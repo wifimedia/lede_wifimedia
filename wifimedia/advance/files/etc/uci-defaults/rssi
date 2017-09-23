@@ -1,0 +1,15 @@
+#!/bin/sh
+
+uci -q get wifimedia.@advance[0] || {
+        uci batch <<EOF
+        add wifimedia advance
+        set wifimedia.@advance[0].level=-80
+        set wifimedia.@advance[0].delays=8s	
+        set wifimedia.@advance[0].interface=wan
+        set wifimedia.@advance[0].pinghosts=8.8.8.8
+	 set wifimedia.@advance[0].timeout=2m
+	 set wifimedia.@advance[0].pinginterval=5s
+	set wifimedia.@advance[0].online=0
+        commit wifimedia
+EOF
+}

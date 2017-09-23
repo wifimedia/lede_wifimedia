@@ -1,0 +1,79 @@
+#!/bin/sh
+
+#/etc/init.d/nodogsplash disable
+echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
+#write file crontabs
+_nds=/etc/cron_nds
+echo '* * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
+
+echo '#!/bin/sh /etc/rc.common
+
+START=99
+STOP=15
+
+EXTRA_COMMANDS="status"
+EXTRA_HELP="        status  View the status of nodogsplash"
+
+boot() {
+    /sbin/wifimedia/update_preauthenticated_rules.sh
+    nodogsplash -s -d 5 -c /tmp/etc/nodogsplash.conf
+}
+
+start() {
+    sleep 1
+    nodogsplash -s -d 5 -c /tmp/etc/nodogsplash.conf
+}
+
+stop() {
+    ndsctl stop
+}
+
+status() {
+    ndsctl status
+}
+' >/etc/init.d/nodogsplash
+
+echo '<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Whoops...</title>
+        <meta http-equiv="refresh" content="0; url=//crm.wifimedia.vn/$gatewaymac">
+        <style>
+            html {
+                background: #F7F7F7;
+            }
+        </style>
+    </head>
+    <body></body>
+</html>' >/etc/nodogsplash/htdocs/infoskel.html
+
+echo '<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>$gatewayname</title>
+  </head>
+  <body>
+      <form id="info" method="POST" action="//crm.wifimedia.vn/back_end/$gatewaymac">
+          <input type="hidden" name="gateway_name" value="$gatewayname">
+          <input type="hidden" name="gateway_mac" value="$gatewaymac">
+          <input type="hidden" name="client_mac" value="$clientmac">
+          <input type="hidden" name="num_clients" value="$nclients">
+          <input type="hidden" name="uptime" value="$uptime">
+          <input type="hidden" name="auth_target" value="$authtarget">
+      </form>
+      <script>
+          document.getElementById("info").submit();
+      </script>
+  </body>
+</html>' >/etc/nodogsplash/htdocs/splash.html
+uci -q get wifimedia.@nodogsplash[0] || {
+        uci batch <<EOF
+        add wifimedia nodogsplash
+        commit wifimedia
+EOF
+}
+ndsctl stop
+#chmod a-x /sbin/wifimedia/heartbeat.sh
+/etc/init.d/firewall restart

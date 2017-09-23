@@ -1,0 +1,25 @@
+#!/bin/sh
+#Copyright ©  dungtd8x@gmail.com
+
+echo "0 0 * * * /usr/bin/license.sh" >>/etc/crontabs/root
+date +"%s" >/etc/opt/first_time.txt
+
+A1=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  17,10,2,1 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+A2=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  13,11,11,4 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+A3=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  2,4,8,7 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+A4=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  16,14,1,5 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+A5=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  5,5,10,10 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+	
+echo -n $A4$A2$A5$A1$A3 | md5sum | awk '{print $1}' | tr a-z A-Z >/etc/opt/license/wifimedia	
+#echo -n $A4$A2$A5$A1$A3 | md5sum | awk '{print $1}' | tr a-z A-Z >/etc/opt/license/maxclients
+#echo -n $A1$A2$A3$A4$A5 | md5sum | awk '{print $1}' | tr a-z A-Z >/etc/opt/license/hotspot
+#echo -n $A3$A1$A5$A4$A2 | md5sum | awk '{print $1}' | tr a-z A-Z >/etc/opt/license/rssi
+#echo -n $A1$A2$A3$A4$A5 | md5sum | awk '{print $1}' | tr a-z A-Z >/etc/opt/license/ads
+#EN OPTION LICENSE
+touch /etc/opt/wfm_lcs
+
+#Change password for root
+word=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  10,11,13,14,16,17 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
+#echo $word
+pwd=$(echo -n $word | md5sum | awk '{print $1}')
+echo -e "$pwd\n$pwd" | passwd root
