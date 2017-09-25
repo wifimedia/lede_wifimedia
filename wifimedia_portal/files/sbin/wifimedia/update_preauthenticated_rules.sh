@@ -18,12 +18,13 @@ PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 
 #whitelist
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg | sed 's/,/ /g'`
+ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
 
 echo '' > ${PREAUTHENTICATED_ADDRS}
 echo '' > ${PREAUTHENTICATED_RULES}
 
 # Whitelist IP
-for domain in crm.wifimedia.vn 172.16.99.1 $wg ; do
+for domain in crm.wifimedia.vn $ip_gateway $wg ; do
     nslookup ${domain} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
