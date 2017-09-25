@@ -76,4 +76,6 @@ EOF
 }
 ndsctl stop
 #chmod a-x /sbin/wifimedia/heartbeat.sh
+/etc/init.d/nodogsplash disable
+/etc/init.d/nodogsplash stop
 /etc/init.d/firewall restart
