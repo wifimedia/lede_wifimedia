@@ -28,7 +28,7 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$domain'/back_end/$gatewaymac">
+      <form id="info" method="POST" action="//'$domain'/back_end/'$apkey'">
           <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="$gatewaymac">
           <input type="hidden" name="client_mac" value="$clientmac">
@@ -48,7 +48,7 @@ echo '<!doctype html>
     <head>
         <meta charset="utf-8">
         <title>Whoops...</title>
-        <meta http-equiv="refresh" content="0; url="//'$domain'/back_end/$gatewaymac">
+        <meta http-equiv="refresh" content="0; url="//'$domain'/back_end/'$apkey'">
         <style>
             html {
                 background: #F7F7F7;
