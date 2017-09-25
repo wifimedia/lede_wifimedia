@@ -4,7 +4,7 @@
 . /sbin/wifimedia/ndscf.sh
 # Wait for network up & running
 while true; do
-    ping -c1 -W1 8.8.8.8
+    ping -c2 -W1 8.8.8.8
     if [ ${?} -eq 0 ]; then
         break
     else
@@ -24,7 +24,7 @@ echo '' > ${PREAUTHENTICATED_ADDRS}
 echo '' > ${PREAUTHENTICATED_RULES}
 
 # Whitelist IP
-for domain in crm.wifimedia.vn 172.16.99.1 ; do
+for domain in crm.wifimedia.vn $ip_gateway $wg ; do
     nslookup ${domain} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
