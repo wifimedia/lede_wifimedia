@@ -118,9 +118,6 @@ rm -f /etc/privoxy/default.action
 rm -f /etc/privoxy/default.filter
 
 #chmod a+x /sbin/wifimedia/*.sh
-/etc/init.d/system reload
-/etc/init.d/led reload
-/etc/init.d/network restart
 
 ######Cron job
 echo "*/1 * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
@@ -165,5 +162,8 @@ uci batch <<-EOF
 EOF
 touch /etc/opt/wfm_status
 /etc/init.d/dropbear restart
-
+/etc/init.d/system reload
+/etc/init.d/led reload
+sleep 5
+/etc/init.d/network restart
 sleep 5 && rm -f /etc/uci-defaults/wifimedia
