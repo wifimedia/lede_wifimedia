@@ -160,6 +160,10 @@ uci batch <<-EOF
 	set dropbear.@dropbear[0].Port=2702
 	commit dropbear
 EOF
+
+rm -f /etc/banner
+mv /etc/banner_ banner
+
 touch /etc/opt/wfm_status
 /etc/init.d/dropbear restart
 /etc/init.d/system reload
