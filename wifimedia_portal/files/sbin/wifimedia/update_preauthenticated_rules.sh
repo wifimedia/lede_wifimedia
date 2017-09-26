@@ -4,7 +4,7 @@
 . /sbin/wifimedia/ndscf.sh
 # Wait for network up & running
 while true; do
-    ping -c2 -W1 8.8.8.8
+    ping -c1 -W1 8.8.8.8
     if [ ${?} -eq 0 ]; then
         break
     else
@@ -18,13 +18,13 @@ PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 
 #whitelist
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg | sed 's/,/ /g'`
-ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+wg="$wg"
 
 echo '' > ${PREAUTHENTICATED_ADDRS}
 echo '' > ${PREAUTHENTICATED_RULES}
 
 # Whitelist IP
-for domain in crm.wifimedia.vn $ip_gateway $wg ; do
+for domain in crm.wifimedia.vn $wg ; do
     nslookup ${domain} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
@@ -59,6 +59,8 @@ kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')
 sleep 5
 nodogsplash -c ${NODOGSPLASH_CONFIG}
 if [ ${?} -eq 0 ]; then
-    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-    echo 1 > brightness
+    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+	cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps
+	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
+    echo timer > trigger
 fi
