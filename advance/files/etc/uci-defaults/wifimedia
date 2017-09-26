@@ -19,7 +19,7 @@ uci batch <<-EOF
 EOF
 
 uci batch <<-EOF
-	set network.lan.ipaddr=192.168.5.1
+	set network.lan.ipaddr=172.16.99.1
 	set network.wan.type=bridge
 	commit network
 EOF
@@ -120,10 +120,9 @@ rm -f /etc/privoxy/default.filter
 #chmod a+x /sbin/wifimedia/*.sh
 /etc/init.d/system reload
 /etc/init.d/led reload
-/etc/init.d/network restart
 
 ######Cron job
-echo "*/1 * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
+echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
 
@@ -165,5 +164,5 @@ uci batch <<-EOF
 EOF
 touch /etc/opt/wfm_status
 /etc/init.d/dropbear restart
-
+/etc/init.d/network restart
 sleep 5 && rm -f /etc/uci-defaults/wifimedia
