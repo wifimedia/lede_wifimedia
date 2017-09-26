@@ -89,8 +89,7 @@ FirewallRuleSet preauthenticated-users {
 
 GatewayName '$fbs_gw'
 RedirectURL '$fbs_url'
-#RedirectURL http://crm.fbs.vn/welcome
-MaxClients '$MaxClients'
+#RedirectURL http://crm.wifimedia.vn
 
 BinVoucher "/sbin/wifimedia/nodogsplash_preauth.sh"
 EnablePreAuth yes
