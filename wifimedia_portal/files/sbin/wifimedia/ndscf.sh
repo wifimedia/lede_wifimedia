@@ -20,6 +20,8 @@ captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
 apkey=${key:-$captive_id}
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
 
+ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+
 #write file splash
 echo '<!doctype html>
 <html lang="en">
@@ -81,14 +83,13 @@ FirewallRuleSet preauthenticated-users {
     # Phần whitelist cho domain www.wifiman.tech được thực hiện lúc startup,
     # để sau mà đổi server thì các router sẽ tự update, không cần vào từng
     # router chỉnh lại
-
+	FirewallRule allow to '$ip_gateway'
     # include /tmp/preauthenticated_rules
 }
 
 GatewayName '$fbs_gw'
 RedirectURL '$fbs_url'
-#RedirectURL http://crm.fbs.vn/welcome
-MaxClients '$MaxClients'
+#RedirectURL http://crm.wifimedia.vn
 
 BinVoucher "/sbin/wifimedia/nodogsplash_preauth.sh"
 EnablePreAuth yes
