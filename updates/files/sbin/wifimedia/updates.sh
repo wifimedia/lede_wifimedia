@@ -128,7 +128,7 @@ curl_data=$(cat $response_file)
 	echo "0" > /tmp/reboot_flag
 	echo "0" > /tmp/lanifbr_flag
 	echo "0" > /tmp/schedule_task_flag
-	echo "0" > /tmp/nodogsplash_flag
+	#echo "0" > /tmp/nodogsplash_flag
 
 	cat $response_file | sed 's/=/ /g'| while read line ; do
 		one=$(echo $line | awk '{print $1}')
@@ -321,31 +321,31 @@ curl_data=$(cat $response_file)
 				echo "0" > $noise_data
 			fi	
 			
-		#nodogslplash
-		elif [ "$one" = "wifimedia.nodogsplash.nds_apkey" ]; then
-			uci set wifimedia.@nodogsplash[0].nds_apkey="$two"
-			
-		elif [ "$one" = "wifimedia.nodogsplash.nds_domain" ]; then
-			uci set wifimedia.@nodogsplash[0].nds_domain="$two"
-		
-		elif [ "$one" = "wifimedia.nodogsplash.ndsurl" ]; then
-			uci set wifimedia.@nodogsplash[0].ndsurl="$two"
-		
-		elif [ "$one" = "wifimedia.nodogsplash.nds_wg" ]; then
-			uci set wifimedia.@nodogsplash[0].nds_wg="$two"
-		
-		elif [ "$one" = "wifimedia.nodogsplash.ndsclient" ]; then
-			uci set wifimedia.@nodogsplash[0].ndsclient="$two"
-		
-		elif [ "$one" = "wifimedia.nodogsplash.ndsidletimeout" ]; then
-			uci set wifimedia.@nodogsplash[0].ndsidletimeout="$two"
-			
-		elif [ "$one" = "wifimedia.nodogsplash.enabled" ]; then
-			if [ "$two" == "1" ]; then
-				echo "1" > /tmp/nodogsplash_flag
-			else
-				echo "2" > /tmp/nodogsplash_flag
-			fi	
+		##nodogslplash
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_apkey" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_apkey="$two"
+		#	
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_domain" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_domain="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsurl" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsurl="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_wg" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_wg="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsclient" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsclient="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsidletimeout" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsidletimeout="$two"
+		#	
+		#elif [ "$one" = "wifimedia.nodogsplash.enabled" ]; then
+		#	if [ "$two" == "1" ]; then
+		#		echo "1" > /tmp/nodogsplash_flag
+		#	else
+		#		echo "2" > /tmp/nodogsplash_flag
+		#	fi	
 			
 		fi
 	done
@@ -378,20 +378,20 @@ curl_data=$(cat $response_file)
 		echo "restarting the schedule task"
 		/usr/bin/scheduled.sh start
 	fi	
-	#start nodogsplash
-	if [ $(cat /tmp/nodogsplash_flag) -eq 1 ]; then
-		crontab /etc/cron_nds -u nds 
-		/etc/init.d/cron restart
-		/etc/init.d/nodogsplash enable
-	##disable nodogsplash	
-	elif [ $(cat /tmp/nodogsplash_flag) -eq 2 ]; then
-		/etc/init.d/nodogsplash disable
-		/etc/init.d/nodogsplash stop
-		/etc/init.d/firewall restart
-		echo ''>/etc/crontabs/nds
-		/etc/init.d/cron restart
-		
-	fi	
+	##start nodogsplash
+	#if [ $(cat /tmp/nodogsplash_flag) -eq 1 ]; then
+	#	crontab /etc/cron_nds -u nds 
+	#	/etc/init.d/cron restart
+	#	/etc/init.d/nodogsplash enable
+	###disable nodogsplash	
+	#elif [ $(cat /tmp/nodogsplash_flag) -eq 2 ]; then
+	#	/etc/init.d/nodogsplash disable
+	#	/etc/init.d/nodogsplash stop
+	#	/etc/init.d/firewall restart
+	#	echo ''>/etc/crontabs/nds
+	#	/etc/init.d/cron restart
+	#	
+	#fi	
 	
 	# Clear out the old files
 	if [ -e $status_file ]; then rm $status_file; fi
