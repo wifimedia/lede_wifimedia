@@ -59,8 +59,6 @@ kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')
 sleep 5
 nodogsplash -c ${NODOGSPLASH_CONFIG}
 if [ ${?} -eq 0 ]; then
-    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-	cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps
-	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
-    echo timer > trigger
+	cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+	echo timer > trigger
 fi
