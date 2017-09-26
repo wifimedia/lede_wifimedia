@@ -33,7 +33,7 @@ else
 	#cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
 	#echo none > trigger
 	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-	echo timer > trigger
+	echo none > trigger
 fi
 #Clear memory
 if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
