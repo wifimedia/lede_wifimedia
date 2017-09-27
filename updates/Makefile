@@ -19,7 +19,6 @@ define Package/updates
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  DEPENDS:=+curl
   TITLE:=Configuration Online
   URL:=http://wifimedia.vn
   MENU:=1
