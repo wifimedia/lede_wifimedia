@@ -36,6 +36,7 @@ echo '<!doctype html>
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
+		  <input type="hidden" name="splashcheck" value="1">
           <input type="hidden" name="auth_target" value="$authtarget">
       </form>
       <script>
