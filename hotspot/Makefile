@@ -19,7 +19,7 @@ define Package/hotspot
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  DEPENDS:=+coova-chilli +curl +luci +luci-mod-admin-full +luci-theme-material
+  DEPENDS:=+coova-chilli +luci +luci-mod-admin-full +luci-theme-material
   TITLE:=Wireless LAN HotSpot controller
   URL:=http://wifimedia.vn
   MENU:=1
