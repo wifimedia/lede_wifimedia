@@ -19,7 +19,6 @@ define Package/license
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  DEPENDS:=+wifimedia_config
   TITLE:=License Users
   URL:=http://wifimedia.vn
   MENU:=1

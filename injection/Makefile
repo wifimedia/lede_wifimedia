@@ -19,7 +19,7 @@ define Package/injection
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  DEPENDS:=+luci +luci-mod-admin-full +interface_users
+  DEPENDS:=+luci +luci-mod-admin-full
   TITLE:=injection ...
   URL:=http://wifimedia.vn
   MENU:=1
