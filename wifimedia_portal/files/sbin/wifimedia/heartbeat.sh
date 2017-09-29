@@ -6,11 +6,11 @@ ndsctl status > /tmp/ndsctl_status.txt
 
 # Update lại trạng thái đèn led
 if [ ${?} -eq 0 ]; then
-	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
-    echo timer > trigger
+    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    echo 1 > brightness
 else
-	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
-    echo timer > none
+    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    echo 0 > brightness
 
     # Tự động bật lại nodogsplash nếu crash
     sh /sbin/wifimedia/update_preauthenticated_rules.sh
@@ -47,8 +47,8 @@ wget -q \
 
 
 # Update lại tên mạng wifi
-if [ -s /tmp/ssid.txt ] && [ $(wc -l < /tmp/ssid.txt) == 0 ] && [ $(wc -c < /tmp/ssid.txt) -le 32 ] && [ "$(cat /tmp/ssid.txt)" != "${SSID}" ]; then
-    uci set wireless.@wifi-iface[0].ssid="$(cat /tmp/ssid.txt)"
-    uci commit
-    wifi
-fi
+#if [ -s /tmp/ssid.txt ] && [ $(wc -l < /tmp/ssid.txt) == 0 ] && [ $(wc -c < /tmp/ssid.txt) -le 32 ] && [ "$(cat /tmp/ssid.txt)" != "${SSID}" ]; then
+#    uci set wireless.@wifi-iface[0].ssid="$(cat /tmp/ssid.txt)"
+#    uci commit
+#    wifi
+#fi
