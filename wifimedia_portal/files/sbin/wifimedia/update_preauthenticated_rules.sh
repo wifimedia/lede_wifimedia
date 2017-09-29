@@ -64,4 +64,3 @@ if [ ${?} -eq 0 ]; then
 	cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
     echo timer > trigger
 fi
-
