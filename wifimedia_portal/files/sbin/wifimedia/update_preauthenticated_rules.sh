@@ -1,7 +1,5 @@
 #!/bin/sh
 
-#load config
-. /sbin/wifimedia/ndscf.sh
 # Wait for network up & running
 while true; do
     ping -c1 -W1 8.8.8.8
@@ -12,19 +10,17 @@ while true; do
     fi
 done
 
+#sh /root/create_ssh_tunnel.sh
+
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
-
-#whitelist
-wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg | sed 's/,/ /g'`
-wg="$wg"
-
+#whitelist=`uci get `
 echo '' > ${PREAUTHENTICATED_ADDRS}
 echo '' > ${PREAUTHENTICATED_RULES}
 
 # Whitelist IP
-for domain in crm.wifimedia.vn $wg ; do
+for domain in crm.wifimedia.vn ; do
     nslookup ${domain} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
@@ -52,15 +48,12 @@ sed -e "/# include \/tmp\/preauthenticated_rules/ {" \
 # Remove comments
 sed -i -e 's/#.*$//' ${NODOGSPLASH_CONFIG}
 
-# T?t nodogsplash cu n?u c�
+# Tắt nodogsplash cũ nếu có
 kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')
 
-# New start nodogsplash 
-sleep 5
+# Bật nodogsplash mới
 nodogsplash -c ${NODOGSPLASH_CONFIG}
 if [ ${?} -eq 0 ]; then
-    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-	cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps
-	#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps
-    echo timer > trigger
+    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    echo 1 > brightness
 fi
