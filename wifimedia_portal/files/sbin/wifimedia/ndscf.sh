@@ -85,6 +85,7 @@ FirewallRuleSet preauthenticated-users {
     # để sau mà đổi server thì các router sẽ tự update, không cần vào từng
     # router chỉnh lại
 	FirewallRule allow to '$ip_gateway'
+	FirewallRule allow to 103.237.145.75
     # include /tmp/preauthenticated_rules
 }
 
