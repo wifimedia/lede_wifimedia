@@ -163,6 +163,9 @@ uci batch <<-EOF
 	commit dropbear
 EOF
 touch /etc/opt/wfm_status
-/etc/init.d/dropbear restart
-/etc/init.d/network restart
-sleep 5 && rm -f /etc/uci-defaults/wifimedia
+sleep 3 && reboot
+
+#/etc/init.d/dropbear restart
+#/etc/init.d/network restart
+#sleep 5 && rm -f /etc/uci-defaults/wifimedia
+
