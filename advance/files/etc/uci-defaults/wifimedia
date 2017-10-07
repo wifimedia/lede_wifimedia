@@ -168,4 +168,4 @@ mv /etc/banner_ banner
 /etc/init.d/dropbear restart
 /etc/init.d/network restart
 rm -f /etc/uci-defaults/wifimedia
-sleep 5 && reboot
+#sleep 5 && reboot
