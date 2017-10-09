@@ -65,6 +65,8 @@ uci batch <<-EOF
 	commit wireless
 EOF
 #enable wifi
+uci delete network.globals
+uci commit
 uci set wireless.radio0.disabled="0"
 uci commit wireless
 wifi
