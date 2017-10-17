@@ -124,6 +124,7 @@ rm -f /etc/privoxy/default.filter
 
 ######Cron job
 echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
+echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
 
@@ -165,7 +166,7 @@ uci batch <<-EOF
 EOF
 touch /etc/opt/wfm_status
 rm -f /etc/banner
-mv /etc/banner_ banner
+mv /etc/banner_ /etc/banner
 /etc/init.d/dropbear restart
 /etc/init.d/network restart
 rm -f /etc/uci-defaults/wifimedia
