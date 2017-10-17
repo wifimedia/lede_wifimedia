@@ -57,7 +57,7 @@ echo '<!doctype html>
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
-		  <input type="hidden" name="splashcheck" value="1">
+		  <!--input type="hidden" name="splashcheck" value="1"-->
           <input type="hidden" name="auth_target" value="$authtarget">
       </form>
       <script>
@@ -90,8 +90,8 @@ uci -q get wifimedia.@nodogsplash[0] || {
 EOF
 }
 
-/etc/ini.d/nodogsplash stop
-/etc/ini.d/nodogsplash disable
+#/etc/ini.d/nodogsplash stop
+/etc/ini.d/nodogsplash enable
 #chmod a-x /sbin/wifimedia/heartbeat.sh
-sleep 10
-/etc/init.d/firewall restart
+#sleep 10
+#/etc/init.d/firewall restart
