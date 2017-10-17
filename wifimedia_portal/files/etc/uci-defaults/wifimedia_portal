@@ -90,8 +90,10 @@ uci -q get wifimedia.@nodogsplash[0] || {
 EOF
 }
 
-#/etc/ini.d/nodogsplash stop
+/sbin/wifimedia/ndscf.sh start >/dev/null
+crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
+/etc/ini.d/nodogsplash start
 /etc/ini.d/nodogsplash enable
-#chmod a-x /sbin/wifimedia/heartbeat.sh
+chmod a+x /sbin/wifimedia/heartbeat.sh
 #sleep 10
 #/etc/init.d/firewall restart
