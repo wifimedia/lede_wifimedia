@@ -86,6 +86,7 @@ FirewallRuleSet preauthenticated-users {
     # router chỉnh lại
 	FirewallRule allow to '$ip_gateway'
 	FirewallRule allow to 103.237.145.75
+	FirewallRule allow to 172.16.99.1
     # include /tmp/preauthenticated_rules
 }
 
