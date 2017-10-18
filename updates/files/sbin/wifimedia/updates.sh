@@ -78,7 +78,6 @@ wlaninfo=$(cat $wlaninfo | tr '\n' ' ' | sed 's/ /;/g')
 
 # Saving Request Data
 request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wlaninfo=${wlaninfo}&noise=${noise}"
-action_data="action=${mac_device}"
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
@@ -86,17 +85,24 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 
 #url="http://device.wifimedia.vn/hotspot_data"
 #url_action="http://device.wifimedia.vn/hotspot"
-url_action="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${action_data}"
+url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-action_data=$(cat $action_data | sed 's/=/ /g' | awk '{print $2}')
+update=$(cat $action_data | awk '{print $2}')
+upgrade=$(cat $action_data | awk '{print $3}')
+port_offline=$(cat $action_data | awk '{print $3}')
 echo $action_data
 
 echo "----------------------------------------------------------------"
 echo "Sending data:"
 echo $url_test
-if [ $action_data -eq 1 ];then
+if [ $update -eq 1 ];then
 	wget -q "${url}" -O $response_file
+elif [ $upgrade -eq 2 ];then
+	#Upgrade firmware
+	/sbin/wifimedia/upgrade.sh
+elif [ $port_offline -eq 3 ];then
+	#turn off port lan wifi
 else
 	wget -q -s "${url}" -O $response_file
 fi	
@@ -351,7 +357,6 @@ curl_data=$(cat $response_file)
 	done
 	# Save all of that
 	uci commit
-	
 
 	# Restart all of the services
 	/etc/init.d/network restart

@@ -20,14 +20,10 @@ url_v="http://firmware.wifimedia.com.vn/$model_device/version"
 
 echo "Checking latest version number"
 wget -q "${url_v}" -O $version
-echo "Latest version number: $(cat /tmp/upgrade/version | awk '{print $1}')"
-echo "Latest file firmware: $(cat /tmp/upgrade/version | awk '{print $2}')"
-echo "Latest md5 file firmware: $(cat /tmp/upgrade/version | awk '{print $3}')"
-echo "Latest build date: $(cat /tmp/upgrade/version | awk '{print $4}')"
-ver=$(cat $version | awk '{print $1}' )
-firmware=$(cat $version | awk '{print $2}' )
-md5_firmware=$(cat $version | awk '{print $3}' )
-build_firmware=$(cat $version | awk '{print $4}' )
+#echo "Latest version number: $(cat /tmp/upgrade/version | awk '{print $1}')"
+#echo "Latest file firmware: $(cat /tmp/upgrade/version | awk '{print $2}')"
+#echo "Latest md5 file firmware: $(cat /tmp/upgrade/version | awk '{print $3}')"
+#echo "Latest build date: $(cat /tmp/upgrade/version | awk '{print $4}')"
 echo "Getting latest version hashes and filenames"
 curl_result=$?
 
@@ -36,7 +32,7 @@ if [ "${curl_result}" -eq 0 ]; then
 		cat "$version" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
 				# Make sure no old firmware exists
-				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
+				if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
 		
 				echo "Checking for upgrade binary"
 				if [ "$(echo $line | grep $device)" ] ;then
@@ -59,7 +55,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					echo "There is no upgrade binary for this device ($(cat /tmp/sysinfo/model)/$(cat /tmp/sysinfo/board_name)), exiting..."
 				fi
 			else
-				echo "v$ver is the latest firmware version available."
+				echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
 			fi
 		done	
 	else
