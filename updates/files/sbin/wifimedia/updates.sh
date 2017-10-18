@@ -90,7 +90,7 @@ url_action="http://firmware.wifimedia.com.vn/data"
 wget -q "${url_action}" -O $action_data
 update=$(cat $action_data | awk '{print $2}')
 upgrade=$(cat $action_data | awk '{print $3}')
-port_offline=$(cat $action_data | awk '{print $5}')
+switch_off=$(cat $action_data | awk '{print $5}')
 reset_default=$(cat $action_data | awk '{print $6}')
 reset_password=$(cat $action_data | awk '{print $7}')
 echo $action_data
@@ -102,12 +102,14 @@ if [ $upgrade -eq 1 ];then
 	#Upgrade firmware
 	/sbin/wifimedia/upgrade.sh
 elif [ $reset_default -eq 2 ];then
-	#script reset default
+	#script restore_defaults
+	/sbin/wifimedia/restore_defaults.sh
 elif [ $reset_password -eq 3 ];then
-	#script reset default
-elif [ $port_offline -eq 4 ];then
-	#turn off port lan wifi
-	#/sbin/wifimedia/ports.sh
+	#script passwd_default
+	/sbin/wifimedia/passwd_default.sh
+elif [ $switch_off -eq 4 ];then
+	#switch_off
+	/sbin/wifimedia/switch_off.sh
 	
 elif [ $update -eq 5 ];then
 	wget -q "${url}" -O $response_file
