@@ -78,7 +78,6 @@ wlaninfo=$(cat $wlaninfo | tr '\n' ' ' | sed 's/ /;/g')
 
 # Saving Request Data
 request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wlaninfo=${wlaninfo}&noise=${noise}"
-action_data="action=${mac_device}"
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
@@ -86,20 +85,35 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 
 #url="http://device.wifimedia.vn/hotspot_data"
 #url_action="http://device.wifimedia.vn/hotspot"
-url_action="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${action_data}"
+url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-action_data=$(cat $action_data | sed 's/=/ /g' | awk '{print $2}')
-echo $action_data
+if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+	#Upgrade firmware
+	echo "upgrade"
+fi
+if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
+	echo "facetory..."
+fi
+if [ "$(cat "$action_data" | grep 'password')" ] ;then
+	echo "password default"
+fi
+if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
+	echo "switch off"
+fi	
+if [ "$(cat "$action_data" | grep 'update')" ] ;then
+	echo "updade"
+	wget -q "${url}" -O $response_file
+else
+	echo "No..."
+	wget -q -s "${url}" -O $response_file
+	echo ${url}
+	
+fi
 
 echo "----------------------------------------------------------------"
 echo "Sending data:"
-echo $url_test
-if [ $action_data -eq 1 ];then
-	wget -q "${url}" -O $response_file
-else
-	wget -q -s "${url}" -O $response_file
-fi	
+
 #curl "${url}" > $response_file
 curl_result=$?
 curl_data=$(cat $response_file)
@@ -351,7 +365,6 @@ curl_data=$(cat $response_file)
 	done
 	# Save all of that
 	uci commit
-	
 
 	# Restart all of the services
 	/etc/init.d/network restart
