@@ -128,7 +128,7 @@ echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
-/etc/init.dwifimedia_upgrade enable
+/etc/init.d/wifimedia_upgrade enable
 
 uci set dhcp.lan.start=10
 uci set dhcp.lan.leasetime=1h
