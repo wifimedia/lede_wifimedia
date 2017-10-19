@@ -91,15 +91,19 @@ wget -q "${url_action}" -O $action_data
 if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
 	echo "upgrade"
+	/sbin/wifimedia/upgrade.sh
 fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
+	/sbin/wifimedia/restore_defaults.sh
 fi
 if [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
+	/sbin/wifimedia/passwd_default.sh
 fi
 if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
 	echo "switch off"
+	/sbin/wifimedia/switch_off.sh
 fi	
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
@@ -156,6 +160,10 @@ curl_data=$(cat $response_file)
 		#Restart router	
 		elif [ "$one" = "system.reboot" ]; then
 			echo $two > /tmp/reboot_flag
+		#Password
+		elif [ "$one" = "system.ssh.password" ]; then
+			two=$(echo $two | sed 's/*/ /g')
+			echo -e "$two\n$two" | passwd root		
 		#Time Sync	
 		elif [ "$one" = "servers.ntp.server" ]; then
 			uci set system.ntp.server="$two"
