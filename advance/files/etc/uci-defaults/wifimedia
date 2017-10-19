@@ -20,7 +20,7 @@ uci batch <<-EOF
 EOF
 
 uci batch <<-EOF
-	set network.lan.ipaddr=172.16.99.1
+	set network.lan.ipaddr=192.168.5.1
 	set network.wan.type=bridge
 	commit network
 EOF
@@ -31,6 +31,7 @@ uci batch <<-EOF
 	#set wireless.@wifi-iface[0].ssid=PDA_$rnd
 	#set wireless.@wifi-iface[0].encryption="mixed-psk"
     #set wireless.@wifi-iface[0].key="123456A@$rnd"
+	set wireless.@wifi-iface[0].disabled=1
 	commit wireless
 EOF
 
@@ -107,7 +108,7 @@ uci batch <<-EOF
 EOF
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" v3.1a"
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" v3.1a_gw"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
