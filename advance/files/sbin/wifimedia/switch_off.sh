@@ -11,20 +11,16 @@ echo "" > $hardware
 
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
-model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '-')
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
-
 url="http://firmware.wifimedia.com.vn/hardware"
-echo "Checking latest version number"
 wget -q "${url}" -O $hardware
-echo "Getting latest version hashes and filenames"
 curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-				echo "Checking for upgrade binary"
+				echo "Find hardware for switch off"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#switch off support TPLINK 840Nv4
 					swconfig dev switch0 port 1 set disable 1		
