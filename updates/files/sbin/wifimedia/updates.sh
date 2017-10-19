@@ -100,10 +100,7 @@ if [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
 	/sbin/wifimedia/passwd_default.sh
 fi
-if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
-	echo "switch off"
-	/sbin/wifimedia/switch_off.sh
-fi	
+	
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file
