@@ -6,19 +6,18 @@ temp_dir="/tmp/checkin"
 status_file="$temp_dir/request.txt"
 response_file="$temp_dir/response.txt"
 temp_file="$temp_dir/tmp"
-
-temp_dir="/tmp/checkin"
-status_file="$temp_dir/request.txt"
-response_file="$temp_dir/response.txt"
-response_file_cfg="$temp_dir/response_cfg.txt"
-temp_file="$temp_dir/tmp"
 action_data="/etc/config/action_data"
 noise_data=/tmp/noise_flag
 
-if [ -e $status_file ]; then rm $status_file; fi
-if [ -e $response_file ]; then rm $response_file; fi
-if [ -e $temp_file ]; then rm $temp_file; fi
-if [ ! -d "$temp_dir" ]; then mkdir $temp_dir; fi
+if [ ! -d "$temp_dir" ]; then
+	mkdir $temp_dir
+	echo "" >/tmp/checkin/request.txt
+	echo "" >/tmp/checkin/response.txt
+
+fi
+#if [ -e $status_file ]; then echo "" >$status_file; fi
+#if [ -e $response_file ]; then echo "" >$response_file; fi
+#if [ -e $temp_file ]; then rm $temp_file; fi
 
 #mac_device
 mac_device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
@@ -415,9 +414,9 @@ curl_data=$(cat $response_file)
 	#fi	
 	
 	# Clear out the old files
-	if [ -e $status_file ]; then rm $status_file; fi
-	if [ -e $response_file ]; then rm $response_file; fi
-	if [ -e $temp_file ]; then rm $temp_file; fi
+	#if [ -e $status_file ]; then rm $status_file; fi
+	#if [ -e $response_file ]; then rm $response_file; fi
+	#if [ -e $temp_file ]; then rm $temp_file; fi
 	echo "----------------------------------------------------------------"
 	echo "Successfully applied new settings"
 	echo "update: Successfully applied new settings"
