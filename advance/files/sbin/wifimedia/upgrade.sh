@@ -11,12 +11,13 @@ echo "" > $version
 
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
+board_name=$(cat /tmp/sysinfo/board_name)
 model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '-')
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
 
-url_d="http://firmware.wifimedia.com.vn/$model_device/$device"
-url_v="http://firmware.wifimedia.com.vn/$model_device/version"
+url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
+url_v="http://firmware.wifimedia.com.vn/tplink/version"
 
 echo "Checking latest version number"
 wget -q "${url_v}" -O $version
@@ -32,12 +33,13 @@ if [ "${curl_result}" -eq 0 ]; then
 		cat "$version" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
 				# Make sure no old firmware exists
-				if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
-		
+				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
+				#url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
+				echo $url
 				echo "Checking for upgrade binary"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#echo "Downloading upgrade binary: $(grep $(cat /tmp/sysinfo/board_name)'-squashfs-sysupgrade' /tmp/upgrade/md5sums | awk '{ print $2 }' | sed 's/*//')"
-					wget -q "${url_d}" -O /tmp/firmware.bin
+					wget -q "${url}" -O /tmp/firmware.bin
 					# Stop if the firmware file does not exist
 					if [ ! -e "/tmp/firmware.bin" ]; then
 						echo "The upgrade binary download was not successful, exiting..."
