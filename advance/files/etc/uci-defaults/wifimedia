@@ -2,6 +2,7 @@
 
 rnd=`cat /dev/urandom | tr -dc 'A-Z' | head -c1`
 ###For version 2.2.0 Khong co key license
+
 uci -q get wifimedia.@sync[0] || {
 	uci batch <<-EOF
 	add wifimedia sync
@@ -11,6 +12,10 @@ uci -q get wifimedia.@sync[0] || {
 	commit wifimedia
 EOF
 }
+
+#change ver  for upgrade
+uci set wifimedia.@sync[0].version=2.2.0
+uci commit wifimedia
 
 uci batch <<-EOF
 	set system.@system[0]=system
