@@ -12,7 +12,7 @@ echo "" > $version
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 board_name=$(cat /tmp/sysinfo/board_name)
-device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
+device=$(ifconfig wlan0 | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
 
 url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
