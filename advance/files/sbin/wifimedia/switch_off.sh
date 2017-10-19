@@ -20,7 +20,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-				echo "Find hardware for switch off"
+				echo "Switch off hardware"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#switch off support TPLINK 840Nv4
 					swconfig dev switch0 port 1 set disable 1		

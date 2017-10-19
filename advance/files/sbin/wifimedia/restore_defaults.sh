@@ -22,7 +22,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-				echo "Find device on file hardware"
+				echo "Factory Reset"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#Reset defaults model
 					sleep 1; jffs2reset -y && reboot

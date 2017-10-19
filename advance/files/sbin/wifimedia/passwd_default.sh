@@ -20,10 +20,10 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-				echo "Find device for passwd reset"
+				echo "Reset Password hardware"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#Reset defaults passwd
-					echo -e "wifimedia\nwifimedia" | passwd admin && reboot
+					echo -e "wifimedia\nwifimedia" | passwd admin
 				else
 					echo "we will maintain the existing settings."
 				fi
