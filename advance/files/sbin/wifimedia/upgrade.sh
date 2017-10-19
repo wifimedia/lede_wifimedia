@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright © 2011-2013 Wifimedia: Vietnamese.
+# Copyright © 2012-2017 Wifimedia: Vietnamese.
 # All rights reserved.
 
 # Creates temporary directory if it doesn't already exist
@@ -12,7 +12,6 @@ echo "" > $version
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 board_name=$(cat /tmp/sysinfo/board_name)
-model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '-')
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
 
@@ -21,10 +20,6 @@ url_v="http://firmware.wifimedia.com.vn/tplink/version"
 
 echo "Checking latest version number"
 wget -q "${url_v}" -O $version
-#echo "Latest version number: $(cat /tmp/upgrade/version | awk '{print $1}')"
-#echo "Latest file firmware: $(cat /tmp/upgrade/version | awk '{print $2}')"
-#echo "Latest md5 file firmware: $(cat /tmp/upgrade/version | awk '{print $3}')"
-#echo "Latest build date: $(cat /tmp/upgrade/version | awk '{print $4}')"
 echo "Getting latest version hashes and filenames"
 curl_result=$?
 
@@ -34,8 +29,6 @@ if [ "${curl_result}" -eq 0 ]; then
 			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
 				# Make sure no old firmware exists
 				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
-				#url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
-				echo $url
 				echo "Checking for upgrade binary"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#echo "Downloading upgrade binary: $(grep $(cat /tmp/sysinfo/board_name)'-squashfs-sysupgrade' /tmp/upgrade/md5sums | awk '{ print $2 }' | sed 's/*//')"
