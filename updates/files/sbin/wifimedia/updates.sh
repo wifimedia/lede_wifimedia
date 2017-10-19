@@ -80,9 +80,9 @@ request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dh
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
-#url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
+url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
 
-url="http://device.wifimedia.vn/hotspot_data"
+#url="http://device.wifimedia.vn/hotspot_data"
 #url_action="http://device.wifimedia.vn/hotspot"
 url_action="http://firmware.wifimedia.com.vn/data"
 
@@ -90,7 +90,7 @@ wget -q "${url_action}" -O $action_data
 if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
 	echo "upgrade"
-	#/sbin/wifimedia/upgrade.sh
+	/sbin/wifimedia/upgrade.sh
 fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
@@ -156,7 +156,6 @@ curl_data=$(cat $response_file)
 		#Change hotname
 		if [ "$one" = "system.hostname.name" ]; then
 			uci set system.@system[0].hostname="$two"
-			uci commit system
 		#Restart router	
 		elif [ "$one" = "system.reboot" ]; then
 			echo $two > /tmp/reboot_flag

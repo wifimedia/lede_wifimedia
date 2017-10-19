@@ -38,9 +38,21 @@ if [ "${curl_result}" -eq 0 ]; then
 						echo "The upgrade binary download was not successful, exiting..."
 					
 					# If the hash is correct: flash the firmware
-					elif [ "$(echo $line | awk '{print $3}')" = "$(md5sum /tmp/firmware.bin | awk '{ print $1 }')" ]; then
+					elif [ "$(echo $line | awk '{print $3}')" = "$(sha256sum /tmp/firmware.bin | awk '{ print $1 }')" ]; then
+						#remove all crontabs/*
+						rm -f /etc/crontabs/*
+						#remove option wireless
+							uci del_list wireless.radio0.ht_capab="SHORT-GI-20"
+							uci del_list wireless.radio0.ht_capab="SHORT-GI-40"
+							uci del_list wireless.radio0.ht_capab="RX-STBC1"
+							uci del_list wireless.radio0.ht_capab="DSSS_CCK-40"
+							uci commit wireless
 						logger "Installing upgrade binary..."
-						sysupgrade -v /tmp/firmware.bin
+						if [ "$(echo $line | grep all)" ] ;then
+							sysupgrade -v -n /tmp/firmware.bin
+						else
+							sysupgrade -c /tmp/firmware.bin
+						fi	
 						#sysupgrade -c -d 600 /tmp/firmware.bin
 					# The hash is invalid, stopping here
 					else
