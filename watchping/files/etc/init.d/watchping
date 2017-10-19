@@ -98,6 +98,5 @@ start() {
 	else
 		logger -p user.info -t "watchping" "no tasks defined"
 	fi
-	/sbin/wifimedia/upgrade.sh
 }
 
