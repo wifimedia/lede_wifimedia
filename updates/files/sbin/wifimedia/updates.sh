@@ -6,19 +6,18 @@ temp_dir="/tmp/checkin"
 status_file="$temp_dir/request.txt"
 response_file="$temp_dir/response.txt"
 temp_file="$temp_dir/tmp"
-
-temp_dir="/tmp/checkin"
-status_file="$temp_dir/request.txt"
-response_file="$temp_dir/response.txt"
-response_file_cfg="$temp_dir/response_cfg.txt"
-temp_file="$temp_dir/tmp"
 action_data="/etc/config/action_data"
 noise_data=/tmp/noise_flag
 
-if [ -e $status_file ]; then rm $status_file; fi
-if [ -e $response_file ]; then rm $response_file; fi
-if [ -e $temp_file ]; then rm $temp_file; fi
-if [ ! -d "$temp_dir" ]; then mkdir $temp_dir; fi
+if [ ! -d "$temp_dir" ]; then
+	mkdir $temp_dir
+	echo "" >/tmp/checkin/request.txt
+	echo "" >/tmp/checkin/response.txt
+
+fi
+#if [ -e $status_file ]; then echo "" >$status_file; fi
+#if [ -e $response_file ]; then echo "" >$response_file; fi
+#if [ -e $temp_file ]; then rm $temp_file; fi
 
 #mac_device
 mac_device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
@@ -81,9 +80,9 @@ request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dh
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
-url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
+#url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
 
-#url="http://device.wifimedia.vn/hotspot_data"
+url="http://device.wifimedia.vn/hotspot_data"
 #url_action="http://device.wifimedia.vn/hotspot"
 url_action="http://firmware.wifimedia.com.vn/data"
 
@@ -91,7 +90,7 @@ wget -q "${url_action}" -O $action_data
 if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
 	echo "upgrade"
-	/sbin/wifimedia/upgrade.sh
+	#/sbin/wifimedia/upgrade.sh
 fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
@@ -157,6 +156,7 @@ curl_data=$(cat $response_file)
 		#Change hotname
 		if [ "$one" = "system.hostname.name" ]; then
 			uci set system.@system[0].hostname="$two"
+			uci commit system
 		#Restart router	
 		elif [ "$one" = "system.reboot" ]; then
 			echo $two > /tmp/reboot_flag
@@ -415,9 +415,9 @@ curl_data=$(cat $response_file)
 	#fi	
 	
 	# Clear out the old files
-	if [ -e $status_file ]; then rm $status_file; fi
-	if [ -e $response_file ]; then rm $response_file; fi
-	if [ -e $temp_file ]; then rm $temp_file; fi
+	#if [ -e $status_file ]; then rm $status_file; fi
+	#if [ -e $response_file ]; then rm $response_file; fi
+	#if [ -e $temp_file ]; then rm $temp_file; fi
 	echo "----------------------------------------------------------------"
 	echo "Successfully applied new settings"
 	echo "update: Successfully applied new settings"
