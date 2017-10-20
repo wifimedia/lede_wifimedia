@@ -12,6 +12,10 @@ uci -q get wifimedia.@sync[0] || {
 EOF
 }
 
+#change ver  for upgrade
+uci set wifimedia.@sync[0].version=2.1.1
+uci commit wifimedia
+
 uci batch <<-EOF
 	set system.@system[0]=system
 	set system.@system[0].hostname="WIFIMEDIA.VN"
@@ -20,7 +24,7 @@ uci batch <<-EOF
 EOF
 
 uci batch <<-EOF
-	set network.lan.ipaddr=192.168.5.1
+	set network.lan.ipaddr=172.16.99.1
 	set network.wan.type=bridge
 	commit network
 EOF
@@ -116,8 +120,8 @@ echo 'DISTRIB_CODENAME="'"$DISTRIB_CODENAME"'"' >> /etc/openwrt_release
 echo 'DISTRIB_TARGET="'"$DISTRIB_TARGET"'"' >> /etc/openwrt_release
 echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
-rm -f /etc/privoxy/default.action
-rm -f /etc/privoxy/default.filter
+#rm -f /etc/privoxy/default.action
+#rm -f /etc/privoxy/default.filter
 
 #chmod a+x /sbin/wifimedia/*.sh
 /etc/init.d/system reload
@@ -128,6 +132,7 @@ echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
+/etc/init.d/wifimedia_upgrade enable
 
 uci set dhcp.lan.start=10
 uci set dhcp.lan.leasetime=1h
