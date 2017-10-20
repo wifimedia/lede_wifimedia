@@ -4,6 +4,9 @@ echo -e "live:x:1000:1000:live:/root:/bin/false" >>/etc/passwd
 echo -e "live:*:0:0:99999:7:::" >>/etc/shadow
 echo "*/10 * * * * /sbin/wifimedia/updates.sh" >>/etc/crontabs/live
 
+/etc/init.d/cron start
+/etc/init.d/cron enable
+
 uci -q get wifimedia.@advance[0] || {
         uci batch <<EOF
         add wifimedia advance
