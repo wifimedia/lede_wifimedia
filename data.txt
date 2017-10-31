@@ -5,3 +5,8 @@ C0-25-E9-41-43-9C ""ddddddddddddddddddd
 C0-25-E9-F9-CA-50
 
 2011 1 2APACLR
+					swconfig dev switch0 port 1 set disable 0		
+					swconfig dev switch0 port 2 set disable 0
+					swconfig dev switch0 port 3 set disable 0		
+					swconfig dev switch0 port 4 set disable 0
+					swconfig dev switch0 set apply
