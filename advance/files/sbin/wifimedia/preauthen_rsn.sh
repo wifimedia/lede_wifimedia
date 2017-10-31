@@ -13,8 +13,9 @@ echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
-url="http://firmware.wifimedia.com.vn/hardware"
-wget -q "${url}" -O $hardware
+#url="http://firmware.wifimedia.com.vn/hardware"
+url_v="http://firmware.wifimedia.com.vn/tplink/version"
+wget -q "${url_v}" -O $hardware
 curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
@@ -32,6 +33,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					uci commit wireless
 					uci get wifimedia.@sync[0].rsn="$(echo $line | awk '{print $1}')"
 					uci commit wifimedia
+					wifi
 				else
 					echo "we will maintain the existing settings."
 				fi

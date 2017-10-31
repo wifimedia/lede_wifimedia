@@ -14,10 +14,11 @@ EOF
 
 #change ver  for upgrade
 uci set wifimedia.@sync[0].version=2.1.1
-uci set wifimedia.@sync[0].version=2.1.1
-uci set wifimedia.@sync[0].version=2.1.1
-uci set wifimedia.@sync[0].version=2.1.1
-uci set wifimedia.@sync[0].version=2.1.1
+uci set wifimedia.@sync[0].passwdwifi=2.1.1
+uci set wifimedia.@sync[0].rsn=2.1.1
+uci set wifimedia.@sync[0].sw=2.1.1
+uci set wifimedia.@sync[0].ftrs=2.1.1
+uci set wifimedia.@sync[0].button=2.1.1
 uci commit wifimedia
 
 uci batch <<-EOF
