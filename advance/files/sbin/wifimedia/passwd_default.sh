@@ -20,13 +20,17 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
+			if [ "$(uci get wifimedia.@sync[0].passwd)" != "$(echo $line | awk '{print $1}')" ]; then
 				echo "Reset Password hardware"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#Reset defaults passwd
 					echo -e "wifimedia\nwifimedia" | passwd admin
+					uci set wifimedia.@sync[0].passwd="$(echo $line | awk '{print $1}')"
+					uci commit wifimedia
 				else
 					echo "we will maintain the existing settings."
 				fi
+			fi	
 		done	
 	else
 		echo "Could not connect to the upgrade server, exiting..."

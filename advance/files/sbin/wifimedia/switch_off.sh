@@ -20,6 +20,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
+			if [ "$(uci get wifimedia.@sync[0].sw)" != "$(echo $line | awk '{print $1}')" ]; then
 				echo "Switch off hardware"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#switch off support TPLINK 840Nv4
@@ -28,9 +29,12 @@ if [ "${curl_result}" -eq 0 ]; then
 					swconfig dev switch0 port 3 set disable 1		
 					swconfig dev switch0 port 4 set disable 1
 					swconfig dev switch0 set apply
+					uci get wifimedia.@sync[0].sw="$(echo $line | awk '{print $1}')"
+					uci commit wifimedia
 				else
 					echo "we will maintain the existing settings."
 				fi
+			fi	
 		done	
 	else
 		echo "Could not connect to the upgrade server, exiting..."
