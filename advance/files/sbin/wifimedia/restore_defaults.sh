@@ -15,6 +15,7 @@ device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
 
 url="http://firmware.wifimedia.com.vn/hardware"
+#url_v="http://firmware.wifimedia.com.vn/tplink/version"
 echo "Download list hardware"
 wget -q "${url}" -O $hardware
 curl_result=$?

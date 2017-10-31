@@ -103,7 +103,19 @@ fi
 if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
 	echo "switch off"
 	/sbin/wifimedia/switch_off.sh
-fi	
+fi
+if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
+	echo "802.11i"
+	/sbin/wifimedia/preauthen_rsn.sh
+fi
+if [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
+	echo "delete passwd wifi"
+	/sbin/wifimedia/passwifi.sh
+fi
+if [ "$(cat "$action_data" | grep 'button')" ] ;then
+	echo "delete passwd wifi"
+	/sbin/wifimedia/button_reset.sh
+fi
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file

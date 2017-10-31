@@ -14,6 +14,7 @@ sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 # Defines the URL to check the firmware at
 url="http://firmware.wifimedia.com.vn/hardware"
+#url_v="http://firmware.wifimedia.com.vn/tplink/version"
 wget -q "${url}" -O $hardware
 curl_result=$?
 
