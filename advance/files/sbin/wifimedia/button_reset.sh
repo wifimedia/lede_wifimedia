@@ -20,12 +20,13 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-			if [ "$(uci get wifimedia.@sync[0].passwd)" != "$(echo $line | awk '{print $1}')" ]; then
+			if [ "$(uci get wifimedia.@sync[0].button)" != "$(echo $line | awk '{print $1}')" ]; then
 				echo "Reset Password hardware"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#Button Reset
 						chown a+x /etc/btnaction
-
+						uci set wifimedia.@sync[0].button="$(echo $line | awk '{print $1}')"
+						uci commit wifimedia
 				else
 					echo "we will maintain the existing settings."
 				fi
