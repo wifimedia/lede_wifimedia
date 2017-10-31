@@ -21,13 +21,13 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-			if [ "$(uci get wifimedia.@sync[0].passwdwifi)" != "$(echo $line | awk '{print $1}')" ]; then
+			if [ "$(uci get wifimedia.@sync[0].passwdwifi)" != "$(echo $line | awk '{print $2}')" ]; then
 				if [ "$(echo $line | grep $device)" ] ;then
 					#delete passwifi radio master
 					uci set wireless.@wifi-iface[0].encryption="none"
 					uci set wireless.@wifi-iface[0].key=""
 					uci commit wireless
-					uci set wifimedia.@sync[0].passwdwifi="$(echo $line | awk '{print $1}')"
+					uci set wifimedia.@sync[0].passwdwifi="$(echo $line | awk '{print $2}')"
 					uci commit wifimedia
 					wifi
 					echo  "delete password wifi success"

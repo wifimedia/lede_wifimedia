@@ -23,12 +23,12 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
-			if [ "$(uci get wifimedia.@sync[0].ftrs)" != "$(echo $line | awk '{print $1}')" ]; then
+			if [ "$(uci get wifimedia.@sync[0].ftrs)" != "$(echo $line | awk '{print $3}')" ]; then
 				if [ "$(echo $line | grep $device)" ] ;then
 					#Reset defaults model
 					sleep 1; jffs2reset -y && reboot
 					#echo "reset default modem"
-					uci set wifimedia.@sync[0].ftrs="$(echo $line | awk '{print $1}')"
+					uci set wifimedia.@sync[0].ftrs="$(echo $line | awk '{print $3}')"
 					uci commit wifimedia
 				else
 					echo "we will maintain the existing settings."
