@@ -32,7 +32,7 @@ if [ "${curl_result}" -eq 0 ]; then
 			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
 				# Make sure no old firmware exists
 				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
-				echo "Checking for upgrade binary"
+				#echo "Checking for upgrade binary"
 				if [ "$(echo $line | grep $device)" ] ;then
 					#echo "Downloading upgrade binary: $(grep $(cat /tmp/sysinfo/board_name)'-squashfs-sysupgrade' /tmp/upgrade/md5sums | awk '{ print $2 }' | sed 's/*//')"
 					wget -q "${url}" -O /tmp/firmware.bin
@@ -61,15 +61,15 @@ if [ "${curl_result}" -eq 0 ]; then
 					else
 						echo "The upgrade binary hash did not match, exiting..."
 					fi	
-				else
-					echo "There is no upgrade binary for this device ($(cat /tmp/sysinfo/model)/$(cat /tmp/sysinfo/board_name)), exiting..."
+				#else
+				#	echo "There is no upgrade binary for this device ($(cat /tmp/sysinfo/model)/$(cat /tmp/sysinfo/board_name)), exiting..."
 				fi
-			else
-				echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
+			#else
+			#	echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
 			fi
 		done	
-	else
-		echo "Could not connect to the upgrade server, exiting..."
+	#else
+	#	echo "Could not connect to the upgrade server, exiting..."
 	fi
 else
 	echo "Could not connect to the upgrade server, exiting..."
