@@ -22,7 +22,7 @@ url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
 url_v="http://firmware.wifimedia.com.vn/tplink/version"
 
 echo "Checking latest version number"
-wget -q "${url_v}" -O $version
+wget -q "${url}" -O $version
 echo "Getting latest version hashes and filenames"
 curl_result=$?
 
