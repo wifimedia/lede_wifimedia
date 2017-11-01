@@ -8,16 +8,16 @@ passwd=`uci -q get wifimedia.@advance[0].password`
 ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
 macs=`uci -q get wifimedia.@advance[0].macs`
-macs=$(echo $macs | sed 's/*/ /g')
 reboot=`uci -q get wifimedia.@advance[0].Everyday`
 group="/www/luci-static/resources/groups.txt"
+devices="/www/luci-static/resources/devices.txt"
 if [ "$groups_en" == "1" ];then
 	echo "ESSID: $essid" > $group
 	echo "PASSWORD: $passwd" >> $group
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
-			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo '$nasid' >> $group
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo '$nasid' >> $devices
 		fi
 else
 	echo "" > $group

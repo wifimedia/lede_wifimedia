@@ -22,10 +22,12 @@ device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
 
 url="http://local.wifimedia.vn/luci-static/resources/groups.txt"
 sha="http://local.wifimedia.vn/luci-static/resources/sha256.txt"
+grpd="http://local.wifimedia.vn/luci-static/resources/devices.txt"
 device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
 echo "Checking latest sha256sum"
 wget -q "${url}" -O $grp
 wget -q "${sha}" -O $sha256
+wget -q "${grpd}" -O $grp_device
 echo "Getting latest version hashes and filenames"
 curl_result=$?
 
@@ -33,11 +35,11 @@ if [ "${curl_result}" -eq 0 ]; then
 
 	if [ "$(sha256sum $grp | awk '{print $1}')" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
 	
-		cat "$grp" | while read line ; do
-			if [ "$(echo $line | grep 'MACs')" ] ;then
-				echo $line | awk '{print $2}' | sed 's/,/ /g' | xargs -n1 echo  >$grp_device #ghi cac thiet bi ra mot file rieng
-			fi
-		done
+		#cat "$grp" | while read line ; do
+		#	if [ "$(echo $line | grep 'MACs')" ] ;then
+		#		echo $line | awk '{print $2}' | sed 's/,/ /g' | xargs -n1 echo  >$grp_device #ghi cac thiet bi ra mot file rieng
+		#	fi
+		#done
 		
 		cat "$grp_device" | while read line ; do
 		
@@ -70,8 +72,8 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set wireless.@wifi-iface[0].rsn_preauth="0"
 						
 						cat "$grp_device" | while read  line;do #add list R0KH va R1KH
-							uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),wifimedia,000102030405060708090a0b0c0d0e0f"
-							uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+							uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+							uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 						done
 						uci commit wireless
 					else #Fast Roaming Preauth RSN C
