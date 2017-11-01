@@ -28,3 +28,4 @@ if [ "$reboot" == "1" ]; then
 else
 	echo "Reboot: 0" >> $group	
 fi
+
