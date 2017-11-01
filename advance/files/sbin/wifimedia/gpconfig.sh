@@ -70,7 +70,6 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set wireless.@wifi-iface[0].rsn_preauth="0"
 						
 						cat "$grp_device" | while read  line;do #add list R0KH va R1KH
-							nas=`uci get wireless.@wifi-iface[0].nasid`
 							uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),wifimedia,000102030405060708090a0b0c0d0e0f"
 							uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 						done
