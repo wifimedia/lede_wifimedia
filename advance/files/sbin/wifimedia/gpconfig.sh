@@ -7,7 +7,7 @@ if [ ! -d "/tmp/upgrade" ]; then mkdir /tmp/upgrade; fi
 
 # Wipes out previous upgrade information from dashboard
 sha256=/tmp/upgrade/sha256
-grp=/tmp/upgrade/group
+grp=/etc/config/group
 grp_device=/tmp/upgrade/devices
 echo "" > $sha256
 
@@ -21,26 +21,24 @@ device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
 # Defines the URL to check the firmware at
 
 url="http://local.wifimedia.vn/luci-static/resources/groups.txt"
-sha="http://local.wifimedia.vn/luci-static/resources/sha256.txt"
 grpd="http://local.wifimedia.vn/luci-static/resources/devices.txt"
-device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
+sha="http://local.wifimedia.vn/luci-static/resources/sha256.txt"
+device=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z)
 echo "Checking latest sha256sum"
-wget -q "${url}" -O $grp
 wget -q "${sha}" -O $sha256
-wget -q "${grpd}" -O $grp_device
-echo "Getting latest version hashes and filenames"
 curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
 
 	if [ "$(sha256sum $grp | awk '{print $1}')" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
-	
+	echo "Getting latest version hashes and filenames"
 		#cat "$grp" | while read line ; do
 		#	if [ "$(echo $line | grep 'MACs')" ] ;then
 		#		echo $line | awk '{print $2}' | sed 's/,/ /g' | xargs -n1 echo  >$grp_device #ghi cac thiet bi ra mot file rieng
 		#	fi
 		#done
-		
+		wget -q "${url}" -O $grp
+		wget -q "${grpd}" -O $grp_device
 		cat "$grp_device" | while read line ; do
 		
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
@@ -68,24 +66,26 @@ if [ "${curl_result}" -eq 0 ]; then
 					fi
 					
 					if [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
-						uci set wireless.@wifi-iface[0].ieee80211r="1"
-						uci set wireless.@wifi-iface[0].rsn_preauth="0"
-						
-						cat "$grp_device" | while read  line;do #add list R0KH va R1KH
-							uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-							uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-						done
-						uci commit wireless
-					else #Fast Roaming Preauth RSN C
-						uci set wireless.@wifi-iface[0].ieee80211r="0"
-						uci set wireless.@wifi-iface[0].rsn_preauth="1"
+
+						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
+							uci set wireless.@wifi-iface[0].ieee80211r="1"
+							uci set wireless.@wifi-iface[0].rsn_preauth="0"
+							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
+								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+							done
+							uci commit wireless
+						else #Fast Roaming Preauth RSN C
+							uci set wireless.@wifi-iface[0].ieee80211r="0"
+							uci set wireless.@wifi-iface[0].rsn_preauth="1"
+						fi
 					fi
 				done
 				uci commit wireless
+				wifi
 			fi	
 		done	
 	fi
 else
 	echo "Could not connect to the upgrade server, exiting..."
 fi
-
