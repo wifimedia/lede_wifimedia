@@ -13,7 +13,7 @@ echo "" > $sha256
 
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
-board_name=$(cat /tmp/sysinfo/board_name)
+#board_name=$(cat /tmp/sysinfo/board_name)
 #tplink840nv4
 #device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 #tplink940/941/901..
@@ -32,11 +32,6 @@ if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking download sha256sum"
 	if [ "$(sha256sum $grp | awk '{print $1}')" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
 	echo "Checking latest sha256sum"
-		#cat "$grp" | while read line ; do
-		#	if [ "$(echo $line | grep 'MACs')" ] ;then
-		#		echo $line | awk '{print $2}' | sed 's/,/ /g' | xargs -n1 echo  >$grp_device #ghi cac thiet bi ra mot file rieng
-		#	fi
-		#done
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
 		cat "$grp_device" | while read line ; do
@@ -48,8 +43,6 @@ if [ "${curl_result}" -eq 0 ]; then
 				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
 					uci add wireless wifi-iface; 
 				fi
-				#uci set wireless.@wifi-iface[0].network="wan"
-				#uci set wireless.@wifi-iface[0].mode="ap"
 				uci set wireless.@wifi-iface[0].device="radio0"
 				uci commit wireless
 				
