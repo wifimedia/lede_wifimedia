@@ -24,14 +24,14 @@ url="http://local.wifimedia.vn/luci-static/resources/groups.txt"
 grpd="http://local.wifimedia.vn/luci-static/resources/devices.txt"
 sha="http://local.wifimedia.vn/luci-static/resources/sha256.txt"
 device=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z)
-echo "Checking latest sha256sum"
+
 wget -q "${sha}" -O $sha256
 curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
-
+	echo "Checking download sha256sum"
 	if [ "$(sha256sum $grp | awk '{print $1}')" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
-	echo "Getting latest version hashes and filenames"
+	echo "Checking latest sha256sum"
 		#cat "$grp" | while read line ; do
 		#	if [ "$(echo $line | grep 'MACs')" ] ;then
 		#		echo $line | awk '{print $2}' | sed 's/,/ /g' | xargs -n1 echo  >$grp_device #ghi cac thiet bi ra mot file rieng
@@ -48,14 +48,20 @@ if [ "${curl_result}" -eq 0 ]; then
 				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
 					uci add wireless wifi-iface; 
 				fi
-				uci set wireless.@wifi-iface[0].network="wan"
-				uci set wireless.@wifi-iface[0].mode="ap"
+				#uci set wireless.@wifi-iface[0].network="wan"
+				#uci set wireless.@wifi-iface[0].mode="ap"
 				uci set wireless.@wifi-iface[0].device="radio0"
 				uci commit wireless
 				
 				cat "$grp" | while read line ; do
 					if [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
 						uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
+						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
+						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
+						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
 						uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 						uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
