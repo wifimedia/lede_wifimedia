@@ -3,7 +3,7 @@
 # All rights reserved.
 
 groups_en=`uci -q get wifimedia.@advance[0].ctrs_en`
-essid=`uci -q get wifimedia.@advance[0].essid`
+essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'`
 mode_=`uci -q get wifimedia.@advance[0].mode`
 networks_=`uci -q get wifimedia.@advance[0].network`
 cnl=`uci -q get wifimedia.@advance[0].maxassoc`
