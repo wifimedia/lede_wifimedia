@@ -17,7 +17,7 @@ sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 #tplink840nv4
 #device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 #tplink940/941/901..
-device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
+#device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
 # Defines the URL to check the firmware at
 
 url="http://local.wifimedia.vn/luci-static/resources/groups.txt"
