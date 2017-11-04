@@ -34,9 +34,9 @@ else
 fi
 
 if [ "$reboot" == "1" ]; then
-	echo "Reboot: $reboot" >> $group
+	echo "Auto reboot: $reboot" >> $group
 else
-	echo "Reboot: 0" >> $group	
+	echo "we will maintain the existing settings."
 fi
 
 echo "SHA256:  $(sha256sum $group | awk '{print $1}')"  > $sha

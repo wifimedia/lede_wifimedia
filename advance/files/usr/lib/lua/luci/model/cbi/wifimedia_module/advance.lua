@@ -53,43 +53,45 @@ if wfm_lcs then
 	wfm.rmempty = true
 end
 --[[ auto controller ]]--
-	s:tab("ctrgroups",  translate("Controllers"))
-	ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
-	ctrgs = s:taboption("ctrgroups",Value, "essid", "SSIDs")
-	ctrgs:depends({ctrs_en="1"})
+s:tab("ctrgroups",  translate("Controllers"))
+ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
+ctrgs = s:taboption("ctrgroups",Value, "essid", "SSIDs")
+ctrgs:depends({ctrs_en="1"})
 
-	ctrgsm = s:taboption("ctrgroups",ListValue, "mode", "MODE")
-	ctrgsm:value("ap","AP")
-	ctrgsm:value("mesh","MESH")
-	ctrgsm:value("wds","WDS")
-	ctrgsm:depends({ctrs_en="1"})
+ctrgsm = s:taboption("ctrgroups",ListValue, "mode", "MODE")
+ctrgsm:value("ap","AP")
+ctrgsm:value("mesh","MESH")
+ctrgsm:value("wds","WDS")
+ctrgsm:depends({ctrs_en="1"})
 
-	ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
-	ctrgscnl:depends({ctrs_en="1"})
+ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
+ctrgscnl:depends({ctrs_en="1"})
 
-	ctrgsn = s:taboption("ctrgroups",ListValue, "network", "Network")
-	ctrgsn:value("wan","WAN")
-	ctrgsn:value("lan","LAN")
-	ctrgsn:depends({ctrs_en="1"})
+ctrgsn = s:taboption("ctrgroups",ListValue, "network", "Network")
+ctrgsn:value("wan","WAN")
+ctrgsn:value("lan","LAN")
+ctrgsn:depends({ctrs_en="1"})
 
-	grwpa = s:taboption("ctrgroups",Value, "password", "Password")
-	grwpa.datatype = "wpakey"
-	grwpa:depends({ctrs_en="1"})
-	ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
-	ctrgsft:value("rsn_preauth","RSN preauthentication")
-	ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
-	ctrgsft:depends({ctrs_en="1"})
-	nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
-	nasid:depends({ft="ieee80211r"})
-	macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
-	macs:depends({ctrs_en="1"})
-	--macs.datatype = "macaddr"
+grwpa = s:taboption("ctrgroups",Value, "password", "Password")
+grwpa.datatype = "wpakey"
+grwpa:depends({ctrs_en="1"})
+ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
+ctrgsft:value("rsn_preauth","RSN preauthentication")
+ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
+ctrgsft:depends({ctrs_en="1"})
+nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
+nasid:depends({ft="ieee80211r"})
+macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
+macs:depends({ctrs_en="1"})
+--macs.datatype = "macaddr"
 
-
+apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
+apisolation.rmempty = false
+apisolation:depends({ctrs_en="1"})
 --[[Auto Reboot ]]--
 
 Everyday = s:taboption("ctrgroups",Flag, "Everyday","Everyday Auto Reboot")
 Everyday.rmempty = false
-
+Everyday:depends({ctrs_en="1"})
 
 return m
