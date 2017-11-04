@@ -82,7 +82,7 @@ end
 	nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 	nasid:depends({ft="ieee80211r"})
 	macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
-	--macs:depends({ft="ieee80211r"})
+	macs:depends({ctrs_en="1"})
 	--macs.datatype = "macaddr"
 
 
