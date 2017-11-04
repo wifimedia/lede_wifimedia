@@ -60,10 +60,10 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-						uci commit wireless
-				
+					elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
+						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"				
 					fi
-					
+					### Fast Roaming
 					if [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
@@ -73,14 +73,76 @@ if [ "${curl_result}" -eq 0 ]; then
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							uci commit wireless
 						else #Fast Roaming Preauth RSN C
 							uci set wireless.@wifi-iface[0].ieee80211r="0"
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 						fi
 					fi
+					
+					#Isolation
+					if [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
+
+						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
+							uci set wireless.@wifi-iface[0].isolate="1"
+						else #Fast Roaming Preauth RSN C
+							uci set wireless.@wifi-iface[0].isolate="0"
+						fi
+					fi
+
+					#Txpower
+					if [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
+
+						if [ "$(echo $line | grep 'auto')"  ];then
+							uci delete wireless.@wifi-device[0].txpower
+						elif [ "$(echo $line | grep 'low')"  ];then
+							uci set wireless.@wifi-device[0].txpower=17
+						elif [ "$(echo $line | grep 'medium')"  ];then
+							uci set wireless.@wifi-device[0].txpower=20
+						elif [ "$(echo $line | grep 'high')"  ];then
+							uci set wireless.@wifi-device[0].txpower=23						
+						fi
+					fi
+					
+					####Auto reboot every day
+					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
+						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
+							echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
+							crontab /tmp/autoreboot -u wifimedia
+							/etc/init.d/cron start
+							ntpd -q -p 0.asia.pool.ntp.org
+							ntpd -q -p 1.asia.pool.ntp.org
+							ntpd -q -p 2.asia.pool.ntp.org
+							ntpd -q -p 3.asia.pool.ntp.org
+							
+							uci set scheduled.days.Mon=1
+							uci set scheduled.days.Tue=1
+							uci set scheduled.days.Wed=1
+							uci set scheduled.days.Thu=1
+							uci set scheduled.days.Fri=1
+							uci set scheduled.days.Sat=1
+							uci set scheduled.days.Sun=1
+							uci set scheduled.time.minute="$(echo $line | awk '{print $4}')"
+							uci set scheduled.time.hour="$(echo $line | awk '{print $3}')"
+						fi
+					else
+						echo -e "" >/tmp/autoreboot
+						crontab /tmp/autoreboot -u wifimedia
+						/etc/init.d/cron start
+						uci set scheduled.days.Mon=0
+						uci set scheduled.days.Tue=0
+						uci set scheduled.days.Wed=0
+						uci set scheduled.days.Thu=0
+						uci set scheduled.days.Fri=0
+						uci set scheduled.days.Sat=0
+						uci set scheduled.days.Sun=0
+						
+						uci set scheduled.time.minute=0
+						uci set scheduled.time.hour=0
+					fi
+					####END Auto reboot every day
 				done
 				uci commit wireless
+				uci commit scheduled
 				wifi up
 			fi	
 		done	

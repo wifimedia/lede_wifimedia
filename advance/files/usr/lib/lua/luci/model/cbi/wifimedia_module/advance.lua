@@ -75,10 +75,12 @@ ctrgsn:depends({ctrs_en="1"})
 grwpa = s:taboption("ctrgroups",Value, "password", "Password")
 grwpa.datatype = "wpakey"
 grwpa:depends({ctrs_en="1"})
+
 ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
 ctrgsft:value("rsn_preauth","RSN preauthentication")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({ctrs_en="1"})
+
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
 macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
@@ -88,10 +90,31 @@ macs:depends({ctrs_en="1"})
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
---[[Auto Reboot ]]--
 
+--[[Tx Power]]--
+ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
+ctrgtx:value("auto","Auto")
+ctrgtx:value("low","Low")
+ctrgtx:value("medium","Medium")
+ctrgtx:value("high","High")
+ctrgtx:depends({ctrs_en="1"})
+--[[Auto Reboot ]]--
 Everyday = s:taboption("ctrgroups",Flag, "Everyday","Everyday Auto Reboot")
 Everyday.rmempty = false
 Everyday:depends({ctrs_en="1"})
 
+h = s:taboption("ctrgroups", ListValue, "hour", "Hours")
+local time = 0
+while (time < 24) do
+	h:value(time, time .. " ")
+	time = time + 1
+end
+h:depends({Everyday="1"})
+mi = s:taboption("ctrgroups", ListValue, "minute", "Minutes")
+local minute = 0
+while (minute < 60) do
+	mi:value(minute, minute .. " ")
+	minute = minute + 1
+end
+mi:depends({Everyday="1"})
 return m

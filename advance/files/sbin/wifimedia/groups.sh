@@ -11,6 +11,11 @@ passwd=`uci -q get wifimedia.@advance[0].password`
 ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
 macs=`uci -q get wifimedia.@advance[0].macs`
+isolation_=`uci -q get wifimedia.@advance[0].isolation`
+txpower_=`uci -q get wifimedia.@advance[0].txpower`
+hour_=`uci -q get wifimedia.@advance[0].hour`
+minute_=`uci -q get wifimedia.@advance[0].minute`
+
 reboot=`uci -q get wifimedia.@advance[0].Everyday`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
@@ -24,6 +29,8 @@ if [ "$groups_en" == "1" ];then
 	echo "CLN: $cnl" >> $group
 	echo "PASSWORD: $passwd" >> $group
 	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
+	echo "Isolation: $isolation_" >> $group
+	echo "TxPower: $txpower_" >> $group 
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
@@ -34,7 +41,7 @@ else
 fi
 
 if [ "$reboot" == "1" ]; then
-	echo "Auto reboot: $reboot" >> $group
+	echo "Reboot: $reboot $hour_ $minute_ " >> $group
 else
 	echo "we will maintain the existing settings."
 fi
