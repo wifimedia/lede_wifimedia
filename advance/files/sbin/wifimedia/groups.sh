@@ -15,6 +15,7 @@ reboot=`uci -q get wifimedia.@advance[0].Everyday`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
+echo "" > $group
 if [ "$groups_en" == "1" ];then
 	echo "ESSID: $essid" > $group
 	echo "MODE: $mode_" >> $group
