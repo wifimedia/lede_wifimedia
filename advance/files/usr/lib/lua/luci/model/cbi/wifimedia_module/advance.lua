@@ -117,4 +117,9 @@ while (minute < 60) do
 	minute = minute + 1
 end
 mi:depends({Everyday="1"})
+
+s:tab("administrator",  translate("Administrators"))
+admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
+admingr = s:taboption("administrator",Value, "passwords", "Password")
+admingr:depends({admins="1"})
 return m

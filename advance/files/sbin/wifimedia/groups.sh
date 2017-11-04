@@ -15,8 +15,10 @@ isolation_=`uci -q get wifimedia.@advance[0].isolation`
 txpower_=`uci -q get wifimedia.@advance[0].txpower`
 hour_=`uci -q get wifimedia.@advance[0].hour`
 minute_=`uci -q get wifimedia.@advance[0].minute`
-
 reboot=`uci -q get wifimedia.@advance[0].Everyday`
+
+admins_=`uci -q get wifimedia.@advance[0].admins`
+passwd_=`uci -q get wifimedia.@advance[0].password`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
@@ -36,6 +38,10 @@ if [ "$groups_en" == "1" ];then
 			echo "NASID: $nasid" >> $group
 			
 		fi
+
+		if [ $admins_ == "1" ] ; then
+			echo "PASSWORD: $passwd_" >> $group
+		fi		
 else
 	echo "" > $group
 fi

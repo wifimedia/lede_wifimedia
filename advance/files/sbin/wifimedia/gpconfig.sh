@@ -63,7 +63,9 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
-						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"				
+						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #TxPower
+						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
 					fi
 					### Fast Roaming
 					if [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
