@@ -21,7 +21,7 @@ if [ "$groups_en" == "1" ];then
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
 	echo "PASSWORD: $passwd" >> $group
-	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo '' > $devices
+	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
