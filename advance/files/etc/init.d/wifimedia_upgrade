@@ -8,4 +8,6 @@ EXTRA_HELP="        status  check upgrade"
 
 boot() {
     sleep 10 && /sbin/wifimedia/upgrade.sh 
+	/sbin/wifimedia/groups.sh
+	/sbin/wifimedia/gpconfig.sh
 }
