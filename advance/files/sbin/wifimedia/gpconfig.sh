@@ -81,7 +81,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					fi
 				done
 				uci commit wireless
-				wifi
+				wifi up
 			fi	
 		done	
 	fi
