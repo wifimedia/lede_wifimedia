@@ -101,7 +101,6 @@ apisolation:depends({ctrs_en="1"})
 s:tab("autoreboot",  translate("Reboot Groups"))
 Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
 Everyday.rmempty = false
-Everyday:depends({ctrs_en="1"})
 
 h = s:taboption("autoreboot", ListValue, "hour", "Hours")
 local time = 0
