@@ -53,7 +53,7 @@ if wfm_lcs then
 	wfm.rmempty = true
 end
 --[[ auto controller ]]--
-s:tab("ctrgroups",  translate("Controllers"))
+s:tab("ctrgroups",  translate("Wireless Groups"))
 ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
 ctrgs = s:taboption("ctrgroups",Value, "essid", "SSIDs")
 ctrgs:depends({ctrs_en="1"})
@@ -86,11 +86,6 @@ nasid:depends({ft="ieee80211r"})
 macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
 macs:depends({ctrs_en="1"})
 --macs.datatype = "macaddr"
-
-apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
-apisolation.rmempty = false
-apisolation:depends({ctrs_en="1"})
-
 --[[Tx Power]]--
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
@@ -98,19 +93,24 @@ ctrgtx:value("low","Low")
 ctrgtx:value("medium","Medium")
 ctrgtx:value("high","High")
 ctrgtx:depends({ctrs_en="1"})
+
+apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
+apisolation.rmempty = false
+apisolation:depends({ctrs_en="1"})
 --[[Auto Reboot ]]--
-Everyday = s:taboption("ctrgroups",Flag, "Everyday","Everyday Auto Reboot")
+s:tab("autoreboot",  translate("Reboot Groups"))
+Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
 Everyday.rmempty = false
 Everyday:depends({ctrs_en="1"})
 
-h = s:taboption("ctrgroups", ListValue, "hour", "Hours")
+h = s:taboption("autoreboot", ListValue, "hour", "Hours")
 local time = 0
 while (time < 24) do
 	h:value(time, time .. " ")
 	time = time + 1
 end
 h:depends({Everyday="1"})
-mi = s:taboption("ctrgroups", ListValue, "minute", "Minutes")
+mi = s:taboption("autoreboot", ListValue, "minute", "Minutes")
 local minute = 0
 while (minute < 60) do
 	mi:value(minute, minute .. " ")
