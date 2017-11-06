@@ -83,8 +83,7 @@ ctrgsft:depends({ctrs_en="1"})
 
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
-macs = s:taboption("ctrgroups",Value, "macs", "MACs Wireless master")
-macs:depends({ctrs_en="1"})
+
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
@@ -97,6 +96,13 @@ ctrgtx:depends({ctrs_en="1"})
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
+
+s:tab("device",  translate("AP Groups"))
+device = s:taboption("device",Flag, "gpd_en","Enable Groups")
+device.rmempty = false
+device = s:taboption("device",Value, "macs", "Devices")
+device:depends({gpd_en="1"})
+
 --[[Auto Reboot ]]--
 s:tab("autoreboot",  translate("Reboot Groups"))
 Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
