@@ -53,7 +53,6 @@ if wfm_lcs then
 	wfm.rmempty = true
 end
 --[[
---[[ auto controller ]]--
 s:tab("ctrgroups",  translate("Wireless Groups"))
 ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
 ctrgs = s:taboption("ctrgroups",Value, "essid", "SSIDs")
@@ -86,7 +85,7 @@ nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
 
 --macs.datatype = "macaddr"
---[[Tx Power]]--
+
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
 ctrgtx:value("low","Low")
@@ -104,7 +103,7 @@ device.rmempty = false
 device = s:taboption("device",Value, "macs", "Devices")
 device:depends({gpd_en="1"})
 
---[[Auto Reboot ]]--
+
 s:tab("autoreboot",  translate("Reboot Groups"))
 Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
 Everyday.rmempty = false
