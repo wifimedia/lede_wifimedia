@@ -10,12 +10,17 @@ cnl=`uci -q get wifimedia.@advance[0].maxassoc`
 passwd=`uci -q get wifimedia.@advance[0].password`
 ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
-macs=`uci -q get wifimedia.@advance[0].macs`
+
 isolation_=`uci -q get wifimedia.@advance[0].isolation`
 txpower_=`uci -q get wifimedia.@advance[0].txpower`
 hour_=`uci -q get wifimedia.@advance[0].hour`
 minute_=`uci -q get wifimedia.@advance[0].minute`
 reboot=`uci -q get wifimedia.@advance[0].Everyday`
+
+gpd_en=`uci -q get wifimedia.@advance[0].gpd_en`
+macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
+
+wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
 
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].password`
@@ -30,9 +35,10 @@ if [ "$groups_en" == "1" ];then
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
 	echo "PASSWORD: $passwd" >> $group
-	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
+	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
-	echo "TxPower: $txpower_" >> $group 
+	echo "TxPower: $txpower_" >> $group
+	echo "Wireless_off: $wireless_off" >> $group
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
@@ -41,9 +47,13 @@ if [ "$groups_en" == "1" ];then
 
 		if [ $admins_ == "1" ] ; then
 			echo "PASSWORD: $passwd_" >> $group
-		fi		
+		fi
 else
 	echo "" > $group
+fi
+
+if [ "$gpd_en" == "1" ];then
+	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 fi
 
 if [ "$reboot" == "1" ]; then
