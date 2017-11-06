@@ -63,4 +63,3 @@ else
 fi
 
 echo "SHA256:  $(sha256sum $group | awk '{print $1}')"  > $sha
-
