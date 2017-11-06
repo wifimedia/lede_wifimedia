@@ -128,7 +128,7 @@ uci batch <<-EOF
 EOF
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" v3.1gw"
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" GW"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
