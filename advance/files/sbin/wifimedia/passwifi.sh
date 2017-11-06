@@ -43,3 +43,4 @@ if [ "${curl_result}" -eq 0 ]; then
 #	echo "Could not connect to the upgrade server, exiting..."
 fi
 
+
