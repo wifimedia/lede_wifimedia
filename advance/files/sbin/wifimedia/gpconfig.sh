@@ -101,7 +101,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-device[0].txpower=23						
 						fi
 					fi
-					
+					wifi up
 					####Auto reboot every day
 					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
