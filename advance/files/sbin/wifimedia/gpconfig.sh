@@ -40,7 +40,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	
 				uci delete wireless.@wifi-iface[0]
 				uci delete wireless.@wifi-iface[1]
-
+				uci commit wireless
 				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
 					uci add wireless wifi-iface; 
 				fi
