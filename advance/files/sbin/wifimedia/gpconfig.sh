@@ -38,13 +38,8 @@ if [ "${curl_result}" -eq 0 ]; then
 		
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
 	
-				uci delete wireless.@wifi-iface[0]
+				#uci delete wireless.@wifi-iface[0]
 				uci delete wireless.@wifi-iface[1]
-				uci commit wireless
-				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
-					uci add wireless wifi-iface; 
-				fi
-				uci set wireless.@wifi-iface[0].device="radio0"
 				uci set wireless.@wifi-iface[0].disabled="0"
 				uci commit wireless
 				
@@ -144,8 +139,6 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set scheduled.time.hour=0
 					fi
 					####END Auto reboot every day
-					uci commit wireless
-					uci commit scheduled
 				done
 				uci commit wireless
 				uci commit scheduled
