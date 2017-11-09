@@ -144,7 +144,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				done
 				uci commit wireless
 				uci commit scheduled
-				sleep 5
+				#sleep 5
 				#wifi up
 				/etc/init.d/network restart
 			fi	
