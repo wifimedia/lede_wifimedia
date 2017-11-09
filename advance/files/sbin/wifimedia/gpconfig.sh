@@ -139,6 +139,8 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set scheduled.time.hour=0
 					fi
 					####END Auto reboot every day
+					uci commit wireless
+					uci commit scheduled
 				done
 				uci commit wireless
 				uci commit scheduled
