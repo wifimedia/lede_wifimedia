@@ -42,7 +42,7 @@ if [ "$groups_en" == "1" ];then
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
-			
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
 		fi
 
 		if [ $admins_ == "1" ] ; then
