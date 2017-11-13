@@ -62,4 +62,5 @@ else
 	echo "we will maintain the existing settings."
 fi
 
-echo "SHA256:  $(sha256sum $group | awk '{print $1}')"  > $sha
+echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
+echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
