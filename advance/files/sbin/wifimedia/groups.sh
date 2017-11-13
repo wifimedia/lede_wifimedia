@@ -63,4 +63,4 @@ else
 fi
 
 echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
-echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
+#echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
