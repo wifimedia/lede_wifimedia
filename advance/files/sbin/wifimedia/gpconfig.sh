@@ -38,8 +38,15 @@ if [ "${curl_result}" -eq 0 ]; then
 		
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
 	
-				#uci delete wireless.@wifi-iface[0]
 				uci delete wireless.@wifi-iface[1]
+				uci delete wireless.@wifi-iface[0]
+				
+				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
+					uci add wireless wifi-iface; 
+				fi
+				uci set wireless.@wifi-iface[0].network="lan"
+				uci set wireless.@wifi-iface[0].mode="ap"
+				uci set wireless.@wifi-iface[0].device="radio0"
 				uci set wireless.@wifi-iface[0].disabled="0"
 				uci commit wireless
 				
