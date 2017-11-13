@@ -1,7 +1,16 @@
 #!/bin/sh
 
 rnd=`cat /dev/urandom | tr -dc 'A-Z' | head -c1`
-###For RAMMIT
+
+uci -q get system.@reset_all[0] || {
+	uci batch <<-EOF
+	add system reset_all
+	set system.@reset_all[0]=reset_all
+	commit system
+EOF
+}
+
+###Sync
 uci -q get wifimedia.@sync[0] || {
 	uci batch <<-EOF
 	add wifimedia sync
@@ -12,13 +21,24 @@ uci -q get wifimedia.@sync[0] || {
 EOF
 }
 
+###Build Date
+uci -q get wifimedia.@builddate[0] || {
+	uci batch <<-EOF
+	add wifimedia builddate
+	set wifimedia.@builddate[0]=builddate
+	set wifimedia.@builddate[0].date=04-11-2017
+	commit wifimedia
+EOF
+}
+
 #change ver  for upgrade
 uci set wifimedia.@sync[0].version=2.1.1
-uci set wifimedia.@sync[0].passwdwifi=2.1.1
-uci set wifimedia.@sync[0].rsn=2.1.1
-uci set wifimedia.@sync[0].sw=2.1.1
-uci set wifimedia.@sync[0].ftrs=2.1.1
-uci set wifimedia.@sync[0].button=2.1.1
+uci set wifimedia.@sync[0].rsn=2.6
+uci set wifimedia.@sync[0].sw=2.5
+uci set wifimedia.@sync[0].button=2.4
+uci set wifimedia.@sync[0].ftrs=2.3
+uci set wifimedia.@sync[0].passwdwifi=2.2
+uci set wifimedia.@sync[0].passwd=2.1
 uci commit wifimedia
 
 uci batch <<-EOF
@@ -29,7 +49,7 @@ uci batch <<-EOF
 EOF
 
 uci batch <<-EOF
-	set network.lan.ipaddr=172.16.99.1
+	set network.lan.ipaddr=192.168.5.1
 	set network.wan.type=bridge
 	commit network
 EOF
@@ -117,7 +137,7 @@ uci batch <<-EOF
 EOF
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" v3.1a_AP"
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" GW"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
@@ -134,6 +154,7 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
 ######Cron job
 echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
+echo "* * * * * /sbin/wifimedia/gpconfig.sh" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
