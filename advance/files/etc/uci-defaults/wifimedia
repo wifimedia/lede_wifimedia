@@ -1,6 +1,15 @@
 #!/bin/sh
 
 rnd=`cat /dev/urandom | tr -dc 'A-Z' | head -c1`
+
+uci -q get system.@reset_all[0] || {
+	uci batch <<-EOF
+	add system reset_all
+	set system.@reset_all[0]=reset_all
+	commit system
+EOF
+}
+
 ###Sync
 uci -q get wifimedia.@sync[0] || {
 	uci batch <<-EOF
