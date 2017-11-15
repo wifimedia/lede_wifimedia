@@ -77,7 +77,7 @@ grwpa.datatype = "wpakey"
 grwpa:depends({ctrs_en="1"})
 
 ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
-ctrgsft:value("rsn_preauth","RSN preauthentication")
+ctrgsft:value("rsn_preauth","Fast roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({ctrs_en="1"})
 
