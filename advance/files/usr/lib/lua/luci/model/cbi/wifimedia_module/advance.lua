@@ -81,7 +81,7 @@ ctrgsft:value("rsn_preauth","Fast roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({ctrs_en="1"})
 
-nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
+nasid = s:taboption("ctrgroups",Value, "nasid", "LocalID")
 nasid:depends({ft="ieee80211r"})
 
 --macs.datatype = "macaddr"
