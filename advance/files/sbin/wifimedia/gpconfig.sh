@@ -30,7 +30,7 @@ curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking download sha256sum"
-	if [ "$(sha256sum $grp | awk '{print $1}')" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
+	if [ "$(uci get wifimedia.@advance[0].sha256)" != "$(cat $sha256 | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
 	echo "Checking latest sha256sum"
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
@@ -146,15 +146,19 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set scheduled.time.hour=0
 					fi
 					####END Auto reboot every day
+					#commit sha256
+					uci set wifimedia.@advance[0].sha256="$(sha256sum $grp | awk '{print $1}')"
+					uci commit wifimedia
 					uci commit wireless
 					uci commit scheduled
+					#switch interface wireless
+					cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
 				done
 				uci commit wireless
 				uci commit scheduled
-
 				# Restart all of the services
 				/etc/init.d/network restart
-			fi	
+			fi
 		done	
 	fi
 else
