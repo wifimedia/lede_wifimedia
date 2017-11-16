@@ -7,6 +7,8 @@ essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'`
 mode_=`uci -q get wifimedia.@advance[0].mode`
 networks_=`uci -q get wifimedia.@advance[0].network`
 cnl=`uci -q get wifimedia.@advance[0].maxassoc`
+
+encr=`uci -q get wifimedia.@advance[0].encrypt`
 passwd=`uci -q get wifimedia.@advance[0].password`
 ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
@@ -39,13 +41,15 @@ if [ "$groups_en" == "1" ];then
 	echo "MODE: $mode_" >> $group
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
-	echo "PASSWORD: $passwd" >> $group
+
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
 	echo "TxPower: $txpower_" >> $group
 	echo "Wireless_off: $wireless_off" >> $group
-	echo "FT: $ft" >> $group
-	if [ $ft == "ieee80211r" ] ; then
+	if [ $encr == "encryption" ] ; then
+		echo "PASSWORD: $passwd" >> $group
+		echo "FT: $ft" >> $group
+	elif [ $ft == "ieee80211r" ] ; then
 		echo "NASID: $nasid" >> $group
 		echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
 	else 
