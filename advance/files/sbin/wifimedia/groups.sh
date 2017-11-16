@@ -43,6 +43,8 @@ if [ "$groups_en" == "1" ];then
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
 			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
+		else 
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices
 		fi
 
 		if [ $admins_ == "1" ] ; then
