@@ -17,7 +17,7 @@ end
 s = m:section(TypedSection, "advance","")
 s.anonymous = true
 s.addremove = false
-
+--[[
 s:tab("rssi",  translate("RSSI"))
 	--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
 	rssi = s:taboption("rssi", Flag, "enable","Status")
@@ -41,7 +41,7 @@ s:tab("rssi",  translate("RSSI"))
 	t.datatype = "min(-90)"
 	--s:taboption("rssi",Value, "delays","Time Delays (s)").optional = false
 	--t:depends({enable="1"})
---[[
+
 if online then
 	s:tab("online",  translate("Staus Online"))
 	rm= s:taboption("online",Flag, "online", "Status","On/Off")
