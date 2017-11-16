@@ -40,7 +40,7 @@ if [ "${curl_result}" -eq 0 ]; then
 			##Gateway
 			#echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
-			
+	
 				uci delete wireless.@wifi-iface[1]
 				uci delete wireless.@wifi-iface[0]
 				
@@ -61,17 +61,14 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
-						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
-					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
-						uci set wireless.@wifi-iface[0].encryption="mixed-psk"
-						uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"	
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 					#elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
 					#	uci set wireless.@wifi-iface[0].txpower="$(echo $line | awk '{print $2}')"
-					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Change Password admin
+					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
-					fi
+			
 					### Fast Roaming
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
 
@@ -120,7 +117,6 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-device[0].txpower=23						
 						fi
 					fi
-					wifi u
 					####Auto reboot every day
 					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
@@ -160,15 +156,13 @@ if [ "${curl_result}" -eq 0 ]; then
 					####END Auto reboot every day
 					#commit sha256
 					uci set wifimedia.@advance[0].sha256="$(sha256sum $grp | awk '{print $1}')"
-					uci commit wifimedia
-					uci commit wireless
-					uci commit scheduled
 					#switch interface wireless
 					if [ "$(uci get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
 						cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
 						uci set wifimedia.@advance[0].wireless_cfg=1
 					fi	
 				done
+				uci commit wifimedia
 				uci commit wireless
 				uci commit scheduled
 				wifi up
