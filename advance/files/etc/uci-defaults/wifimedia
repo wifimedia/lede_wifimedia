@@ -150,7 +150,7 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 #rm -f /etc/privoxy/default.filter
 
 #chmod a+x /sbin/wifimedia/*.sh
-echo "No Fast Roaming" /etc/FT
+echo "No Fast Roaming" >/etc/FT
 /etc/init.d/system reload
 /etc/init.d/led reload
 
