@@ -92,24 +92,20 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							uci commit wireless
+							echo "No Support Fast Roaming" >/etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
 						fi
-					fi	
-					
-					#Isolation
-					if [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
 						else #Fast Roaming Preauth RSN C
 							uci set wireless.@wifi-iface[0].isolate="0"
 						fi
-					fi
-
 					#Txpower
-					if [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | grep 'auto')"  ];then
 							uci delete wireless.@wifi-device[0].txpower
