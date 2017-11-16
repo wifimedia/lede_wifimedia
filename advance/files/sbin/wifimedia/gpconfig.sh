@@ -73,7 +73,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
 					fi
 					### Fast Roaming
-					if [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
@@ -88,20 +88,27 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi
-					fi
-					
-					#Isolation
-					if [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
+						if [ "$(echo $line | awk '{print $2}')" == " " ];then
+							uci delete wireless.@wifi-iface[0].encryption
+							uci delete wireless.@wifi-iface[0].key
+							uci delete wireless.@wifi-iface[0].ieee80211r
+							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci commit wireless
+							echo "No Support Fast Roaming" >/etc/FT
+						else	
+							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
+							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+						fi
+					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
 						else #Fast Roaming Preauth RSN C
 							uci set wireless.@wifi-iface[0].isolate="0"
 						fi
-					fi
-
 					#Txpower
-					if [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | grep 'auto')"  ];then
 							uci delete wireless.@wifi-device[0].txpower
@@ -113,7 +120,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-device[0].txpower=23						
 						fi
 					fi
-					wifi up
+					wifi u
 					####Auto reboot every day
 					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
