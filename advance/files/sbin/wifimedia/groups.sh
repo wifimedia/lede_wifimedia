@@ -42,7 +42,9 @@ if [ "$groups_en" == "1" ];then
 	echo "FT: $ft" >> $group
 		if [ $ft == "ieee80211r" ] ; then
 			echo "NASID: $nasid" >> $group
-			
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
+		else 
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices
 		fi
 
 		if [ $admins_ == "1" ] ; then
@@ -62,4 +64,5 @@ else
 	echo "we will maintain the existing settings."
 fi
 
-echo "SHA256:  $(sha256sum $group | awk '{print $1}')"  > $sha
+echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
+#echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha

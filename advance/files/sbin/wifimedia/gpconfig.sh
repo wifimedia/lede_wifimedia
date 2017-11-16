@@ -34,16 +34,19 @@ if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking latest sha256sum"
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
+		rm -f /etc/ap
+		touch -c /etc/ap
 		cat "$grp_device" | while read line ; do
-		
+			##Gateway
+			echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
 	
 				uci delete wireless.@wifi-iface[1]
 				uci delete wireless.@wifi-iface[0]
 				
-				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
-					uci add wireless wifi-iface; 
-				fi
+				#if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
+				uci add wireless wifi-iface; 
+				#fi
 				uci set wireless.@wifi-iface[0].network="lan"
 				uci set wireless.@wifi-iface[0].mode="ap"
 				uci set wireless.@wifi-iface[0].device="radio0"
@@ -65,7 +68,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
-						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
+						uci set wireless.@wifi-iface[0].txpower="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
 					fi
@@ -152,12 +155,16 @@ if [ "${curl_result}" -eq 0 ]; then
 					uci commit wireless
 					uci commit scheduled
 					#switch interface wireless
-					cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
+					if [ "$(uci get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
+						cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
+						uci set wifimedia.@advance[0].wireless_cfg=1
+					fi	
 				done
 				uci commit wireless
 				uci commit scheduled
+				wifi up
 				# Restart all of the services
-				/etc/init.d/network restart
+				#/etc/init.d/network restart
 			fi
 		done	
 	fi
