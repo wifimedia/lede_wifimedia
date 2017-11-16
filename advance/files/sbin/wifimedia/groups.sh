@@ -45,16 +45,16 @@ if [ "$groups_en" == "1" ];then
 	echo "TxPower: $txpower_" >> $group
 	echo "Wireless_off: $wireless_off" >> $group
 	echo "FT: $ft" >> $group
-		if [ $ft == "ieee80211r" ] ; then
-			echo "NASID: $nasid" >> $group
-			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
-		else 
-			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices
-		fi
+	if [ $ft == "ieee80211r" ] ; then
+		echo "NASID: $nasid" >> $group
+		echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
+	else 
+		echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices
+	fi
 
-		if [ $admins_ == "1" ] ; then
-			echo "PASSWORD: $passwd_" >> $group
-		fi
+	if [ $admins_ == "1" ] ; then
+		echo "admin: $passwd_" >> $group
+	fi
 else
 	echo "" > $group
 fi
