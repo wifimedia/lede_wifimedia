@@ -78,7 +78,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
 							uci set wireless.@wifi-iface[0].rsn_preauth="0"
-							echo "Fast BSS Transition" >/etc/FT
+							echo "Fast BSS Transition Roaming" >/etc/FT
 							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
@@ -86,7 +86,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						else #Fast Roaming Preauth RSN C
 							uci set wireless.@wifi-iface[0].ieee80211r="0"
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
-							echo "Fast Secure Roaming" >/etc/FT
+							echo "Fast-Secure Roaming" >/etc/FT
 						fi
 					fi
 					
