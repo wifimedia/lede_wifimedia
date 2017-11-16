@@ -61,19 +61,16 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
-						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
-					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
-						uci set wireless.@wifi-iface[0].encryption="mixed-psk"
-						uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"	
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 					#elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
 					#	uci set wireless.@wifi-iface[0].txpower="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
-					fi
+			
 					### Fast Roaming
-					if [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
+					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
@@ -88,7 +85,18 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi
-					fi
+					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
+						if [ "$(echo $line | awk '{print $2}')" == " " ];then
+							uci delete wireless.@wifi-iface[0].encryption
+							uci delete wireless.@wifi-iface[0].key
+							uci delete wireless.@wifi-iface[0].ieee80211r
+							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci commit wireless
+						else	
+							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
+							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+						fi
+					fi	
 					
 					#Isolation
 					if [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
