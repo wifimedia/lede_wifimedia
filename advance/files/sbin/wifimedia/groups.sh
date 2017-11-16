@@ -49,7 +49,8 @@ if [ "$groups_en" == "1" ];then
 	if [ $encr == "encryption" ] ; then
 		echo "PASSWORD: $passwd" >> $group
 		echo "FT: $ft" >> $group
-	elif [ $ft == "ieee80211r" ] ; then
+	fi	
+	if [ $ft == "ieee80211r" ] ; then
 		echo "NASID: $nasid" >> $group
 		echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
 	else 
