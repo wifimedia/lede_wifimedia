@@ -29,6 +29,11 @@ devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
 echo "" > $devices
 echo "" > $group
+
+if [ "$gpd_en" == "1" ];then
+	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
+fi
+
 if [ "$groups_en" == "1" ];then
 	echo "ESSID: $essid" > $group
 	echo "MODE: $mode_" >> $group
@@ -52,10 +57,6 @@ if [ "$groups_en" == "1" ];then
 		fi
 else
 	echo "" > $group
-fi
-
-if [ "$gpd_en" == "1" ];then
-	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 fi
 
 if [ "$reboot" == "1" ]; then
