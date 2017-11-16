@@ -34,16 +34,19 @@ if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking latest sha256sum"
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
+		rm -f /etc/ap
+		touch -c /etc/ap
 		cat "$grp_device" | while read line ; do
-		
+			##Gateway
+			echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
 	
 				uci delete wireless.@wifi-iface[1]
 				uci delete wireless.@wifi-iface[0]
 				
-				if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
-					uci add wireless wifi-iface; 
-				fi
+				#if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
+				uci add wireless wifi-iface; 
+				#fi
 				uci set wireless.@wifi-iface[0].network="lan"
 				uci set wireless.@wifi-iface[0].mode="ap"
 				uci set wireless.@wifi-iface[0].device="radio0"
@@ -159,8 +162,9 @@ if [ "${curl_result}" -eq 0 ]; then
 				done
 				uci commit wireless
 				uci commit scheduled
+				wifi up
 				# Restart all of the services
-				/etc/init.d/network restart
+				#/etc/init.d/network restart
 			fi
 		done	
 	fi
