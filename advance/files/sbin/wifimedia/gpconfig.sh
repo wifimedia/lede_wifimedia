@@ -152,7 +152,10 @@ if [ "${curl_result}" -eq 0 ]; then
 					uci commit wireless
 					uci commit scheduled
 					#switch interface wireless
-					cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
+					if [ "$(uci get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
+						cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
+						uci set wifimedia.@advance[0].wireless_cfg=1
+					fi	
 				done
 				uci commit wireless
 				uci commit scheduled
