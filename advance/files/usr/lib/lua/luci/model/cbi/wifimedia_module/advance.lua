@@ -37,6 +37,7 @@ s:tab("rssi",  translate("RSSI"))
 	--	m.pageaction = false
 
 	t = s:taboption("rssi", Value, "level","RSSI:","Range:-60dBm ~ -90dBm")
+	t:depends({enable="1"})
 	t.datatype = "min(-90)"
 	--s:taboption("rssi",Value, "delays","Time Delays (s)").optional = false
 	--t:depends({enable="1"})
@@ -72,16 +73,21 @@ ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
 ctrgsn:depends({ctrs_en="1"})
 
+ctrgsn = s:taboption("ctrgroups",ListValue, "encrypt", "Wireless Security")
+ctrgsn:value("","No Encryption")
+ctrgsn:value("encryption","WPA-PSK/WPA2-PSK")
+ctrgsn:depends({ctrs_en="1"})
+
 grwpa = s:taboption("ctrgroups",Value, "password", "Password")
 grwpa.datatype = "wpakey"
-grwpa:depends({ctrs_en="1"})
+grwpa:depends({encrypt="encryption"})
 
 ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
-ctrgsft:value("rsn_preauth","Fast roaming")
+ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
-ctrgsft:depends({ctrs_en="1"})
+ctrgsft:depends({encrypt="encryption"})
 
-nasid = s:taboption("ctrgroups",Value, "nasid", "LocalID")
+nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
 
 --macs.datatype = "macaddr"
