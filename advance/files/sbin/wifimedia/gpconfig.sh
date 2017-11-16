@@ -157,15 +157,13 @@ if [ "${curl_result}" -eq 0 ]; then
 					####END Auto reboot every day
 					#commit sha256
 					uci set wifimedia.@advance[0].sha256="$(sha256sum $grp | awk '{print $1}')"
-					uci commit wifimedia
-					uci commit wireless
-					uci commit scheduled
 					#switch interface wireless
 					if [ "$(uci get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
 						cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
 						uci set wifimedia.@advance[0].wireless_cfg=1
 					fi	
 				done
+				uci commit wifimedia
 				uci commit wireless
 				uci commit scheduled
 				wifi up
