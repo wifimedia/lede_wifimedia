@@ -34,11 +34,11 @@ if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking latest sha256sum"
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
-		rm -f /etc/ap
-		touch -c /etc/ap
+		#rm -f /etc/ap
+		#touch -c /etc/ap
 		cat "$grp_device" | while read line ; do
 			##Gateway
-			echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
+			#echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
 	
 				uci delete wireless.@wifi-iface[1]

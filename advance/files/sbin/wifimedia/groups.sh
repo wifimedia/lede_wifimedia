@@ -29,11 +29,13 @@ passwd_=`uci -q get wifimedia.@advance[0].password`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
+dhcp="/tmp/dhcp.leases"
 echo "" > $devices
 echo "" > $group
-
+rm -f /etc/ap
+touch -c /etc/ap
 if [ "$gpd_en" == "1" ];then
-	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
+	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices
 fi
 
 if [ "$groups_en" == "1" ];then
@@ -60,8 +62,6 @@ if [ "$groups_en" == "1" ];then
 	if [ $admins_ == "1" ] ; then
 		echo "admin: $passwd_" >> $group
 	fi
-else
-	echo "" > $group
 fi
 
 if [ "$reboot" == "1" ]; then
@@ -69,6 +69,22 @@ if [ "$reboot" == "1" ]; then
 else
 	echo "we will maintain the existing settings."
 fi
+#EXPORT DATA AP IP MAC
+cat "$devices" | while read line ; do
+
+	linedev=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr a-z A-Z)
+		
+		cat "$dhcp" | while read line ; do
+		
+			linedhcp=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr a-z A-Z)
+			#echo $linedev
+			#echo $linedhcp
+			if [ "$linedev" == "$linedhcp" ] ;then
+				echo $line | awk '{print $2 " http://" $3 " " $3}' >>/etc/ap
+			fi
+		
+		done
+done
 
 echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
 #echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
