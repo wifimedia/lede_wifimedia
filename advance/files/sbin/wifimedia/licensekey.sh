@@ -22,7 +22,7 @@ if [ "${curl_result}" -eq 0 ]; then
 		cat "$licensekey" | while read line ; do
 			if [ "$(echo $line | grep $device)" ] ;then
 				#Update License Key
-				uci -q get wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
+				uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
 				/usr/bin/license.sh
 			else
