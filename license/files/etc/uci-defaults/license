@@ -1,7 +1,7 @@
 #!/bin/sh
 #Copyright ©  dungtd8x@gmail.com
 
-echo "0 0 * * * /usr/bin/license.sh" >>/etc/crontabs/root
+#echo "0 0 * * * /usr/bin/license.sh" >>/etc/crontabs/root
 date +"%s" >/etc/opt/first_time.txt
 
 A1=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  17,10,2,1 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
