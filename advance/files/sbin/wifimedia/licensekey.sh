@@ -12,7 +12,7 @@ echo "" > $licensekey
 echo "Waiting a bit..check license key."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
-# Defines the URL to check the firmware at
+# Defines the URL to check the license key at
 url="http://firmware.wifimedia.com.vn/hardware_active"
 wget -q "${url}" -O $licensekey
 curl_result=$?
