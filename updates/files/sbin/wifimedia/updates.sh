@@ -87,11 +87,11 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+#if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
-	echo "upgrade"
-	/sbin/wifimedia/upgrade.sh
-fi
+#	echo "upgrade"
+#	/sbin/wifimedia/upgrade.sh
+#fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
 	/sbin/wifimedia/restore_defaults.sh
@@ -100,10 +100,10 @@ if [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
 	/sbin/wifimedia/passwd_default.sh
 fi
-if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
-	echo "switch off"
-	/sbin/wifimedia/switch_off.sh
-fi
+#if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
+#	echo "switch off"
+#	/sbin/wifimedia/switch_off.sh
+#fi
 if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
 	echo "802.11i"
 	/sbin/wifimedia/preauthen_rsn.sh
