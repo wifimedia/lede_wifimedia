@@ -12,7 +12,7 @@ diff=$(expr $diff \% 3600)
 min=$(expr $diff / 60)
 
 #uptime="${days}"
-time=$(uci get -q wifimedia.@advance[0].time)
+time=$(uci -q get wifimedia.@advance[0].time)
 time1=${days}
 uptime="${time:-$time1}"
 #uptime="${$(uci get license.active.time):-${days}}"
