@@ -7,5 +7,6 @@ EXTRA_COMMANDS="status"
 EXTRA_HELP="        status  check upgrade"
 
 boot() {
-    sleep 10 && /sbin/wifimedia/upgrade.sh 
+    sleep 10 && /sbin/wifimedia/upgrade.sh
+	/sbin/wifimedia/licensekey.sh 
 }
