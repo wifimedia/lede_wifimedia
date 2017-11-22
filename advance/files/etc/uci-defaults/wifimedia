@@ -203,5 +203,5 @@ rm -f /etc/banner
 mv /etc/banner_ /etc/banner
 /etc/init.d/dropbear restart
 /etc/init.d/network restart
-rm -f /etc/uci-defaults/wifimedia
+#rm -f /etc/uci-defaults/wifimedia
 #sleep 5 && reboot
