@@ -87,11 +87,11 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+#if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
-	echo "upgrade"
-	/sbin/wifimedia/upgrade.sh
-fi
+#	echo "upgrade"
+#	/sbin/wifimedia/upgrade.sh
+#fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
 	/sbin/wifimedia/restore_defaults.sh
