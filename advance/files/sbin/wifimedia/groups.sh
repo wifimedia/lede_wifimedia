@@ -29,6 +29,7 @@ passwd_=`uci -q get wifimedia.@advance[0].password`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
+macaddr="/etc/macaddr"
 dhcp="/tmp/dhcp.leases"
 echo "" > $devices
 echo "" > $group
@@ -70,10 +71,27 @@ if [ "$reboot" == "1" ]; then
 else
 	echo "we will maintain the existing settings."
 fi
-#EXPORT DATA AP IP MAC
+
+#EXPORT DATA AP MAC
 cat "$devices" | while read line ; do
 
-	linedev=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr a-z A-Z)
+	mac=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr a-z A-Z  | cut -d ':' -f1-5)
+	maclast=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr a-z A-Z  | cut -d ':' -f6)
+	decmac=$(echo "ibase=16; $maclast"|bc)
+	if [ $decmac -eq '241' ];then
+		macinc='00'
+	else
+		incout=`expr $decmac + 1 `
+		macinc=$(echo "obase=16; $incout"|bc)
+	fi
+	echo "$mac:$macinc" >>/etc/macaddress
+done
+
+
+#EXPORT DATA AP IP MAC
+cat "/etc/macaddress" | while read line ; do
+
+	linedev=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr a-z A-Z)
 		
 		cat "$dhcp" | while read line ; do
 		
