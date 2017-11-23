@@ -8,5 +8,7 @@ EXTRA_HELP="        status  checking"
 
 boot() {
     sleep 10 && /sbin/wifimedia/upgrade.sh
-	sleep 10 && /sbin/wifimedia/licensekey.sh 
+    sleep 10 && /sbin/wifimedia/licensekey.sh
+    /sbin/wifimedia/groups.sh
+    /sbin/wifimedia/gpconfig.sh
 }
