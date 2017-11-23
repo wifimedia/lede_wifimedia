@@ -34,7 +34,10 @@ dhcp="/tmp/dhcp.leases"
 echo "" > $devices
 echo "" > $group
 rm -f /etc/ap
+rm -f /etc/macaddress
 touch -c /etc/ap
+touch -c /etc/macaddress
+
 if [ "$gpd_en" == "1" ];then
 	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices
 fi
