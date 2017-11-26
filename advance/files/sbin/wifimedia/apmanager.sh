@@ -35,4 +35,3 @@ cat "/etc/macaddress" | while read line ; do
 			fi
 		done
 done
-
