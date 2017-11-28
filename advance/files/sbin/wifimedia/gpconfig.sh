@@ -114,7 +114,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						elif [ "$(echo $line | grep 'medium')"  ];then
 							uci set wireless.@wifi-device[0].txpower=20
 						elif [ "$(echo $line | grep 'high')"  ];then
-							uci set wireless.@wifi-device[0].txpower=23						
+							uci set wireless.@wifi-device[0].txpower=22						
 						fi
 					fi
 					####Auto reboot every day
