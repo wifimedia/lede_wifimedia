@@ -25,7 +25,7 @@ macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
 wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
 
 admins_=`uci -q get wifimedia.@advance[0].admins`
-passwd_=`uci -q get wifimedia.@advance[0].password`
+passwd_=`uci -q get wifimedia.@advance[0].passwords`
 group="/www/luci-static/resources/groups.txt"
 devices="/www/luci-static/resources/devices.txt"
 sha="/www/luci-static/resources/sha256.txt"
