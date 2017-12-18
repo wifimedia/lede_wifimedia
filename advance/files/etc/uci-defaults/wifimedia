@@ -67,17 +67,17 @@ EOF
 
 #Add vitual SSID
 #For abng
-uci -q get wireless.@wifi-iface[1] || {
-        uci batch <<EOF
-        add wireless wifi-iface
-        set wireless.@wifi-iface[1].device=radio0
-        set wireless.@wifi-iface[1].mode=ap
-        set wireless.@wifi-iface[1].network=lan
-        set wireless.@wifi-iface[1].ssid=OPENWIFIx2
-		set wireless.@wifi-iface[1].disabled=1
-        commit wireless
-EOF
-}
+#uci -q get wireless.@wifi-iface[1] || {
+#        uci batch <<EOF
+#        add wireless wifi-iface
+#        set wireless.@wifi-iface[1].device=radio0
+#        set wireless.@wifi-iface[1].mode=ap
+#        set wireless.@wifi-iface[1].network=lan
+#        set wireless.@wifi-iface[1].ssid=OPENWIFIx2
+#		set wireless.@wifi-iface[1].disabled=1
+#        commit wireless
+#EOF
+#}
 
 
 uci batch <<-EOF
