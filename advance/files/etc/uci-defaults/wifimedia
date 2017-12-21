@@ -158,6 +158,8 @@ echo " " >/etc/FT
 echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
 echo "* * * * * /sbin/wifimedia/gpconfig.sh" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
+echo "0 0 * * * /usr/bin/license.sh" >>/etc/crontabs/root
+
 /etc/init.d/cron start
 /etc/init.d/cron enable
 /etc/init.d/wifimedia_upgrade enable
