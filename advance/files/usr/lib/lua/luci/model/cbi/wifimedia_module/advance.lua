@@ -49,7 +49,7 @@ end
 ]]--
 if wfm_lcs then
 	s:tab("license",  translate("License"))
-	wfm = s:taboption("license",Value,"wfm","wifimedia")
+	wfm = s:taboption("license",Value,"wfm","Key")
 	wfm.rmempty = true
 end
 --[[
