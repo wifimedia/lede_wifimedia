@@ -66,7 +66,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 						
-					elif [ "$(echo $line | grep 'HIDESSID')" ] ;then #HIDESSID
+					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"
 						else #Fast Roaming Preauth RSN C
@@ -79,8 +79,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.proto='dhcp'
 							uci set network.wan.ifname='eth0 eth1'
 							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@advance[0].bridge_mode=1
-							uci commit
+							
 						else
 							uci set network.lan.proto='static'
 							uci set network.lan.ipaddr='172.16.99.1'
@@ -92,12 +91,11 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
-							uci delete wifimedia.@advance[0].bridge_mode
-							uci commit
+							
 						fi
 					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
-						echo -e "$(echo $line | awk '{print $2}')\n$(echo $line | awk '{print $2}')" | passwd admin							
+						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
 			
 					### Fast Roaming
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
