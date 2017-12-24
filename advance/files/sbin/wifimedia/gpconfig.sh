@@ -95,7 +95,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						fi
 					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
-						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
+						echo -e "$(echo $line | awk '{print $2}')\n$(echo $line | awk '{print $2}')" | passwd admin							
 			
 					### Fast Roaming
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming

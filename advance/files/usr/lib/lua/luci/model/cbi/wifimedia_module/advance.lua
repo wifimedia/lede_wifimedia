@@ -142,7 +142,7 @@ mi:depends({Everyday="1"})
 s:tab("administrator",  translate("Administrators"))
 admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
 admingr = s:taboption("administrator",Value, "passwords", "Password")
-admingr.rmempty = false
+admingr.rmempty = true
 admingr.password = true
-admingr:depends({gpd_en="1"})
+admingr:depends({admins="1"})
 return m
