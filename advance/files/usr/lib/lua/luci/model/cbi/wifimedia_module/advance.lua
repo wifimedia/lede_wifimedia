@@ -13,7 +13,7 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /usr/bin/license.sh start >/dev/null")
 	--luci.sys.call("env -i /sbin/wifimedia/groups.sh start >/dev/null")
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
+	luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
 s = m:section(TypedSection, "advance","")
@@ -64,7 +64,6 @@ bridge_mode.rmempty = false
 				luci.sys.call("uci set network.wan.proto='dhcp'")
 				luci.sys.call("uci set network.wan.ifname='eth0 eth1'")
 				luci.sys.call("uci set wireless.@wifi-iface[0].network='wan'")
-
 				luci.sys.call("uci commit")
 			else
 				luci.sys.call("uci set network.lan.proto='static'")
