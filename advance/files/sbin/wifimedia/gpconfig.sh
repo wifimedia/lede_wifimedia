@@ -79,6 +79,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.proto='dhcp'
 							uci set network.wan.ifname='eth0 eth1'
 							uci set wireless.@wifi-iface[0].network='wan'
+							uci set wifimedia.@advance[0].bridge_mode=1
 							uci commit
 						else
 							uci set network.lan.proto='static'
@@ -91,6 +92,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
+							uci delete wifimedia.@advance[0].bridge_mode
 							uci commit
 						fi
 					
