@@ -53,7 +53,10 @@ uci batch <<-EOF
 	set network.lan.ipaddr=172.16.99.1
 	set network.wan.type=bridge
 	delete network.globals
-	commit network
+	set dhcp.lan.force=1
+	set dhcp.lan.netmask=255.255.255.0
+	add_list dhcp.lan.dhcp_option=6,8.8.8.8,8.8.4.4
+	commit
 EOF
 
 uci batch <<-EOF
