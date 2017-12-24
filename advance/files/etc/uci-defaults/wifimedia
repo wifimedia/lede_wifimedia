@@ -179,7 +179,7 @@ uci batch <<-EOF
 	set system.ntp.enable_server=1
 	commit system
 EOF
-
+/etc/init.d/sysntpd start >/dev/null
 ##LED XIAOMI-MIWIFI
 #uci batch <<-EOF
 #	set system.led_power.name='power'
