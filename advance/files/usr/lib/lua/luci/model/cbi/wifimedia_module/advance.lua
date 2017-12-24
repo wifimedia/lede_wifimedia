@@ -66,10 +66,12 @@ bridge_mode.rmempty = false
 				luci.sys.call("uci set wireless.@wifi-iface[0].network='wan'")
 				luci.sys.call("uci commit")
 			else
+			    luci.sys.call("uci set network.lan='interface'")
 				luci.sys.call("uci set network.lan.proto='static'")
 				luci.sys.call("uci set network.lan.ipaddr='172.16.99.1'")
 				luci.sys.call("uci set network.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci set network.lan.type='bridge'")
+				luci.sys.call("uci set network.lan.ifname='eth1'")
 				luci.sys.call("uci set dhcp.lan.force='1'")
 				luci.sys.call("uci set dhcp.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci del dhcp.lan.dhcp_option")
