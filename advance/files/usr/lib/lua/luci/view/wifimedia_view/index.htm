@@ -1,6 +1,6 @@
 <%+header%>
 <% 
-local has_license = fs.access("/usr/sbin/license.sh")
+local has_license = fs.access("/usr/bin/license.sh")
 %>
 <!--h2><a id="content" name="content"><%:Info %></a></h2-->
 
@@ -11,16 +11,8 @@ local has_license = fs.access("/usr/sbin/license.sh")
 		<tr><td width="15%"><%:Website:%></td><td><a href="http://wifimedia.com.vn">www.wifimedia.vn</a></td></tr>
 		<tr><td width="15%"><%:Email:%></td><td><a href=" " target="_blank">itvnbk@gmail.com</a></td></tr>
 		<% if has_license then %>
-		<tr><td width="15%"><%:License key:%></td><td><a href=" " target="_blank"><%=luci.sys.exec("uci -q get wifimedia.@advance[0].wfm")%></a></td></tr>
+		<tr><td width="15%"><%:License key:%></td><td><a href=" " target="_blank"><%=luci.sys.exec("cat /etc/opt/license/status")%></a></td></tr>
 		<% end %>
 	</table>	
-</fieldset>
-<fieldset class="cbi-section">
-<strong>Access Point manager</strong><hr/>
-
-<%
-print(luci.sys.exec("cat /etc/ap | awk 'BEGIN {print \"<table><tr><th>Access Point</th><th>MAC Address</th><th>IP Address</th></tr>\";} {print \"<tr><td align=center>AP: \", i++,\"</td><td align=center> <a href=\"$2,\">\",$1,\"<a></td><td align=center>\",$3,\"</td></tr>\";} END {print \"</table>\"}'"))
-
-%>
 </fieldset>
 <%+footer%>

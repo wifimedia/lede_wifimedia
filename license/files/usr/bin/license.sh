@@ -20,8 +20,11 @@ uptime="${time:-$time1}"
 status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	touch $status
 	rm $lcs
+else
+	echo "Wrong License Code" >/etc/opt/license/status
 fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
@@ -30,7 +33,9 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		wifi
 		touch $status
 		rm $lcs
+		cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	else
+		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
 		uci commit wireless
 		wifi down
