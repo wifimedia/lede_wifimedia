@@ -92,7 +92,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							uci commit wireless
-							echo "No Support Fast Roaming" >/etc/FT
+							rm -f /etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
