@@ -49,8 +49,8 @@ if [ "$groups_en" == "1" ];then
 	echo "MODE: $mode_" >> $group
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
-	echo "HIDESSID: $hide_ssid" >>$group
-	echo "BRIDGE: br_network" >>$group
+	echo "HIDE: $hide_ssid" >>$group
+	echo "BRIDGE: $br_network" >>$group
 
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
