@@ -11,7 +11,7 @@ local has_license = fs.access("/usr/bin/license.sh")
 		<tr><td width="15%"><%:Website:%></td><td><a href="http://wifimedia.com.vn">www.wifimedia.vn</a></td></tr>
 		<tr><td width="15%"><%:Email:%></td><td><a href=" " target="_blank">itvnbk@gmail.com</a></td></tr>
 		<% if has_license then %>
-		<tr><td width="15%"><%:License key:%></td><td><a href=" " target="_blank"><%=luci.sys.exec("uci -q get wifimedia.@advance[0].wfm")%></a></td></tr>
+		<tr><td width="15%"><%:License key:%></td><td><a href=" " target="_blank"><%=luci.sys.exec("cat /etc/opt/license/status")%></a></td></tr>
 		<% end %>
 	</table>	
 </fieldset>
