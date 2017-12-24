@@ -34,8 +34,8 @@ if [ "${curl_result}" -eq 0 ]; then
 	echo "Checking latest sha256sum"
 		wget -q "${url}" -O $grp
 		wget -q "${grpd}" -O $grp_device
-		rm -f /etc/ap
-		touch -c /etc/ap
+		#rm -f /etc/ap
+		#touch -c /etc/ap
 		cat "$grp_device" | while read line ; do
 			##Gateway
 			#echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
@@ -50,6 +50,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				uci set wireless.@wifi-iface[0].network="lan"
 				uci set wireless.@wifi-iface[0].mode="ap"
 				uci set wireless.@wifi-iface[0].device="radio0"
+				uci set wireless.@wifi-iface[0].ssid=OPENWIFI
 				uci set wireless.@wifi-iface[0].disabled="0"
 				uci commit wireless
 				
@@ -64,8 +65,35 @@ if [ "${curl_result}" -eq 0 ]; then
 						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"	
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-					#elif [ "$(echo $line | grep 'TxPower')" ] ;then #TxPower
-					#	uci set wireless.@wifi-iface[0].txpower="$(echo $line | awk '{print $2}')"
+						
+					elif [ "$(echo $line | grep 'HIDESSID')" ] ;then #HIDESSID
+						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
+							uci set wireless.@wifi-iface[0].hidden="1"
+						else #Fast Roaming Preauth RSN C
+							uci delete wireless.@wifi-iface[0].hidden
+						fi					
+					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
+					
+						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
+							uci delete network.lan
+							uci set network.wan.proto='dhcp'
+							uci set network.wan.ifname='eth0 eth1'
+							uci set wireless.@wifi-iface[0].network='wan'
+							uci commit
+						else
+							uci set network.lan.proto='static'
+							uci set network.lan.ipaddr='172.16.99.1'
+							uci set network.lan.netmask='255.255.255.0'
+							uci set network.lan.type='bridge'
+							uci set dhcp.lan.force='1'
+							uci set dhcp.lan.netmask='255.255.255.0'
+							uci del dhcp.lan.dhcp_option
+							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
+							uci set network.wan.ifname='eth0'
+							uci set wireless.@wifi-iface[0].network='wan'
+							uci commit
+						fi
+					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')/n$(echo $line | awk '{print $2}')" | passwd admin							
 			
@@ -74,14 +102,14 @@ if [ "${curl_result}" -eq 0 ]; then
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
-							uci set wireless.@wifi-iface[0].rsn_preauth="0"
+							uci delete wireless.@wifi-iface[0].rsn_preauth
 							echo "Fast BSS Transition Roaming" >/etc/FT
 							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
 						else #Fast Roaming Preauth RSN C
-							uci set wireless.@wifi-iface[0].ieee80211r="0"
+							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi
@@ -92,7 +120,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							uci commit wireless
-							rm -f /etc/FT
+							rm -f >/etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
@@ -102,7 +130,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
 						else #Fast Roaming Preauth RSN C
-							uci set wireless.@wifi-iface[0].isolate="0"
+							uci delete wireless.@wifi-iface[0].isolate
 						fi
 					#Txpower
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
@@ -114,9 +142,10 @@ if [ "${curl_result}" -eq 0 ]; then
 						elif [ "$(echo $line | grep 'medium')"  ];then
 							uci set wireless.@wifi-device[0].txpower=20
 						elif [ "$(echo $line | grep 'high')"  ];then
-							uci set wireless.@wifi-device[0].txpower=22						
+							uci set wireless.@wifi-device[0].txpower=23						
 						fi
 					fi
+					wifi up
 					####Auto reboot every day
 					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
