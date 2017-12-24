@@ -101,7 +101,11 @@ ctrgtx:value("medium","Medium")
 ctrgtx:value("high","High")
 ctrgtx:depends({ctrs_en="1"})
 
-apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
+hidessid = s:taboption("ctrgroups",Flag, "hidessid","Hide SSID")
+hidessid.rmempty = false
+hidessid:depends({ctrs_en="1"})
+
+apisolation = s:taboption("ctrgroups",Flag, "isolation","Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
 
@@ -136,5 +140,12 @@ admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
 admingr = s:taboption("administrator",Value, "passwords", "Password")
 admingr.rmempty = true
 admingr.password = true
-admingr:depends({admins="1"})
+admingr:depends({gpd_en="1"})
+
+
+s:tab("br-network","Bridge Network")
+brnetworkgr = s:taboption("network",Flag, "brnetwork", "Enable Groups")
+brnetworkgr.rmempty = true
+brnetworkgr.password = true
+brnetworkgr:depends({admins="1"})
 return m

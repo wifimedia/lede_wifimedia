@@ -14,6 +14,7 @@ ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
 
 isolation_=`uci -q get wifimedia.@advance[0].isolation`
+hide_ssid=`uci -q get wifimedia.@advance[0].hidessid`
 txpower_=`uci -q get wifimedia.@advance[0].txpower`
 hour_=`uci -q get wifimedia.@advance[0].hour`
 minute_=`uci -q get wifimedia.@advance[0].minute`
@@ -23,6 +24,7 @@ gpd_en=`uci -q get wifimedia.@advance[0].gpd_en`
 macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
 
 wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
+br_network=`uci -q get wifimedia.@advance[0].brnetwork`
 
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].passwords`
@@ -47,6 +49,8 @@ if [ "$groups_en" == "1" ];then
 	echo "MODE: $mode_" >> $group
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
+	echo "HIDESSID: $hide_ssid" >>$group
+	echo "BRIDGE: br_network" >>$group
 
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
