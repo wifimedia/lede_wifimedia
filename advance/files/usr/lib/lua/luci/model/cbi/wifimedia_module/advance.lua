@@ -115,6 +115,10 @@ device.rmempty = false
 device = s:taboption("device",Value, "macs", "Devices")
 device:depends({gpd_en="1"})
 
+s:tab("br-network","Bridge Network")
+brnetworkgr = s:taboption("br-network",Flag, "brnetwork", "Enable Groups")
+brnetworkgr.rmempty = false
+
 --[[Auto Reboot ]]--
 s:tab("autoreboot",  translate("Reboot Groups"))
 Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
@@ -138,14 +142,7 @@ mi:depends({Everyday="1"})
 s:tab("administrator",  translate("Administrators"))
 admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
 admingr = s:taboption("administrator",Value, "passwords", "Password")
-admingr.rmempty = true
+admingr.rmempty = false
 admingr.password = true
 admingr:depends({gpd_en="1"})
-
-
-s:tab("br-network","Bridge Network")
-brnetworkgr = s:taboption("network",Flag, "brnetwork", "Enable Groups")
-brnetworkgr.rmempty = true
-brnetworkgr.password = true
-brnetworkgr:depends({admins="1"})
 return m
