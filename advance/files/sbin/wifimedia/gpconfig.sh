@@ -82,6 +82,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wifimedia.@advance[0].bridge_mode=1
 							uci commit
 						else
+							uci set network.lan='interface'
 							uci set network.lan.proto='static'
 							uci set network.lan.ipaddr='172.16.99.1'
 							uci set network.lan.netmask='255.255.255.0'
