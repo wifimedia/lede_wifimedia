@@ -80,7 +80,6 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.ifname='eth0 eth1'
 							uci set wireless.@wifi-iface[0].network='wan'
 							uci set wifimedia.@advance[0].bridge_mode=1
-							
 						else
 							uci set network.lan.proto='static'
 							uci set network.lan.ipaddr='172.16.99.1'
