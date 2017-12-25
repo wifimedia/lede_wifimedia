@@ -125,7 +125,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci commit wireless
 							rm -f >/etc/FT
 						else	
-							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
+							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
 						fi
 					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
@@ -199,7 +199,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				uci commit scheduled
 				wifi up
 				# Restart all of the services
-				#/etc/init.d/network restart
+				/bin/ubus call network reload >/dev/null 2>/dev/null
 			fi
 		done	
 	fi
