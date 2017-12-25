@@ -24,7 +24,7 @@ gpd_en=`uci -q get wifimedia.@advance[0].gpd_en`
 macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
 
 wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
-br_network=`uci -q get wifimedia.@advance[0].brnetwork`
+br_network=`uci -q get wifimedia.@advance[0].bridge_mode`
 
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].passwords`
