@@ -127,6 +127,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						else	
 							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+							uci commit wireless
 						fi
 					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
 
