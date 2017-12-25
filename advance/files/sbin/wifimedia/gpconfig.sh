@@ -80,7 +80,9 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.ifname='eth0 eth1'
 							uci set wireless.@wifi-iface[0].network='wan'
 							uci set wifimedia.@advance[0].bridge_mode=1
+							uci commit
 						else
+							uci set network.lan='interface'
 							uci set network.lan.proto='static'
 							uci set network.lan.ipaddr='172.16.99.1'
 							uci set network.lan.netmask='255.255.255.0'
@@ -92,6 +94,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
 							uci delete wifimedia.@advance[0].bridge_mode
+							uci commit
 						fi
 					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
@@ -122,7 +125,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci commit wireless
 							rm -f >/etc/FT
 						else	
-							uci set wireless.@wifi-iface[0].encryption="mixed-psk"
+							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
 						fi
 					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
@@ -196,7 +199,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				uci commit scheduled
 				wifi up
 				# Restart all of the services
-				#/etc/init.d/network restart
+				/bin/ubus call network reload >/dev/null 2>/dev/null
 			fi
 		done	
 	fi
