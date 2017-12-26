@@ -173,16 +173,10 @@ if [ "${curl_result}" -eq 0 ]; then
 						echo -e "" >/tmp/autoreboot
 						crontab /tmp/autoreboot -u wifimedia
 						/etc/init.d/cron start
-						uci set scheduled.days.Mon=0
-						uci set scheduled.days.Tue=0
-						uci set scheduled.days.Wed=0
-						uci set scheduled.days.Thu=0
-						uci set scheduled.days.Fri=0
-						uci set scheduled.days.Sat=0
-						uci set scheduled.days.Sun=0
-						
-						uci set scheduled.time.minute=0
-						uci set scheduled.time.hour=0
+						uci delete scheduled.days
+						uci set scheduled.days=instance
+						uci delete scheduled.time
+						uci set scheduled.time=times
 					fi
 					####END Auto reboot every day
 					#commit sha256
