@@ -44,28 +44,55 @@ if [ "${curl_result}" -eq 0 ]; then
 				uci delete wireless.@wifi-iface[1]
 				uci delete wireless.@wifi-iface[0]
 				
-				#if [ -z "$(uci get wireless.@wifi-iface[0])" ]; then 
-				uci add wireless wifi-iface; 
-				#fi
+				uci set wireless.default_radio0="wifi-iface"
+				uci set wireless.@wifi-iface[0].device="radio0"
 				uci set wireless.@wifi-iface[0].network="lan"
 				uci set wireless.@wifi-iface[0].mode="ap"
-				uci set wireless.@wifi-iface[0].device="radio0"
 				uci set wireless.@wifi-iface[0].ssid=OPENWIFI
 				uci set wireless.@wifi-iface[0].disabled="0"
 				uci commit wireless
 				
 				cat "$grp" | while read line ; do
-					if [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
-						uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
+					if [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
+						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
 						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
-					elif [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
-						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
+						uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"					
 					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
-						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"	
+						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
+					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
+						if [ "$(echo $line | awk '{print $2}')" == " " ];then
+							uci delete wireless.@wifi-iface[0].encryption
+							uci delete wireless.@wifi-iface[0].key
+							uci delete wireless.@wifi-iface[0].ieee80211r
+							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci commit wireless
+							rm -f >/etc/FT
+						else	
+							uci set wireless.@wifi-iface[0].encryption="psk2"
+							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+						fi
+					### Fast Roaming
+					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
+
+						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
+							uci set wireless.@wifi-iface[0].ieee80211r="1"
+							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci commit wireless
+							echo "Fast BSS Transition Roaming" >/etc/FT
+							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
+								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+							done
+						else #Fast Roaming Preauth RSN C
+							uci delete wireless.@wifi-iface[0].ieee80211r
+							uci set wireless.@wifi-iface[0].rsn_preauth="1"
+							uci commit wireless
+							echo "Fast-Secure Roaming" >/etc/FT
+						fi						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
-						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-						
+						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"						
 					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"
@@ -100,34 +127,6 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')\n$(echo $line | awk '{print $2}')" | passwd admin							
 			
-					### Fast Roaming
-					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
-
-						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
-							uci set wireless.@wifi-iface[0].ieee80211r="1"
-							uci delete wireless.@wifi-iface[0].rsn_preauth
-							echo "Fast BSS Transition Roaming" >/etc/FT
-							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
-								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-							done
-						else #Fast Roaming Preauth RSN C
-							uci delete wireless.@wifi-iface[0].ieee80211r
-							uci set wireless.@wifi-iface[0].rsn_preauth="1"
-							echo "Fast-Secure Roaming" >/etc/FT
-						fi
-					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
-						if [ "$(echo $line | awk '{print $2}')" == " " ];then
-							uci delete wireless.@wifi-iface[0].encryption
-							uci delete wireless.@wifi-iface[0].key
-							uci delete wireless.@wifi-iface[0].ieee80211r
-							uci delete wireless.@wifi-iface[0].rsn_preauth
-							uci commit wireless
-							rm -f >/etc/FT
-						else	
-							uci set wireless.@wifi-iface[0].encryption="psk2"
-							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
-						fi
 					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
