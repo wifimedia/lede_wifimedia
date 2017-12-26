@@ -28,10 +28,10 @@ macinc=$(echo "obase=16; $incout"|bc)
 fi
 	
 if [ $zero -eq '0' ];then
-	echo "Mac address= $mac:$zero$macinc"
+	#echo "Mac address= $mac:$zero$macinc"
 	echo "$mac:$zero$macinc" >>/etc/macap
 else
-	echo "Mac address= $mac:$macinc"
+	#echo "Mac address= $mac:$macinc"
 	echo "$mac:$macinc" >>/etc/macap
 fi
 done
