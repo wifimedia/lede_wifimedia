@@ -12,8 +12,8 @@ touch -c /etc/macaddress
 #EXPORT DATA AP MAC
 cat "$devices" | while read line ; do
 
-	mac=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | cut -d ':' -f1-5)
-	maclast=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | cut -d ':' -f6)
+	mac=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr A-Z a-z | cut -d ':' -f1-5)
+	maclast=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr A-Z a-z | cut -d ':' -f6)
 	decmac=$(echo "ibase=16; $maclast"|bc)
 	if [ $decmac -eq '241' ];then
 		macinc='00'
@@ -25,7 +25,14 @@ cat "$devices" | while read line ; do
 done
 
 #EXPORT DATA AP IP MAC
+#EXPORT DATA AP IP MAC
 cat "/etc/macaddress" | while read line ; do
-	linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g')
-	arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/etc/ap
+
+	linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
+	#echo $linedeap
+		
+		#
+				arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/root/mac
+				#echo "in dung"
+		#fi
 done
