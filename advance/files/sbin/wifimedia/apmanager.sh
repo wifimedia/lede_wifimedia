@@ -3,36 +3,42 @@
 # All rights reserved.
 
 devices="/www/luci-static/resources/devices.txt"
-dhcp="/tmp/dhcp.leases"
-rm -f /etc/ap
-rm -f /etc/macaddress
-touch -c /etc/ap
-touch -c /etc/macaddress
+rm -f /etc/macap
+rm -f /tmp/eap
+#touch -c /etc/macap
+#touch -c /etc/macap
 
-#EXPORT DATA AP MAC
 cat "$devices" | while read line ; do
 
-	mac=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr A-Z a-z | cut -d ':' -f1-5)
-	maclast=$(echo $line | awk '{print $2}' | sed 's/-/:/g' | tr A-Z a-z | cut -d ':' -f6)
-	decmac=$(echo "ibase=16; $maclast"|bc)
-	if [ $decmac -eq '241' ];then
-		macinc='00'
-	else
-		incout=`expr $decmac + 1 `
-		macinc=$(echo "obase=16; $incout"|bc)
-	fi
-	echo "$mac:$macinc" >>/etc/macaddress
-done
+mac=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f1-5)
+maclast=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f6)
+#echo $maclast
+zero=$(echo $maclast | cut -c 1)
+echo $zero
+#echo "Mac address= $mac:$maclast"
 
+decmac=$(echo "ibase=16; $maclast"|bc)
+if [ $decmac -eq '241' ]
+then
+macinc='00'
+else
+incout=`expr $decmac + 1 `
+macinc=$(echo "obase=16; $incout"|bc)
+
+fi
+	
+if [ $zero -eq '0' ];then
+	echo "Mac address= $mac:$zero$macinc"
+	echo "$mac:$zero$macinc" >>/etc/macap
+else
+	echo "Mac address= $mac:$macinc"
+	echo "$mac:$macinc" >>/etc/macap
+fi
+done
 #EXPORT DATA AP IP MAC
-#EXPORT DATA AP IP MAC
-cat "/etc/macaddress" | while read line ; do
+cat "/etc/macap" | while read line ; do
 
 	linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	#echo $linedeap
-		
-		#
-				arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/root/mac
-				#echo "in dung"
-		#fi
+	arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
+	echo $linedeap
 done
