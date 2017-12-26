@@ -8,6 +8,7 @@ rm -f /etc/ap
 rm -f /etc/macaddress
 touch -c /etc/ap
 touch -c /etc/macaddress
+
 #EXPORT DATA AP MAC
 cat "$devices" | while read line ; do
 
