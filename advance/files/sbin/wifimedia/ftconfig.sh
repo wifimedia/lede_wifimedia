@@ -19,7 +19,7 @@ txpower_=`uci -q get wifimedia.@advance[0].txpower`
 macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1`
 
 list_ap="/tmp/list_eap"
-touch $list_ap
+touch -c $list_ap
 if [ "$groups_en" == "1" ];then
 	#Network
 	uci set wireless.@wifi-iface[0].network="$networks_"
@@ -95,3 +95,4 @@ if [ "$groups_en" == "1" ];then
 	uci set wireless.@wifi-iface[0].isolate="$isolation_"
 	uci commit wireless
 fi
+wifi
