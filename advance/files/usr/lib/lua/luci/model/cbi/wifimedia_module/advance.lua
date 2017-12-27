@@ -13,7 +13,7 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /usr/bin/license.sh start >/dev/null")
 	luci.sys.call("env -i /sbin/wifimedia/ftconfig.sh start >/dev/null")
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-	luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
+	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
 s = m:section(TypedSection, "advance","")
@@ -38,6 +38,8 @@ while (channel < 14) do
 	ch:value(channel, channel .. " ")
 	channel = channel + 1
 end
+ch:depends({ctrs_en="1"})
+
 ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
 ctrgscnl:depends({ctrs_en="1"})
 
