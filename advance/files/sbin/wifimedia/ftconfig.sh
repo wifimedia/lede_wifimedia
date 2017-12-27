@@ -77,8 +77,8 @@ if [ "$groups_en" == "1" ];then
 	fi
 	#NASID
 	uci set wireless.@wifi-iface[0].nasid="$nasid"
-	#TxPower
 
+	#TxPower
 	if [ "$txpower_" == "auto"  ];then
 		uci delete wireless.@wifi-device[0].txpower
 	elif [ "$txpower_" == "low"  ];then
