@@ -19,7 +19,7 @@ local has_license = fs.access("/usr/bin/license.sh")
 <strong>Access Point</strong><hr/>
 
 <%
-print(luci.sys.exec("cat /tmp/eap | awk 'BEGIN {print \"<table><tr><th>TT</th><th>MAC Address</th><th>IP Address</th></tr>\";} {print \"<tr><td align=center>\", i++,\"</td><td align=center> <a \"$2,\">\",$1,\"<a></td><td align=center> <a href=\"$3,\">\",$3,\"<a></td><td></tr>\";} END {print \"</table>\"}'"))
+print(luci.sys.exec("cat /tmp/eap | awk 'BEGIN {print \"<table><tr><th>TT</th><th>MAC Address</th><th>IP Address</th></tr>\";} {print \"<tr><td align=center>\", i++,\"</td><td align=center> <a \"$2,\">\",$1,\"<a></td><td align=center> <a href=\"$3,\">\",$2,\"<a></td><td></tr>\";} END {print \"</table>\"}'"))
 
 %>
 </fieldset>
