@@ -58,7 +58,8 @@ ctrgsft:depends({encrypt="encryption"})
 
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
-
+device = s:taboption("ctrgroups",Value, "macs", "MACs")
+device:depends({ft="ieee80211r"})
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
@@ -75,15 +76,6 @@ hidessid:depends({ctrs_en="1"})
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
---[[AP Groups]]--
---[[
-s:tab("device",  translate("AP Groups"))
-device = s:taboption("device",Flag, "gpd_en","Enable Groups")
-device.rmempty = false
-device = s:taboption("device",Value, "macs", "Devices")
-device:depends({gpd_en="1"})
---[[END]]--
-]]--
 
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
