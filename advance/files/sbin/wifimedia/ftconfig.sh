@@ -12,6 +12,7 @@ encr=`uci -q get wifimedia.@advance[0].encrypt`
 passwd=`uci -q get wifimedia.@advance[0].password`
 ft=`uci -q get wifimedia.@advance[0].ft`
 nasid=`uci -q get wifimedia.@advance[0].nasid`
+nasid_cfg=`uci -q get wireless.default_radio0.nasid`
 
 isolation_=`uci -q get wifimedia.@advance[0].isolation`
 hide_ssid=`uci -q get wifimedia.@advance[0].hidessid`
@@ -51,7 +52,7 @@ if [ "$groups_en" == "1" ];then
 		
 		#delete all r0kh r1kh
 		cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid,000102030405060708090a0b0c0d0e0f"
+			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
 			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 		done
 		uci commit wireless
@@ -64,7 +65,7 @@ if [ "$groups_en" == "1" ];then
 
 		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
 		#echo "test rong"
-			uci del_list wireless.@wifi-iface[0].r0kh=",$nasid,000102030405060708090a0b0c0d0e0f"
+			uci del_list wireless.@wifi-iface[0].r0kh=",$nasid_cfg,000102030405060708090a0b0c0d0e0f"
 			uci del_list wireless.@wifi-iface[0].r1kh=",,000102030405060708090a0b0c0d0e0f"		
 		fi
 		#uci commit wireless
