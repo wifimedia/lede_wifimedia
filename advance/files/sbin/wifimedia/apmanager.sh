@@ -38,7 +38,14 @@ done
 #EXPORT DATA AP IP MAC
 cat "/etc/macap" | while read line ; do
 
-	linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-	echo $linedeap
+	#linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
+	#arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
+	#echo $linedeap
+	eapmac=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
+	cat "/proc/net/arp" | while read line ; do
+		arpmac=$(echo $line | awk '{print $4}' | sed 's/-/:/g' )
+		if [ "$eapmac" == "$arpmac" ] ;then
+			echo $line | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
+		fi
+	done	
 done
