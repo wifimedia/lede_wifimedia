@@ -11,7 +11,7 @@ local wfm_lcs = fs.access("/etc/opt/wfm_lcs")
 m = Map("wifimedia", "")
 function m.on_after_commit(self)
 	luci.sys.call("env -i /usr/bin/license.sh start >/dev/null")
-	--luci.sys.call("env -i /sbin/wifimedia/groups.sh start >/dev/null")
+	luci.sys.call("env -i /sbin/wifimedia/ftconfig.sh start >/dev/null")
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
