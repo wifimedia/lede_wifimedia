@@ -58,7 +58,7 @@ ctrgsft:depends({encrypt="encryption"})
 
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
-device = s:taboption("ctrgroups",Value, "macs", "AP ID")
+device = s:taboption("ctrgroups",Value, "macs", "APID")
 device:depends({ft="ieee80211r"})
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
