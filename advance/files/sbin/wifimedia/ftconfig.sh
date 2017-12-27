@@ -5,6 +5,7 @@
 groups_en=`uci -q get wifimedia.@advance[0].ctrs_en`
 essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'`
 mode_=`uci -q get wifimedia.@advance[0].mode`
+ch=`uci -q get wifimedia.@advance[0].channel` 
 networks_=`uci -q get wifimedia.@advance[0].network`
 cnl=`uci -q get wifimedia.@advance[0].maxassoc`
 
@@ -31,6 +32,8 @@ if [ "$groups_en" == "1" ];then
 	else 
 		uci set wireless.@wifi-iface[0].ssid="$essid"
 	fi
+	#channel
+	uci set wireless.radio0.channel="$ch"
 	#Connect Limit
 	uci set wireless.@wifi-iface[0].maxassoc="$cnl"
 	#Passwd ssid
