@@ -34,7 +34,7 @@ if [ "$groups_en" == "1" ];then
 	#Connect Limit
 	uci set wireless.@wifi-iface[0].maxassoc="$cnl"
 	#Passwd ssid
-	if [ "$passwd" == " " ];then
+	if [ -z "$passwd" ];then
 		uci delete wireless.@wifi-iface[0].encryption
 		uci delete wireless.@wifi-iface[0].key
 		uci delete wireless.@wifi-iface[0].ieee80211r
@@ -55,8 +55,7 @@ if [ "$groups_en" == "1" ];then
 			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
 			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 		done
-		uci commit wireless
-		
+
 		echo "$macs"  | while read  line;do #add list R0KH va R1KH
 			uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
 			uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
@@ -73,6 +72,11 @@ if [ "$groups_en" == "1" ];then
 	else
 		uci delete wireless.@wifi-iface[0].ieee80211r
 		uci set wireless.@wifi-iface[0].rsn_preauth="1"
+		cat "$list_ap" | while read  line;do #add list R0KH va R1KH
+			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
+			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+		done
+
 		echo "Fast-Secure Roaming" >/etc/FT
 	fi
 	#NASID
@@ -95,4 +99,4 @@ if [ "$groups_en" == "1" ];then
 	uci set wireless.@wifi-iface[0].isolate="$isolation_"
 	uci commit wireless
 fi
-wifi
+sleep 5 && wifi

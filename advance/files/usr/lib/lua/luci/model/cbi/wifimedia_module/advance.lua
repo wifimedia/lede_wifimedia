@@ -32,6 +32,12 @@ ctrgsm:value("mesh","MESH")
 ctrgsm:value("wds","WDS")
 ctrgsm:depends({ctrs_en="1"})
 
+ch = s:taboption( "ctrgroups",ListValue, "channel", "Channel")
+local channel = 1
+while (channel < 14) do
+	ch:value(channel, channel .. " ")
+	channel = channel + 1
+end
 ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
 ctrgscnl:depends({ctrs_en="1"})
 
