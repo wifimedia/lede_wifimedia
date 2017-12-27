@@ -49,9 +49,6 @@ if [ "$groups_en" == "1" ];then
 		uci set wireless.@wifi-iface[0].ieee80211r="1"
 		uci delete wireless.@wifi-iface[0].rsn_preauth
 		echo "Fast BSS Transition Roaming" >/etc/FT
-	
-		#macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1`
-		#nasid=`uci -q get wifimedia.@advance[0].nasid`
 		
 		#delete all r0kh r1kh
 		cat "/root/c" | while read  line;do #add list R0KH va R1KH
