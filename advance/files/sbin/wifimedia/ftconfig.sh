@@ -17,9 +17,8 @@ isolation_=`uci -q get wifimedia.@advance[0].isolation`
 hide_ssid=`uci -q get wifimedia.@advance[0].hidessid`
 txpower_=`uci -q get wifimedia.@advance[0].txpower`
 macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1`
-
 list_ap="/tmp/list_eap"
-touch $list_ap
+touch  /tmp/list_eap
 if [ "$groups_en" == "1" ];then
 	#Network
 	uci set wireless.@wifi-iface[0].network="$networks_"
@@ -52,8 +51,8 @@ if [ "$groups_en" == "1" ];then
 		
 		#delete all r0kh r1kh
 		cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
-			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid,000102030405060708090a0b0c0d0e0f"
+			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 		done
 		uci commit wireless
 		
@@ -61,7 +60,7 @@ if [ "$groups_en" == "1" ];then
 			uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
 			uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 		done
-		uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1 >$list_ap
+		uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1 echo $nasid >$list_ap
 
 		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
 		#echo "test rong"
