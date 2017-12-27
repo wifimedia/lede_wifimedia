@@ -89,6 +89,11 @@ if wfm_lcs then
 	wfm = s:taboption("license",Value,"wfm","Key")
 	wfm.rmempty = true
 end
+s:tab("fastroaming",  translate("Fast Roaming"))
+ft = s:taboption("fastroaming",Flag, "ft_wifi", "Enable Fast Roaming")
+ft = s:taboption("fastroaming",Value, "essid", "SSIDs")
+ft:depends({ft_wifi="1"})
+
 --[[
 s:tab("ctrgroups",  translate("Wireless Groups"))
 ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
