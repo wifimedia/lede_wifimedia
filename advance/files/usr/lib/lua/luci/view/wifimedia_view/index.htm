@@ -1,6 +1,7 @@
 <%+header%>
 <% 
 local has_license = fs.access("/usr/bin/license.sh")
+local has_eap = fs.access("/tmp/eap")
 %>
 <!--h2><a id="content" name="content"><%:Info %></a></h2-->
 
@@ -15,4 +16,14 @@ local has_license = fs.access("/usr/bin/license.sh")
 		<% end %>
 	</table>	
 </fieldset>
+<% if has_eap  then %>
+<fieldset class="cbi-section">
+<strong>Access Point</strong><hr/>
+
+<%
+print(luci.sys.exec("cat /tmp/eap | awk 'BEGIN {print \"<table><tr><th>TT</th><th>MAC Address</th><th>IP Address</th></tr>\";} {print \"<tr><td align=center>\", i++,\"</td><td align=center> <a \"$2,\">\",$1,\"<a></td><td align=center> <a href=\"$3,\">\",$2,\"<a></td><td></tr>\";} END {print \"</table>\"}'"))
+
+%>
+</fieldset>
+<% end %>
 <%+footer%>
