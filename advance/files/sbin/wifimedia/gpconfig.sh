@@ -77,8 +77,9 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							echo "Fast BSS Transition Roaming" >/etc/FT
 							#Delete List r0kh r1kh
-							list_r_ft="/tmp/rxkh"
-							cat "$list_r_ft" | while read  line;do #add list R0KH va R1KH
+							list_ap="/tmp/list_eap"
+							touch  /tmp/list_eap
+							cat "$list_ap" | while read  line;do #add list R0KH va R1KH
 								uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done							
@@ -87,7 +88,7 @@ if [ "${curl_result}" -eq 0 ]; then
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							cat "$grp_device" >$list_r_ft
+							cat "$grp_device" >$list_ap
 
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
