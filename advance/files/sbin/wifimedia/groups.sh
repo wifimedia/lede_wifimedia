@@ -110,7 +110,7 @@ fi
 #		
 #		done
 #done
-
+#/etc/init.d/network restart
 /sbin/wifimedia/apmanager.sh
 echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
 #echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
