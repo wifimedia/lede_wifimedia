@@ -63,8 +63,8 @@ if [ "$groups_en" == "1" ];then
 			uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 		done
 		uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1 >/root/c
-		macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1`
-		nasid=`uci -q get wifimedia.@advance[0].nasid`
+		#macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1`
+		#nasid=`uci -q get wifimedia.@advance[0].nasid`
 		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
 		#echo "test rong"
 			uci del_list wireless.@wifi-iface[0].r0kh=",$nasid,000102030405060708090a0b0c0d0e0f"
