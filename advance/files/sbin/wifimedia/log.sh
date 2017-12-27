@@ -40,21 +40,25 @@ if [ "${curl_result}" -eq 0 ]; then
 			##Gateway
 			#echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
-					
+	
+				uci delete wireless.@wifi-iface[1]
+				uci delete wireless.@wifi-iface[0]
+				
+				uci set wireless.default_radio0="wifi-iface"
+				uci set wireless.@wifi-iface[0].device="radio0"
+				uci set wireless.@wifi-iface[0].network="lan"
+				uci set wireless.@wifi-iface[0].mode="ap"
+				uci set wireless.@wifi-iface[0].ssid=OPENWIFI
+				uci set wireless.@wifi-iface[0].disabled="0"
+				uci commit wireless
+				
 				cat "$grp" | while read line ; do
 					if [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
 						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
-						
 					elif [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
-						essid="$(echo $line | awk '{print $2}')"
-						echo "ESSID: $essid"
-						if [ -z "$essid" ];then
-							echo "no change SSID"
-						else 
-							uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
-						fi
+						uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"					
 					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
@@ -75,23 +79,16 @@ if [ "${curl_result}" -eq 0 ]; then
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
 							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci commit wireless
 							echo "Fast BSS Transition Roaming" >/etc/FT
-							#Delete List r0kh r1kh
-							list_r_ft="/tmp/rxkh"
-							cat "$list_r_ft" | while read  line;do #add list R0KH va R1KH
-								uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-								uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-							done							
-							#add List r0kh r1kh
 							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							cat "$grp_device" >$list_r_ft
-
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
+							uci commit wireless
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
@@ -99,9 +96,8 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"
-						else
-							uci set wireless.@wifi-iface[0].hidden="0"
-							#uci delete wireless.@wifi-iface[0].hidden #uci: Entry not found
+						else #Fast Roaming Preauth RSN C
+							uci delete wireless.@wifi-iface[0].hidden
 						fi					
 					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
 					
@@ -110,7 +106,8 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.wan.proto='dhcp'
 							uci set network.wan.ifname='eth0 eth1'
 							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@advance[0].bridge_mode='1'
+							uci set wifimedia.@advance[0].bridge_mode=1
+							uci commit
 						else
 							uci set network.lan='interface'
 							uci set network.lan.proto='static'
@@ -123,8 +120,8 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
-							#uci delete wifimedia.@advance[0].bridge_mode #uci: Entry not found
-							uci set wifimedia.@advance[0].bridge_mode='0'
+							uci delete wifimedia.@advance[0].bridge_mode
+							uci commit
 						fi
 					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
@@ -134,9 +131,8 @@ if [ "${curl_result}" -eq 0 ]; then
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
-						else
-							#uci delete wireless.@wifi-iface[0].isolate
-							uci set wireless.@wifi-iface[0].isolate="0"
+						else #Fast Roaming Preauth RSN C
+							uci delete wireless.@wifi-iface[0].isolate
 						fi
 					#Txpower
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
@@ -186,15 +182,14 @@ if [ "${curl_result}" -eq 0 ]; then
 					#commit sha256
 					uci set wifimedia.@advance[0].sha256="$(sha256sum $grp | awk '{print $1}')"
 					#switch interface wireless
-					#if [ "$(uci -q get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
-					#	cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
-					#	uci set wifimedia.@advance[0].wireless_cfg=1
-					#fi	
+					if [ "$(uci get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
+						cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
+						uci set wifimedia.@advance[0].wireless_cfg=1
+					fi	
 				done
 				uci commit wifimedia
 				uci commit wireless
 				uci commit scheduled
-				uci commit network
 				wifi up
 				# Restart all of the services
 				/bin/ubus call network reload >/dev/null 2>/dev/null
@@ -204,3 +199,4 @@ if [ "${curl_result}" -eq 0 ]; then
 else
 	echo "Could not connect to the upgrade server, exiting..."
 fi
+
