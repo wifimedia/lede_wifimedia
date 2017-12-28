@@ -129,11 +129,11 @@ s:tab("rssi",  translate("RSSI"))
 	rssi.rmempty = false
 		function rssi.write(self, section, value)
 			if value == self.enabled then
-				luci.sys.call("env -i /etc/init.d/watchping start >/dev/null")
-				luci.sys.call("env -i /etc/init.d/watchping enable >/dev/null")
+				luci.sys.call("env -i /etc/init.d/watchcat start >/dev/null")
+				luci.sys.call("env -i /etc/init.d/watchcat enable >/dev/null")
 			else
-				luci.sys.call("env -i /etc/init.d/watchping stop >/dev/null")
-				luci.sys.call("env -i /etc/init.d/watchping disable >/dev/null")
+				luci.sys.call("env -i /etc/init.d/watchcat stop >/dev/null")
+				luci.sys.call("env -i /etc/init.d/watchcat disable >/dev/null")
 			end
 			return Flag.write(self, section, value)
 		end
@@ -141,7 +141,7 @@ s:tab("rssi",  translate("RSSI"))
 	--else 
 	--	m.pageaction = false
 
-	t = s:taboption("rssi", Value, "level","RSSI:","Range:-60dBm ~ -90dBm")
+	t = s:taboption("rssi", Value, "level","RSSI:","Received signal strength indication: Range:-60dBm ~ -90dBm")
 	t.datatype = "min(-90)"
 	--s:taboption("rssi",Value, "delays","Time Delays (s)").optional = false
 	--t:depends({enable="1"})
