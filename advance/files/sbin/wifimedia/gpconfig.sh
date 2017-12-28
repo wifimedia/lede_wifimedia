@@ -110,9 +110,15 @@ if [ "${curl_result}" -eq 0 ]; then
 						fi	
 						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
+					mactmp="/tmp/mac_device"
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 						uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
-						
+						cat "$grp_device" | while read line ; do
+							if [ "$(echo $line | grep $(echo $line | awk '{print $2}'))" ];then
+								echo $line | awk '{print $2}' >>$mactmp
+							fi
+						done
+						uci set wifimedia.@advance[0].macs="$(cat $mactmp | xargs | sed 's/:/-/g' | sed 's/ /,/g')"
 					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"

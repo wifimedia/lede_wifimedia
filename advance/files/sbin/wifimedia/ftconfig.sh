@@ -27,7 +27,7 @@ if [ "$groups_en" == "1" ];then
 	#Mode
 	uci set wireless.@wifi-iface[0].mode="$mode_"
 	#ESSID
-	if [ "$essid" == " " ];then
+	if [ -z "$essid" ];then
 		echo "no change SSID"
 	else 
 		uci set wireless.@wifi-iface[0].ssid="$essid"
