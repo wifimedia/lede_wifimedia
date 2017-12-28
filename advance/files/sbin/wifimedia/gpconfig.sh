@@ -110,7 +110,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						fi	
 						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
-					mactmp="/tmp/mac_device"
+						mactmp="/tmp/mac_device"
 						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
 						uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
 						cat "$grp_device" | while read line ; do
