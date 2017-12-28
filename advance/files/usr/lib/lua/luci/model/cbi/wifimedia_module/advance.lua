@@ -38,6 +38,7 @@ while (channel < 14) do
 	ch:value(channel, channel .. " ")
 	channel = channel + 1
 end
+ch.default = "6"
 ch:depends({ctrs_en="1"})
 
 ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
