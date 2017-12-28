@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=watchcat
+PKG_NAME:=watchdogtimer
 PKG_VERSION:=1
 PKG_RELEASE:=6
 
@@ -16,7 +16,7 @@ PKG_LICENSE:=GPL-2.0
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/watchcat
+define Package/watchdogtimer
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
@@ -27,18 +27,18 @@ define Package/watchcat
   TITLE:=Enable the configuration of programed reboots
 endef
 
-define Package/watchcat/description
+define Package/watchdogtimer/description
 Allows to configure a periodically reboot, or after losing internet connectivity. Configured trough UCI /etc/config/system.
 endef
 
-define Package/watchcat/conffiles
+define Package/watchdogtimer/conffiles
 /etc/config/system
 endef
 
 define Build/Compile
 endef
 
-define Package/watchcat/install
+define Package/watchdogtimer/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/initd_watchcat $(1)/etc/init.d/watchcat
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -49,7 +49,7 @@ define Package/watchcat/install
 	$(INSTALL_BIN) ./files/rssi.sh $(1)/sbin/wifimedia/rssi.sh
 endef
 
-define Package/advance/postinst
+define Package/watchdogtimer/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "${IPKG_INSTROOT}" ]; then
@@ -61,4 +61,4 @@ fi
 exit 0
 endef
 
-$(eval $(call BuildPackage,watchcat))
+$(eval $(call BuildPackage,watchdogtimer))
