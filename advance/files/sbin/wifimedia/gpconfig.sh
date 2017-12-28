@@ -71,13 +71,14 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci delete wireless.@wifi-iface[0].key
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci delete wifimedia.@advance[0].encrypt
 							uci commit wireless
 							rm -f >/etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@advance[0].encrypt="psk2"
 							uci set wifimedia.@advance[0].password="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@advance[0].encrypt="encryption"
 						fi
 						
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
