@@ -89,19 +89,20 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wifimedia.@advance[0].ft="ieee80211r"
 							echo "Fast BSS Transition Roaming" >/etc/FT
 							#Delete List r0kh r1kh
-							list_ap="/tmp/list_eap"
-							touch  /tmp/list_eap
-							cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-								uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-								uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-							done							
+							#list_ap="/tmp/list_eap"
+							#touch  /tmp/list_eap
+							#cat "$list_ap" | while read  line;do #add list R0KH va R1KH
+							#	uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+							#	uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+							#done
+							uci del wireless.default_radio0.r0kh
+							uci del wireless.default_radio0.r1kh
 							#add List r0kh r1kh
 							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							cat "$grp_device" >$list_ap
-
+							
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
@@ -112,8 +113,14 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
 						echo ''>$mactmp
-						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
+						nas_id="$(echo $line | awk '{print $2}')"
+						if [ -z "$nas_id" ];then
+							uci del wireless.default_radio0.r0kh
+							uci del wireless.default_radio0.r1kh
+						else	
+							uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
+						fi	
 						cat "$grp_device" | while read line ; do
 							if [ "$(echo $line | grep $(echo $line | awk '{print $2}'))" ];then
 								echo $line | awk '{print $2}' >>$mactmp
