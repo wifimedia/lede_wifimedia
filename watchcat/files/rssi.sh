@@ -5,7 +5,7 @@
 
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 if [ $rssi_on == "1" ];then
-	level_defaults=-95
+	level_defaults=-80
 	level=$(uci -q get wifimedia.@advance[0].level)
 	level=${level%dBm}
 	LOWER=${level:-$level_defaults}
