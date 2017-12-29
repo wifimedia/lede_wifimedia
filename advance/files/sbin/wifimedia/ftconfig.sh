@@ -109,3 +109,5 @@ if [ "$groups_en" == "1" ];then
 	uci commit wireless
 fi
 sleep 5 && wifi
+/bin/ubus call network reload >/dev/null 2>/dev/null
+
