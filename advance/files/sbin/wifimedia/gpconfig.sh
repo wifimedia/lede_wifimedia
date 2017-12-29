@@ -138,31 +138,31 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wifimedia.@advance[0].hidessid="0"
 							#uci delete wireless.@wifi-iface[0].hidden #uci: Entry not found
 						fi					
-					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
-					
-						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
-							uci delete network.lan
-							uci set network.wan.proto='dhcp'
-							uci set network.wan.ifname='eth0 eth1'
-							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@advance[0].bridge_mode='1'
-						else
-							uci set network.lan='interface'
-							uci commit network
-							uci set network.lan.proto='static'
-							uci set network.lan.ipaddr='172.16.99.1'
-							uci set network.lan.netmask='255.255.255.0'
-							uci set network.lan.type='bridge'
-							uci set network.wan.ifname='eth1'
-							uci set dhcp.lan.force='1'
-							uci set dhcp.lan.netmask='255.255.255.0'
-							uci del dhcp.lan.dhcp_option
-							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
-							uci set network.wan.ifname='eth0'
-							uci set wireless.@wifi-iface[0].network='wan'
-							#uci delete wifimedia.@advance[0].bridge_mode #uci: Entry not found
-							uci set wifimedia.@advance[0].bridge_mode='0'
-						fi
+					#elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
+					#
+					#if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
+					#	uci delete network.lan
+					#	uci set network.wan.proto='dhcp'
+					#	uci set network.wan.ifname='eth0 eth1'
+					#	uci set wireless.@wifi-iface[0].network='wan'
+					#	uci set wifimedia.@advance[0].bridge_mode='1'
+					#else
+					#	uci set network.lan='interface'
+					#	uci commit network
+					#	uci set network.lan.proto='static'
+					#	uci set network.lan.ipaddr='172.16.99.1'
+					#	uci set network.lan.netmask='255.255.255.0'
+					#	uci set network.lan.type='bridge'
+					#	uci set network.wan.ifname='eth1'
+					#	uci set dhcp.lan.force='1'
+					#	uci set dhcp.lan.netmask='255.255.255.0'
+					#	uci del dhcp.lan.dhcp_option
+					#	uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
+					#	uci set network.wan.ifname='eth0'
+					#	uci set wireless.@wifi-iface[0].network='wan'
+					#	#uci delete wifimedia.@advance[0].bridge_mode #uci: Entry not found
+					#	uci set wifimedia.@advance[0].bridge_mode='0'
+					#fi
 					
 					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
 						echo -e "$(echo $line | awk '{print $2}')\n$(echo $line | awk '{print $2}')" | passwd admin							
