@@ -43,7 +43,7 @@ define Package/advance/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "${IPKG_INSTROOT}" ]; then
-	chmod a+x /sbin/wifimedia/advance.sh	
+	chmod a+x /sbin/wifimedia/*	
 fi
 exit 0
 endef
