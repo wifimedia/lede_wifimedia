@@ -102,14 +102,15 @@ if [ "${curl_result}" -eq 0 ]; then
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							
+
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi	
-						
+						#Enable RSSI 
+						/etc/init.d/watchcat stop && sleep 5 && etc/init.d/watchcat start && /etc/init.d/watchcat enable						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
 						echo ''>$mactmp
