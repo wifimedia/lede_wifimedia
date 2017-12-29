@@ -106,4 +106,3 @@ if [ "$groups_en" == "1" ];then
 	uci commit wireless
 fi
 sleep 5 && wifi
-
