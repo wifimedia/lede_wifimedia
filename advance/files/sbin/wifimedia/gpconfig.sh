@@ -154,8 +154,8 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.lan.type='bridge'
 							uci set dhcp.lan.force='1'
 							uci set dhcp.lan.netmask='255.255.255.0'
-							uci del dhcp.lan.dhcp_option
-							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
+							#uci del dhcp.lan.dhcp_option
+							#uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
 							#uci delete wifimedia.@advance[0].bridge_mode #uci: Entry not found
