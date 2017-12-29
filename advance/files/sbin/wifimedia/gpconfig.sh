@@ -111,7 +111,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						fi	
 						#Enable RSSI 
 						/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable
-						uci set wifimedia.@advance[0].enable="1"
+						#uci set wifimedia.@advance[0].enable="1"
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
 						echo ''>$mactmp
