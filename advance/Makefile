@@ -43,7 +43,12 @@ define Package/advance/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "${IPKG_INSTROOT}" ]; then
-	chmod a+x /sbin/wifimedia/*	
+	chmod a+x /sbin/wifimedia/*
+	chmod a+x /etc/init.d/wifimedia_check
+	chmod a+x /etc/uci-defaults/wifimedia
+	chmod a+x /etc/hotplug.d/button/00-button
+	chmod a+x /etc/btnaction
+	
 fi
 exit 0
 endef
