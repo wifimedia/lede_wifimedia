@@ -195,7 +195,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
 						rssi="$(echo $line | awk '{print $2}')"
 						if [ -z "$rssi" ];then
-							uci delete wifimedia.@advance[0].enable
+							uci set wifimedia.@advance[0].enable="0"
 							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
 						else
 							uci set wifimedia.@advance[0].enable="1"
@@ -213,7 +213,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							#ntpd -q -p 0.asia.pool.ntp.org
 							#ntpd -q -p 1.asia.pool.ntp.org
 							#ntpd -q -p 2.asia.pool.ntp.org
-							#ntpd -q -p 3.asia.pool.ntp.org
+							#ntpd -q -p 3.asia.pool.ntp.org					
 							uci set scheduled.days.Mon=1
 							uci set scheduled.days.Tue=1
 							uci set scheduled.days.Wed=1
