@@ -110,7 +110,8 @@ if [ "${curl_result}" -eq 0 ]; then
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi	
 						#Enable RSSI 
-						/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable						
+						/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable
+						uci set wifimedia.@advance[0].level=1
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
 						echo ''>$mactmp
