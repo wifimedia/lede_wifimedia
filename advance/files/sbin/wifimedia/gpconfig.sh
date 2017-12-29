@@ -195,7 +195,7 @@ if [ "${curl_result}" -eq 0 ]; then
 					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
 						rssi="$(echo $line | awk '{print $2}')"
 						if [ -z "$rssi" ];then
-							uci delete wifimedia.@advance[0].enable
+							uci set wifimedia.@advance[0].enable="0"
 							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
 						else
 							uci set wifimedia.@advance[0].enable="1"
