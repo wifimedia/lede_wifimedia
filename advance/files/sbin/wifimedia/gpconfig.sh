@@ -102,15 +102,16 @@ if [ "${curl_result}" -eq 0 ]; then
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							
+
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi	
-						#Enable RSSI
-						
+						#Enable RSSI 
+						/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable
+						uci set wifimedia.@advance[0].enable="1"
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
 						echo ''>$mactmp
@@ -191,6 +192,16 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-device[0].txpower=22
 							uci set wifimedia.@advance[0].txpower="high"
 						fi
+					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
+						rssi="$(echo $line | awk '{print $2}')"
+						if [ -z "$rssi" ];then
+							uci delete wifimedia.@advance[0].enable
+							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
+						else
+							uci set wifimedia.@advance[0].enable="1"
+							/etc/init.d/watchcat start && /etc/init.d/watchcat enable
+							uci set wifimedia.@advance[0].level="$rssi"
+						fi
 					fi
 					wifi up
 					####Auto reboot every day
@@ -236,6 +247,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				uci commit wireless
 				uci commit scheduled
 				uci commit network
+				uci commit dhcp
 				wifi up
 				# Restart all of the services
 				/bin/ubus call network reload >/dev/null 2>/dev/null
