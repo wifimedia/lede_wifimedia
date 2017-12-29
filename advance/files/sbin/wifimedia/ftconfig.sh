@@ -27,7 +27,7 @@ if [ "$groups_en" == "1" ];then
 	#Mode
 	uci set wireless.@wifi-iface[0].mode="$mode_"
 	#ESSID
-	if [ "$essid" == " " ];then
+	if [ -z "$essid" ];then
 		echo "no change SSID"
 	else 
 		uci set wireless.@wifi-iface[0].ssid="$essid"
@@ -54,36 +54,39 @@ if [ "$groups_en" == "1" ];then
 		echo "Fast BSS Transition Roaming" >/etc/FT
 		
 		#delete all r0kh r1kh
-		cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
-			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-		done
-
+		#cat "$list_ap" | while read  line;do #add list R0KH va R1KH
+			#uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
+			#uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+		#done
+		uci del wireless.default_radio0.r0kh
+		uci del wireless.default_radio0.r1kh
 		echo "$macs"  | while read  line;do #add list R0KH va R1KH
 			uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
 			uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 		done
-		uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1 echo $nasid >$list_ap
+		#uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' | sed 's/,/ /g' | xargs -n1 echo $nasid >$list_ap
 
 		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
 		#echo "test rong"
-			uci del_list wireless.@wifi-iface[0].r0kh=",$nasid_cfg,000102030405060708090a0b0c0d0e0f"
-			uci del_list wireless.@wifi-iface[0].r1kh=",,000102030405060708090a0b0c0d0e0f"		
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh	
 		fi
 		#uci commit wireless
 		
 	else
 		uci delete wireless.@wifi-iface[0].ieee80211r
 		uci set wireless.@wifi-iface[0].rsn_preauth="1"
-		cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-			uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$nasid_cfg,000102030405060708090a0b0c0d0e0f"
-			uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-		done
-
+		uci del wireless.default_radio0.r0kh
+		uci del wireless.default_radio0.r1kh
 		echo "Fast-Secure Roaming" >/etc/FT
 	fi
 	#NASID
-	uci set wireless.@wifi-iface[0].nasid="$nasid"
+	if [ -z "$nasid" ];then
+		uci del wireless.default_radio0.r0kh
+		uci del wireless.default_radio0.r1kh
+	else
+		uci set wireless.@wifi-iface[0].nasid="$nasid"
+	fi	
 
 	#TxPower
 	if [ "$txpower_" == "auto"  ];then

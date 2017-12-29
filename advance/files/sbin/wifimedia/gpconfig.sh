@@ -40,12 +40,16 @@ if [ "${curl_result}" -eq 0 ]; then
 			##Gateway
 			#echo "$(echo $line | awk '{print $2}' | sed 's/:/-/g' | tr a-z A-Z ) http://"$(echo $(echo $line | awk '{print $2}' | sed 's/://g' | tr A-Z a-z )".wifimedia.vn")  >>/etc/ap
 			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
-					
+					uci set wifimedia.@advance[0].ctrs_en="1" #update config
 				cat "$grp" | while read line ; do
+				
 					if [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@advance[0].network="$(echo $line | awk '{print $2}')"
+						
 					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
 						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@advance[0].mode="$(echo $line | awk '{print $2}')"
 						
 					elif [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
 						essid="$(echo $line | awk '{print $2}')"
@@ -55,53 +59,81 @@ if [ "${curl_result}" -eq 0 ]; then
 						else 
 							uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
 						fi
-					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim LAN/WAN
+						uci set wifimedia.@advance[0].essid="$essid"
+						
+					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim maxassoc
 						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@advance[0].maxassoc="$(echo $line | awk '{print $2}')"
+						
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
 						if [ "$(echo $line | awk '{print $2}')" == " " ];then
 							uci delete wireless.@wifi-iface[0].encryption
 							uci delete wireless.@wifi-iface[0].key
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci delete wifimedia.@advance[0].encrypt
 							uci commit wireless
 							rm -f >/etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@advance[0].password="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@advance[0].encrypt="encryption"
 						fi
-					### Fast Roaming
+						
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
 							uci delete wireless.@wifi-iface[0].rsn_preauth
+							uci set wifimedia.@advance[0].ft="ieee80211r"
 							echo "Fast BSS Transition Roaming" >/etc/FT
 							#Delete List r0kh r1kh
-							list_ap="/tmp/list_eap"
-							touch  /tmp/list_eap
-							cat "$list_ap" | while read  line;do #add list R0KH va R1KH
-								uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-								uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-							done							
+							#list_ap="/tmp/list_eap"
+							#touch  /tmp/list_eap
+							#cat "$list_ap" | while read  line;do #add list R0KH va R1KH
+							#	uci del_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+							#	uci del_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+							#done
+							uci del wireless.default_radio0.r0kh
+							uci del wireless.default_radio0.r1kh
 							#add List r0kh r1kh
 							cat "$grp_device" | while read  line;do #add list R0KH va R1KH
 								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
 								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
 							done
-							cat "$grp_device" >$list_ap
-
+							
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
+							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
-						fi						
+						fi	
+						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
-						uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"						
+						mactmp="/tmp/mac_device"
+						echo ''>$mactmp
+						nas_id="$(echo $line | awk '{print $2}')"
+						if [ -z "$nas_id" ];then
+							uci del wireless.default_radio0.r0kh
+							uci del wireless.default_radio0.r1kh
+						else	
+							uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
+						fi	
+						cat "$grp_device" | while read line ; do
+							if [ "$(echo $line | grep $(echo $line | awk '{print $2}'))" ];then
+								echo $line | awk '{print $2}' >>$mactmp
+							fi
+						done
+						uci set wifimedia.@advance[0].macs="$(cat $mactmp | xargs | sed 's/:/-/g' | sed 's/ /,/g')"
 					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"
+							uci set wifimedia.@advance[0].hidessid="1"
 						else
 							uci set wireless.@wifi-iface[0].hidden="0"
+							uci set wifimedia.@advance[0].hidessid="0"
 							#uci delete wireless.@wifi-iface[0].hidden #uci: Entry not found
 						fi					
 					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
@@ -114,6 +146,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wifimedia.@advance[0].bridge_mode='1'
 						else
 							uci set network.lan='interface'
+							uci commit network
 							uci set network.lan.proto='static'
 							uci set network.lan.ipaddr='172.16.99.1'
 							uci set network.lan.netmask='255.255.255.0'
@@ -135,21 +168,27 @@ if [ "${curl_result}" -eq 0 ]; then
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
+							uci set wifimedia.@advance[0].isolation="1"
 						else
 							#uci delete wireless.@wifi-iface[0].isolate
 							uci set wireless.@wifi-iface[0].isolate="0"
+							uci set wifimedia.@advance[0].isolation="0"
 						fi
 					#Txpower
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | grep 'auto')"  ];then
 							uci delete wireless.@wifi-device[0].txpower
+							uci set wifimedia.@advance[0].txpower="auto"
 						elif [ "$(echo $line | grep 'low')"  ];then
 							uci set wireless.@wifi-device[0].txpower=17
+							uci set wifimedia.@advance[0].txpower="low"
 						elif [ "$(echo $line | grep 'medium')"  ];then
 							uci set wireless.@wifi-device[0].txpower=20
+							uci set wifimedia.@advance[0].txpower="medium"
 						elif [ "$(echo $line | grep 'high')"  ];then
-							uci set wireless.@wifi-device[0].txpower=22						
+							uci set wireless.@wifi-device[0].txpower=22
+							uci set wifimedia.@advance[0].txpower="high"
 						fi
 					fi
 					wifi up
