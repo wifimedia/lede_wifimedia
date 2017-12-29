@@ -2,31 +2,32 @@
 # Copyright © 2017 Wifimedia.vn.
 # All rights reserved.
 
-groups_en=`uci -q get wifimedia.@advance[0].ctrs_en`
-essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'`
+groups_en=`uci -q get wifimedia.@advance[0].ctrs_en` #Enable config
+essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'` #SSID
 mode_=`uci -q get wifimedia.@advance[0].mode`
 networks_=`uci -q get wifimedia.@advance[0].network`
-cnl=`uci -q get wifimedia.@advance[0].maxassoc`
+cnl=`uci -q get wifimedia.@advance[0].maxassoc` #Max Connect
 
-encr=`uci -q get wifimedia.@advance[0].encrypt`
-passwd=`uci -q get wifimedia.@advance[0].password`
-ft=`uci -q get wifimedia.@advance[0].ft`
+encr=`uci -q get wifimedia.@advance[0].encrypt` #Type Ecrypt
+passwd=`uci -q get wifimedia.@advance[0].password` #PASSWORD ESSID
+ft=`uci -q get wifimedia.@advance[0].ft`	#Fast Roaming
 nasid=`uci -q get wifimedia.@advance[0].nasid`
 
 isolation_=`uci -q get wifimedia.@advance[0].isolation`
 hide_ssid=`uci -q get wifimedia.@advance[0].hidessid`
 txpower_=`uci -q get wifimedia.@advance[0].txpower`
-hour_=`uci -q get wifimedia.@advance[0].hour`
-minute_=`uci -q get wifimedia.@advance[0].minute`
-reboot=`uci -q get wifimedia.@advance[0].Everyday`
+hour_=`uci -q get wifimedia.@advance[0].hour`	#Time Schedule
+minute_=`uci -q get wifimedia.@advance[0].minute` #Time Schedule
+reboot=`uci -q get wifimedia.@advance[0].Everyday` #Auto reboot
 
-gpd_en=`uci -q get wifimedia.@advance[0].gpd_en`
-macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
+gpd_en=`uci -q get wifimedia.@advance[0].gpd_en` #Enable List AP
+macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g'` #List MAC AP
 
 wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
-br_network=`uci -q get wifimedia.@advance[0].bridge_mode`
+br_network=`uci -q get wifimedia.@advance[0].bridge_mode` #switch 5 port
 
-rssi=`uci -q get wifimedia.@advance[0].level`
+rssi=`uci -q get wifimedia.@advance[0].level` #level rssi
+enable_rssi=`uci -q get wifimedia.@advance[0].enable` #enable rssi
 
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].passwords`
@@ -53,7 +54,11 @@ if [ "$groups_en" == "1" ];then
 	echo "CLN: $cnl" >> $group
 	echo "HIDE: $hide_ssid" >>$group
 	echo "BRIDGE: $br_network" >>$group
-	echo "RSSI: $rssi" >>$group
+	if [ $enable_rssi == "1" ];then
+		echo "RSSI: $rssi" >>$group
+	else
+		echo "RSSI: STOP" >>$group
+	fi	
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
 	echo "TxPower: $txpower_" >> $group
