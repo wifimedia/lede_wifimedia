@@ -108,6 +108,6 @@ if [ "$groups_en" == "1" ];then
 	uci set wireless.@wifi-iface[0].isolate="$isolation_"
 	uci commit wireless
 fi
-#sleep 5 && wifi
-sleep 5 && /bin/ubus call network reload >/dev/null 2>/dev/null
+sleep 5 && wifi
+
 
