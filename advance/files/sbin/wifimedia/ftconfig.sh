@@ -81,7 +81,7 @@ if [ "$groups_en" == "1" ];then
 		uci del wireless.default_radio0.r1kh
 		echo "Fast-Secure Roaming" >/etc/FT
 		#Enable RSSI 
-		/etc/init.d/watchcat stop && sleep 5 && etc/init.d/watchcat start && /etc/init.d/watchcat enable		
+		/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable		
 	fi
 	#NASID
 	if [ -z "$nasid" ];then
