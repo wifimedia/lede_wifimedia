@@ -57,6 +57,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	chmod a+x /usr/bin/watchcat.sh
 	chmod a+x /etc/init.d/watchcat
 	chmod a+x /etc/uci-defaults/50-watchcat
+	/etc/init.d/watchcat enable
 fi
 exit 0
 endef
