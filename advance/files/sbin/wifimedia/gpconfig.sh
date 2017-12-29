@@ -109,6 +109,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi	
+						#Enable RSSI
 						
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
 						mactmp="/tmp/mac_device"
