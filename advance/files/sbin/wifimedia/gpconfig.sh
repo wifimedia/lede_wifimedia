@@ -210,11 +210,10 @@ if [ "${curl_result}" -eq 0 ]; then
 							echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
 							crontab /tmp/autoreboot -u wifimedia
 							/etc/init.d/cron start
-							ntpd -q -p 0.asia.pool.ntp.org
-							ntpd -q -p 1.asia.pool.ntp.org
-							ntpd -q -p 2.asia.pool.ntp.org
-							ntpd -q -p 3.asia.pool.ntp.org
-							
+							#ntpd -q -p 0.asia.pool.ntp.org
+							#ntpd -q -p 1.asia.pool.ntp.org
+							#ntpd -q -p 2.asia.pool.ntp.org
+							#ntpd -q -p 3.asia.pool.ntp.org					
 							uci set scheduled.days.Mon=1
 							uci set scheduled.days.Tue=1
 							uci set scheduled.days.Wed=1
