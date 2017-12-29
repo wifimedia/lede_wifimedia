@@ -192,6 +192,16 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set wireless.@wifi-device[0].txpower=22
 							uci set wifimedia.@advance[0].txpower="high"
 						fi
+					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
+						rssi="$(echo $line | awk '{print $2}')"
+						if [ -z "$rssi" ];then
+							uci delete wifimedia.@advance[0].enable
+							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
+						else
+							uci set wifimedia.@advance[0].enable="1"
+							/etc/init.d/watchcat start && /etc/init.d/watchcat enable
+							uci set wifimedia.@advance[0].level="$rssi"
+						fi
 					fi
 					wifi up
 					####Auto reboot every day
