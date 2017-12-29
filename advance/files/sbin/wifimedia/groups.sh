@@ -57,7 +57,7 @@ if [ "$groups_en" == "1" ];then
 	if [ $enable_rssi == "1" ];then
 		echo "RSSI: $rssi" >>$group
 	else
-		echo "RSSI: STOP" >>$group
+		echo "RSSI:" >>$group
 	fi	
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
