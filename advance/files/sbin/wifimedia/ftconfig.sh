@@ -112,4 +112,3 @@ if [ "$groups_en" == "1" ];then
 fi
 sleep 5 && wifi
 
-
