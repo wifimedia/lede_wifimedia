@@ -26,6 +26,8 @@ macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
 wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
 br_network=`uci -q get wifimedia.@advance[0].bridge_mode`
 
+rssi=`uci -q get wifimedia.@advance[0].level`
+
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].passwords`
 group="/www/luci-static/resources/groups.txt"
@@ -51,7 +53,7 @@ if [ "$groups_en" == "1" ];then
 	echo "CLN: $cnl" >> $group
 	echo "HIDE: $hide_ssid" >>$group
 	echo "BRIDGE: $br_network" >>$group
-
+	echo "RSSI: $rssi" >>$group
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
 	echo "TxPower: $txpower_" >> $group
