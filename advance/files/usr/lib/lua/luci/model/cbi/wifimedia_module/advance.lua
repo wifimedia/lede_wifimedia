@@ -17,37 +17,7 @@ end
 s = m:section(TypedSection, "advance","")
 s.anonymous = true
 s.addremove = false
---[[
-s:tab("rssi",  translate("RSSI"))
-	--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
-	rssi = s:taboption("rssi", Flag, "enable","Status")
-	rssi.rmempty = false
-		function rssi.write(self, section, value)
-			if value == self.enabled then
-				luci.sys.call("env -i /etc/init.d/watchping start >/dev/null")
-				luci.sys.call("env -i /etc/init.d/watchping enable >/dev/null")
-			else
-				luci.sys.call("env -i /etc/init.d/watchping stop >/dev/null")
-				luci.sys.call("env -i /etc/init.d/watchping disable >/dev/null")
-			end
-			return Flag.write(self, section, value)
-		end
-		function rssi.remove() end
-	--else 
-	--	m.pageaction = false
 
-	t = s:taboption("rssi", Value, "level","RSSI:","Range:-60dBm ~ -90dBm")
-	t:depends({enable="1"})
-	t.datatype = "min(-90)"
-	--s:taboption("rssi",Value, "delays","Time Delays (s)").optional = false
-	--t:depends({enable="1"})
-
-if online then
-	s:tab("online",  translate("Staus Online"))
-	rm= s:taboption("online",Flag, "online", "Status","On/Off")
-	rm.rmempty = false
-end
-]]--
 if wfm_lcs then
 	s:tab("license",  translate("License"))
 	wfm = s:taboption("license",Value,"wfm","wifimedia")
@@ -139,6 +109,28 @@ while (minute < 60) do
 end
 mi:depends({Everyday="1"})
 
+s:tab("rssi",  translate("RSSI"))
+
+rssi = s:taboption("rssi", Flag, "enable","Enable")
+rssi.rmempty = false
+t = s:taboption("rssi", Value, "level","RSSI:","Received signal strength indication: Range:-60dBm ~ -90dBm")
+t.datatype = "min(-90)"
+--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
+--[[
+function rssi.write(self, section, value)
+	if value == self.enabled then
+		luci.sys.call("env -i /etc/init.d/watchcat start >/dev/null")
+		luci.sys.call("env -i /etc/init.d/watchcat enable >/dev/null")
+	else
+		luci.sys.call("env -i /etc/init.d/watchcat stop >/dev/null")
+		luci.sys.call("env -i /etc/init.d/watchcat disable >/dev/null")
+	end
+	return Flag.write(self, section, value)
+end
+function rssi.remove() end
+--else 
+--	m.pageaction = false
+]]--
 s:tab("administrator",  translate("Administrators"))
 admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
 admingr = s:taboption("administrator",Value, "passwords", "Password")
