@@ -50,6 +50,7 @@ if [ "$groups_en" == "1" ];then
 	#Fast Roaming
 	if [ "$ft" == "ieee80211r"  ];then
 		uci set wireless.@wifi-iface[0].ieee80211r="1"
+		uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
 		uci delete wireless.@wifi-iface[0].rsn_preauth
 		echo "Fast BSS Transition Roaming" >/etc/FT
 		
@@ -77,6 +78,7 @@ if [ "$groups_en" == "1" ];then
 		uci set wifimedia.@advance[0].enable=1
 	else
 		uci delete wireless.@wifi-iface[0].ieee80211r
+		uci delete wireless.@wifi-iface[0].ft_psk_generate_local
 		uci set wireless.@wifi-iface[0].rsn_preauth="1"
 		uci del wireless.default_radio0.r0kh
 		uci del wireless.default_radio0.r1kh

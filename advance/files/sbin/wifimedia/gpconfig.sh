@@ -85,6 +85,7 @@ if [ "${curl_result}" -eq 0 ]; then
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
+							uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							uci set wifimedia.@advance[0].ft="ieee80211r"
 							echo "Fast BSS Transition Roaming" >/etc/FT
@@ -105,6 +106,7 @@ if [ "${curl_result}" -eq 0 ]; then
 
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
+							uci delete wireless.@wifi-iface[0].ft_psk_generate_local
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
