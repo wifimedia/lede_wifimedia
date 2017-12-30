@@ -75,7 +75,6 @@ if [ "$groups_en" == "1" ];then
 		#uci commit wireless
 		#Enable RSSI 
 		/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable
-		uci set wifimedia.@advance[0].enable=1
 	else
 		uci delete wireless.@wifi-iface[0].ieee80211r
 		uci delete wireless.@wifi-iface[0].ft_psk_generate_local
@@ -85,7 +84,6 @@ if [ "$groups_en" == "1" ];then
 		echo "Fast-Secure Roaming" >/etc/FT
 		#Enable RSSI 
 		/etc/init.d/watchcat stop && etc/init.d/watchcat start && /etc/init.d/watchcat enable
-		uci set wifimedia.@advance[0].enable=1
 	fi
 	#NASID
 	if [ -z "$nasid" ];then
