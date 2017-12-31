@@ -145,7 +145,7 @@ if [ "${curl_result}" -eq 0 ]; then
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci delete network.lan
 							uci set network.wan.proto='dhcp'
-							uci set network.wan.ifname='eth0 eth1'
+							uci set network.wan.ifname='eth0 eth1.1'
 							uci set wireless.@wifi-iface[0].network='wan'
 							uci set wifimedia.@advance[0].bridge_mode='1'
 						else

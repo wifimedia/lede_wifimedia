@@ -99,7 +99,7 @@ bridge_mode.rmempty = false
 				--luci.sys.call("uci set network.lan.netmask='255.255.255.0'")
 				--luci.sys.call("uci delete network.lan.type='bridge'")
 				luci.sys.call("uci set network.wan.proto='dhcp'")
-				luci.sys.call("uci set network.wan.ifname='eth0 eth1'")
+				luci.sys.call("uci set network.wan.ifname='eth0 eth1.1'")
 				luci.sys.call("uci set wireless.@wifi-iface[0].network='wan'")
 				luci.sys.call("uci commit")
 			else
