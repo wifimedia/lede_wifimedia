@@ -155,7 +155,7 @@ if [ "${curl_result}" -eq 0 ]; then
 							uci set network.lan.ipaddr='172.16.99.1'
 							uci set network.lan.netmask='255.255.255.0'
 							uci set network.lan.type='bridge'
-							uci set network.lan.ifname='eth1'
+							uci set network.lan.ifname='eth1.1'
 							uci set dhcp.lan.force='1'
 							uci set dhcp.lan.netmask='255.255.255.0'
 							uci del dhcp.lan.dhcp_option
