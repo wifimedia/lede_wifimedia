@@ -58,6 +58,8 @@ licensekey=/tmp/upgrade/licensekey
 device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
 license_srv="http://firmware.wifimedia.com.vn/hardware_active"
 apid=$(echo $device | sed 's/:/-/g')
+#--------------RSSI------------------------------
+rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 #------------------------------------------------
 #eap_manager
 eap_device="/www/luci-static/resources/devices.txt"
