@@ -3,7 +3,6 @@
 # All rights reserved.
 
 . /sbin/wifimedia/variables.sh
-
 startup() {
 echo "" > $hardware
 wget -q "${url_srv}" -O $hardware
@@ -133,8 +132,6 @@ if [ "${curl_result}" -eq 0 ]; then
 			fi	
 		done
 	fi
-else
-	echo "Could not connect to the upgrade server, exiting..."
 fi
 }
 
@@ -187,9 +184,7 @@ if [ "${curl_result}" -eq 0 ]; then
 			#else
 			#	echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
 			fi
-		done	
-	#else
-	#	echo "Could not connect to the upgrade server, exiting..."
+		done
 	fi
 else
 	echo "Could not connect to the upgrade server, exiting..."

@@ -84,10 +84,10 @@ check_wr940v5() { #checking internet
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		sync && echo 3 > /proc/sys/vm/drop_caches
 	fi
-	eap_manager
 }
 
 remote_cfg() {
+
 echo "" > $sha256_download
 wget -q "${sha_download}" -O $sha256_download
 curl_result=$?
@@ -95,7 +95,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 echo "Checking download sha256sum"
 	if [ "$(uci -q get wifimedia.@advance[0].sha256)" != "$(cat $sha256_download | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
-		echo "NEW"
+
 		wget -q "${url}" -O $grp_download
 		wget -q "${grpd}" -O $grp_device_download
 		cat "$grp_device_download" | while read line ; do
@@ -304,8 +304,6 @@ echo "Checking download sha256sum"
 		done
 		echo "update: Successfully applied new settings"
 	fi
-else
-	echo "Could not connect to the upgrade server, exiting..."
 fi
 }
 
@@ -553,6 +551,7 @@ cat "/tmp/eap_mac" | while read line ; do
 	done	
 done
 }
+
 rssi() {
 
 if [ $rssi_on == "1" ];then
