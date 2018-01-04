@@ -299,7 +299,7 @@ echo "Checking download sha256sum"
 				uci commit dhcp
 				wifi up
 				# Restart all of the services
-				/bin/ubus call network reload >/dev/null 2>/dev/null
+				/bin/ubus call network reload >/dev/null 2>/dev/null 
 			fi
 		done
 		echo "update: Successfully applied new settings"
