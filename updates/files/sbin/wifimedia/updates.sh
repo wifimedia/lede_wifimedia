@@ -2,6 +2,9 @@
 # Copyright © 2013-2017 WiFiMedia.
 # All rights reserved.
 
+#Load Function online
+. /sbin/wifimedia/controller_srv.sh
+
 temp_dir="/tmp/checkin"
 status_file="$temp_dir/request.txt"
 response_file="$temp_dir/response.txt"
@@ -94,29 +97,28 @@ wget -q "${url_action}" -O $action_data
 #fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
-	/sbin/wifimedia/restore_defaults.sh
-fi
-if [ "$(cat "$action_data" | grep 'password')" ] ;then
+	upgrade_srv
+elif [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
-	/sbin/wifimedia/passwd_default.sh
-fi
+	passwd_admin_srv
+
 #if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
 #	echo "switch off"
 #	/sbin/wifimedia/switch_off.sh
 #fi
-if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
+elif [ "$(cat "$action_data" | grep '802.11i')" ] ;then
 	echo "802.11i"
-	/sbin/wifimedia/preauthen_rsn.sh
-fi
-if [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
+	preauth_rsn_srv
+elif
+ [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
 	echo "delete passwd wifi"
-	/sbin/wifimedia/passwifi.sh
-fi
-if [ "$(cat "$action_data" | grep 'button')" ] ;then
+	passwd_wifi
+elif
+ [ "$(cat "$action_data" | grep 'button')" ] ;then
 	echo "delete passwd wifi"
-	/sbin/wifimedia/button_reset.sh
-fi
-if [ "$(cat "$action_data" | grep 'update')" ] ;then
+	restore_srv
+elif
+ [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file
 else
