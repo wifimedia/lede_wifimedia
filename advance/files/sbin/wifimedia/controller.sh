@@ -99,7 +99,7 @@ echo "Checking download sha256sum"
 		wget -q "${url}" -O $grp_download
 		wget -q "${grpd}" -O $grp_device_download
 		cat "$grp_device_download" | while read line ; do
-			if [ "$(echo $line | grep $device)" ] ;then #tim thiet bi xem co trong groups hay khong
+			if [ "$(echo $line | grep $device_cfg)" ] ;then #tim thiet bi xem co trong groups hay khong
 					uci set wifimedia.@advance[0].ctrs_en="1" #update config
 				cat "$grp_download" | while read line ; do
 				
@@ -300,9 +300,9 @@ echo "Checking download sha256sum"
 				wifi up
 				# Restart all of the services
 				/bin/ubus call network reload >/dev/null 2>/dev/null 
+				echo "update: Successfully applied new settings"
 			fi
 		done
-		echo "update: Successfully applied new settings"
 	fi
 fi
 }
