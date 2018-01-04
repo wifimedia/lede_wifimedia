@@ -9,7 +9,7 @@ wget -q "${url_srv}" -O $hardware
 curl_result=$?
 }
 
-srv_reset() {
+btn_reset() {
 
 startup
 if [ "${curl_result}" -eq 0 ]; then
@@ -146,7 +146,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $version; then
 		cat "$version" | while read line ; do
-			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
+			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $7}')" ]; then
 				# Make sure no old firmware exists
 				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
 				#echo "Checking for upgrade binary"

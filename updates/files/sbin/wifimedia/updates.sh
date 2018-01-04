@@ -2,9 +2,6 @@
 # Copyright © 2013-2017 WiFiMedia.
 # All rights reserved.
 
-#Load Function online
-. /sbin/wifimedia/controller_srv.sh
-
 temp_dir="/tmp/checkin"
 status_file="$temp_dir/request.txt"
 response_file="$temp_dir/response.txt"
@@ -90,35 +87,36 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-#if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
-#	echo "upgrade"
-#	/sbin/wifimedia/upgrade.sh
-#fi
+	echo "upgrade"
+	/sbin/wifimedia/controller_srv.sh upgrade_srv
+fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
-	upgrade_srv
-elif [ "$(cat "$action_data" | grep 'password')" ] ;then
+	/sbin/wifimedia/controller_srv.sh restore_srv
+fi
+if [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
-	passwd_admin_srv
-
+	/sbin/wifimedia/controller_srv.sh passwd_admin_srv
+fi
 #if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
 #	echo "switch off"
 #	/sbin/wifimedia/switch_off.sh
 #fi
-elif [ "$(cat "$action_data" | grep '802.11i')" ] ;then
+if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
 	echo "802.11i"
-	preauth_rsn_srv
-elif
- [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
+	/sbin/wifimedia/controller_srv.sh preauth_rsn_srv
+fi
+if [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
 	echo "delete passwd wifi"
-	passwd_wifi
-elif
- [ "$(cat "$action_data" | grep 'button')" ] ;then
-	echo "delete passwd wifi"
-	restore_srv
-elif
- [ "$(cat "$action_data" | grep 'update')" ] ;then
+	/sbin/wifimedia/controller_srv.sh passwd_wifi
+fi
+if [ "$(cat "$action_data" | grep 'button')" ] ;then
+	echo "disable button reset"
+	/sbin/wifimedia/controller_srv.sh btn_reset
+fi
+if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file
 else
