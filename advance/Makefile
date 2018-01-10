@@ -63,7 +63,7 @@ define Package/advance/install
 	
 	$(INSTALL_DATA) ./files/advance_controller.lua $(1)/usr/lib/lua/luci/controller/wifimedia/advance.lua
 	$(INSTALL_DATA) ./files/advance_model.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
-	$(INSTALL_DATA) ./files/index.htm $(1)/usr/lib/lua/luci/view/wifimedia_view/index.html
+	$(INSTALL_DATA) ./files/index.htm $(1)/usr/lib/lua/luci/view/wifimedia_view/index.htm
 	
 endef
 
