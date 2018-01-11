@@ -16,7 +16,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].button)" != "$(echo $line | awk '{print $4}')" ]; then
-				if [ "$(echo $line | grep $device)" ] ;then
+				if [ "$(echo $line | grep $device_fw)" ] ;then
 					#Button Reset
 						chmod a+x /etc/btnaction
 						uci set wifimedia.@sync[0].button="$(echo $line | awk '{print $4}')"
@@ -42,7 +42,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].passwd)" != "$(echo $line | awk '{print $1}')" ]; then
-				if [ "$(echo $line | grep $device)" ] ;then
+				if [ "$(echo $line | grep $device_fw)" ] ;then
 					#Reset defaults passwd
 					echo -e "wifimedia\nwifimedia" | passwd admin
 					uci set wifimedia.@sync[0].passwd="$(echo $line | awk '{print $1}')"
@@ -68,7 +68,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].passwdwifi)" != "$(echo $line | awk '{print $2}')" ]; then
-				if [ "$(echo $line | grep $device)" ] ;then
+				if [ "$(echo $line | grep $device_fw)" ] ;then
 					#delete passwifi radio master
 					uci set wireless.@wifi-iface[0].encryption="none"
 					uci set wireless.@wifi-iface[0].key=""
@@ -92,7 +92,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].rsn)" != "$(echo $line | awk '{print $6}')" ]; then
-				if [ "$(echo $line | grep $device)" ] ;then
+				if [ "$(echo $line | grep $device_fw)" ] ;then
 					#802.11i passwifi radio master
 					uci set wireless.@wifi-iface[0].ssid="PDA"
 					uci set wireless.@wifi-iface[0].encryption="mixed-psk"
@@ -120,7 +120,7 @@ if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $hardware; then
 		cat "$hardware" | while read line ; do
 			if [ "$(uci get wifimedia.@sync[0].ftrs)" != "$(echo $line | awk '{print $3}')" ]; then
-				if [ "$(echo $line | grep $device)" ] ;then
+				if [ "$(echo $line | grep $device_fw)" ] ;then
 					#Reset defaults model
 					sleep 1; jffs2reset -y && reboot
 					#echo "reset default modem"
