@@ -10,7 +10,7 @@ echo "*/10 * * * * /sbin/wifimedia/updates.sh" >>/etc/crontabs/live
 uci -q get wifimedia.@advance[0] || {
         uci batch <<EOF
         add wifimedia advance
-        set wifimedia.@advance[0].online=0
+        #set wifimedia.@advance[0].online=0
         commit wifimedia
 EOF
 }
