@@ -321,7 +321,7 @@ if [ "$groups_en" == "1" ];then
 		uci set wireless.@wifi-iface[0].ssid="$essid"
 	fi
 	#channel
-	uci set wireless.radio0.channel="$ch"
+	#uci set wireless.radio0.channel="$ch" for wr840v4/wr840v5/wr841v13
 	#Connect Limit
 	uci set wireless.@wifi-iface[0].maxassoc="$cnl"
 	#Passwd ssid
