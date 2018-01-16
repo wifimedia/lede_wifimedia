@@ -158,7 +158,7 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 /etc/init.d/led reload
 
 ######Cron job
-echo "* * * * * /sbin/wifimedia/controller.sh check_wr840v4" >>/etc/crontabs/root
+echo "* * * * * /sbin/wifimedia/controller.sh check_wr841v13" >>/etc/crontabs/root
 echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
 
