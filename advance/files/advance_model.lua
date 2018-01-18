@@ -82,10 +82,10 @@ apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
 
-s:tab("device",  translate("AP Groups"))
+s:tab("device",  translate("APID Groups"))
 device = s:taboption("device",Flag, "gpd_en","Enable Groups")
 device.rmempty = false
-device = s:taboption("device",Value, "macs", "Devices")
+device = s:taboption("device",Value, "macs", "APID")
 device:depends({gpd_en="1"})
 
 s:tab("bridge_network",  translate("Bridge Network"))
