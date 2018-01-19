@@ -7,10 +7,12 @@ local sys = require "luci.sys"
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 local wfm_lcs = fs.access("/etc/opt/wfm_lcs")
---local online = fs.access("/etc/opt/online")
+local license = fs.access("/etc/opt/first_time.txt")
 m = Map("wifimedia", "")
 function m.on_after_commit(self)
-	luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
+	if license then
+		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
+	end
 	luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
