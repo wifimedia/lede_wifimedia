@@ -3,7 +3,7 @@
 # All rights reserved.
 
 . /sbin/wifimedia/variables.sh
-check_wr840v4() { #checking internet
+wr840v4() { #checking internet
 
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
@@ -31,7 +31,7 @@ check_wr840v4() { #checking internet
 	eap_manager
 }
 
-check_wr840v13() { #checking internet
+wr840v13() { #checking internet
 
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
@@ -59,7 +59,7 @@ check_wr840v13() { #checking internet
 	eap_manager
 }
 
-check_wr940v5() { #checking internet
+wr940v5() { #checking internet
 
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
@@ -84,6 +84,47 @@ check_wr940v5() { #checking internet
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		sync && echo 3 > /proc/sys/vm/drop_caches
 	fi
+}
+
+wr940v6() { #checking internet
+
+	#check gateway
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
+		echo 0 > brightness
+		echo none > trigger
+	fi
+	
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
+		echo none > trigger
+	fi
+	#Clear memory
+	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
+		sync && echo 3 > /proc/sys/vm/drop_caches
+	fi
+}
+
+checking (){
+model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+if [ "$model" == "TL-WR840N_v4" ];then
+	wr840v4
+elif [ "$model" == "TL-WR841N_v13" ];then
+	wr841v13
+elif [ "$model" == "TL-WR940N_v5" ];then
+	wr940v5
+elif [ "$model" == "TL-WR940N_v6" ];then
+	wr940v6
+fi
 }
 
 remote_cfg() {
