@@ -24,11 +24,6 @@ wr840v4() { #checking internet
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
 		echo none > trigger
 	fi
-	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
-		sync && echo 3 > /proc/sys/vm/drop_caches
-	fi
-	eap_manager
 }
 
 wr840v13() { #checking internet
@@ -52,11 +47,6 @@ wr840v13() { #checking internet
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/
 		echo none > trigger
 	fi
-	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
-		sync && echo 3 > /proc/sys/vm/drop_caches
-	fi
-	eap_manager
 }
 
 wr940v5() { #checking internet
@@ -80,10 +70,7 @@ wr940v5() { #checking internet
 		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
 		echo none > trigger
 	fi
-	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
-		sync && echo 3 > /proc/sys/vm/drop_caches
-	fi
+
 }
 
 wr940v6() { #checking internet
@@ -108,23 +95,25 @@ wr940v6() { #checking internet
 		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
 		echo none > trigger
 	fi
+}
+
+checking (){
+	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+	if [ "$model" == "TL-WR840N_v4" ];then
+		wr840v4
+		eap_manager
+	elif [ "$model" == "TL-WR841N_v13" ];then
+		wr841v13
+		eap_manager
+	elif [ "$model" == "TL-WR940N_v5" ];then
+		wr940v5
+	elif [ "$model" == "TL-WR940N_v6" ];then
+		wr940v6
+	fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		sync && echo 3 > /proc/sys/vm/drop_caches
 	fi
-}
-
-checking (){
-model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
-if [ "$model" == "TL-WR840N_v4" ];then
-	wr840v4
-elif [ "$model" == "TL-WR841N_v13" ];then
-	wr841v13
-elif [ "$model" == "TL-WR940N_v5" ];then
-	wr940v5
-elif [ "$model" == "TL-WR940N_v6" ];then
-	wr940v6
-fi
 }
 
 remote_cfg() {
