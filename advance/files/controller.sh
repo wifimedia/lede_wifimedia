@@ -438,7 +438,7 @@ if [ "$reboot" == "1" ]; then
 fi
 #ap_manager
 echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
-
+eap_manager
 }
 
 license_srv() {
