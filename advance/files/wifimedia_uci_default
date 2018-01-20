@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rnd=`cat /dev/urandom | tr -dc 'A-Z' | head -c1`
-model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 uci -q get system.@reset_all[0] || {
 	uci batch <<-EOF
 	add system reset_all
@@ -49,7 +49,7 @@ uci batch <<-EOF
 	set system.@system[0].timezone=ICT-7
 EOF
 
-if [ "$model" == "TL-WR940N_v5" ] || [ "$model" == "TL-WR940N_v6" ];then
+if [ "$model_hardware" == "TL-WR940N_v5" ] || [ "$model_hardware" == "TL-WR940N_v6" ];then
 	uci batch <<-EOF
 		set network.lan.ipaddr=172.16.99.1
 		set network.wan.type=bridge
@@ -72,7 +72,7 @@ if [ "$model" == "TL-WR940N_v5" ] || [ "$model" == "TL-WR940N_v6" ];then
 
 fi
 
-if [ "$model" == "TL-WR840N_v4" ] || [ "$model" == "TL-WR841N_v13" ];then
+if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_v13" ];then
 	uci batch <<-EOF
 		set network.lan.ipaddr=192.168.5.1
 		set network.wan.type=bridge
@@ -178,6 +178,16 @@ echo 'DISTRIB_CODENAME="'"$DISTRIB_CODENAME"'"' >> /etc/openwrt_release
 echo 'DISTRIB_TARGET="'"$DISTRIB_TARGET"'"' >> /etc/openwrt_release
 echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
+if [ "$model_hardware" == "TL-WR840N_v4" ];then
+	echo "TL-WR840N v4" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR841N_v13" ];then
+	echo "TL-WR841N v13" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v5" ];then
+	echo "TL-WR940N v5" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v6" ];then
+	echo "TL-WR940N v6" >/etc/hardware
+fi
+	
 #rm -f /etc/privoxy/default.action
 #rm -f /etc/privoxy/default.filter
 
