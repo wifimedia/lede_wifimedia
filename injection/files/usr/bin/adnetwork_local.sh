@@ -19,7 +19,7 @@ ads_fb_like=/tmp/fblike.txt
 
 rm -f /etc/privoxy/default.filter
 rm -f /etc/privoxy/default.action
-
+rm -f /etc/privoxy/regression-tests.action
 dns=$(uci -q get wifimedia.@adnetwork[0].domain)
 dns_acl=$(uci -q get wifimedia.@adnetwork[0].domain_acl)
 if [ -z $dns ];then
