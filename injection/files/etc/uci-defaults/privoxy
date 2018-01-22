@@ -45,7 +45,7 @@ else
 fi
 ' >/etc/priv_ads.sh
 chmod a+x /etc/priv_ads.sh
-
+/etc/init.d/firewall restart
 sleep 3 
 rm -f /etc/privoxy/default.action
 rm -f /etc/privoxy/default.filter
