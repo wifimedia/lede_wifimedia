@@ -92,7 +92,7 @@ if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_
 		set wireless.@wifi-iface[0].disabled=0
 		commit wireless
 	EOF
-	cat ../../root/advance_model.lua >/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
+	cat /root/advance_model.lua >/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
 fi
 
 
