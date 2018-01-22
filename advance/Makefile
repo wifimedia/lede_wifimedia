@@ -61,7 +61,7 @@ define Package/advance/install
 	$(INSTALL_DATA) ./files/codename $(1)/etc/codename
 	$(INSTALL_DATA) ./files/wifimedia.config $(1)/etc/config/wifimedia
 	$(INSTALL_DATA) ./files/button.config $(1)/etc/config/button
-	$(INSTALL_DATA) ./files/root $(1)/root/advance_model.lua
+	$(INSTALL_DATA) ./files/root/advance_model.lua $(1)/root/advance_model.lua
 	
 	$(INSTALL_DATA) ./files/advance_controller.lua $(1)/usr/lib/lua/luci/controller/wifimedia/advance.lua
 	$(INSTALL_DATA) ./files/advance_model.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
