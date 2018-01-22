@@ -93,6 +93,7 @@ if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_
 		commit wireless
 	EOF
 	cat /root/advance_model.lua >/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
+	cat /root/gw_index.htm >/usr/lib/lua/luci/view/admin_status/index.htm
 fi
 
 
