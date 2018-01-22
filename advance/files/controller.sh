@@ -105,7 +105,7 @@ checking (){
 	elif [ "$model" == "TL-WR841N_v13" ];then
 		wr841v13
 		eap_manager
-	elif [ "$model" == "TL-WR940N_v5" ];then
+	elif [ "$model" == "TL-WR940N_v4" ];then
 		wr940v5
 	elif [ "$model" == "TL-WR940N_v6" ];then
 		wr940v6
