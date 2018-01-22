@@ -23,14 +23,18 @@ rm -f /etc/privoxy/default.action
 dns=$(uci -q get wifimedia.@adnetwork[0].domain)
 dns_acl=$(uci -q get wifimedia.@adnetwork[0].domain_acl)
 if [ -z $dns ];then
-	echo '{-filter{user-adv}}' >$action #write filter
+	echo '{-filter{user-adv}}' >$action
+	echo '/' >>$action
 else
-	echo '{+filter{user-adv}}' >$action #write filter
+	echo '{+filter{user-adv}}' >$action
+	echo '/' >>$action
 fi
 if [ -z $dns_acl ];then
 	echo '{-filter{user-ads}}' >$action_acl
+	echo '/' >>$action_acl
 else
 	echo '{+filter{user-ads}}' >$action_acl
+	echo '/' >>$action_acl
 fi
 
 #uci -q get wifimedia.@adnetwork[0].domain | sed 's/,/ /g' | xargs -n1 -r >>$action #write domain
