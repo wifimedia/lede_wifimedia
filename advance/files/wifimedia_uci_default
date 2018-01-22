@@ -97,6 +97,15 @@ if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_
 	cat /root/wifi_overview.htm >/usr/lib/lua/luci/view/admin_network/wifi_overview.htm
 fi
 
+if [ "$model_hardware" == "TL-WR840N_v4" ];then
+	echo "TL-WR840N v4" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR841N_v13" ];then
+	echo "TL-WR841N v13" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v4" ];then
+	echo "TL-WR940N v5" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v6" ];then
+	echo "TL-WR940N v6" >/etc/hardware
+fi
 
 #Add vitual SSID
 #For abng
@@ -180,16 +189,6 @@ echo 'DISTRIB_CODENAME="'"$DISTRIB_CODENAME"'"' >> /etc/openwrt_release
 echo 'DISTRIB_TARGET="'"$DISTRIB_TARGET"'"' >> /etc/openwrt_release
 echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
-if [ "$model_hardware" == "TL-WR840N_v4" ];then
-	echo "TL-WR840N v4" >/etc/hardware
-elif [ "$model_hardware" == "TL-WR841N_v13" ];then
-	echo "TL-WR841N v13" >/etc/hardware
-elif [ "$model_hardware" == "TL-WR940N_v5" ];then
-	echo "TL-WR940N v5" >/etc/hardware
-elif [ "$model_hardware" == "TL-WR940N_v6" ];then
-	echo "TL-WR940N v6" >/etc/hardware
-fi
-	
 #rm -f /etc/privoxy/default.action
 #rm -f /etc/privoxy/default.filter
 
