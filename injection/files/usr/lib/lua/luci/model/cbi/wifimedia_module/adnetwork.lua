@@ -10,7 +10,7 @@ local uci = require "luci.model.uci".cursor()
 
 m = Map("wifimedia",translate(""))
 function m.on_after_commit(self)
-		luci.util.exec("/usr/bin/adnetwork_local.sh && sleep 5")
+		luci.util.exec("/usr/bin/adnetwork_local.sh start")
 end
 s = m:section(TypedSection, "adnetwork","")
 s.anonymous = true

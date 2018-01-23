@@ -17,24 +17,21 @@ ads_fb_page=/tmp/fbpage.txt
 ads_fb_video=/tmp/fbvideo.txt
 ads_fb_like=/tmp/fblike.txt
 
-rm -f /etc/privoxy/default.filter
-rm -f /etc/privoxy/default.action
-rm -f /etc/privoxy/regression-tests.action
 dns=$(uci -q get wifimedia.@adnetwork[0].domain)
 dns_acl=$(uci -q get wifimedia.@adnetwork[0].domain_acl)
 if [ -z $dns ];then
 	echo '{-filter{user-adv}}' >$action
-	echo '/' >>$action
+	#echo '/' >>$action
 else
 	echo '{+filter{user-adv}}' >$action
-	echo '/' >>$action
+	#echo '/' >>$action
 fi
 if [ -z $dns_acl ];then
 	echo '{-filter{user-ads}}' >$action_acl
-	echo '/' >>$action_acl
+	#echo '/' >>$action_acl
 else
 	echo '{+filter{user-ads}}' >$action_acl
-	echo '/' >>$action_acl
+	#echo '/' >>$action_acl
 fi
 
 #uci -q get wifimedia.@adnetwork[0].domain | sed 's/,/ /g' | xargs -n1 -r >>$action #write domain
@@ -55,13 +52,13 @@ status=$(uci -q get wifimedia.@adnetwork[0].status)
 gw=${apkey:-$wlan}
 
 #write to user.filter
-echo 'FILTER:user-adv
+#echo 'FILTER:user-adv
 #head-website
-s†(<(?:head|body)[^>]*?>)†$1\n\
-<script src="http://ads.wifimedia.vn/public/wifimedia/jquery.js"></script>\n\
-<script src="http://ads.wifimedia.vn/public/wifimedia/lib.js"></script>\n\
-<script src="http://ads.wifimedia.vn/public/wifimedia/'$gw'.js"></script>\n\
-†i ' >$user_filter
+#s†(<(?:head|body)[^>]*?>)†$1\n\
+#<script src="http://ads.wifimedia.vn/public/wifimedia/jquery.js"></script>\n\
+#<script src="http://ads.wifimedia.vn/public/wifimedia/lib.js"></script>\n\
+#<script src="http://ads.wifimedia.vn/public/wifimedia/'$gw'.js"></script>\n\
+#†i ' >$user_filter
 
 echo 'FILTER:user-ads' >$user_acl_filter
 

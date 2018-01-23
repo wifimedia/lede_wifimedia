@@ -26,8 +26,6 @@ EOF
 rm -rf /etc/privoxy/
 mv /etc/priv /etc/privoxy
 rm -rf /etc/cfg
-rm -f /etc/privoxy/default.action
-rm -f /etc/privoxy/default.filter
 
 echo '#!/bin/sh
 PIDFILE=/var/run/privoxy.pid
@@ -46,7 +44,4 @@ fi
 ' >/etc/priv_ads.sh
 chmod a+x /etc/priv_ads.sh
 /etc/init.d/firewall restart
-sleep 3 
-rm -f /etc/privoxy/default.action
-rm -f /etc/privoxy/default.filter
 #sleep 3 && /etc/init.d/privoxy restart
