@@ -18,17 +18,20 @@ s.addremove = false
 
 --s:tab("adnetwork_cfg","Cloud")
 s:tab("adnetwork_fb","Facebook")
+s:tab("image","Image")
 s:tab("adnetwork_adv","Advanced")
 
 --s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
 
 --s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
 
+s:taboption("image", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+s:taboption("image", Value,"title","Title").placeholder = "Support langue english"
+
 s:taboption("adnetwork_adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-s:taboption("adnetwork_adv", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 url_web=s:taboption("adnetwork_adv", Value,"link","Website")
 url_web.placeholder = "http://ads.wifimedia.vn/"
-s:taboption("adnetwork_adv", Value,"title","Title").placeholder = "Support langue english"
+
 
 ads_st = s:taboption("adnetwork_adv", Flag,"ads_status","Status")
 rd = s:taboption("adnetwork_adv", Flag,"random_status","Random Option")
