@@ -19,13 +19,13 @@ ads_fb_like=/tmp/fblike.txt
 
 dns=$(uci -q get wifimedia.@adnetwork[0].domain)
 dns_acl=$(uci -q get wifimedia.@adnetwork[0].domain_acl)
-if [ -z $dns ];then
-	echo '{-filter{user-adv}}' >$action
+#if [ -z $dns ];then
+#	echo '{-filter{user-adv}}' >$action
 	#echo '/' >>$action
-else
-	echo '{+filter{user-adv}}' >$action
+#else
+#	echo '{+filter{user-adv}}' >$action
 	#echo '/' >>$action
-fi
+#fi
 if [ -z $dns_acl ];then
 	echo '{-filter{user-ads}}' >$action_acl
 	#echo '/' >>$action_acl

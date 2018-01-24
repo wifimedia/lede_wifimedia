@@ -16,13 +16,13 @@ s = m:section(TypedSection, "adnetwork","")
 s.anonymous = true
 s.addremove = false
 
-s:tab("adnetwork_cfg","Cloud")
+--s:tab("adnetwork_cfg","Cloud")
 s:tab("adnetwork_fb","Facebook")
 s:tab("adnetwork_adv","Advanced")
 
-s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
+--s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
 
-s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
+--s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
 
 s:taboption("adnetwork_adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
 s:taboption("adnetwork_adv", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
