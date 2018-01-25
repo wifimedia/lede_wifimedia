@@ -9,13 +9,30 @@ fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
 fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)
 fb_like=$(uci -q get wifimedia.@adnetwork[0].ads_fb_like)
 ads_sec=$(uci -q get wifimedia.@adnetwork[0].second)
+page_id=$(uci -q get wifimedia.@adnetwork[0].facebook_id)
+ref=$(uci -q get wifimedia.@adnetwork[0].ref)
 
 ads_img=/tmp/img.txt
+chatbot=/tmp/chatbot.txt
 adsfb_video=/tmp/fbvideo.txt
 adsfb_page=/tmp/fbpage.txt
 adsfb_like=/tmp/fblike.txt
 ads_css=/www/luci-static/resources/ads_wifimedia.css
 ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
+echo '
+FILTER:user-ads
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
+<script>\n\
+(function(d){\n\
+var js, id = '"facebook-jssdk"'; if (d.getElementById(id)) {return;}\n\
+js = d.createElement('"script"'); js.id = id; js.async = true;\n\
+js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&appId=363772567412181&version=v2.0";\n\
+d.getElementsByTagName('"head"')[0].appendChild(js);\n\
+}(document));\n\
+</script>\n\
+†i' >$chatbot
+###END Chatbot
 #FILTER:user-ads
 ##Img && Title
 echo '
