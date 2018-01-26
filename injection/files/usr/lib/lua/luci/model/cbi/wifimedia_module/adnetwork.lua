@@ -25,7 +25,7 @@ s:tab("adv","Advanced")
 --s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
 --s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
 s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
-s:taboption("chatbot", Value,"rel","Ref").placeholder = "Ref"
+s:taboption("chatbot", Value,"ref","Ref").placeholder = "Ref"
 
 s:taboption("image", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 s:taboption("image", Value,"title","Title").placeholder = "Support langue english"

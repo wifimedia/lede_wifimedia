@@ -6,15 +6,8 @@ echo '
 FILTER:user-ads
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
-<script>\n\
-(function(d){\n\
-var js, id = '"facebook-jssdk"'; if (d.getElementById(id)) {return;}\n\
-js = d.createElement('"script"'); js.id = id; js.async = true;\n\
-js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&appId=363772567412181&version=v2.0";\n\
-d.getElementsByTagName('"head"')[0].appendChild(js);\n\
-}(document));\n\
-</script>\n\
-†i' >$user_acl_filter
+'>$user_acl_filter
+cat /sbin/wifimedia/fb.txt >>$user_acl_filter
 }
 ###END Chatbot
 
