@@ -12,7 +12,6 @@ ads_css=/www/luci-static/resources/ads_wifimedia.css
 action=/etc/privoxy/user.action
 action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter
-user_acl_filter=/etc/privoxy/useracl.filter
 filter=/etc/privoxy/user.filter
 
 link=$(uci -q get wifimedia.@adnetwork[0].link)

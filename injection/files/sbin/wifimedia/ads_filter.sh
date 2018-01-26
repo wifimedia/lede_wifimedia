@@ -1,6 +1,7 @@
 #!/bin/sh
 # Copyright © 2013-2017 Wifimedia.
 . /sbin/wifimedia/adslib.sh
+chatbot(){
 echo '
 FILTER:user-ads
 s†(<(?:body)[^>]*?>)†$1\n\
@@ -13,9 +14,11 @@ js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&appId=36377256741218
 d.getElementsByTagName('"head"')[0].appendChild(js);\n\
 }(document));\n\
 </script>\n\
-†i' >$chatbot
+†i' >$user_acl_filter
+}
 ###END Chatbot
-#FILTER:user-ads
+
+img(){
 ##Img && Title
 echo '
 FILTER:user-ads
@@ -32,7 +35,10 @@ s†(<(?:body)[^>]*?>)†$1\n\
 		<a href="'$link'" taget="_blank" ><img width="auto" height="80" src="'$img'" >\</a>\n\
 	\</div>\n\
 \</div>\n\
-†i' >$ads_img
+†i' >$user_acl_filter
+}
+
+fbvideo(){
 ##Faccebook video
 echo '
 FILTER:user-ads
@@ -49,8 +55,10 @@ s†(<(?:body)[^>]*?>)†$1\n\
 		<iframe src="https://www.facebook.com/plugins/video.php?href='$fb_video'&width=320&show_text=false&autoplay=true&allowfullscreen=true&appId=112390685897051&height=120" width="320" height="120" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\n\
 	\</div>\n\
 \</div>\n\
-†i' >$adsfb_video
+†i' >$user_acl_filter
+}
 
+fbpage(){
 #Facebook page
 echo '
 FILTER:user-ads
@@ -64,8 +72,10 @@ s†(<(?:body)[^>]*?>)†$1\n\
 		<iframe src="https://www.facebook.com/plugins/page.php?href='$fb_page'&tabs=timeline&width=320&height=72&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=1585330391731025" width="320" height="72" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\n\
 	\</div>\n\
 \</div>\n\
-†i' >$adsfb_page
+†i' >$user_acl_filter
+}
 
+fbls(){
 #Facebook Like & Share
 echo '
 FILTER:user-ads
@@ -82,7 +92,8 @@ s†(<(?:body)[^>]*?>)†$1\n\
 		<a href="'$link'" taget="_blank" ><img width="auto" height="80" src="'$img'" >\</a>\n\
 	</div>\n\
 </div>\n\
-†i' >$adsfb_like
+†i' >$user_acl_filter
+}
 
 echo '
 .float-ck {
