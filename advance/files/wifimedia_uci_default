@@ -105,6 +105,8 @@ elif [ "$model_hardware" == "TL-WR940N_v4" ];then
 	echo "TL-WR940N v5" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR940N_v6" ];then
 	echo "TL-WR940N v6" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR941ND_v6" ];then
+	echo "TL-WR940N v3" >/etc/hardware
 fi
 
 #Add vitual SSID
