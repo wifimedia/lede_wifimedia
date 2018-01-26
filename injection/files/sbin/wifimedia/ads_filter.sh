@@ -1,24 +1,6 @@
 #!/bin/sh
 # Copyright © 2013-2017 Wifimedia.
-
-link=$(uci -q get wifimedia.@adnetwork[0].link)
-img=$(uci -q get wifimedia.@adnetwork[0].img)
-title=$(uci -q get wifimedia.@adnetwork[0].title)
-
-fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
-fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)
-fb_like=$(uci -q get wifimedia.@adnetwork[0].ads_fb_like)
-ads_sec=$(uci -q get wifimedia.@adnetwork[0].second)
-page_id=$(uci -q get wifimedia.@adnetwork[0].facebook_id)
-ref=$(uci -q get wifimedia.@adnetwork[0].ref)
-
-ads_img=/tmp/img.txt
-chatbot=/tmp/chatbot.txt
-adsfb_video=/tmp/fbvideo.txt
-adsfb_page=/tmp/fbpage.txt
-adsfb_like=/tmp/fblike.txt
-ads_css=/www/luci-static/resources/ads_wifimedia.css
-ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
+. /sbin/wifimedia/adslib.sh
 echo '
 FILTER:user-ads
 s†(<(?:body)[^>]*?>)†$1\n\

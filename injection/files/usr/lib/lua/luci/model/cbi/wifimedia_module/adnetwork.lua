@@ -17,44 +17,46 @@ s.anonymous = true
 s.addremove = false
 
 --s:tab("adnetwork_cfg","Cloud")
-s:tab("adnetwork_fb","Facebook")
+s:tab("chatbot","Chatbot")
+s:tab("fb","Facebook")
 s:tab("image","Image")
-s:tab("adnetwork_adv","Advanced")
+s:tab("adv","Advanced")
 
 --s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
-
 --s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
+s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
+s:taboption("chatbot", Value,"rel","Ref").placeholder = "Ref"
 
 s:taboption("image", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 s:taboption("image", Value,"title","Title").placeholder = "Support langue english"
 
-s:taboption("adnetwork_adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-url_web=s:taboption("adnetwork_adv", Value,"link","Website")
+s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
+url_web=s:taboption("adv", Value,"link","Website")
 url_web.placeholder = "http://ads.wifimedia.vn/"
 
 
-ads_st = s:taboption("adnetwork_adv", Flag,"ads_status","Status")
-rd = s:taboption("adnetwork_adv", Flag,"random_status","Random Option")
+ads_st = s:taboption("adv", Flag,"ads_status","Status")
+rd = s:taboption("adv", Flag,"random_status","Random Option")
 rd:depends({ads_status="1"})
-st = s:taboption("adnetwork_adv", ListValue,"status","Option")
+st = s:taboption("adv", ListValue,"status","Option")
 st:depends({ads_status="1"})
 
-local data = {"Facebook_Page","Facebook_videos", "Facebook_Like_Share","Image" }
+local data = {"Chatbot","Facebook_Page","Facebook_videos", "Facebook_Like_Share","Image" }
 for _, status in ipairs(data) do 
 	st:value(status, status .. " ")
 end
 
-sec = s:taboption("adnetwork_adv", ListValue, "second", "Second")
+sec = s:taboption("adv", ListValue, "second", "Second")
 sec:depends({ads_status="1"})
-local second = 6
+local second = 9
 while (second < 121) do
 	sec:value(second, second .. " ")
 	second = second + 1
 end
 
-s:taboption("adnetwork_fb", Value,"ads_fb_page","Facebook Page").placeholder = "Facebook Page Url"
-s:taboption("adnetwork_fb", Value,"ads_fb_video","Facebook videos and Facebook live videos ").placeholder = "Facebook videos Url"
-s:taboption("adnetwork_fb", Value,"ads_fb_like","Facebook Like & Share").placeholder = "Facebook Like & Share Url"
+s:taboption("fb", Value,"ads_fb_page","Facebook Page").placeholder = "Facebook Page Url"
+s:taboption("fb", Value,"ads_fb_video","Facebook videos and Facebook live videos ").placeholder = "Facebook videos Url"
+s:taboption("fb", Value,"ads_fb_like","Facebook Like & Share").placeholder = "Facebook Like & Share Url"
 
 local pid = luci.util.exec("pidof privoxy")
 local message = luci.http.formvalue("message")
