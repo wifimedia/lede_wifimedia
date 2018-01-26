@@ -1,9 +1,8 @@
-<script>\n\
-(function(d){\n\
-var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}\n\
-js = d.createElement('script'); js.id = id; js.async = true;\n\
-js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&appId=363772567412181&version=v2.0";\n\
-d.getElementsByTagName('head')[0].appendChild(js);\n\
-}(document));\n\
-</script>\n\
-†i'
+<script>
+(function(d){
+var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+js = d.createElement("script"); js.id = id; js.async = true;
+js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&appId=1549208022047891&version=v2.6";
+d.getElementsByTagName("head")[0].appendChild(js);
+}(document));
+</script>

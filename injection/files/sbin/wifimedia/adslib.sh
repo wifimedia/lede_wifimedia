@@ -9,6 +9,7 @@ ads_fb_video=/tmp/fbvideo.txt
 ads_fb_like=/tmp/fblike.txt
 chatbot=/tmp/chatbot.txt
 ads_css=/www/luci-static/resources/ads_wifimedia.css
+js=/www/luci-static/resources/fb.js
 action=/etc/privoxy/user.action
 action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter

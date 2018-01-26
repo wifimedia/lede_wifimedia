@@ -6,8 +6,10 @@ echo '
 FILTER:user-ads
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
+<script type="text/javascript" src="http://'$ip_lan'/luci-static/resources/fb.js" async="async"></script>\n\
+
 '>$user_acl_filter
-cat /sbin/wifimedia/fb.txt >>$user_acl_filter
+cat /sbin/wifimedia/fb.txt >$js
 }
 ###END Chatbot
 
