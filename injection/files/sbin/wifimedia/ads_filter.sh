@@ -6,13 +6,33 @@ echo '
 FILTER:user-ads
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
-<script type="text/javascript" src="http://'$ip_lan'/luci-static/resources/fb.js" async="async"></script>\n\
+<script>\n\
+
+  window.fbAsyncInit = function() { \n\
+    FB.init({ \n\
+      appId            : '"567774043309572"', \n\
+      autoLogAppEvents : true,\n\
+      xfbml            : true,
+      version          : '"v2.5"'\n\
+    });\n\
+  };\n\
+
+  (function(d, s, id){\n\
+    var js, fjs = d.getElementsByTagName(s)[0];\n\
+    if (d.getElementById(id)) {return;}\n\
+    js = d.createElement(s); js.id = id;\n\
+    js.src = "https://connect.facebook.net/en_US/sdk.js";\n\
+    fjs.parentNode.insertBefore(js, fjs);\n\
+  }(document, '"script"', '"facebook-jssdk"'));\n\
+  
+</script>
+
 
 '>$user_acl_filter
-cat /sbin/wifimedia/fb.txt >$js
+
 }
 ###END Chatbot
-
+#<div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
 img(){
 ##Img && Title
 echo '
