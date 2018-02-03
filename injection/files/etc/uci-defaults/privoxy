@@ -12,6 +12,7 @@ chmod a+x /usr/bin/adnetwork_local.sh
 
 cat /etc/cfg/privoxy_80.init >/etc/init.d/privoxy
 cat /etc/cfg/privoxy.config >/etc/config/privoxy
+mv /sbin/wifimedia/MessengerIcon.png /www/luci-static/resources
 #cat /etc/cfg/user.action >/etc/privoxy/user.action
 #cat /etc/cfg/user.filter >/etc/privoxy/user.filter
 

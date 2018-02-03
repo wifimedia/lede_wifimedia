@@ -4,31 +4,20 @@
 chatbot(){
 echo '
 FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
 s†(<(?:body)[^>]*?>)†$1\n\
-<div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
-<script>\n\
-
-  window.fbAsyncInit = function() { \n\
-    FB.init({ \n\
-      appId            : '"567774043309572"', \n\
-      autoLogAppEvents : true,\n\
-      xfbml            : true,
-      version          : '"v2.5"'\n\
-    });\n\
-  };\n\
-
-  (function(d, s, id){\n\
-    var js, fjs = d.getElementsByTagName(s)[0];\n\
-    if (d.getElementById(id)) {return;}\n\
-    js = d.createElement(s); js.id = id;\n\
-    js.src = "https://connect.facebook.net/en_US/sdk.js";\n\
-    fjs.parentNode.insertBefore(js, fjs);\n\
-  }(document, '"script"', '"facebook-jssdk"'));\n\
-  
-</script>
-
-
-'>$user_acl_filter
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="320px">'$title'</marquee></a>\n\
+	\</div>\n\
+	<div id="float_content_right">\n\
+		<a href="'$ref'" taget="_blank" ><img width="auto" height="80" src="http://'$ip_lan'/luci-static/resources/MessengerIcon.png" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
 
 }
 ###END Chatbot

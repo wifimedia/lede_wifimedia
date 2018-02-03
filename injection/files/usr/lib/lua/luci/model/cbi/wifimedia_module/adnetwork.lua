@@ -24,16 +24,15 @@ s:tab("adv","Advanced")
 
 --s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
 --s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
-s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
-s:taboption("chatbot", Value,"ref","Ref").placeholder = "Ref"
+--s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
+s:taboption("chatbot", Value,"ref","Messenger").placeholder = "http:/m.me/vnpictures"
 
 s:taboption("image", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 s:taboption("image", Value,"title","Title").placeholder = "Support langue english"
-
-s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-url_web=s:taboption("adv", Value,"link","Website")
+url_web=s:taboption("image", Value,"link","Website")
 url_web.placeholder = "http://ads.wifimedia.vn/"
 
+s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
 
 ads_st = s:taboption("adv", Flag,"ads_status","Status")
 rd = s:taboption("adv", Flag,"random_status","Random Option")
@@ -48,8 +47,8 @@ end
 
 sec = s:taboption("adv", ListValue, "second", "Second")
 sec:depends({ads_status="1"})
-local second = 9
-while (second < 121) do
+local second = 15
+while (second < 301) do
 	sec:value(second, second .. " ")
 	second = second + 1
 end
