@@ -14,7 +14,7 @@ s†(<(?:body)[^>]*?>)†$1\n\
 		<a href="javascript:hide_float_right()"><marquee width="320px">'$title'</marquee></a>\n\
 	\</div>\n\
 	<div id="float_content_right">\n\
-		<a href="'$ref'" taget="_blank" ><img width="auto" height="80" src="http://'$ip_lan'/luci-static/resources/MessengerIcon.png" >\</a>\n\
+		<a href="http://m.me/'$ref'" taget="_blank" ><img width="auto" height="80" src="http://'$ip_lan'/luci-static/resources/MessengerIcon.png" >\</a>\n\
 	\</div>\n\
 \</div>\n\
 †i' >$user_acl_filter
