@@ -10,9 +10,6 @@ s†(<(?:head|body)[^>]*?>)†$1\n\
 
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
-	<div id="text_float_right">\n\
-		<a href="javascript:hide_float_right()"><marquee width="320px">'$title'</marquee></a>\n\
-	\</div>\n\
 	<div id="float_content_right">\n\
 		<a href="http://m.me/'$ref'" taget="_blank" ><img width="auto" height="80" src="http://'$ip_lan'/luci-static/resources/MessengerIcon.png" >\</a>\n\
 	\</div>\n\
@@ -32,11 +29,25 @@ s†(<(?:head|body)[^>]*?>)†$1\n\
 
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
-	<div id="text_float_right">\n\
-		<a href="javascript:hide_float_right()"><marquee width="320px">'$title'</marquee></a>\n\
-	\</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link'" taget="_blank" ><img width="auto" height="80" src="'$img'" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
+}
+
+youtube(){
+##Img && Title
+echo '
+FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="float_content_right">\n\
+		<iframe width="320" src="https://www.youtube.com/embed/'$youtube'?rel=0&autoplay=1" frameborder="0"></iframe>\n\
 	\</div>\n\
 \</div>\n\
 †i' >$user_acl_filter

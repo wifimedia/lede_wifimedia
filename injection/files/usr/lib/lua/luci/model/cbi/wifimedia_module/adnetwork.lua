@@ -19,14 +19,15 @@ s.addremove = false
 --s:tab("adnetwork_cfg","Cloud")
 s:tab("chatbot","Chatbot")
 s:tab("fb","Facebook")
+s:tab("youtube","Youtube")
 s:tab("image","Image")
 s:tab("adv","Advanced")
 
 --s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
 --s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
 --s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
-s:taboption("chatbot", Value,"ref","Messenger").placeholder = "http:/m.me/vnpictures"
-
+s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
+s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
 s:taboption("image", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 s:taboption("image", Value,"title","Title").placeholder = "Support langue english"
 url_web=s:taboption("image", Value,"link","Website")
@@ -40,7 +41,7 @@ rd:depends({ads_status="1"})
 st = s:taboption("adv", ListValue,"status","Option")
 st:depends({ads_status="1"})
 
-local data = {"Chatbot","Facebook_Page","Facebook _Videos", "Facebook_Like_Share","Image" }
+local data = {"Chatbot","Facebook_Page","Facebook _Videos", "Facebook_Like_Share","Youtube","Image" }
 for _, status in ipairs(data) do 
 	st:value(status, status .. " ")
 end

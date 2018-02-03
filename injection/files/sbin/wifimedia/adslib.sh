@@ -25,6 +25,7 @@ fb_like=$(uci -q get wifimedia.@adnetwork[0].ads_fb_like)
 ads_sec=$(uci -q get wifimedia.@adnetwork[0].second)
 page_id=$(uci -q get wifimedia.@adnetwork[0].facebook_id)
 ref=$(uci -q get wifimedia.@adnetwork[0].ref)
+youtube=$(uci -q get wifimedia.@adnetwork[0].youtube)
 
 ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 
