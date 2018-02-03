@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=22-01-2018
+	set wifimedia.@builddate[0].date=3-02-2018
 	commit wifimedia
 EOF
 }
@@ -183,7 +183,7 @@ EOF
 
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" stable"
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" Filter stable"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
