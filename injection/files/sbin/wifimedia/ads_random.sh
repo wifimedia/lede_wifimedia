@@ -14,5 +14,7 @@ if [ $adsrandom == "1" ];then
 		fbls
 	elif [ $ads_random == "5" ];then
 		chatbot	
+	elif [ $ads_random == "3" ];then
+		youtube			
 	fi
 fi
