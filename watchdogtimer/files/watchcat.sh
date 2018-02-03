@@ -54,7 +54,11 @@ watchcat_ping() {
 		time_now="$(cat /proc/uptime)"
 		time_now="${time_now%%.*}"
 		time_lastcheck="$time_now"
-
+		##Check process privoxy
+		PID_ads=`pidof privoxy`
+		if [ -f /etc/rc.d/S80privoxy ] && [ -z $PID_ads ] ; then
+			/etc/priv_ads.sh
+		fi
 		for host in "$pinghosts"
 		do
 			if ping -c 1 "$host" &> /dev/null
