@@ -21,7 +21,7 @@ if [ $status == "Image" ];then
 	img
 elif [ $status == "Facebook_Page" ];then
 	fbpage
-elif [ $status == "Facebook_videos" ];then
+elif [ $status == "Facebook_Videos" ];then
 	fbvideo
 elif [ $status == "Facebook_Like_Share" ];then
 	fbls
