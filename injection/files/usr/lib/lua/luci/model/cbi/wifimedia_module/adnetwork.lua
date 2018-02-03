@@ -49,7 +49,7 @@ end
 sec = s:taboption("adv", ListValue, "second", "Second")
 sec.default = "20"
 sec:depends({ads_status="1"})
-local second = 15
+local second = 9
 while (second < 301) do
 	sec:value(second, second .. " ")
 	second = second + 1
