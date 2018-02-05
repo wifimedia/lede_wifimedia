@@ -28,8 +28,4 @@ rm -f /etc/hotplug.d/iface/30-chilli
 echo "" >/etc/config/hs_ips
 echo "" >/etc/config/hs_wgd
 
-echo "
-
-
-
-"
+cat /sbin/wifimedia/defaults >/etc/chilli/defaults
