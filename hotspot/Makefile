@@ -48,7 +48,7 @@ define Package/hotspot/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
 	
-	rm -f $(INSTALL_DIR) $(1)/etc/chilli/defaults
+	rm -f $(INSTALL_DIR)/etc/chilli/defaults
 
 	$(INSTALL_DATA) ./files/etc/chilli/defaults $(1)/etc/chilli/defaults
 	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/chilli
