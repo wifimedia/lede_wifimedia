@@ -27,3 +27,9 @@ EOF
 rm -f /etc/hotplug.d/iface/30-chilli
 echo "" >/etc/config/hs_ips
 echo "" >/etc/config/hs_wgd
+
+echo "
+
+
+
+"

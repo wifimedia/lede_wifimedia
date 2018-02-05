@@ -46,7 +46,7 @@ define Package/advance/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/wifimedia_view
-	$(CP) $(PKG_INSTALL_DIR)/etc/chilli/* $(1)/etc/chilli/
+	
 	$(INSTALL_BIN) ./files/controller.sh $(1)/sbin/wifimedia/controller.sh
 	$(INSTALL_BIN) ./files/controller_srv.sh $(1)/sbin/wifimedia/controller_srv.sh
 	$(INSTALL_BIN) ./files/settings.sh $(1)/sbin/wifimedia/settings.sh
