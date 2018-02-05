@@ -38,8 +38,26 @@ define Build/Compile
 endef
 
 define Package/hotspot/install
-	$(INSTALL_DIR) $(1)
-	$(CP) ./files/* $(1)
+	$(INSTALL_DIR) $(1)/etc/chilli
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DIR) $(1)/sbin/wifimedia
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
+
+	$(INSTALL_DATA) ./files/etc/chilli/defaults $(1)/etc/chilli/defaults
+	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/chilli
+	
+	$(INSTALL_BIN) ./files/etc/init.d/update_ip $(1)/etc/init.d/update_ip
+	$(INSTALL_BIN) ./files/etc/uci-defaults $(1) /etc/uci-defaults/hotspot
+	$(INSTALL_BIN) ./files/sbin/wifimedia/update_ip.sh $(1) /sbin/wifimedia/update_ip.sh
+	
+	$(INSTALL_DATA) ./files/usr/lib/lua/luci/controller/wifimedia/hotspot.lua $(1)/usr/lib/lua/luci/controller/wifimedia/hotspot.lua
+	$(INSTALL_DATA) ./files/usr/lib/lua/luci/model/cbi/wifimedia_module/hotspot.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/hotspot.lua	
+	
 endef
 
 define Package/hotspot/postinst
