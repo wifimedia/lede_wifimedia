@@ -101,7 +101,7 @@ function hotspot_process_status()
       status = "Hotspot is running PID: "..pid.. "and "
   end
 
-  if nixio.fs.access("/etc/rc.d/S99chilli") then
+  if nixio.fs.access("/etc/rc.d/S99wifi_portal") then
     status = status .. "it's enabled on the startup"
   else
     status = status .. "it's disabled on the startup"
@@ -117,13 +117,13 @@ t.anonymous = true
 
 t:option(DummyValue, "status","Hotspot status")
 
-if nixio.fs.access("/etc/rc.d/S99chilli") then
+if nixio.fs.access("/etc/rc.d/S99wifi_portal") then
   disable = t:option(Button, "_disable","Disable from startup")
   disable.inputstyle = "remove"
   function disable.write(self, section)
 		luci.util.exec("/etc/init.d/update_ip disable")
-		luci.util.exec("/etc/init.d/chilli disable")
-		luci.util.exec("/etc/init.d/chilli stop && /etc/init.d/network restart")
+		luci.util.exec("/etc/init.d/wifi_portal disable")
+		luci.util.exec("/etc/init.d/wifi_portal stop && /etc/init.d/network restart")
 		luci.http.redirect(
         		luci.dispatcher.build_url("admin", "wifimedia", "hotspot")
 		)
@@ -133,7 +133,7 @@ else
   enable.inputstyle = "apply"
   function enable.write(self, section)
 		luci.util.exec("/etc/init.d/update_ip enable")
-		luci.util.exec("/etc/init.d/chilli enable")
+		luci.util.exec("/etc/init.d/wifi_portal enable")
 		luci.http.redirect(
         		luci.dispatcher.build_url("admin", "wifimedia", "hotspot")
 		)
