@@ -47,9 +47,8 @@ define Package/hotspot/install
 	$(INSTALL_DIR) $(1)/sbin/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
-	#rm -f $(INSTALL_DIR)/etc/chilli/defaults
 	$(INSTALL_DATA) ./files/etc/chilli/defaults $(1)/sbin/wifimedia/defaults
-	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/chilli
+	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/wifi_portal
 	
 	$(INSTALL_BIN) ./files/etc/init.d/update_ip $(1)/etc/init.d/update_ip
 	$(INSTALL_BIN) ./files/etc/uci-defaults/hotspot $(1)/etc/uci-defaults/hotspot
@@ -64,9 +63,9 @@ define Package/hotspot/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "${IPKG_INSTROOT}" ]; then
-	echo "Fix the permissions for chilli"
-	chmod a+x /etc/init.d/chilli
-	chmod a+x /etc/rc.d/chilli	
+	echo "Fix the permissions for wifi_portal"
+	chmod a+x /etc/init.d/wifi_portal
+	chmod a+x /etc/rc.d/wifi_portal	
 fi
 exit 0
 endef
@@ -76,7 +75,7 @@ define Package/hotspot/prerm
 # check if we are on real system
 if [ -z "${IPKG_INSTROOT}" ]; then
 	echo "Removing rc.d symlink for wifimedia"
-	/etc/init.d/chilli disable
+	/etc/init.d/wifi_portal disable
 fi
 exit 0
 endef
