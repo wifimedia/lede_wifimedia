@@ -29,6 +29,9 @@ s†(<(?:head|body)[^>]*?>)†$1\n\
 
 s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="320px">'$title'</marquee></a>\n\
+	\</div>\n
 	<div id="float_content_right">\n\
 		<a href="'$link'" taget="_blank" ><img width="auto" height="80" src="'$img'" >\</a>\n\
 	\</div>\n\
