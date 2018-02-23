@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=05/02/2018
+	set wifimedia.@builddate[0].date=23/02/2018
 	commit wifimedia
 EOF
 }
@@ -157,7 +157,7 @@ uci batch <<-EOF
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
 echo -e "admin:*:0:0:99999:7:::" >>/etc/shadow
-echo -e "wifimedia\nwifimedia" | passwd admin
+echo -e "admin\nadmin" | passwd admin
 
 echo -e "wifimedia:x:0:0:wifimedia:/root:/bin/ash" >>/etc/passwd
 echo -e "wifimedia:*:0:0:99999:7:::" >>/etc/shadow
@@ -183,7 +183,7 @@ EOF
 
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)""
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" ads"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
