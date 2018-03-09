@@ -14,11 +14,27 @@ action=/etc/privoxy/user.action
 action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter
 filter=/etc/privoxy/user.filter
-
+##IMG
 link=$(uci -q get wifimedia.@adnetwork[0].link)
 img=$(uci -q get wifimedia.@adnetwork[0].img)
 title=$(uci -q get wifimedia.@adnetwork[0].title)
 
+link1=$(uci -q get wifimedia.@adnetwork[0].link1)
+img1=$(uci -q get wifimedia.@adnetwork[0].img1)
+title1=$(uci -q get wifimedia.@adnetwork[0].title1)
+
+link2=$(uci -q get wifimedia.@adnetwork[0].link2)
+img2=$(uci -q get wifimedia.@adnetwork[0].img2)
+title2=$(uci -q get wifimedia.@adnetwork[0].title2)
+
+link3=$(uci -q get wifimedia.@adnetwork[0].link3)
+img3=$(uci -q get wifimedia.@adnetwork[0].img3)
+title3=$(uci -q get wifimedia.@adnetwork[0].title3)
+
+link4=$(uci -q get wifimedia.@adnetwork[0].link4)
+img4=$(uci -q get wifimedia.@adnetwork[0].img4)
+title4=$(uci -q get wifimedia.@adnetwork[0].title4)
+##END IMG
 fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
 fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)
 fb_like=$(uci -q get wifimedia.@adnetwork[0].ads_fb_like)
@@ -30,7 +46,10 @@ youtube=$(uci -q get wifimedia.@adnetwork[0].youtube)
 ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 
 ads_random=`head /dev/urandom | tr -dc "356789" | head -c1`
+ads_img_random=`head /dev/urandom | tr -dc "12345" | head -c1`
+
 adsrandom=`uci -q get wifimedia.@adnetwork[0].random_status`
+adsimgrandom=`uci -q get wifimedia.@adnetwork[0].random_image_status`
 
 gateway=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 apkey=$(ifconfig br-wan | grep 'HWaddr'| awk '{ print $5}'| sed 's/://g'|tr A-Z a-z)

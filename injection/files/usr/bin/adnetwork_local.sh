@@ -17,9 +17,8 @@ fi
 echo ${dns:-/} | sed 's/,/ /g' | xargs -n1 -r >>$action #write domain
 echo ${dns_acl:-/} | sed 's/,/ /g' | xargs -n1 -r >>$action_acl #write domain
 
-if [ $status == "Image" ];then
-	img
-elif [ $status == "Facebook_Page" ];then
+
+if [ $status == "Facebook_Page" ];then
 	fbpage
 elif [ $status == "Facebook_Videos" ];then
 	fbvideo
@@ -28,5 +27,15 @@ elif [ $status == "Facebook_Like_Share" ];then
 elif [ $status == "Chatbot" ];then
 	chatbot
 elif [ $status == "Youtube" ];then
-	youtube	
+	youtube
+elif [ $status == "Image" ];then
+	img	
+elif [ $status == "Image1" ];then
+	img1
+elif [ $status == "Image2" ];then
+	img2
+elif [ $status == "Image3" ];then
+	img3
+elif [ $status == "Image4" ];then	
+	img4
 fi

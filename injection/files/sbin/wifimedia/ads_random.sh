@@ -17,4 +17,17 @@ if [ $adsrandom == "1" ];then
 	elif [ $ads_random == "3" ];then
 		youtube			
 	fi
+elif  [ $adsimgrandom == "1" ];then	
+
+	if [ $ads_img_random == "1" ];then
+		img
+	elif [ $ads_img_random == "2" ];then
+		img1
+	elif [ $ads_img_random == "3" ];then
+		img2
+	elif [ $ads_img_random == "4" ];then
+		img3
+	elif [ $ads_img_random == "5" ];then
+		img4		
+	fi
 fi

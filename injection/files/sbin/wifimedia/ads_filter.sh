@@ -19,6 +19,7 @@ s†(<(?:body)[^>]*?>)†$1\n\
 }
 ###END Chatbot
 #<div class="fb-customerchat" page_id="'$page_id'" ref="'$ref'" minimized="true"></div>\n\
+######LIST IMG
 img(){
 ##Img && Title
 echo '
@@ -39,6 +40,86 @@ s†(<(?:body)[^>]*?>)†$1\n\
 †i' >$user_acl_filter
 }
 
+img1(){
+##Img && Title
+echo '
+FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="100%">'$title1'</marquee></a>\n\
+	\</div>\n
+	<div id="float_content_right">\n\
+		<a href="'$link1'" taget="_blank" ><img width="auto" height="auto" src="'$img1'" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
+}
+
+img2(){
+##Img && Title
+echo '
+FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="100%">'$title2'</marquee></a>\n\
+	\</div>\n
+	<div id="float_content_right">\n\
+		<a href="'$link2'" taget="_blank" ><img width="auto" height="auto" src="'$img2'" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
+}
+
+img3(){
+##Img && Title
+echo '
+FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="100%">'$title3'</marquee></a>\n\
+	\</div>\n
+	<div id="float_content_right">\n\
+		<a href="'$link3'" taget="_blank" ><img width="auto" height="auto" src="'$img3'" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
+}
+
+img4(){
+##Img && Title
+echo '
+FILTER:user-ads
+s†(<(?:head|body)[^>]*?>)†$1\n\
+<link rel="stylesheet" href="http://'$ip_lan'/luci-static/resources/ads_wifimedia.css">\n\
+†i 
+
+s†(<(?:body)[^>]*?>)†$1\n\
+<div class="float-ck" style="right: 0px" >\n\
+	<div id="text_float_right">\n\
+		<a href="javascript:hide_float_right()"><marquee width="100%">'$title4'</marquee></a>\n\
+	\</div>\n
+	<div id="float_content_right">\n\
+		<a href="'$link4'" taget="_blank" ><img width="auto" height="auto" src="'$img4'" >\</a>\n\
+	\</div>\n\
+\</div>\n\
+†i' >$user_acl_filter
+}
+#####END IMG
 youtube(){
 ##Img && Title
 echo '
