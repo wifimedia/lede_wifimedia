@@ -76,7 +76,7 @@ rd:depends({ads_status="1"})
 st = s:taboption("adv", ListValue,"status","Option")
 st:depends({ads_status="1"})
 
-local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Imge","Imge1","Imge2", "Imge3","Imge4" }
+local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Image","Image1","Image2", "Image3","Image4" }
 for _, status in ipairs(data) do 
 	st:value(status, status .. " ")
 end
