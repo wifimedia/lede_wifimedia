@@ -254,6 +254,7 @@ mv /etc/banner_ /etc/banner
 rm -f /root/advance_model.lua
 rm -f /root/gw_index.htm
 rm -f /root/wifi_overview.htm
+chmod +x /sbin/wifimedia/*
 wifi up
 #rm -f /etc/uci-defaults/wifimedia
 #sleep 5 && reboot
