@@ -116,8 +116,6 @@ bridge_mode.rmempty = false
 			return Flag.write(self, section, value)
 		end
 		function bridge_mode.remove() end
-		
-		
 --RSSI--
 s:tab("rssi",  translate("RSSI"))
 	--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
