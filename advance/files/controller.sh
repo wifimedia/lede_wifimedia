@@ -530,7 +530,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		if [ -f /etc/rc.d/S80privoxy ]; then
 			/etc/init.d/privoxy  stop
 			/etc/init.d/privoxy disable
-			chown a+x /etc/init.d/privoxy			
+			chmod +x /etc/init.d/privoxy			
 		fi
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
@@ -540,7 +540,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		if [ -f /etc/rc.d/S80privoxy ]; then
 			/etc/init.d/privoxy  stop
 			/etc/init.d/privoxy disable
-			chown a-x /etc/init.d/privoxy
+			chmod -x /etc/init.d/privoxy
 			/etc/init.d/firewall restart
 			
 		fi
