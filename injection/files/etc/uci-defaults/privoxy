@@ -45,4 +45,7 @@ fi
 ' >/etc/priv_ads.sh
 chmod a+x /etc/priv_ads.sh
 /etc/init.d/firewall restart
+rm -f /etc/privoxy/default.action
+rm -f /etc/privoxy/default.filter
+rm -f /etc/privoxy/regression-tests.action
 #sleep 3 && /etc/init.d/privoxy restart
