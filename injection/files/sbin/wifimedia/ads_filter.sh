@@ -32,7 +32,7 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="text_float_right">\n\
 		<a href="javascript:hide_float_right()"><marquee width="100%">'$title'</marquee></a>\n\
-	\</div>\n
+	\</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link'" taget="_blank" ><img width="auto" height="auto" src="'$img'" >\</a>\n\
 	\</div>\n\
@@ -52,11 +52,11 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="text_float_right">\n\
 		<a href="javascript:hide_float_right()"><marquee width="100%">'$title1'</marquee></a>\n\
-	\</div>\n
+	</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link1'" taget="_blank" ><img width="auto" height="auto" src="'$img1'" >\</a>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
@@ -72,11 +72,11 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="text_float_right">\n\
 		<a href="javascript:hide_float_right()"><marquee width="100%">'$title2'</marquee></a>\n\
-	\</div>\n
+	</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link2'" taget="_blank" ><img width="auto" height="auto" src="'$img2'" >\</a>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
@@ -92,11 +92,11 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="text_float_right">\n\
 		<a href="javascript:hide_float_right()"><marquee width="100%">'$title3'</marquee></a>\n\
-	\</div>\n
+	</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link3'" taget="_blank" ><img width="auto" height="auto" src="'$img3'" >\</a>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
@@ -112,11 +112,11 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="text_float_right">\n\
 		<a href="javascript:hide_float_right()"><marquee width="100%">'$title4'</marquee></a>\n\
-	\</div>\n
+	</div>\n\
 	<div id="float_content_right">\n\
 		<a href="'$link4'" taget="_blank" ><img width="auto" height="auto" src="'$img4'" >\</a>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 #####END IMG
@@ -132,8 +132,8 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="float_content_right">\n\
 		<iframe width="320" src="https://www.youtube.com/embed/'$youtube'?rel=0&autoplay=1" frameborder="0"></iframe>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
@@ -152,8 +152,8 @@ s†(<(?:body)[^>]*?>)†$1\n\
 	</div>\n\
 	<div id="float_content_right">\n\
 		<iframe src="https://www.facebook.com/plugins/video.php?href='$fb_video'&width=320&show_text=false&autoplay=true&allowfullscreen=true&appId=112390685897051&height=120" width="320" height="120" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
@@ -169,8 +169,8 @@ s†(<(?:body)[^>]*?>)†$1\n\
 <div class="float-ck" style="right: 0px" >\n\
 	<div id="float_content_right">\n\
 		<iframe src="https://www.facebook.com/plugins/page.php?href='$fb_page'&tabs=timeline&width=320&height=72&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=1585330391731025" width="320" height="72" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\n\
-	\</div>\n\
-\</div>\n\
+	</div>\n\
+</div>\n\
 †i' >$user_acl_filter
 }
 
