@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=09/03/2018
+	set wifimedia.@builddate[0].date=14/03/2018
 	commit wifimedia
 EOF
 }
@@ -113,17 +113,17 @@ fi
 
 #Add vitual SSID
 #For abng
-uci -q get wireless.@wifi-iface[1] || {
-        uci batch <<EOF
-        add wireless wifi-iface
-        set wireless.@wifi-iface[1].device=radio0
-        set wireless.@wifi-iface[1].mode=ap
-        set wireless.@wifi-iface[1].network=lan
-        set wireless.@wifi-iface[1].ssid=OPENWIFIx2
-		set wireless.@wifi-iface[1].disabled=1
-        commit wireless
-EOF
-}
+#uci -q get wireless.@wifi-iface[1] || {
+#        uci batch <<EOF
+#        add wireless wifi-iface
+#        set wireless.@wifi-iface[1].device=radio0
+#        set wireless.@wifi-iface[1].mode=ap
+#        set wireless.@wifi-iface[1].network=lan
+#        set wireless.@wifi-iface[1].ssid=OPENWIFIx2
+#		set wireless.@wifi-iface[1].disabled=1
+#        commit wireless
+#EOF
+#}
 
 
 uci batch <<-EOF
@@ -159,7 +159,7 @@ uci batch <<-EOF
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
 echo -e "admin:*:0:0:99999:7:::" >>/etc/shadow
-echo -e "wifimedia\nwifimedia" | passwd admin
+echo -e "admin\nadmin" | passwd admin
 
 echo -e "wifimedia:x:0:0:wifimedia:/root:/bin/ash" >>/etc/passwd
 echo -e "wifimedia:*:0:0:99999:7:::" >>/etc/shadow
@@ -168,7 +168,7 @@ echo -e "09465670089\n09465670089" | passwd wifimedia
 #Change password for root
 word=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  10,11,13,14,16,17 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
 pwd=$(echo -n $word | md5sum | awk '{print $1}')
-echo -e "09465670089\n09465670089" | passwd root
+echo -e "$pwd\n$pwd" | passwd root
 #End
 
 #Info
@@ -185,7 +185,7 @@ EOF
 
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
-DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" filter"
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" Portal"
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
