@@ -19,7 +19,7 @@ s.anonymous = true
 s.addremove = false
 --s:option( Value, "ndsname","Name")
 --s:option( Value, "nds_apkey","APKEY")
---s:option( Value, "nds_domain","Domain")
+s:option( Value, "nds_domain","Domain")
 s:option( Value, "ndsurl","Redirect URL")
 s:option( Value, "nds_wg","Walled Garden")
 s:option( Value, "ndsclient","MaxClients")
