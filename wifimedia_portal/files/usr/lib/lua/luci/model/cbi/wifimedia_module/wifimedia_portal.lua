@@ -29,16 +29,17 @@ local pid = luci.util.exec("pidof nodogsplash")
 local message = luci.http.formvalue("message")
 
 function captive_process_status()
-  local status = "Captive portal is not running now and "
+  local status = "Captive portal is not running"
 
   if pid ~= "" then
-      status = "Captive portal is running PID: "..pid.. "and "
+      --status = "Captive portal is running PID: "..pid.. ""
+	  status = "Captive portal is running"
   end
 
   if nixio.fs.access("/etc/rc.d/S99nodogsplash") then
-    status = status .. "it's enabled on the startup"
+    status = status .. ""
   else
-    status = status .. "it's disabled on the startup"
+    status = status .. ""
   end
 
   local status = { status=status, message=message }
@@ -52,7 +53,7 @@ t.anonymous = true
 t:option(DummyValue, "status","Captive portal status")
 
 	if nixio.fs.access("/etc/rc.d/S99nodogsplash") then
-	  disable = t:option(Button, "_disable","Disable from startup")
+	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
 			luci.util.exec("/etc/init.d/nodogsplash disable")
@@ -63,7 +64,7 @@ t:option(DummyValue, "status","Captive portal status")
 			)			
 	  end
 	else
-	  enable = t:option(Button, "_enable","Enable on startup")
+	  enable = t:option(Button, "_enable","Enable")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
 			luci.util.exec("/etc/init.d/nodogsplash enable")

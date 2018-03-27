@@ -22,7 +22,9 @@ apkey=${key:-$captive_id}
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
 
 ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
-
+if [ "$fbs_url" != "" ];then
+	redir="RedirectURL "$fbs_url
+fi
 #write file splash
 echo '<!doctype html>
 <html lang="en">
@@ -89,11 +91,7 @@ FirewallRuleSet preauthenticated-users {
 	FirewallRule allow to 103.237.145.75
     # include /tmp/preauthenticated_rules
 }
-
-GatewayName '$fbs_gw'
-RedirectURL '$fbs_url'
-#RedirectURL http://crm.wifimedia.vn
-
+'$redir'
 BinVoucher "/sbin/wifimedia/nodogsplash_preauth.sh"
 EnablePreAuth yes
 
