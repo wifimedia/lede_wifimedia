@@ -43,40 +43,40 @@ echo "Getting the model information"
 model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
 #echo "" >$noise_data
-if [ $(cat $noise_data) -eq 1 ];then
-	noise=/tmp/noise.tmp
-	echo "Checking the Noise"
-	echo "" > $noise
-	iw wlan0 survey dump | while read line; do
-		if [ "$(echo $line | grep 'frequency')" ]; then
-			echo ";$(echo $line | awk '{ print $2 $4 "-" $5}')," >> /tmp/noise.tmp
-		elif [ "$(echo $line | grep 'noise')" ]; then
-			echo $(echo $line | awk '{ print $2 }') >> /tmp/noise.tmp
-		fi
-	done
-	echo "" >$noise_data
-	noise=$(cat /tmp/noise.tmp | tr '\n' ' ' | sed 's/ //g')
-fi
+#if [ $(cat $noise_data) -eq 1 ];then
+#	noise=/tmp/noise.tmp
+#	echo "Checking the Noise"
+#	echo "" > $noise
+#	iw wlan0 survey dump | while read line; do
+#		if [ "$(echo $line | grep 'frequency')" ]; then
+#			echo ";$(echo $line | awk '{ print $2 $4 "-" $5}')," >> /tmp/noise.tmp
+#		elif [ "$(echo $line | grep 'noise')" ]; then
+#			echo $(echo $line | awk '{ print $2 }') >> /tmp/noise.tmp
+#		fi
+#	done
+#	echo "" >$noise_data
+#	noise=$(cat /tmp/noise.tmp | tr '\n' ' ' | sed 's/ //g')
+#fi
 
 #echo $noise
 
-echo "Checking the WLAN Info"
-wlaninfo=/tmp/info.tmp
-echo "" > $wlaninfo
-iwinfo wlan0 info | while read line; do
-	if [ "$(echo $line | grep 'ESSID')" ]; then
-		echo "$(echo $line | awk '{ print $2 $3 }')" >> $wlaninfo
-	elif [ "$(echo $line | grep 'Channel')" ]; then
-		echo "$(echo $line | awk '{ print $3 $4 $5 $6 }')" >> $wlaninfo
-	elif [ "$(echo $line | grep 'Noise')" ]; then
-		echo "$(echo $line | awk '{ print $4 $5 $6 }')" >> $wlaninfo		
-	fi
-done
-wlaninfo=$(cat $wlaninfo | tr '\n' ' ' | sed 's/ /;/g')
+#echo "Checking the WLAN Info"
+#wlaninfo=/tmp/info.tmp
+#echo "" > $wlaninfo
+#iwinfo wlan0 info | while read line; do
+#	if [ "$(echo $line | grep 'ESSID')" ]; then
+#		echo "$(echo $line | awk '{ print $2 $3 }')" >> $wlaninfo
+#	elif [ "$(echo $line | grep 'Channel')" ]; then
+#		echo "$(echo $line | awk '{ print $3 $4 $5 $6 }')" >> $wlaninfo
+#	elif [ "$(echo $line | grep 'Noise')" ]; then
+#		echo "$(echo $line | awk '{ print $4 $5 $6 }')" >> $wlaninfo		
+#	fi
+#done
+#wlaninfo=$(cat $wlaninfo | tr '\n' ' ' | sed 's/ /;/g')
 #echo $wlaninfo
 
 # Saving Request Data
-request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wlaninfo=${wlaninfo}&noise=${noise}"
+request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}"
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
@@ -86,62 +86,29 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 #url_action="http://device.wifimedia.vn/hotspot"
 url_action="http://firmware.wifimedia.com.vn/data"
 
-wget -q "${url_action}" -O $action_data
-if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
-	#Upgrade firmware
-	echo "upgrade"
-	/sbin/wifimedia/controller_srv.sh upgrade_srv
-fi
-if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
-	echo "facetory..."
-	/sbin/wifimedia/controller_srv.sh restore_srv
-fi
-if [ "$(cat "$action_data" | grep 'password')" ] ;then
-	echo "password default"
-	/sbin/wifimedia/controller_srv.sh passwd_admin_srv
-fi
-#if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
-#	echo "switch off"
-#	/sbin/wifimedia/switch_off.sh
-#fi
-if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
-	echo "802.11i"
-	/sbin/wifimedia/controller_srv.sh preauth_rsn_srv
-fi
-if [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
-	echo "delete passwd wifi"
-	/sbin/wifimedia/controller_srv.sh passwd_wifi
-fi
-if [ "$(cat "$action_data" | grep 'button')" ] ;then
-	echo "disable button reset"
-	/sbin/wifimedia/controller_srv.sh btn_reset
-fi
-if [ "$(cat "$action_data" | grep 'update')" ] ;then
-	echo "updade"
-	wget -q "${url}" -O $response_file
-else
-	echo "No..."
-	wget -q -s "${url}" -O $response_file
-	echo ${url}
-	
-fi
+wget -q "${url}" -O $response_file
 
 echo "----------------------------------------------------------------"
 echo "Sending data:"
 
 #curl "${url}" > $response_file
 curl_result=$?
-curl_data=$(cat $response_file)
+#curl_data=$(cat $response_file)
 
 	if [ "$curl_result" -eq "0" ]; then
 		echo "Checked in to the dashboard successfully,"
 		
-		if grep -q "." $response_file; then
-			echo "we have new settings to apply!"
-		else
-			echo "we will maintain the existing settings."
-			exit
-		fi
+		#doc file 
+		cat $response_file | while read line ; do
+		
+			if [ "$(echo $line | grep 'action' | awk '{print $2}')" != "$(uci -q get wifimedia.@advance[0].action)"  ] ;then
+			#if grep -q "." $response_file; then
+			#	echo "we have new settings to apply!"
+			else
+				echo "we will maintain the existing settings."
+				exit
+			fi
+		done	
 	else
 		logger "WARNING: Could not checkin to the dashboard."
 		echo "WARNING: Could not checkin to the dashboard."
@@ -160,10 +127,12 @@ curl_data=$(cat $response_file)
 	#echo "0" > /tmp/nodogsplash_flag
 
 	cat $response_file | sed 's/=/ /g'| while read line ; do
+	
 		one=$(echo $line | awk '{print $1}')
 		two=$(echo $line | awk '{print $2}')
+		three=$(echo $line | awk '{print $3}')
 		
-		echo "$one=$two"
+		echo "$one=$two=$three"
 		
 		#Change hotname
 		if [ "$one" = "system.hostname.name" ]; then
@@ -175,13 +144,6 @@ curl_data=$(cat $response_file)
 		elif [ "$one" = "system.ssh.password" ]; then
 			two=$(echo $two | sed 's/*/ /g')
 			echo -e "$two\n$two" | passwd root		
-		#Time Sync	
-		elif [ "$one" = "servers.ntp.server" ]; then
-			uci set system.ntp.server="$two"
-		elif [ "$one" = "servers.ntp.timezone" ]; then
-			uci set system.@system[0].timezone="$two"
-		elif [ "$one" = "servers.dns.domain" ]; then
-			uci set dhcp.@dnsmasq[0].domain="$two"
 			
 		#time update
 		elif [ "$one" = "wifimedia.sync.time" ]; then
@@ -198,13 +160,10 @@ curl_data=$(cat $response_file)
 			
 		elif [ "$one" = "network.wan.proto" ]; then
 			uci set network.wan.proto="$two"
-		elif [ "$one" = "network.wan.ifname" ]; then
-			uci set network.wan.ifname="$two"
 		elif [ "$one" = "network.wan.type" ]; then
 			uci set network.wan.type="$two"
 			
 		#Network LAN
-
 		elif [ "$one" = "network.lan.ipaddr" ]; then
 			uci set network.lan.ipaddr="$two"
 		elif [ "$one" = "network.lan.netmask" ]; then
@@ -212,14 +171,8 @@ curl_data=$(cat $response_file)
 			
 		elif [ "$one" = "network.lan.proto" ]; then
 			uci set network.lan.proto="$two"
-		elif [ "$one" = "network.lan.ifname" ]; then
-			uci set network.lan.ifname="$two"
 		elif [ "$one" = "network.lan.type" ]; then
 			uci set network.lan.type="$two"
-		elif [ "$one" = "network.lan._orig_ifname" ]; then
-			uci set network.lan._orig_ifname="$two"	
-		elif [ "$one" = "network.lan._orig_bridge" ]; then
-			uci set network.lan._orig_bridge="$two"	
 
 		#DHCP
 		elif [ "$one" = "dhcp.lan.interface" ]; then
@@ -231,49 +184,40 @@ curl_data=$(cat $response_file)
 		elif [ "$one" = "dhcp.lan.leasetime" ]; then
 			uci set dhcp.lan.leasetime="$two"		
 			
-		#Schedule task
-		elif [ "$one" = "scheduled.days.mon" ]; then
-			uci set scheduled.days.Mon="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.tue" ]; then
-			uci set scheduled.days.Tue="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.wed" ]; then
-			uci set scheduled.days.Wed="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.thu" ]; then
-			uci set scheduled.days.Thu="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.fri" ]; then
-			uci set scheduled.days.Fri="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.sat" ]; then
-			uci set scheduled.days.Sat="$two"
-			echo "1" > /tmp/schedule_task_flag
-		elif [ "$one" = "scheduled.days.sun" ]; then
-			uci set scheduled.days.Sun="$two"
-			echo "1" > /tmp/schedule_task_flag
+		#Schedule task all
+		elif [ "$one" = "scheduled" ]; then
+			echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
+			crontab /tmp/autoreboot -u wifimedia
+			/etc/init.d/cron start
+			#ntpd -q -p 0.asia.pool.ntp.org				
+			uci set scheduled.days.Mon=1
+			uci set scheduled.days.Tue=1
+			uci set scheduled.days.Wed=1
+			uci set scheduled.days.Thu=1
+			uci set scheduled.days.Fri=1
+			uci set scheduled.days.Sat=1
+			uci set scheduled.days.Sun=1
+
 		elif [ "$one" = "scheduled.time.hour" ]; then
 			uci set scheduled.time.hour="$two"
-			echo "1" > /tmp/schedule_task_flag
+			
 		elif [ "$one" = "scheduled.time.minute" ]; then
 			uci set scheduled.time.minute="$two"
-			echo "1" > /tmp/schedule_task_flag
 			
 		#Wireless
-		#SSID #1 (formerly Public SSID)
-		elif [ "$one" = "wireless.ssid1.enabled" ]; then
-			if [ "$two" == "1" ]; then
-				uci set wireless.@wifi-iface[0].disabled="0"
+		#ESSID # (formerly Public ESSID)
+		elif [ "$one" = "wireless.radio.enable" ]; then
+			if [ "$two" == "enable" ]; then
+				uci set wireless.radio0.disabled="1"
 			else
-				uci get wireless.@wifi-iface[0].disabled="1"
+				uci get wireless.@wifi-iface[0].disabled="0"
 			fi
-		elif [ "$one" = "wireless.ssid1.hide" ]; then
+		elif [ "$one" = "wireless.essid.hide" ]; then
 			uci set wireless.@wifi-iface[0].hidden="$two"
-		elif [ "$one" = "wireless.ssid1.ssid" ]; then
+		elif [ "$one" = "wireless.essid.ssid" ]; then
 			two=$(echo $two | sed 's/*/ /g')
 			uci set wireless.@wifi-iface[0].ssid="$two"
-		elif [ "$one" = "wireless.ssid1.key" ]; then
+		elif [ "$one" = "wireless.essid.key" ]; then
 			if [ "$two" = "" ]; then
 				uci set wireless.@wifi-iface[0].encryption="none"
 				uci set wireless.@wifi-iface[0].key=""
@@ -281,112 +225,89 @@ curl_data=$(cat $response_file)
 				uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 				uci set wireless.@wifi-iface[0].key="$two"
 			fi
-		elif [ "$one" = "wireless.ssid1.isolate" ]; then
+		elif [ "$one" = "wireless.essid.isolate" ]; then
 			uci set wireless.@wifi-iface[0].isolate="$two"
 			
-		#SSID #2 (formerly Public SSID)	
-		elif [ "$one" = "wireless.ssid2.enabled" ]; then
-			if [ "$two" == "1" ]; then
-				if [ -z "$(uci get wireless.@wifi-iface[1])" ]; then uci add wireless wifi-iface; fi
-				uci set wireless.@wifi-iface[1].network="lan"
-				uci set wireless.@wifi-iface[1].mode="ap"
-				uci set wireless.@wifi-iface[1].device="radio0"
-			else
-				uci set wireless.@wifi-iface[1].disabled=1
-			fi
-		elif [ "$one" = "wireless.ssid2.hide" ]; then
-			uci set wireless.@wifi-iface[1].hidden="$two"
-		elif [ "$one" = "wireless.ssid2.ssid" ]; then
-			two=$(echo $two | sed 's/*/ /g')
-			uci set wireless.@wifi-iface[1].ssid="$two"
-		elif [ "$one" = "wireless.ssid2.key" ]; then
-			if [ "$two" = "" ]; then
-				uci set wireless.@wifi-iface[1].encryption="none"
-				uci set wireless.@wifi-iface[1].key=""
-			else
-				uci set wireless.@wifi-iface[1].encryption="mixed-psk"
-				uci set wireless.@wifi-iface[1].key="$two"
-			fi
-		elif [ "$one" = "wireless.ssid2.isolate" ]; then
-			uci set wireless.@wifi-iface[1].isolate="$two"
-			
 		#Network SSID
-		elif [ "$one" = "wireless.ssid1.network" ]; then
+		elif [ "$one" = "wireless.essid.network" ]; then
 			uci set wireless.@wifi-iface[0].network="$two"
-		elif [ "$one" = "wireless.ssid2.network" ]; then
-			uci set wireless.@wifi-iface[1].network="$two"
 			
 		#AP mode
-		elif [ "$one" = "wireless.ssid1.mode" ]; then	
+		elif [ "$one" = "wireless.essid.mode" ]; then	
 			uci set wireless.@wifi-iface[0].mode="$two"
-		elif [ "$one" = "wireless.ssid2.mode" ]; then	
-			uci set wireless.@wifi-iface[1].mode="$two"
 
 		#AP Channel
-		elif [ "$one" = "wireless.ssid1.channel" ]; then	
+		elif [ "$one" = "wireless.essid.channel" ]; then	
 			uci set wireless.@wifi-iface[0].channel="$two"
-		elif [ "$one" = "wireless.ssid2.channel" ]; then	
-			uci set wireless.@wifi-iface[1].channel="$two"		
-
 		#AP country
-		elif [ "$one" = "wireless.ssid1.country" ]; then	
-			uci set wireless.@wifi-iface[0].country="$two"
-		elif [ "$one" = "wireless.ssid2.country" ]; then	
-			uci set wireless.@wifi-iface[1].country="$two"		
+		elif [ "$one" = "wireless.essid.country" ]; then	
+			uci set wireless.@wifi-iface[0].country="$two"	
 
 		#AP Connect Limit
-		elif [ "$one" = "wireless.ssid1.maxassoc" ]; then	
+		elif [ "$one" = "wireless.essid.maxassoc" ]; then	
 			uci set wireless.@wifi-iface[0].maxassoc="$two"
-		elif [ "$one" = "wireless.ssid2.maxassoc" ]; then	
-			uci set wireless.@wifi-iface[1].maxassoc="$two"	
-
-		#AP 802.11i Preauth RSN
-		elif [ "$one" = "wireless.ssid1.rsn_preauth" ]; then	
-			uci set wireless.@wifi-iface[0].rsn_preauth="$two"
-		elif [ "$one" = "wireless.ssid2.rsn_preauth" ]; then
-			uci set wireless.@wifi-iface[1].rsn_preauth="$two"
 			
-		#Scan Noise
-		elif [ "$one" = "wireless.noise.scan" ]; then
-			if [ "$two" == "1" ]; then
-				echo "1" > $noise_data
+		#NASID
+		elif [ "$one" = "wireless.essid.maxassoc" ];then
+			if [ -z "$two" ];then
+				uci del wireless.default_radio0.r0kh
+				uci del wireless.default_radio0.r1kh
 			else
-				echo "0" > $noise_data
+				uci set wireless.@wifi-iface[0].nasid="$two"
 			fi	
+			uci commit wireless
+		#AP 802.11i Preauth RSN
+		#elif [ "$one" = "wireless.essid.rsn_preauth" ]; then	
+		#	uci set wireless.@wifi-iface[0].rsn_preauth="$two"
+		
+		#AP 802.11r
+		elif [ "$one" = "wireless.essid.802.11r" ]; then
+		
+			nasid=`uci get wireless.@wifi-iface[0].nasid`
 			
-		##nodogslplash
-		#elif [ "$one" = "wifimedia.nodogsplash.nds_apkey" ]; then
-		#	uci set wifimedia.@nodogsplash[0].nds_apkey="$two"
-		#	
-		#elif [ "$one" = "wifimedia.nodogsplash.nds_domain" ]; then
-		#	uci set wifimedia.@nodogsplash[0].nds_domain="$two"
-		#
-		#elif [ "$one" = "wifimedia.nodogsplash.ndsurl" ]; then
-		#	uci set wifimedia.@nodogsplash[0].ndsurl="$two"
-		#
-		#elif [ "$one" = "wifimedia.nodogsplash.nds_wg" ]; then
-		#	uci set wifimedia.@nodogsplash[0].nds_wg="$two"
-		#
-		#elif [ "$one" = "wifimedia.nodogsplash.ndsclient" ]; then
-		#	uci set wifimedia.@nodogsplash[0].ndsclient="$two"
-		#
-		#elif [ "$one" = "wifimedia.nodogsplash.ndsidletimeout" ]; then
-		#	uci set wifimedia.@nodogsplash[0].ndsidletimeout="$two"
-		#	
-		#elif [ "$one" = "wifimedia.nodogsplash.enabled" ]; then
-		#	if [ "$two" == "1" ]; then
-		#		echo "1" > /tmp/nodogsplash_flag
-		#	else
-		#		echo "2" > /tmp/nodogsplash_flag
-		#	fi	
+			if [ "$two" == "ieee80211r"  ];then
+				uci set wireless.@wifi-iface[0].ieee80211r="1"
+				uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
+				uci delete wireless.@wifi-iface[0].rsn_preauth
+				uci set wifimedia.@advance[0].ft="ieee80211r"
+				echo "Fast BSS Transition Roaming" >/etc/FT
 			
+				if [ "$three" != "" ];then
+					#Ghi du lieu APID ra file
+					echo "$three" | sed 's/,/ /g' | xargs -n1 echo $nasid > $grp_device_download
+				fi
+				
+				#Delete List r0kh r1kh
+				uci del wireless.default_radio0.r0kh
+				uci del wireless.default_radio0.r1kh
+				
+				#add List r0kh r1kh
+				cat "$grp_device_download" | while read  line;do #add list R0KH va R1KH
+					uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+					uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+				done
+
+			else #Fast Roaming Preauth RSN C
+				uci delete wireless.@wifi-iface[0].ieee80211r
+				uci delete wireless.@wifi-iface[0].ft_psk_generate_local
+				uci set wireless.@wifi-iface[0].rsn_preauth="1"
+				uci set wifimedia.@advance[0].ft="rsn_preauth"
+				echo "Fast-Secure Roaming" >/etc/FT
+			fi	
+
+		##upgrade
+		elif [ "$one" = "ap.upgade" ]; then
+			/sbin/wifimedia/controller_srv.sh upgrade_srv
+		elif [ "$one" = "ap.reset" ]; then
+			/sbin/wifimedia/controller_srv.sh restore_srv
 		fi
 	done
+	uci set wifimedia.@advance[0].action=$(echo $line | grep 'action' | awk '{print $2}')
 	# Save all of that
 	uci commit
 
 	# Restart all of the services
-	/etc/init.d/network restart
+	/bin/ubus call network reload >/dev/null 2>/dev/null
 	/etc/init.d/system reload
 
 	if [ $(cat /tmp/lanifbr_flag) -eq 2 ]; then
@@ -405,25 +326,6 @@ curl_data=$(cat $response_file)
 		echo "restarting the node"
 		reboot
 	fi
-	
-	if [ $(cat /tmp/schedule_task_flag) -eq 1 ]; then
-		echo "restarting the schedule task"
-		/usr/bin/scheduled.sh start
-	fi	
-	##start nodogsplash
-	#if [ $(cat /tmp/nodogsplash_flag) -eq 1 ]; then
-	#	crontab /etc/cron_nds -u nds 
-	#	/etc/init.d/cron restart
-	#	/etc/init.d/nodogsplash enable
-	###disable nodogsplash	
-	#elif [ $(cat /tmp/nodogsplash_flag) -eq 2 ]; then
-	#	/etc/init.d/nodogsplash disable
-	#	/etc/init.d/nodogsplash stop
-	#	/etc/init.d/firewall restart
-	#	echo ''>/etc/crontabs/nds
-	#	/etc/init.d/cron restart
-	#	
-	#fi	
 	
 	# Clear out the old files
 	#if [ -e $status_file ]; then rm $status_file; fi
