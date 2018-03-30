@@ -90,16 +90,33 @@ wget -q "${url_action}" -O $action_data
 if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
 	echo "upgrade"
-	/sbin/wifimedia/upgrade.sh
+	/sbin/wifimedia/controller_srv.sh upgrade_srv
 fi
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
-	/sbin/wifimedia/restore_defaults.sh
+	/sbin/wifimedia/controller_srv.sh restore_srv
 fi
 if [ "$(cat "$action_data" | grep 'password')" ] ;then
 	echo "password default"
-	/sbin/wifimedia/passwd_default.sh
+	/sbin/wifimedia/controller_srv.sh passwd_admin_srv
 fi
+#if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
+#	echo "switch off"
+#	/sbin/wifimedia/switch_off.sh
+#fi
+if [ "$(cat "$action_data" | grep '802.11i')" ] ;then
+	echo "802.11i"
+	/sbin/wifimedia/controller_srv.sh preauth_rsn_srv
+fi
+if [ "$(cat "$action_data" | grep 'passwdwifi')" ] ;then
+	echo "delete passwd wifi"
+	/sbin/wifimedia/controller_srv.sh passwd_wifi
+fi
+if [ "$(cat "$action_data" | grep 'button')" ] ;then
+	echo "disable button reset"
+	/sbin/wifimedia/controller_srv.sh btn_reset
+fi
+<<<<<<< HEAD
 if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
 	echo "switch off"
 	/sbin/wifimedia/switch_off.sh
@@ -116,6 +133,8 @@ if [ "$(cat "$action_data" | grep 'button')" ] ;then
 	echo "delete passwd wifi"
 	/sbin/wifimedia/button_reset.sh
 fi
+=======
+>>>>>>> wr841v13_ext
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file
