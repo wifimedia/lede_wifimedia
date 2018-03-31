@@ -59,7 +59,7 @@ curl_result=$?
 if [ "$curl_result" -eq "0" ]; then
 	echo "Checked in to the dashboard successfully,"
 
-	if [ "$(cat "$response_file" | grep 'action' | awk '{print $2}')" != "$(uci -q get wifimedia.@advance[0].action)"  ] ;then
+	if [ "$(cat "$response_file" | grep 'Token' | awk '{print $2}')" != "$(uci -q get wifimedia.@advance[0].token)"  ] ;then
 	#if grep -q "." $response_file; then
 		echo "we have new settings to apply!"
 	else
@@ -276,7 +276,7 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 		/sbin/wifimedia/controller_srv.sh restore_srv
 	fi
 done
-uci set wifimedia.@advance[0].action="$(cat "$response_file" | grep 'action' | awk '{print $2}')"
+uci set wifimedia.@advance[0].token="$(cat "$response_file" | grep 'Token' | awk '{print $2}')"
 # Save all of that
 uci commit
 
@@ -301,10 +301,6 @@ if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
 	reboot
 fi
 
-# Clear out the old files
-#if [ -e $status_file ]; then rm $status_file; fi
-#if [ -e $response_file ]; then rm $response_file; fi
-#if [ -e $temp_file ]; then rm $temp_file; fi
 echo "----------------------------------------------------------------"
 echo "Successfully applied new settings"
 echo "update: Successfully applied new settings"
