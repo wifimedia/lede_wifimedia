@@ -7,7 +7,6 @@ status_file="$temp_dir/request.txt"
 response_file="$temp_dir/response.txt"
 temp_file="$temp_dir/tmp"
 action_data="/etc/config/action_data"
-noise_data=/tmp/noise_flag
 
 if [ ! -d "$temp_dir" ]; then
 	mkdir $temp_dir
@@ -15,9 +14,6 @@ if [ ! -d "$temp_dir" ]; then
 	echo "" >/tmp/checkin/response.txt
 
 fi
-#if [ -e $status_file ]; then echo "" >$status_file; fi
-#if [ -e $response_file ]; then echo "" >$response_file; fi
-#if [ -e $temp_file ]; then rm $temp_file; fi
 
 #mac_device
 mac_device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
@@ -47,12 +43,10 @@ request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dh
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
-url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
+url_r="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
 
-#url="http://device.wifimedia.vn/hotspot_data"
-#url_action="http://device.wifimedia.vn/hotspot"
-url_action="http://firmware.wifimedia.com.vn/data"
-
+url="http://firmware.wifimedia.com.vn/test"
+echo $url_r
 wget -q "${url}" -O $response_file
 
 echo "----------------------------------------------------------------"
@@ -60,248 +54,243 @@ echo "Sending data:"
 
 #curl "${url}" > $response_file
 curl_result=$?
-#curl_data=$(cat $response_file)
 
-	if [ "$curl_result" -eq "0" ]; then
-		echo "Checked in to the dashboard successfully,"
-		
-		#doc file 
-		cat $response_file | while read line ; do
-		
-			if [ "$(echo $line | grep 'action' | awk '{print $2}')" != "$(uci -q get wifimedia.@advance[0].action)"  ] ;then
-			#if grep -q "." $response_file; then
-			#	echo "we have new settings to apply!"
-			else
-				echo "we will maintain the existing settings."
-				exit
-			fi
-		done	
+if [ "$curl_result" -eq "0" ]; then
+	echo "Checked in to the dashboard successfully,"
+
+	if [ "$(cat "$response_file" | grep 'action' | awk '{print $2}')" != "$(uci -q get wifimedia.@advance[0].action)"  ] ;then
+	#if grep -q "." $response_file; then
+		echo "we have new settings to apply!"
 	else
-		logger "WARNING: Could not checkin to the dashboard."
-		echo "WARNING: Could not checkin to the dashboard."
-		
+		echo "we will maintain the existing settings."
 		exit
 	fi
+else
+	echo "WARNING: Could not checkin to the dashboard."
+	exit
+fi
 
-	echo "----------------------------------------------------------------"
-	echo "Applying settings"
+echo "----------------------------------------------------------------"
+echo "Applying settings"
 
-	# define the hosts file
-	echo "127.0.0.1 localhost" > /etc/hosts
-	echo "0" > /tmp/reboot_flag
-	echo "0" > /tmp/lanifbr_flag
-	echo "0" > /tmp/schedule_task_flag
-	#echo "0" > /tmp/nodogsplash_flag
+# define the hosts file
+echo "127.0.0.1 localhost" > /etc/hosts
+echo "0" > /tmp/reboot_flag
+echo "0" > /tmp/lanifbr_flag
+echo "0" > /tmp/schedule_task_flag
 
-	cat $response_file | sed 's/=/ /g'| while read line ; do
+cat $response_file | sed 's/=/ /g'| while read line ; do
+
+	one=$(echo $line | awk '{print $1}')
+	two=$(echo $line | awk '{print $2}')
+	three=$(echo $line | awk '{print $3}')
 	
-		one=$(echo $line | awk '{print $1}')
-		two=$(echo $line | awk '{print $2}')
-		three=$(echo $line | awk '{print $3}')
-		
-		echo "$one=$two=$three"
-		
-		#Change hotname
-		if [ "$one" = "system.hostname.name" ]; then
-			uci set system.@system[0].hostname="$two"
-		#Restart router	
-		elif [ "$one" = "system.reboot" ]; then
-			echo $two > /tmp/reboot_flag
-		#Password
-		elif [ "$one" = "system.ssh.password" ]; then
-			two=$(echo $two | sed 's/*/ /g')
-			echo -e "$two\n$two" | passwd root		
-			
-		#time update
-		elif [ "$one" = "wifimedia.sync.time" ]; then
+	echo "Name:$one Value:$two Value:$three"
 	
-			sync_time="/tmp/checkin/sync_time.txt"
-			echo "*/$two * * * * /sbin/wifimedia/updates.sh" >$sync_time
-			crontab $sync_time -u live
-			
-		#Network wan
-		elif [ "$one" = "network.wan.ipaddr" ]; then
-			uci set network.wan.ipaddr="$two"
-		elif [ "$one" = "network.wan.netmask" ]; then
-			uci set network.wan.netmask="$two"
-			
-		elif [ "$one" = "network.wan.proto" ]; then
-			uci set network.wan.proto="$two"
-		elif [ "$one" = "network.wan.type" ]; then
-			uci set network.wan.type="$two"
-			
-		#Network LAN
-		elif [ "$one" = "network.lan.ipaddr" ]; then
-			uci set network.lan.ipaddr="$two"
-		elif [ "$one" = "network.lan.netmask" ]; then
-			uci set network.lan.netmask="$two"
-			
-		elif [ "$one" = "network.lan.proto" ]; then
-			uci set network.lan.proto="$two"
-		elif [ "$one" = "network.lan.type" ]; then
-			uci set network.lan.type="$two"
-
-		#DHCP
-		elif [ "$one" = "dhcp.lan.interface" ]; then
-			uci set dhcp.lan.interface="$two"	
-		elif [ "$one" = "dhcp.lan.start" ]; then
-			uci set dhcp.lan.start="$two"	
-		elif [ "$one" = "dhcp.lan.limit" ]; then
-			uci set dhcp.lan.limit="$two"					
-		elif [ "$one" = "dhcp.lan.leasetime" ]; then
-			uci set dhcp.lan.leasetime="$two"		
-			
-		#Schedule task all
-		elif [ "$one" = "scheduled" ]; then
-			echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
-			crontab /tmp/autoreboot -u wifimedia
-			/etc/init.d/cron start
-			#ntpd -q -p 0.asia.pool.ntp.org				
-			uci set scheduled.days.Mon=1
-			uci set scheduled.days.Tue=1
-			uci set scheduled.days.Wed=1
-			uci set scheduled.days.Thu=1
-			uci set scheduled.days.Fri=1
-			uci set scheduled.days.Sat=1
-			uci set scheduled.days.Sun=1
-
-		elif [ "$one" = "scheduled.time.hour" ]; then
-			uci set scheduled.time.hour="$two"
-			
-		elif [ "$one" = "scheduled.time.minute" ]; then
-			uci set scheduled.time.minute="$two"
-			
-		#Wireless
-		#ESSID # (formerly Public ESSID)
-		elif [ "$one" = "wireless.radio.enable" ]; then
-			if [ "$two" == "enable" ]; then
-				uci set wireless.radio0.disabled="1"
-			else
-				uci get wireless.@wifi-iface[0].disabled="0"
-			fi
-			
-		elif [ "$one" = "wireless.essid.hide" ]; then
-			uci set wireless.@wifi-iface[0].hidden="$two"
-			
-		elif [ "$one" = "wireless.essid.ssid" ]; then
-			two=$(echo $two | sed 's/*/ /g')
-			uci set wireless.@wifi-iface[0].ssid="$two"
-			
-		elif [ "$one" = "wireless.essid.key" ]; then
-			if [ "$two" = "" ]; then
-				uci set wireless.@wifi-iface[0].encryption="none"
-				uci set wireless.@wifi-iface[0].key=""
-			else
-				uci set wireless.@wifi-iface[0].encryption="mixed-psk"
-				uci set wireless.@wifi-iface[0].key="$two"
-			fi
-			
-		elif [ "$one" = "wireless.essid.isolate" ]; then
-			uci set wireless.@wifi-iface[0].isolate="$two"
-			
-		#Network SSID
-		elif [ "$one" = "wireless.essid.network" ]; then
-			uci set wireless.@wifi-iface[0].network="$two"
-			
-		#AP mode
-		elif [ "$one" = "wireless.essid.mode" ]; then	
-			uci set wireless.@wifi-iface[0].mode="$two"
-
-		#AP Channel
-		elif [ "$one" = "wireless.essid.channel" ]; then	
-			uci set wireless.@wifi-iface[0].channel="$two"
-		#AP country
-		elif [ "$one" = "wireless.essid.country" ]; then	
-			uci set wireless.@wifi-iface[0].country="$two"	
-
-		#AP Connect Limit
-		elif [ "$one" = "wireless.essid.maxassoc" ]; then	
-			uci set wireless.@wifi-iface[0].maxassoc="$two"
-			
-		#NASID
-		elif [ "$one" = "wireless.essid.maxassoc" ];then
-			if [ -z "$two" ];then
-				uci del wireless.default_radio0.r0kh
-				uci del wireless.default_radio0.r1kh
-			else
-				uci set wireless.@wifi-iface[0].nasid="$two"
-			fi	
-			uci commit wireless
-		#AP 802.11i Preauth RSN
-		#elif [ "$one" = "wireless.essid.rsn_preauth" ]; then	
-		#	uci set wireless.@wifi-iface[0].rsn_preauth="$two"
+	#Change hotname
+	if [ "$one" = "system.hostname.name" ]; then
+		uci set system.@system[0].hostname="$two"
+	#Restart router	
+	elif [ "$one" = "system.reboot" ]; then
+		echo $two > /tmp/reboot_flag
+	#Password
+	elif [ "$one" = "system.ssh.password" ]; then
+		two=$(echo $two | sed 's/*/ /g')
+		echo -e "$two\n$two" | passwd root		
 		
-		#AP 802.11r
-		elif [ "$one" = "wireless.essid.802.11r" ]; then
+	#time update
+	elif [ "$one" = "wifimedia.sync.time" ]; then
+
+		sync_time="/tmp/checkin/sync_time.txt"
+		echo "*/$two * * * * /sbin/wifimedia/updates.sh" >$sync_time
+		crontab $sync_time -u live
 		
-			nasid=`uci get wireless.@wifi-iface[0].nasid`
-			
-			if [ "$two" == "ieee80211r"  ];then
-				uci set wireless.@wifi-iface[0].ieee80211r="1"
-				uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
-				uci delete wireless.@wifi-iface[0].rsn_preauth
-				uci set wifimedia.@advance[0].ft="ieee80211r"
-				echo "Fast BSS Transition Roaming" >/etc/FT
-			
-				if [ "$three" != "" ];then
-					#Ghi du lieu APID ra file
-					echo "$three" | sed 's/,/ /g' | xargs -n1 echo $nasid > $grp_device_download
-				fi
-				
-				#Delete List r0kh r1kh
-				uci del wireless.default_radio0.r0kh
-				uci del wireless.default_radio0.r1kh
-				
-				#add List r0kh r1kh
-				cat "$grp_device_download" | while read  line;do #add list R0KH va R1KH
-					uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-					uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-				done
+	#Network wan
+	elif [ "$one" = "network.wan.ipaddr" ]; then
+		uci set network.wan.ipaddr="$two"
+	elif [ "$one" = "network.wan.netmask" ]; then
+		uci set network.wan.netmask="$two"
+		
+	elif [ "$one" = "network.wan.proto" ]; then
+		uci set network.wan.proto="$two"
+	elif [ "$one" = "network.wan.type" ]; then
+		uci set network.wan.type="$two"
+		
+	#Network LAN
+	elif [ "$one" = "network.lan.ipaddr" ]; then
+		uci set network.lan.ipaddr="$two"
+	elif [ "$one" = "network.lan.netmask" ]; then
+		uci set network.lan.netmask="$two"
+		
+	elif [ "$one" = "network.lan.proto" ]; then
+		uci set network.lan.proto="$two"
+	elif [ "$one" = "network.lan.type" ]; then
+		uci set network.lan.type="$two"
 
-			else #Fast Roaming Preauth RSN C
-				uci delete wireless.@wifi-iface[0].ieee80211r
-				uci delete wireless.@wifi-iface[0].ft_psk_generate_local
-				uci set wireless.@wifi-iface[0].rsn_preauth="1"
-				uci set wifimedia.@advance[0].ft="rsn_preauth"
-				echo "Fast-Secure Roaming" >/etc/FT
-			fi	
+	#DHCP
+	elif [ "$one" = "dhcp.lan.interface" ]; then
+		uci set dhcp.lan.interface="$two"	
+	elif [ "$one" = "dhcp.lan.start" ]; then
+		uci set dhcp.lan.start="$two"	
+	elif [ "$one" = "dhcp.lan.limit" ]; then
+		uci set dhcp.lan.limit="$two"					
+	elif [ "$one" = "dhcp.lan.leasetime" ]; then
+		uci set dhcp.lan.leasetime="$two"		
+		
+	#Schedule task all
+	elif [ "$one" = "scheduled" ]; then
+		echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
+		crontab /tmp/autoreboot -u wifimedia
+		/etc/init.d/cron start
+		#ntpd -q -p 0.asia.pool.ntp.org				
+		uci set scheduled.days.Mon=1
+		uci set scheduled.days.Tue=1
+		uci set scheduled.days.Wed=1
+		uci set scheduled.days.Thu=1
+		uci set scheduled.days.Fri=1
+		uci set scheduled.days.Sat=1
+		uci set scheduled.days.Sun=1
 
-		##upgrade
-		elif [ "$one" = "ap.upgade" ]; then
-			/sbin/wifimedia/controller_srv.sh upgrade_srv
-		elif [ "$one" = "ap.reset" ]; then
-			/sbin/wifimedia/controller_srv.sh restore_srv
+	elif [ "$one" = "scheduled.time.hour" ]; then
+		uci set scheduled.time.hour="$two"
+		
+	elif [ "$one" = "scheduled.time.minute" ]; then
+		uci set scheduled.time.minute="$two"
+		
+	#Wireless
+	#ESSID # (formerly Public ESSID)
+	elif [ "$one" = "wireless.radio.enable" ]; then
+		if [ "$two" == "enable" ]; then
+			uci set wireless.radio0.disabled="0"
+		else
+			uci set wireless.radio0.disabled="1"
 		fi
-	done
-	uci set wifimedia.@advance[0].action=$(echo $line | grep 'action' | awk '{print $2}')
-	# Save all of that
-	uci commit
+		
+	elif [ "$one" = "wireless.essid.hide" ]; then
+		uci set wireless.@wifi-iface[0].hidden="$two"
+		
+	elif [ "$one" = "wireless.essid.ssid" ]; then
+		two=$(echo $two | sed 's/*/ /g')
+		uci set wireless.@wifi-iface[0].ssid="$two"
+		
+	elif [ "$one" = "wireless.essid.key" ]; then
+		if [ "$two" = "" ]; then
+			uci set wireless.@wifi-iface[0].encryption="none"
+			uci set wireless.@wifi-iface[0].key=""
+		else
+			uci set wireless.@wifi-iface[0].encryption="psk2"
+			uci set wireless.@wifi-iface[0].key="$two"
+		fi
+		
+	elif [ "$one" = "wireless.essid.isolate" ]; then
+		uci set wireless.@wifi-iface[0].isolate="$two"
+		
+	#Network SSID
+	elif [ "$one" = "wireless.essid.network" ]; then
+		uci set wireless.@wifi-iface[0].network="$two"
+		
+	#AP mode
+	elif [ "$one" = "wireless.essid.mode" ]; then	
+		uci set wireless.@wifi-iface[0].mode="$two"
 
-	# Restart all of the services
-	/bin/ubus call network reload >/dev/null 2>/dev/null
-	/etc/init.d/system reload
+	#AP Channel
+	elif [ "$one" = "wireless.essid.channel" ]; then	
+		uci set wireless.@wifi-iface[0].channel="$two"
+	#AP country
+	elif [ "$one" = "wireless.essid.country" ]; then	
+		uci set wireless.@wifi-iface[0].country="$two"	
 
-	if [ $(cat /tmp/lanifbr_flag) -eq 2 ]; then
-		echo "moving interface: $(uci get network.lan.ifname) to the WAN"
-		brctl delif br-lan $(uci -q get network.lan.ifname) && brctl addif br-wan $(uci -q get network.lan.ifname)	
-	fi
-
-	if [ "$(brctl show | grep br-wan | awk '{print $3}')" = "no" ]; then
-		echo "stp is is disabled on the WAN, enable stp"
-		# Enable stp on the wan bridge
-		sleep 1 && brctl stp br-wan on
-	fi
+	#AP Connect Limit
+	elif [ "$one" = "wireless.essid.maxassoc" ]; then	
+		uci set wireless.@wifi-iface[0].maxassoc="$two"
+		
+	#NASID
+	elif [ "$one" = "wireless.essid.nasid" ];then
+		if [ -z "$two" ];then
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh
+		else
+			uci set wireless.@wifi-iface[0].nasid="$two"
+		fi	
+		uci commit wireless
+	#AP 802.11i Preauth RSN
+	#elif [ "$one" = "wireless.essid.rsn_preauth" ]; then	
+	#	uci set wireless.@wifi-iface[0].rsn_preauth="$two"
 	
-	#Reboot
-	if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
-		echo "restarting the node"
-		reboot
-	fi
+	#AP 802.11r
+	elif [ "$one" = "wireless.essid.fastroaming" ]; then
 	
-	# Clear out the old files
-	#if [ -e $status_file ]; then rm $status_file; fi
-	#if [ -e $response_file ]; then rm $response_file; fi
-	#if [ -e $temp_file ]; then rm $temp_file; fi
-	echo "----------------------------------------------------------------"
-	echo "Successfully applied new settings"
-	echo "update: Successfully applied new settings"
+		nasid=`uci get wireless.@wifi-iface[0].nasid`
+		
+		if [ "$two" == "ieee80211r"  ];then
+			uci set wireless.@wifi-iface[0].ieee80211r="1"
+			uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
+			uci delete wireless.@wifi-iface[0].rsn_preauth
+			uci set wifimedia.@advance[0].ft="ieee80211r"
+			echo "Fast BSS Transition Roaming" >/etc/FT
+		
+			if [ "$three" != "" ];then
+				#Ghi du lieu APID ra file
+				echo "$three" | sed 's/,/ /g' | sed 's/-/:/g' | xargs -n1 echo $nasid > /tmp/apid_list
+			fi
+			
+			#Delete List r0kh r1kh
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh
+			
+			#add List r0kh r1kh
+			cat "/tmp/apid_list" | while read  line;do #add list R0KH va R1KH
+				uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+				uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
+			done
+
+		else #Fast Roaming Preauth RSN C
+			uci delete wireless.@wifi-iface[0].ieee80211r
+			uci delete wireless.@wifi-iface[0].ft_psk_generate_local
+			uci set wireless.@wifi-iface[0].rsn_preauth="1"
+			uci set wifimedia.@advance[0].ft="rsn_preauth"
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh
+			uci del wireless.@wifi-iface[0].nasid
+			echo "Fast-Secure Roaming" >/etc/FT
+		fi	
+
+	##upgrade
+	elif [ "$one" = "ap.upgade" ]; then
+		/sbin/wifimedia/controller_srv.sh upgrade_srv
+	elif [ "$one" = "ap.reset" ]; then
+		/sbin/wifimedia/controller_srv.sh restore_srv
+	fi
+done
+uci set wifimedia.@advance[0].action="$(cat "$response_file" | grep 'action' | awk '{print $2}')"
+# Save all of that
+uci commit
+
+# Restart all of the services
+/bin/ubus call network reload >/dev/null 2>/dev/null
+/etc/init.d/system reload
+
+if [ $(cat /tmp/lanifbr_flag) -eq 2 ]; then
+	echo "moving interface: $(uci get network.lan.ifname) to the WAN"
+	brctl delif br-lan $(uci -q get network.lan.ifname) && brctl addif br-wan $(uci -q get network.lan.ifname)	
+fi
+
+if [ "$(brctl show | grep br-wan | awk '{print $3}')" = "no" ]; then
+	echo "stp is is disabled on the WAN, enable stp"
+	# Enable stp on the wan bridge
+	sleep 1 && brctl stp br-wan on
+fi
+
+#Reboot
+if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
+	echo "restarting the node"
+	reboot
+fi
+
+# Clear out the old files
+#if [ -e $status_file ]; then rm $status_file; fi
+#if [ -e $response_file ]; then rm $response_file; fi
+#if [ -e $temp_file ]; then rm $temp_file; fi
+echo "----------------------------------------------------------------"
+echo "Successfully applied new settings"
+echo "update: Successfully applied new settings"
