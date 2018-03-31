@@ -42,39 +42,6 @@ load=$(uptime | awk '{ print $8 $9 $10 }')
 echo "Getting the model information"
 model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
-#echo "" >$noise_data
-#if [ $(cat $noise_data) -eq 1 ];then
-#	noise=/tmp/noise.tmp
-#	echo "Checking the Noise"
-#	echo "" > $noise
-#	iw wlan0 survey dump | while read line; do
-#		if [ "$(echo $line | grep 'frequency')" ]; then
-#			echo ";$(echo $line | awk '{ print $2 $4 "-" $5}')," >> /tmp/noise.tmp
-#		elif [ "$(echo $line | grep 'noise')" ]; then
-#			echo $(echo $line | awk '{ print $2 }') >> /tmp/noise.tmp
-#		fi
-#	done
-#	echo "" >$noise_data
-#	noise=$(cat /tmp/noise.tmp | tr '\n' ' ' | sed 's/ //g')
-#fi
-
-#echo $noise
-
-#echo "Checking the WLAN Info"
-#wlaninfo=/tmp/info.tmp
-#echo "" > $wlaninfo
-#iwinfo wlan0 info | while read line; do
-#	if [ "$(echo $line | grep 'ESSID')" ]; then
-#		echo "$(echo $line | awk '{ print $2 $3 }')" >> $wlaninfo
-#	elif [ "$(echo $line | grep 'Channel')" ]; then
-#		echo "$(echo $line | awk '{ print $3 $4 $5 $6 }')" >> $wlaninfo
-#	elif [ "$(echo $line | grep 'Noise')" ]; then
-#		echo "$(echo $line | awk '{ print $4 $5 $6 }')" >> $wlaninfo		
-#	fi
-#done
-#wlaninfo=$(cat $wlaninfo | tr '\n' ' ' | sed 's/ /;/g')
-#echo $wlaninfo
-
 # Saving Request Data
 request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}"
 dashboard_protocol="http"
@@ -212,11 +179,14 @@ curl_result=$?
 			else
 				uci get wireless.@wifi-iface[0].disabled="0"
 			fi
+			
 		elif [ "$one" = "wireless.essid.hide" ]; then
 			uci set wireless.@wifi-iface[0].hidden="$two"
+			
 		elif [ "$one" = "wireless.essid.ssid" ]; then
 			two=$(echo $two | sed 's/*/ /g')
 			uci set wireless.@wifi-iface[0].ssid="$two"
+			
 		elif [ "$one" = "wireless.essid.key" ]; then
 			if [ "$two" = "" ]; then
 				uci set wireless.@wifi-iface[0].encryption="none"
@@ -225,6 +195,7 @@ curl_result=$?
 				uci set wireless.@wifi-iface[0].encryption="mixed-psk"
 				uci set wireless.@wifi-iface[0].key="$two"
 			fi
+			
 		elif [ "$one" = "wireless.essid.isolate" ]; then
 			uci set wireless.@wifi-iface[0].isolate="$two"
 			
