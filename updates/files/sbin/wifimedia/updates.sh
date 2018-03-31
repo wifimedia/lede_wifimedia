@@ -87,18 +87,18 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 	
 	echo "Name:$one Value:$two Value:$three"
 	
-	#Change hotname
-	if [ "$one" = "system.hostname.name" ]; then
+	#Change hotname OK
+	if [ "$one" = "system.hostname" ]; then
 		uci set system.@system[0].hostname="$two"
 	#Restart router	
 	elif [ "$one" = "system.reboot" ]; then
 		echo $two > /tmp/reboot_flag
-	#Password
-	elif [ "$one" = "system.ssh.password" ]; then
+	#Password OK
+	elif [ "$one" = "system.admin.passwd" ]; then
 		two=$(echo $two | sed 's/*/ /g')
-		echo -e "$two\n$two" | passwd root		
+		echo -e "$two\n$two" | passwd admin		
 		
-	#time update
+	#time update ok
 	elif [ "$one" = "wifimedia.sync.time" ]; then
 
 		sync_time="/tmp/checkin/sync_time.txt"
@@ -139,17 +139,30 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 		
 	#Schedule task all
 	elif [ "$one" = "scheduled" ]; then
-		echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
-		crontab /tmp/autoreboot -u wifimedia
-		/etc/init.d/cron start
-		#ntpd -q -p 0.asia.pool.ntp.org				
-		uci set scheduled.days.Mon=1
-		uci set scheduled.days.Tue=1
-		uci set scheduled.days.Wed=1
-		uci set scheduled.days.Thu=1
-		uci set scheduled.days.Fri=1
-		uci set scheduled.days.Sat=1
-		uci set scheduled.days.Sun=1
+		if [ "$two" == "enable" ];then
+			echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
+			crontab /tmp/autoreboot -u wifimedia
+			/etc/init.d/cron start
+			#ntpd -q -p 0.asia.pool.ntp.org				
+			uci set scheduled.days.Mon=1
+			uci set scheduled.days.Tue=1
+			uci set scheduled.days.Wed=1
+			uci set scheduled.days.Thu=1
+			uci set scheduled.days.Fri=1
+			uci set scheduled.days.Sat=1
+			uci set scheduled.days.Sun=1
+		else
+			echo -e "" >/tmp/autoreboot
+			crontab /tmp/autoreboot -u wifimedia
+			/etc/init.d/cron start
+			#ntpd -q -p 0.asia.pool.ntp.org				
+			uci set scheduled.days.Mon=0
+			uci set scheduled.days.Tue=0
+			uci set scheduled.days.Wed=0
+			uci set scheduled.days.Thu=0
+			uci set scheduled.days.Fri=0
+			uci set scheduled.days.Sat=0
+			uci set scheduled.days.Sun=0			
 
 	elif [ "$one" = "scheduled.time.hour" ]; then
 		uci set scheduled.time.hour="$two"
