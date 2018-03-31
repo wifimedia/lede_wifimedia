@@ -16,7 +16,8 @@ if [ ! -d "$temp_dir" ]; then
 fi
 
 #mac_device
-mac_device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
+#mac_device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
+mac_device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z")
 #IP_WAN_ROUTE
 ip_dhcp_client=$(ifconfig br-wan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 #IP_LAN Router
