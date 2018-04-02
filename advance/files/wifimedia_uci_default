@@ -159,7 +159,7 @@ uci batch <<-EOF
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
 echo -e "admin:*:0:0:99999:7:::" >>/etc/shadow
-echo -e "admin\nadmin" | passwd admin
+echo -e "wifimedia\nwifimedia" | passwd admin
 
 echo -e "wifimedia:x:0:0:wifimedia:/root:/bin/ash" >>/etc/passwd
 echo -e "wifimedia:*:0:0:99999:7:::" >>/etc/shadow
