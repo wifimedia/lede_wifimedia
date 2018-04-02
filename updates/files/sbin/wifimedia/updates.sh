@@ -26,6 +26,14 @@ ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 ip_gateway=$(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }')
 #hotname
 hostname=$(uci -q get system.@system[0].hostname)
+wifi=$(pidof hostapd)
+
+if [ "$wifi" != "" ];then
+	wifi_status="Online"
+else
+	wifi_status="Offline"
+fi
+
 echo "Wifimedia checking"
 echo "----------------------------------------------------------------"
 
@@ -40,19 +48,19 @@ echo "Getting the model information"
 model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
 # Saving Request Data
-request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}"
+request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wifi_status=${wifi_status}"
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
 url_r="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
 
 url="http://firmware.wifimedia.com.vn/test"
-echo $url_r
-wget -q "${url}" -O $response_file
 
 echo "----------------------------------------------------------------"
 echo "Sending data:"
 
+echo $url_r
+wget -q "${url_r}" -O $response_file
 #curl "${url}" > $response_file
 curl_result=$?
 
