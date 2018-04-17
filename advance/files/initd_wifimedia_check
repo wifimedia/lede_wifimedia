@@ -7,7 +7,7 @@ EXTRA_COMMANDS="status"
 EXTRA_HELP="        status  checking"
 
 boot() {
-    sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv
+    sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh
 	if [ -e "/etc/opt/first_time.txt" ];then
 		/sbin/wifimedia/controller.sh license_srv
 		echo "checking"
