@@ -172,7 +172,7 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 			uci set scheduled.days.Fri=0
 			uci set scheduled.days.Sat=0
 			uci set scheduled.days.Sun=0			
-
+		fi
 	elif [ "$one" = "scheduled.time.hour" ]; then
 		uci set scheduled.time.hour="$two"
 		
