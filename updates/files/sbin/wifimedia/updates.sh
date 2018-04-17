@@ -52,7 +52,7 @@ request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dh
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
-url_r="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data}"
+url_r="${dashboard_protocol}://${dashboard_server}/${dashboard_url}?${request_data}"
 
 url="http://firmware.wifimedia.com.vn/test"
 
