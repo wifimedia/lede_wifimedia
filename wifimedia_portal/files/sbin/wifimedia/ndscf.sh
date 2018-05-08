@@ -17,7 +17,8 @@ domain=`uci -q get wifimedia.@nodogsplash[0].nds_domain`
 domain=${domain:-crm.wifimedia.vn}
 
 key=`uci -q get wifimedia.@nodogsplash[0].nds_apkey`
-captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
+#captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
+captive_id=`cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g' | tr a-z A-Z`
 apkey=${key:-$captive_id}
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
 
