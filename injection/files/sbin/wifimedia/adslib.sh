@@ -8,32 +8,32 @@ ads_fb_page=/tmp/fbpage.txt
 ads_fb_video=/tmp/fbvideo.txt
 ads_fb_like=/tmp/fblike.txt
 chatbot=/tmp/chatbot.txt
-ads_css=/www/luci-static/resources/ads_wifimedia.css
+adjs=/www/luci-static/resources/wifimedia.js
 js=/www/luci-static/resources/fb.js
 action=/etc/privoxy/user.action
 action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter
 filter=/etc/privoxy/user.filter
 ##IMG
-link=$(uci -q get wifimedia.@adnetwork[0].link)
-img=$(uci -q get wifimedia.@adnetwork[0].img)
-title=$(uci -q get wifimedia.@adnetwork[0].title)
+link5=$(uci -q get wifimedia.@adnetwork[0].link)
+img5=$(uci -q get wifimedia.@adnetwork[0].img)
+#title5=$(uci -q get wifimedia.@adnetwork[0].title)
 
 link1=$(uci -q get wifimedia.@adnetwork[0].link1)
 img1=$(uci -q get wifimedia.@adnetwork[0].img1)
-title1=$(uci -q get wifimedia.@adnetwork[0].title1)
+#title1=$(uci -q get wifimedia.@adnetwork[0].title1)
 
 link2=$(uci -q get wifimedia.@adnetwork[0].link2)
 img2=$(uci -q get wifimedia.@adnetwork[0].img2)
-title2=$(uci -q get wifimedia.@adnetwork[0].title2)
+#title2=$(uci -q get wifimedia.@adnetwork[0].title2)
 
 link3=$(uci -q get wifimedia.@adnetwork[0].link3)
 img3=$(uci -q get wifimedia.@adnetwork[0].img3)
-title3=$(uci -q get wifimedia.@adnetwork[0].title3)
+#title3=$(uci -q get wifimedia.@adnetwork[0].title3)
 
 link4=$(uci -q get wifimedia.@adnetwork[0].link4)
 img4=$(uci -q get wifimedia.@adnetwork[0].img4)
-title4=$(uci -q get wifimedia.@adnetwork[0].title4)
+#title4=$(uci -q get wifimedia.@adnetwork[0].title4)
 ##END IMG
 fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
 fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)
