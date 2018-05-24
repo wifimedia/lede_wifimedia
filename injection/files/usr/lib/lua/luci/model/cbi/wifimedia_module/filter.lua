@@ -29,30 +29,20 @@ s:tab("adv","Advanced")
 --s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
 --s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
 
-s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
---s:taboption("image", Value,"title1","Title").placeholder = "Support langue english"
+s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px")
 url_web=s:taboption("image", Value,"link1","Website")
-url_web.placeholder = "http://ads.wifimedia.vn/"
 
-s:taboption("image", Value,"img2","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
---s:taboption("image", Value,"title2","Title").placeholder = "Support langue english"
+s:taboption("image", Value,"img2","Imge","Min-width:360px, Height:120px")
 url_web=s:taboption("image", Value,"link2","Website")
-url_web.placeholder = "http://ads.wifimedia.vn/"
 
-s:taboption("image", Value,"img3","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
---s:taboption("image", Value,"title3","Title").placeholder = "Support langue english"
+s:taboption("image", Value,"img3","Imge","Min-width:360px, Height:120px")
 url_web=s:taboption("image", Value,"link3","Website")
-url_web.placeholder = "http://ads.wifimedia.vn/"
 
-s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
---s:taboption("image", Value,"title4","Title").placeholder = "Support langue english"
+s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px")
 url_web=s:taboption("image", Value,"link4","Website")
-url_web.placeholder = "http://ads.wifimedia.vn/"
 
-s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
---s:taboption("image", Value,"title5","Title").placeholder = "Support langue english"
+s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px")"
 url_web=s:taboption("image", Value,"link5","Website")
-url_web.placeholder = "http://ads.wifimedia.vn/"
 
 --ads_image = s:taboption("image", Flag,"ads_image_status","Status")
 rd_image = s:taboption("image", Flag,"random_image_status","Random Option")
