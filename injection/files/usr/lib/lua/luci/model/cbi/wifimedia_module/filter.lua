@@ -29,7 +29,7 @@ s:tab("adv","Advanced")
 --s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
 --s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
 
-s:taboption("image", Value,"img1","Link image")
+s:taboption("image", Value,"img1","Link1 image")
 url_web=s:taboption("image", Value,"link1","Link1 website")
 
 s:taboption("image", Value,"img2","Link2 image")
