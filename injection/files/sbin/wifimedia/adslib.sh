@@ -41,8 +41,8 @@ youtube=$(uci -q get wifimedia.@adnetwork[0].youtube)
 
 ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 
-ads_random=`head /dev/urandom | tr -dc "356789" | head -c1`
-ads_img_random=`head /dev/urandom | tr -dc "12345" | head -c1`
+#ads_random=`head /dev/urandom | tr -dc "56789" | head -c1`
+ads_img_random=`head /dev/urandom | tr -dc "56789" | head -c1`
 
 adsrandom=`uci -q get wifimedia.@adnetwork[0].random_status`
 adsimgrandom=`uci -q get wifimedia.@adnetwork[0].random_image_status`
