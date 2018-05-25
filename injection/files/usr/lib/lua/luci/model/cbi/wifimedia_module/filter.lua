@@ -60,9 +60,10 @@ s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.
 ads_st = s:taboption("adv", Flag,"ads_status","Status")
 rd = s:taboption("adv", Flag,"random_status","Random Option")
 rd:depends({ads_status="1"})
-st = s:taboption("adv", ListValue,"status","Option")
-st:depends({ads_status="1"})
 ]]--
+st = s:taboption("adv", ListValue,"status","Option")
+--st:depends({ads_status="1"})
+
 --local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Image1","Image2", "Image3","Image4","Image5" }
 local data = {"Image1","Image2", "Image3","Image4","Image5" }
 for _, status in ipairs(data) do 
