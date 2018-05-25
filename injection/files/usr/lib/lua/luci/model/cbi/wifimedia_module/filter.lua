@@ -56,13 +56,13 @@ rd_image = s:taboption("image", Flag,"random_image_status","Random Option")
 --end
 
 s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-
+--[[
 ads_st = s:taboption("adv", Flag,"ads_status","Status")
 rd = s:taboption("adv", Flag,"random_status","Random Option")
 rd:depends({ads_status="1"})
 st = s:taboption("adv", ListValue,"status","Option")
 st:depends({ads_status="1"})
-
+]]--
 --local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Image1","Image2", "Image3","Image4","Image5" }
 local data = {"Image1","Image2", "Image3","Image4","Image5" }
 for _, status in ipairs(data) do 
@@ -86,16 +86,16 @@ local pid = luci.util.exec("pidof privoxy")
 local message = luci.http.formvalue("message")
 
 function advertis_network_process_status()
-  local status = "Ad network is not running now and "
+  local status = "Filter is not running"
 
   if pid ~= "" then
-      status = "Ad network is running PID: "..pid.. "and "
+      status = "Filter is running PID: "..pid.. " "
   end
 
   if nixio.fs.access("/etc/rc.d/80privoxy") then
-    status = status .. "it's enabled on the startup"
+    status = status .. ""
   else
-    status = status .. "it's disabled on the startup"
+    status = status .. ""
   end
 
   local status = { status=status, message=message }
@@ -106,10 +106,10 @@ end
 t = m:section(Table, advertis_network_process_status())
 t.anonymous = true
 
-t:option(DummyValue, "status","Ad network status")
+t:option(DummyValue, "status","Filter status")
 
 if nixio.fs.access("/etc/rc.d/S80privoxy") then
-  disable = t:option(Button, "_disable","Disable from startup")
+  disable = t:option(Button, "_disable","Disable")
   disable.inputstyle = "remove"
   function disable.write(self, section)
 		luci.util.exec("echo ''>/etc/crontabs/adnetwork && /etc/init.d/cron restart")
@@ -120,7 +120,7 @@ if nixio.fs.access("/etc/rc.d/S80privoxy") then
 		)			
   end
 else
-  enable = t:option(Button, "_enable","Enable on startup")
+  enable = t:option(Button, "_enable","Enable")
   enable.inputstyle = "apply"
   function enable.write(self, section)
 		luci.util.exec("uci set privoxy.privoxy.permit_access=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'|cut -c 1,2,3,4,5,6,7,8,9,10,11)0/24:8118 && uci commit privoxy")
