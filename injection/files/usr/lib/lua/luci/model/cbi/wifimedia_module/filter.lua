@@ -29,20 +29,20 @@ s:tab("adv","Advanced")
 --s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
 --s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
 
-s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px")
-url_web=s:taboption("image", Value,"link1","Website")
+s:taboption("image", Value,"img1","Link image")
+url_web=s:taboption("image", Value,"link1","Link1 website")
 
-s:taboption("image", Value,"img2","Imge","Min-width:360px, Height:120px")
-url_web=s:taboption("image", Value,"link2","Website")
+s:taboption("image", Value,"img2","Link2 image")
+url_web=s:taboption("image", Value,"link2","Link2 website")
 
-s:taboption("image", Value,"img3","Imge","Min-width:360px, Height:120px")
-url_web=s:taboption("image", Value,"link3","Website")
+s:taboption("image", Value,"img3","Link3 image")
+url_web=s:taboption("image", Value,"link3","Linh3 website")
 
-s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px")
-url_web=s:taboption("image", Value,"link4","Website")
+s:taboption("image", Value,"img4","Link4 image")
+url_web=s:taboption("image", Value,"link4","Link4 website")
 
-s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px")"
-url_web=s:taboption("image", Value,"link5","Website")
+s:taboption("image", Value,"img5","Link5 image")
+url_web=s:taboption("image", Value,"link5","Link5 website")
 
 --ads_image = s:taboption("image", Flag,"ads_image_status","Status")
 rd_image = s:taboption("image", Flag,"random_image_status","Random Option")
@@ -116,7 +116,7 @@ if nixio.fs.access("/etc/rc.d/S80privoxy") then
 		luci.util.exec("/etc/init.d/privoxy disable")
 		luci.util.exec(" /etc/init.d/privoxy  stop && /etc/init.d/firewall restart")
 		luci.http.redirect(
-        		luci.dispatcher.build_url("admin", "wifimedia", "adnetwork")
+        		luci.dispatcher.build_url("admin", "wifimedia", "filter")
 		)			
   end
 else
@@ -129,7 +129,7 @@ else
 		luci.util.exec(" /etc/init.d/privoxy start ")
 		luci.util.exec("crontab /etc/cron_ads -u adnetwork && /etc/init.d/cron restart")
 		luci.http.redirect(
-        		luci.dispatcher.build_url("admin", "wifimedia", "adnetwork")
+        		luci.dispatcher.build_url("admin", "wifimedia", "filter")
 		)			
   end
 end
