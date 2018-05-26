@@ -36,7 +36,7 @@ s:taboption("image", Value,"img2","Link2 image")
 url_web=s:taboption("image", Value,"link2","Link2 website")
 
 s:taboption("image", Value,"img3","Link3 image")
-url_web=s:taboption("image", Value,"link3","Linh3 website")
+url_web=s:taboption("image", Value,"link3","Link3 website")
 
 s:taboption("image", Value,"img4","Link4 image")
 url_web=s:taboption("image", Value,"link4","Link4 website")
