@@ -12,11 +12,11 @@ function m.on_after_commit(self)
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
-s = m:section(TypedSection, "advance","")
+s = m:section(TypedSection, "advance","Ethernet Switch")
 s.anonymous = true
 s.addremove = false
 
-bridge_mode = s:optional(Flag, "bridge_mode","Bridge","Ethernet:  switch")
+bridge_mode = s:option(Flag, "bridge_mode","Bridge","")
 bridge_mode.rmempty = false
 		function bridge_mode.write(self, section, value)
 			if value == self.enabled then
