@@ -87,7 +87,7 @@ hidessid:depends({ctrs_en="1"})
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
-
+--[[
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
 bridge_mode.rmempty = false
@@ -116,6 +116,7 @@ bridge_mode.rmempty = false
 			return Flag.write(self, section, value)
 		end
 		function bridge_mode.remove() end
+]]--		
 --RSSI--
 s:tab("rssi",  translate("RSSI"))
 	--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
