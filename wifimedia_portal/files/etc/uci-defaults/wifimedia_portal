@@ -51,13 +51,17 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
+<<<<<<< HEAD
       <form id="info" method="POST" action="//'$domain'/back_end/'$apkey'/1">
+=======
+      <form id="info" method="POST" action="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
           <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="$gatewaymac">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
-		  <input type="hidden" name="splashcheck" value="1">
+		  <!--input type="hidden" name="splashcheck" value="1"-->
           <input type="hidden" name="auth_target" value="$authtarget">
       </form>
       <script>
@@ -72,7 +76,11 @@ echo '<!doctype html>
     <head>
         <meta charset="utf-8">
         <title>Whoops...</title>
+<<<<<<< HEAD
         <meta http-equiv="refresh" content="0; url="//'$domain'/back_end/'$apkey'/1">
+=======
+        <meta http-equiv="refresh" content="0; url="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
         <style>
             html {
                 background: #F7F7F7;
@@ -90,8 +98,10 @@ uci -q get wifimedia.@nodogsplash[0] || {
 EOF
 }
 
-/etc/ini.d/nodogsplash stop
-/etc/ini.d/nodogsplash disable
-#chmod a-x /sbin/wifimedia/heartbeat.sh
-sleep 10
-/etc/init.d/firewall restart
+/sbin/wifimedia/ndscf.sh start >/dev/null
+crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
+/etc/ini.d/nodogsplash start
+/etc/ini.d/nodogsplash enable
+chmod a+x /sbin/wifimedia/heartbeat.sh
+#sleep 10
+#/etc/init.d/firewall restart

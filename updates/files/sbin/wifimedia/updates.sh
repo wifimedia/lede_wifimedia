@@ -48,7 +48,11 @@ echo "Getting the model information"
 model_device=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
 # Saving Request Data
+<<<<<<< HEAD
 request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wifi_status=${wifi_status}"
+=======
+request_data="mac_device=${mac_device}&gateway=${ip_gateway}&ip_internal=${ip_dhcp_client}&ip_lan=${ip_lan}&model_device=${model_device}&load=${load}&uptime=${uptime}&hostname=${hostname}&wlaninfo=${wlaninfo}&noise=${noise}"
+>>>>>>> Blacklist
 dashboard_protocol="http"
 dashboard_server=$(uci -q get wifimedia.@sync[0].domain)
 dashboard_url="checkin"
@@ -60,6 +64,7 @@ url_r="${dashboard_protocol}://${dashboard_server}/${dashboard_url}?${request_da
 url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
+<<<<<<< HEAD
 #if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
 <<<<<<< HEAD
@@ -117,6 +122,25 @@ fi
 >>>>>>> wr841v13_ext
 =======
 >>>>>>> master
+=======
+if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+	#Upgrade firmware
+	echo "upgrade"
+	/sbin/wifimedia/upgrade.sh
+fi
+if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
+	echo "facetory..."
+	/sbin/wifimedia/restore_defaults.sh
+fi
+if [ "$(cat "$action_data" | grep 'password')" ] ;then
+	echo "password default"
+	/sbin/wifimedia/passwd_default.sh
+fi
+if [ "$(cat "$action_data" | grep 'switchoff')" ] ;then
+	echo "switch off"
+	/sbin/wifimedia/switch_off.sh
+fi	
+>>>>>>> Blacklist
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file
@@ -126,15 +150,21 @@ else
 	echo ${url}
 	
 fi
+<<<<<<< HEAD
 =======
 url="http://firmware.wifimedia.com.vn/test"
 >>>>>>> origin/wr84xx
+=======
+>>>>>>> Blacklist
 
 echo "----------------------------------------------------------------"
 echo "Sending data:"
 
+<<<<<<< HEAD
 echo $url_r
 wget -q "${url_r}" -O $response_file
+=======
+>>>>>>> Blacklist
 #curl "${url}" > $response_file
 curl_result=$?
 
@@ -188,6 +218,7 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 		echo "*/$two * * * * /sbin/wifimedia/updates.sh" >$sync_time
 		crontab $sync_time -u live
 		
+<<<<<<< HEAD
 	#Network wan
 	elif [ "$one" = "network.wan.ipaddr" ]; then
 		uci set network.wan.ipaddr="$two"
@@ -209,6 +240,47 @@ cat $response_file | sed 's/=/ /g'| while read line ; do
 		uci set network.lan.proto="$two"
 	elif [ "$one" = "network.lan.type" ]; then
 		uci set network.lan.type="$two"
+=======
+		#Change hotname
+		if [ "$one" = "system.hostname.name" ]; then
+			uci set system.@system[0].hostname="$two"
+		#Restart router	
+		elif [ "$one" = "system.reboot" ]; then
+			echo $two > /tmp/reboot_flag
+		#Password
+		elif [ "$one" = "system.ssh.password" ]; then
+			two=$(echo $two | sed 's/*/ /g')
+			echo -e "$two\n$two" | passwd root		
+		#Time Sync	
+		elif [ "$one" = "servers.ntp.server" ]; then
+			uci set system.ntp.server="$two"
+		elif [ "$one" = "servers.ntp.timezone" ]; then
+			uci set system.@system[0].timezone="$two"
+		elif [ "$one" = "servers.dns.domain" ]; then
+			uci set dhcp.@dnsmasq[0].domain="$two"
+			
+		#time update
+		elif [ "$one" = "wifimedia.sync.time" ]; then
+	
+			sync_time="/tmp/checkin/sync_time.txt"
+			echo "*/$two * * * * /sbin/wifimedia/updates.sh" >$sync_time
+			crontab $sync_time -u live
+			
+		#Network wan
+		elif [ "$one" = "network.wan.ipaddr" ]; then
+			uci set network.wan.ipaddr="$two"
+		elif [ "$one" = "network.wan.netmask" ]; then
+			uci set network.wan.netmask="$two"
+			
+		elif [ "$one" = "network.wan.proto" ]; then
+			uci set network.wan.proto="$two"
+		elif [ "$one" = "network.wan.ifname" ]; then
+			uci set network.wan.ifname="$two"
+		elif [ "$one" = "network.wan.type" ]; then
+			uci set network.wan.type="$two"
+			
+		#Network LAN
+>>>>>>> Blacklist
 
 	#DHCP
 	elif [ "$one" = "dhcp.lan.interface" ]; then
@@ -366,10 +438,57 @@ uci commit
 /bin/ubus call network reload >/dev/null 2>/dev/null
 /etc/init.d/system reload
 
+<<<<<<< HEAD
 if [ $(cat /tmp/lanifbr_flag) -eq 2 ]; then
 	echo "moving interface: $(uci get network.lan.ifname) to the WAN"
 	brctl delif br-lan $(uci -q get network.lan.ifname) && brctl addif br-wan $(uci -q get network.lan.ifname)	
 fi
+=======
+		#AP 802.11i Preauth RSN
+		elif [ "$one" = "wireless.ssid1.rsn_preauth" ]; then	
+			uci set wireless.@wifi-iface[0].rsn_preauth="$two"
+		elif [ "$one" = "wireless.ssid2.rsn_preauth" ]; then
+			uci set wireless.@wifi-iface[1].rsn_preauth="$two"
+			
+		#Scan Noise
+		elif [ "$one" = "wireless.noise.scan" ]; then
+			if [ "$two" == "1" ]; then
+				echo "1" > $noise_data
+			else
+				echo "0" > $noise_data
+			fi	
+			
+		##nodogslplash
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_apkey" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_apkey="$two"
+		#	
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_domain" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_domain="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsurl" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsurl="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.nds_wg" ]; then
+		#	uci set wifimedia.@nodogsplash[0].nds_wg="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsclient" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsclient="$two"
+		#
+		#elif [ "$one" = "wifimedia.nodogsplash.ndsidletimeout" ]; then
+		#	uci set wifimedia.@nodogsplash[0].ndsidletimeout="$two"
+		#	
+		#elif [ "$one" = "wifimedia.nodogsplash.enabled" ]; then
+		#	if [ "$two" == "1" ]; then
+		#		echo "1" > /tmp/nodogsplash_flag
+		#	else
+		#		echo "2" > /tmp/nodogsplash_flag
+		#	fi	
+			
+		fi
+	done
+	# Save all of that
+	uci commit
+>>>>>>> Blacklist
 
 if [ "$(brctl show | grep br-wan | awk '{print $3}')" = "no" ]; then
 	echo "stp is is disabled on the WAN, enable stp"

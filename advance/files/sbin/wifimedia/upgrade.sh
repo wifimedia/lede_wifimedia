@@ -12,10 +12,14 @@ echo "" > $version
 echo "Waiting a bit..."
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 board_name=$(cat /tmp/sysinfo/board_name)
+<<<<<<< HEAD
 #tplink840nv4
 #device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
 #tplink940/941/901..
 device=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
+=======
+device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
+>>>>>>> Blacklist
 # Defines the URL to check the firmware at
 
 url="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
@@ -32,7 +36,11 @@ if [ "${curl_result}" -eq 0 ]; then
 			if [ "$(uci get wifimedia.@sync[0].version)" != "$(echo $line | awk '{print $1}')" ]; then
 				# Make sure no old firmware exists
 				#if [ -e "/tmp/firmware.bin" ]; then rm "/tmp/firmware.bin"; fi
+<<<<<<< HEAD
 				#echo "Checking for upgrade binary"
+=======
+				echo "Checking for upgrade binary"
+>>>>>>> Blacklist
 				if [ "$(echo $line | grep $device)" ] ;then
 					#echo "Downloading upgrade binary: $(grep $(cat /tmp/sysinfo/board_name)'-squashfs-sysupgrade' /tmp/upgrade/md5sums | awk '{ print $2 }' | sed 's/*//')"
 					wget -q "${url}" -O /tmp/firmware.bin
@@ -64,8 +72,13 @@ if [ "${curl_result}" -eq 0 ]; then
 				#else
 				#	echo "There is no upgrade binary for this device ($(cat /tmp/sysinfo/model)/$(cat /tmp/sysinfo/board_name)), exiting..."
 				fi
+<<<<<<< HEAD
 			#else
 			#	echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
+=======
+			else
+				echo "Update Version: v$(echo $line | awk '{print $1}') is the latest firmware version available."
+>>>>>>> Blacklist
 			fi
 		done	
 	#else

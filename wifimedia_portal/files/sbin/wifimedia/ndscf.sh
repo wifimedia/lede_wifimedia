@@ -34,7 +34,11 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
+<<<<<<< HEAD
       <form id="info" method="POST" action="//'$domain'/back_end/'$apkey'/1">
+=======
+      <form id="info" method="POST" action="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
           <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="$gatewaymac">
           <input type="hidden" name="client_mac" value="$clientmac">
@@ -55,7 +59,11 @@ echo '<!doctype html>
     <head>
         <meta charset="utf-8">
         <title>Whoops...</title>
+<<<<<<< HEAD
         <meta http-equiv="refresh" content="0; url="//'$domain'/back_end/'$apkey'/1">
+=======
+        <meta http-equiv="refresh" content="0; url="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
         <style>
             html {
                 background: #F7F7F7;
@@ -90,6 +98,7 @@ FirewallRuleSet preauthenticated-users {
     # router chỉnh lại
 	FirewallRule allow to '$ip_gateway'
 	FirewallRule allow to 103.237.145.75
+	FirewallRule allow to 172.16.99.1
     # include /tmp/preauthenticated_rules
 }
 '$redir'
