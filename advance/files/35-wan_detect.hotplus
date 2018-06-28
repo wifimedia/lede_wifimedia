@@ -38,7 +38,11 @@ mac_wlan=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g')
 
 echo "127.0.0.1 localhost" > /etc/hosts
 echo "${ip_dhcp} $mac_wlan.wifimedia.vn" >> /etc/hosts
+<<<<<<< HEAD
 echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
 
+=======
+echo "$ip_gateway local.wifimedia.vn" >> /etc/hosts
+>>>>>>> origin/wifimedia_dev
 /sbin/wifimedia/controller.sh license_srv
 #/etc/init.d/network restart

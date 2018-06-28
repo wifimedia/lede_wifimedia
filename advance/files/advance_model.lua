@@ -13,9 +13,14 @@ function m.on_after_commit(self)
 	if license then
 		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
 	end
+<<<<<<< HEAD
 	--luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
 	luci.sys.call("env -i /sbin/wifimedia/controller.sh groups_cfg >/dev/null")
 	--luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
+=======
+	luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
+	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
+>>>>>>> origin/wifimedia_dev
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
