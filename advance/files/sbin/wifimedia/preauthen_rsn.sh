@@ -11,7 +11,11 @@ echo "" > $hardware
 
 echo "Waiting a bit...802.11i"
 sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
+<<<<<<< HEAD
 device=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'|sed 's/:/-/g')
+=======
+device=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z)
+>>>>>>> master
 # Defines the URL to check the firmware at
 url="http://firmware.wifimedia.com.vn/hardware"
 #url_v="http://firmware.wifimedia.com.vn/tplink/version"

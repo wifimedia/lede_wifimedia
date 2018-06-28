@@ -4,6 +4,7 @@
 #START=20
 #STOP=15
 
+<<<<<<< HEAD
 #boot(){
 #lcs=/etc/opt/wfm_lcs
 #if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
@@ -15,3 +16,16 @@
 #/etc/init.d/license disable
 #rm /etc/init.d/license
 #}
+=======
+boot(){
+lcs=/etc/opt/wfm_lcs
+if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	uci set wireless.radio0.disabled="0"
+	uci commit wireless
+	wifi
+	rm $lcs
+fi
+/etc/init.d/license disable
+rm /etc/init.d/license
+}
+>>>>>>> master

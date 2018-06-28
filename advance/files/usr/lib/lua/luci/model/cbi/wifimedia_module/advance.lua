@@ -43,6 +43,7 @@ ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
 ctrgsn:depends({ctrs_en="1"})
 
+<<<<<<< HEAD
 ctrgsn = s:taboption("ctrgroups",ListValue, "encrypt", "Wireless Security")
 ctrgsn:value("","No Encryption")
 ctrgsn:value("encryption","WPA-PSK/WPA2-PSK")
@@ -60,6 +61,18 @@ ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({encrypt="encryption"})
 
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
+=======
+grwpa = s:taboption("ctrgroups",Value, "password", "Password")
+grwpa.datatype = "wpakey"
+grwpa:depends({ctrs_en="1"})
+
+ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
+ctrgsft:value("rsn_preauth","Fast roaming")
+ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
+ctrgsft:depends({ctrs_en="1"})
+
+nasid = s:taboption("ctrgroups",Value, "nasid", "LocalID")
+>>>>>>> master
 nasid:depends({ft="ieee80211r"})
 
 --macs.datatype = "macaddr"
@@ -71,10 +84,13 @@ ctrgtx:value("medium","Medium")
 ctrgtx:value("high","High")
 ctrgtx:depends({ctrs_en="1"})
 
+<<<<<<< HEAD
 hidessid = s:taboption("ctrgroups",Flag, "hidessid","Hide SSID")
 hidessid.rmempty = false
 hidessid:depends({ctrs_en="1"})
  
+=======
+>>>>>>> master
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
@@ -85,10 +101,13 @@ device.rmempty = false
 device = s:taboption("device",Value, "macs", "Devices")
 device:depends({gpd_en="1"})
 
+<<<<<<< HEAD
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
 bridge_mode.rmempty = false
 
+=======
+>>>>>>> master
 --[[Auto Reboot ]]--
 s:tab("autoreboot",  translate("Reboot Groups"))
 Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
@@ -109,6 +128,7 @@ while (minute < 60) do
 end
 mi:depends({Everyday="1"})
 
+<<<<<<< HEAD
 s:tab("rssi",  translate("RSSI"))
 
 rssi = s:taboption("rssi", Flag, "enable","Enable")
@@ -136,5 +156,10 @@ admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
 admingr = s:taboption("administrator",Value, "passwords", "Password")
 admingr.rmempty = true
 admingr.password = true
+=======
+s:tab("administrator",  translate("Administrators"))
+admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
+admingr = s:taboption("administrator",Value, "passwords", "Password")
+>>>>>>> master
 admingr:depends({admins="1"})
 return m

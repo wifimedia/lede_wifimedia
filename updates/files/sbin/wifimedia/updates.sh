@@ -87,11 +87,17 @@ url="${dashboard_protocol}://${dashboard_server}/${dashboard_url}/${request_data
 url_action="http://firmware.wifimedia.com.vn/data"
 
 wget -q "${url_action}" -O $action_data
-if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
+#if [ "$(cat "$action_data" | grep 'upgrade')" ] ;then
 	#Upgrade firmware
+<<<<<<< HEAD
 	echo "upgrade"
 	/sbin/wifimedia/controller_srv.sh upgrade_srv
 fi
+=======
+#	echo "upgrade"
+#	/sbin/wifimedia/upgrade.sh
+#fi
+>>>>>>> master
 if [ "$(cat "$action_data" | grep 'facetory')" ] ;then
 	echo "facetory..."
 	/sbin/wifimedia/controller_srv.sh restore_srv
@@ -133,8 +139,11 @@ if [ "$(cat "$action_data" | grep 'button')" ] ;then
 	echo "delete passwd wifi"
 	/sbin/wifimedia/button_reset.sh
 fi
+<<<<<<< HEAD
 =======
 >>>>>>> wr841v13_ext
+=======
+>>>>>>> master
 if [ "$(cat "$action_data" | grep 'update')" ] ;then
 	echo "updade"
 	wget -q "${url}" -O $response_file

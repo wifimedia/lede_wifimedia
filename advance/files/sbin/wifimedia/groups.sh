@@ -2,6 +2,7 @@
 # Copyright © 2017 Wifimedia.vn.
 # All rights reserved.
 
+<<<<<<< HEAD
 groups_en=`uci -q get wifimedia.@advance[0].ctrs_en` #Enable config
 essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'` #SSID
 mode_=`uci -q get wifimedia.@advance[0].mode`
@@ -45,6 +46,38 @@ touch -c /etc/macaddress
 
 if [ "$gpd_en" == "1" ];then
 	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices
+=======
+groups_en=`uci -q get wifimedia.@advance[0].ctrs_en`
+essid=`uci -q get wifimedia.@advance[0].essid | sed 's/ /_/g'`
+mode_=`uci -q get wifimedia.@advance[0].mode`
+networks_=`uci -q get wifimedia.@advance[0].network`
+cnl=`uci -q get wifimedia.@advance[0].maxassoc`
+passwd=`uci -q get wifimedia.@advance[0].password`
+ft=`uci -q get wifimedia.@advance[0].ft`
+nasid=`uci -q get wifimedia.@advance[0].nasid`
+
+isolation_=`uci -q get wifimedia.@advance[0].isolation`
+txpower_=`uci -q get wifimedia.@advance[0].txpower`
+hour_=`uci -q get wifimedia.@advance[0].hour`
+minute_=`uci -q get wifimedia.@advance[0].minute`
+reboot=`uci -q get wifimedia.@advance[0].Everyday`
+
+gpd_en=`uci -q get wifimedia.@advance[0].gpd_en`
+macs=`uci -q get wifimedia.@advance[0].macs | sed 's/-/:/g' `
+
+wireless_off=`uci -q get wifimedia.@advance[0].wireless_off`
+
+admins_=`uci -q get wifimedia.@advance[0].admins`
+passwd_=`uci -q get wifimedia.@advance[0].password`
+group="/www/luci-static/resources/groups.txt"
+devices="/www/luci-static/resources/devices.txt"
+sha="/www/luci-static/resources/sha256.txt"
+echo "" > $devices
+echo "" > $group
+
+if [ "$gpd_en" == "1" ];then
+	echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
+>>>>>>> master
 fi
 
 if [ "$groups_en" == "1" ];then
@@ -52,6 +85,7 @@ if [ "$groups_en" == "1" ];then
 	echo "MODE: $mode_" >> $group
 	echo "NETWORK: $networks_" >> $group
 	echo "CLN: $cnl" >> $group
+<<<<<<< HEAD
 	echo "HIDE: $hide_ssid" >>$group
 	echo "BRIDGE: $br_network" >>$group
 	if [ $enable_rssi == "1" ];then
@@ -59,10 +93,14 @@ if [ "$groups_en" == "1" ];then
 	else
 		echo "RSSI:" >>$group
 	fi	
+=======
+	echo "PASSWORD: $passwd" >> $group
+>>>>>>> master
 	#echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
 	echo "Isolation: $isolation_" >> $group
 	echo "TxPower: $txpower_" >> $group
 	echo "Wireless_off: $wireless_off" >> $group
+<<<<<<< HEAD
 	if [ $encr == "encryption" ] ; then
 		echo "PASSWORD: $passwd" >> $group
 		echo "FT: $ft" >> $group
@@ -78,6 +116,21 @@ if [ "$groups_en" == "1" ];then
 	if [ $admins_ == "1" ] ; then
 		echo "admin: $passwd_" >> $group
 	fi
+=======
+	echo "FT: $ft" >> $group
+		if [ $ft == "ieee80211r" ] ; then
+			echo "NASID: $nasid" >> $group
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group
+		else 
+			echo "$macs" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices
+		fi
+
+		if [ $admins_ == "1" ] ; then
+			echo "PASSWORD: $passwd_" >> $group
+		fi
+else
+	echo "" > $group
+>>>>>>> master
 fi
 
 if [ "$reboot" == "1" ]; then
@@ -86,6 +139,7 @@ else
 	echo "we will maintain the existing settings."
 fi
 
+<<<<<<< HEAD
 #EXPORT DATA AP MAC
 #cat "$devices" | while read line ; do
 #
@@ -121,3 +175,7 @@ fi
 /sbin/wifimedia/apmanager.sh
 echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
 #echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
+=======
+echo "GRP:  $(sha256sum $group | awk '{print $1}')"  > $sha
+#echo "Device:  $(sha256sum $devices | awk '{print $1}')"  >> $sha
+>>>>>>> master

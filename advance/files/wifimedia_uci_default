@@ -26,11 +26,15 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
+<<<<<<< HEAD:advance/files/wifimedia_uci_default
 <<<<<<< HEAD:advance/files/etc/uci-defaults/wifimedia
 	set wifimedia.@builddate[0].date=30-12-2017
 =======
 	set wifimedia.@builddate[0].date=18-01-2018
 >>>>>>> wr841v13_ext:advance/files/wifimedia_uci_default
+=======
+	set wifimedia.@builddate[0].date=04-11-2017
+>>>>>>> master:advance/files/etc/uci-defaults/wifimedia
 	commit wifimedia
 EOF
 }
@@ -43,7 +47,10 @@ uci set wifimedia.@sync[0].button=2.4
 uci set wifimedia.@sync[0].ftrs=2.3
 uci set wifimedia.@sync[0].passwdwifi=2.2
 uci set wifimedia.@sync[0].passwd=2.1
+<<<<<<< HEAD:advance/files/wifimedia_uci_default
 uci set wifimedia.@advance[0].wireless_cfg=0
+=======
+>>>>>>> master:advance/files/etc/uci-defaults/wifimedia
 uci commit wifimedia
 
 uci batch <<-EOF

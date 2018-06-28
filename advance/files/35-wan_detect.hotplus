@@ -37,6 +37,7 @@ mac_wlan=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g')
 #echo "$ip_gateway local.wifimedia.vn" >> /etc/hosts
 
 echo "127.0.0.1 localhost" > /etc/hosts
+<<<<<<< HEAD:advance/files/35-wan_detect.hotplus
 echo "${ip_dhcp} $mac_wlan.wifimedia.vn" >> /etc/hosts
 echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
 <<<<<<< HEAD:advance/files/etc/hotplug.d/iface/35-wan_detect
@@ -44,4 +45,8 @@ echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
 
 /sbin/wifimedia/controller.sh license_srv
 >>>>>>> wr841v13_ext:advance/files/35-wan_detect.hotplus
+=======
+echo "${ip_dhcp} $mac_wlan.local" >> /etc/hosts
+echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
+>>>>>>> master:advance/files/etc/hotplug.d/iface/35-wan_detect
 #/etc/init.d/network restart
