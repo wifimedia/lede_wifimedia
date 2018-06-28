@@ -22,8 +22,10 @@ uci -q get wifimedia.@hotspot[0] || {
 EOF
 }
 /etc/init.d/update_ip disable
-/etc/init.d/chilli stop
-/etc/init.d/chilli disable
+/etc/init.d/wifi_portal stop
+/etc/init.d/wifi_portal disable
 rm -f /etc/hotplug.d/iface/30-chilli
 echo "" >/etc/config/hs_ips
 echo "" >/etc/config/hs_wgd
+
+cat /sbin/wifimedia/defaults >/etc/chilli/defaults

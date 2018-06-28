@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rnd=`cat /dev/urandom | tr -dc 'A-Z' | head -c1`
-
+model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 uci -q get system.@reset_all[0] || {
 	uci batch <<-EOF
 	add system reset_all
@@ -16,7 +16,7 @@ uci -q get wifimedia.@sync[0] || {
 	add wifimedia sync
 	set wifimedia.@sync[0]=sync
 	set wifimedia.@sync[0].version=2.1.0
-	set wifimedia.@sync[0].domain="crm.wifimedia.vn"
+	set wifimedia.@sync[0].domain="crm.wifimedia.com.vn"
 	commit wifimedia
 EOF
 }
@@ -26,6 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
+<<<<<<< HEAD
 <<<<<<< HEAD:advance/files/wifimedia_uci_default
 <<<<<<< HEAD:advance/files/etc/uci-defaults/wifimedia
 	set wifimedia.@builddate[0].date=30-12-2017
@@ -35,6 +36,9 @@ uci -q get wifimedia.@builddate[0] || {
 =======
 	set wifimedia.@builddate[0].date=04-11-2017
 >>>>>>> master:advance/files/etc/uci-defaults/wifimedia
+=======
+	set wifimedia.@builddate[0].date=15/04/2018
+>>>>>>> origin/wr84xx
 	commit wifimedia
 EOF
 }
@@ -55,11 +59,12 @@ uci commit wifimedia
 
 uci batch <<-EOF
 	set system.@system[0]=system
-	set system.@system[0].hostname="WIFIMEDIA.VN"
+	set system.@system[0].hostname="wifimedia.com.vn"
 	set system.@system[0].zonename='Asia/Ho Chi Minh'
 	set system.@system[0].timezone=ICT-7
 EOF
 
+<<<<<<< HEAD
 uci batch <<-EOF
 	set network.lan.ipaddr=192.168.5.1
 	set network.wan.type=bridge
@@ -83,6 +88,70 @@ uci batch <<-EOF
 	set wireless.@wifi-iface[0].disabled=0
 	commit wireless
 EOF
+=======
+#if [ "$model_hardware" == "TL-WR940N_v4" ] || [ "$model_hardware" == "TL-WR940N_v6" ] || [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
+	uci batch <<-EOF
+		set network.lan.ipaddr=172.16.99.1
+		set network.wan.type=bridge
+		delete network.globals
+		set dhcp.lan.force=1
+		set dhcp.lan.netmask=255.255.255.0
+		add_list dhcp.lan.dhcp_option=6,8.8.8.8,8.8.4.4
+		commit
+	EOF
+
+	uci batch <<-EOF
+		set wireless.@wifi-iface[0].maxassoc=30
+		set wireless.@wifi-iface[0].ssid=OPENWIFI
+		#set wireless.@wifi-iface[0].ssid=PDA_$rnd
+		#set wireless.@wifi-iface[0].encryption="psk2"
+		#set wireless.@wifi-iface[0].key="123456A@$rnd"
+		set wireless.@wifi-iface[0].disabled=0
+		commit wireless
+	EOF
+
+#fi
+
+if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_v13" ] || [ "$model_hardware" == "TL-WR840N_v5" ];then
+	uci batch <<-EOF
+		#set network.lan.ipaddr=192.168.5.1
+		#set network.lan.ipaddr=172.16.99.1
+		set network.wan.type=bridge
+		delete network.globals
+		set dhcp.lan.force=1
+		set dhcp.lan.netmask=255.255.255.0
+		add_list dhcp.lan.dhcp_option=6,8.8.8.8,8.8.4.4
+		commit
+	EOF
+
+	uci batch <<-EOF
+		set wireless.@wifi-iface[0].maxassoc=30
+		#set wireless.@wifi-iface[0].ssid=OPENWIFI
+		set wireless.@wifi-iface[0].ssid=PDA_$rnd
+		set wireless.@wifi-iface[0].encryption="psk2"
+		set wireless.@wifi-iface[0].key="123456A@$rnd"
+		set wireless.@wifi-iface[0].disabled=0
+		commit wireless
+	EOF
+	cat /root/advance_model.lua >/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
+	cat /root/gw_index.htm >/usr/lib/lua/luci/view/admin_status/index.htm
+	cat /root/wifi_overview.htm >/usr/lib/lua/luci/view/admin_network/wifi_overview.htm
+fi
+
+if [ "$model_hardware" == "TL-WR840N_v4" ];then
+	echo "TL-WR840N v4" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR841N_v13" ];then
+	echo "TL-WR841N v13" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v4" ];then
+	echo "TL-WR940N v5" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR940N_v6" ];then
+	echo "TL-WR940N v6" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
+	echo "TL-WR940N v3" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR840N_v5" ];then
+	echo "TL-WR840N v5" >/etc/hardware	
+fi
+>>>>>>> origin/wr84xx
 
 #Add vitual SSID
 #For abng
@@ -92,7 +161,11 @@ EOF
 #        set wireless.@wifi-iface[1].device=radio0
 #        set wireless.@wifi-iface[1].mode=ap
 #        set wireless.@wifi-iface[1].network=lan
+<<<<<<< HEAD
 #        set wireless.@wifi-iface[1].ssid=Guest
+=======
+#        set wireless.@wifi-iface[1].ssid=OPENWIFIx2
+>>>>>>> origin/wr84xx
 #		set wireless.@wifi-iface[1].disabled=1
 #        commit wireless
 #EOF
@@ -141,11 +214,11 @@ echo -e "09465670089\n09465670089" | passwd wifimedia
 #Change password for root
 word=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  10,11,13,14,16,17 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
 pwd=$(echo -n $word | md5sum | awk '{print $1}')
-echo -e "09465670089\n09465670089" | passwd root
+echo -e "$pwd\n$pwd" | passwd root
 #End
 
 #Info
-CODENAME="WIFIMEDIA"
+CODENAME="wifimedia"
 if [ -f "/etc/codename" ]; then
 	source /etc/codename
 fi
@@ -155,9 +228,14 @@ uci batch <<-EOF
 	set wifimedia.Version.ver=$CODENAME
 	commit wifimedia
 EOF
+
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
+<<<<<<< HEAD
 DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" GW"
+=======
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)"GWPortal"
+>>>>>>> origin/wr84xx
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release
@@ -173,12 +251,15 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 /etc/init.d/led reload
 
 ######Cron job
+<<<<<<< HEAD
 <<<<<<< HEAD:advance/files/etc/uci-defaults/wifimedia
 echo "* * * * * /sbin/wifimedia/clear.sh" >>/etc/crontabs/root
 echo "* * * * * /sbin/wifimedia/gpconfig.sh" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/upgrade.sh" >>/etc/crontabs/root
 echo "30 * * * * /sbin/wifimedia/apmanager.sh" >>/etc/crontabs/root
 =======
+=======
+>>>>>>> origin/wr84xx
 echo "* * * * * /sbin/wifimedia/controller.sh checking" >>/etc/crontabs/root
 echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
@@ -232,6 +313,14 @@ mv /etc/banner_ /etc/banner
 <<<<<<< HEAD:advance/files/etc/uci-defaults/wifimedia
 =======
 /etc/init.d/watchcat start #start watchcat
+<<<<<<< HEAD
 >>>>>>> wr841v13_ext:advance/files/wifimedia_uci_default
+=======
+rm -f /root/advance_model.lua
+rm -f /root/gw_index.htm
+rm -f /root/wifi_overview.htm
+chmod +x /sbin/wifimedia/*
+wifi up
+>>>>>>> origin/wr84xx
 #rm -f /etc/uci-defaults/wifimedia
 #sleep 5 && reboot

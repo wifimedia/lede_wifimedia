@@ -105,7 +105,11 @@ checking (){
 	elif [ "$model" == "TL-WR841N_v13" ];then
 		wr841v13
 		eap_manager
+<<<<<<< HEAD
 	elif [ "$model" == "TL-WR940N_v5" ];then
+=======
+	elif [ "$model" == "TL-WR940N_v4" ];then
+>>>>>>> origin/wr84xx
 		wr940v5
 	elif [ "$model" == "TL-WR940N_v6" ];then
 		wr940v6
@@ -527,11 +531,23 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		touch $status
 		rm $lcs
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
+		if [ -f /etc/rc.d/S80privoxy ]; then
+			/etc/init.d/privoxy  stop
+			/etc/init.d/privoxy disable
+			chmod +x /etc/init.d/privoxy			
+		fi
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
 		uci commit wireless
 		wifi down
+		if [ -f /etc/rc.d/S80privoxy ]; then
+			/etc/init.d/privoxy  stop
+			/etc/init.d/privoxy disable
+			chmod -x /etc/init.d/privoxy
+			/etc/init.d/firewall restart
+			
+		fi
 		rm $status
 	fi
 fi
