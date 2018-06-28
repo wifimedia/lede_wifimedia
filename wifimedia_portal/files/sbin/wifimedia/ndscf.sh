@@ -4,7 +4,8 @@ fbs_gw1=`uci -q get wifimedia.@nodogsplash[0].ndsname`
 fbs_gw=${fbs_gw1:-WIFIMEDIA.VN}
 
 fbs_url1=`uci -q get wifimedia.@nodogsplash[0].ndsurl`
-fbs_url=${fbs_url1:-http://google.com.vn}
+fbs_url=${fbs_url1:-}
+#fbs_url=${fbs_url1:-http://google.com.vn}
 
 MaxClients1=`uci -q get wifimedia.@nodogsplash[0].ndsclient`
 MaxClients=${MaxClients1:-120}
@@ -16,12 +17,15 @@ domain=`uci -q get wifimedia.@nodogsplash[0].nds_domain`
 domain=${domain:-crm.wifimedia.vn}
 
 key=`uci -q get wifimedia.@nodogsplash[0].nds_apkey`
-captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
+#captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
+captive_id=`cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g' | tr a-z A-Z`
 apkey=${key:-$captive_id}
 wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
 
 ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
-
+if [ "$fbs_url" != "" ];then
+	redir="RedirectURL "$fbs_url
+fi
 #write file splash
 echo '<!doctype html>
 <html lang="en">
@@ -88,11 +92,7 @@ FirewallRuleSet preauthenticated-users {
 	FirewallRule allow to 103.237.145.75
     # include /tmp/preauthenticated_rules
 }
-
-GatewayName '$fbs_gw'
-RedirectURL '$fbs_url'
-#RedirectURL http://crm.wifimedia.vn
-
+'$redir'
 BinVoucher "/sbin/wifimedia/nodogsplash_preauth.sh"
 EnablePreAuth yes
 

@@ -12,6 +12,7 @@ chmod a+x /usr/bin/adnetwork_local.sh
 
 cat /etc/cfg/privoxy_80.init >/etc/init.d/privoxy
 cat /etc/cfg/privoxy.config >/etc/config/privoxy
+mv /sbin/wifimedia/MessengerIcon.png /www/luci-static/resources
 #cat /etc/cfg/user.action >/etc/privoxy/user.action
 #cat /etc/cfg/user.filter >/etc/privoxy/user.filter
 
@@ -26,8 +27,6 @@ EOF
 rm -rf /etc/privoxy/
 mv /etc/priv /etc/privoxy
 rm -rf /etc/cfg
-rm -f /etc/privoxy/default.action
-rm -f /etc/privoxy/default.filter
 
 echo '#!/bin/sh
 PIDFILE=/var/run/privoxy.pid
@@ -45,8 +44,8 @@ else
 fi
 ' >/etc/priv_ads.sh
 chmod a+x /etc/priv_ads.sh
-
-sleep 3 
+/etc/init.d/firewall restart
 rm -f /etc/privoxy/default.action
 rm -f /etc/privoxy/default.filter
+rm -f /etc/privoxy/regression-tests.action
 #sleep 3 && /etc/init.d/privoxy restart

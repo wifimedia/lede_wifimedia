@@ -10,48 +10,87 @@ local uci = require "luci.model.uci".cursor()
 
 m = Map("wifimedia",translate(""))
 function m.on_after_commit(self)
-		luci.util.exec("/usr/bin/adnetwork_local.sh && sleep 5")
+		luci.util.exec("/usr/bin/adnetwork_local.sh start")
 end
 s = m:section(TypedSection, "adnetwork","")
 s.anonymous = true
 s.addremove = false
 
-s:tab("adnetwork_cfg","Cloud")
-s:tab("adnetwork_fb","Facebook")
-s:tab("adnetwork_adv","Advanced")
+--s:tab("adnetwork_cfg","Cloud")
+--s:tab("chatbot","Chatbot")
+--s:tab("fb","Facebook")
+--s:tab("youtube","Youtube")
+s:tab("image","Image")
+s:tab("adv","Advanced")
 
-s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
+--s:taboption("adnetwork_cfg", Value, "domain","Domain").placeholder = "exp: .vnexpress.net, ..."
+--s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
+--s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
+--s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
+--s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
 
-s:taboption("adnetwork_cfg", Value,"gw","APkey").placeholder = "APKEY"
-
-s:taboption("adnetwork_adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-s:taboption("adnetwork_adv", Value,"img","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
-url_web=s:taboption("adnetwork_adv", Value,"link","Website")
+s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title1","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link1","Website")
 url_web.placeholder = "http://ads.wifimedia.vn/"
-s:taboption("adnetwork_adv", Value,"title","Title").placeholder = "Support langue english"
 
-ads_st = s:taboption("adnetwork_adv", Flag,"ads_status","Status")
-rd = s:taboption("adnetwork_adv", Flag,"random_status","Random Option")
+s:taboption("image", Value,"img2","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title2","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link2","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img3","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title3","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link3","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title4","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link4","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title5","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link5","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+--ads_image = s:taboption("image", Flag,"ads_image_status","Status")
+rd_image = s:taboption("image", Flag,"random_image_status","Random Option")
+--rd_image:depends({ads_image_status="1"})
+--st_img = s:taboption("image", ListValue,"img_status","Option")
+--st_img:depends({ads_image_status="1"})
+
+--local data_img = {"Imge","Imge1","Imge2", "Imge3","Imge4" }
+--for _, img_status in ipairs(data_img) do 
+--	st:value(img_status, img_status .. " ")
+--end
+
+s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
+
+ads_st = s:taboption("adv", Flag,"ads_status","Status")
+rd = s:taboption("adv", Flag,"random_status","Random Option")
 rd:depends({ads_status="1"})
-st = s:taboption("adnetwork_adv", ListValue,"status","Option")
+st = s:taboption("adv", ListValue,"status","Option")
 st:depends({ads_status="1"})
 
-local data = {"Facebook_Page","Facebook_videos", "Facebook_Like_Share","Image" }
+--local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Image1","Image2", "Image3","Image4","Image5" }
+local data = {"Image1","Image2", "Image3","Image4","Image5" }
 for _, status in ipairs(data) do 
 	st:value(status, status .. " ")
 end
 
-sec = s:taboption("adnetwork_adv", ListValue, "second", "Second")
+sec = s:taboption("adv", ListValue, "second", "Second")
+sec.default = "20"
 sec:depends({ads_status="1"})
-local second = 6
-while (second < 121) do
+local second = 9
+while (second < 301) do
 	sec:value(second, second .. " ")
 	second = second + 1
 end
 
-s:taboption("adnetwork_fb", Value,"ads_fb_page","Facebook Page").placeholder = "Facebook Page Url"
-s:taboption("adnetwork_fb", Value,"ads_fb_video","Facebook videos and Facebook live videos ").placeholder = "Facebook videos Url"
-s:taboption("adnetwork_fb", Value,"ads_fb_like","Facebook Like & Share").placeholder = "Facebook Like & Share Url"
+--s:taboption("fb", Value,"ads_fb_page","Facebook Page").placeholder = "Facebook Page Url"
+--s:taboption("fb", Value,"ads_fb_video","Facebook videos and Facebook live videos ").placeholder = "Facebook videos Url"
+--s:taboption("fb", Value,"ads_fb_like","Facebook Like & Share").placeholder = "Facebook Like & Share Url"
 
 local pid = luci.util.exec("pidof privoxy")
 local message = luci.http.formvalue("message")

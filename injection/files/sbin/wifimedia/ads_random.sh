@@ -1,24 +1,33 @@
 #!/bin/sh
 # Copyright © 2013-2017 Wifimedia.
 
-#. /sbin/wifimedia/ads_settings.sh
-user_acl_filter=/etc/privoxy/useracl.filter
-ads_img=/tmp/img.txt
-ads_fb_page=/tmp/fbpage.txt
-ads_fb_video=/tmp/fbvideo.txt
-ads_fb_like=/tmp/fblike.txt
+. /sbin/wifimedia/ads_filter.sh
+#if [ $adsrandom == "1" ];then
+##write to user.filter
+#	if [ $ads_random == "6" ];then
+#		img
+#	elif [ $ads_random == "7" ];then
+#		fbpage
+#	elif [ $ads_random == "8" ];then
+#		fbvideo
+#	elif [ $ads_random == "9" ];then
+#		fbls
+#	elif [ $ads_random == "5" ];then
+#		chatbot	
+#	elif [ $ads_random == "3" ];then
+#		youtube			
+#	fi
+if  [ $adsimgrandom == "1" ];then	
 
-ads_random=`head /dev/urandom | tr -dc "6789" | head -c1`
-adsrandom=`uci -q get wifimedia.@adnetwork[0].random_status`
-if [ $adsrandom == "1" ];then
-#write to user.filter
-	if [ $ads_random == "6" ];then
-		cat $ads_img >$user_acl_filter
-	elif [ $ads_random == "7" ];then
-		cat $ads_fb_page >$user_acl_filter
-	elif [ $ads_random == "8" ];then
-		cat $ads_fb_video >$user_acl_filter
-	elif [ $ads_random == "9" ];then
-		cat $ads_fb_like >$user_acl_filter
+	if [ $ads_img_random == "1" ];then
+		img1
+	elif [ $ads_img_random == "2" ];then
+		img2
+	elif [ $ads_img_random == "3" ];then
+		img3
+	elif [ $ads_img_random == "4" ];then
+		img4
+	elif [ $ads_img_random == "5" ];then
+		img5		
 	fi
 fi

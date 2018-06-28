@@ -35,6 +35,7 @@ define Build/Compile
 endef
 
 define Package/advance/install
+	$(INSTALL_DIR) $(1)/root
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
@@ -60,6 +61,9 @@ define Package/advance/install
 	$(INSTALL_DATA) ./files/codename $(1)/etc/codename
 	$(INSTALL_DATA) ./files/wifimedia.config $(1)/etc/config/wifimedia
 	$(INSTALL_DATA) ./files/button.config $(1)/etc/config/button
+	$(INSTALL_DATA) ./files/root/advance_model.lua $(1)/root/advance_model.lua
+	$(INSTALL_DATA) ./files/root/gw_index.htm $(1)/root/gw_index.htm
+	$(INSTALL_DATA) ./files/root/wifi_overview.htm $(1)/root/wifi_overview.htm
 	
 	$(INSTALL_DATA) ./files/advance_controller.lua $(1)/usr/lib/lua/luci/controller/wifimedia/advance.lua
 	$(INSTALL_DATA) ./files/advance_model.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/advance.lua
@@ -67,9 +71,23 @@ define Package/advance/install
 	
 endef
 
+<<<<<<< HEAD
+define Package/advance/postinst
+#!/bin/sh
+# check if we are on real system
+if [ -z "${IPKG_INSTROOT}" ]; then
+	chmod a+x /sbin/wifimedia/*.sh
+	chmod a+x /etc/init.d/wifimedia_check
+	chmod a+x /etc/uci-defaults/wifimedia
+	chmod a+x /etc/hotplug.d/button/00-button
+	chmod a+x /etc/btnaction
+fi
+exit 0
+=======
 define Package/advance/conffiles
 /etc/config/button
 /etc/config/wifimedia
+>>>>>>> wr841v13_ext
 endef
 
 $(eval $(call BuildPackage,advance))

@@ -5,9 +5,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 #
 
-#load function
-
-
 mode="$1"
 
 # Fix potential typo in mode (backward compatibility).
@@ -54,7 +51,11 @@ watchcat_ping() {
 		time_now="$(cat /proc/uptime)"
 		time_now="${time_now%%.*}"
 		time_lastcheck="$time_now"
-
+		##Check process privoxy
+		PID_ads=`pidof privoxy`
+		if [ -f /etc/rc.d/S80privoxy ] && [ -z $PID_ads ] ; then
+			/etc/priv_ads.sh
+		fi
 		for host in "$pinghosts"
 		do
 			if ping -c 1 "$host" &> /dev/null
@@ -65,7 +66,7 @@ watchcat_ping() {
 				logger -p daemon.info -t "watchcat[$$]" "no internet connectivity for $time_diff seconds. Reseting when reaching $period"
 			fi
 		done
-		/sbin/wifimedia/controller.sh rssi
+		/sbin/wifimedia/rssi.sh
 		#time_diff="$((time_now-time_lastcheck_withinternet))"
 		#[ "$time_diff" -ge "$period" ] && shutdown_now "$forcedelay"
 
