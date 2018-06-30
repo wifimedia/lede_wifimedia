@@ -78,10 +78,10 @@ wr940v6() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
 		echo timer > trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
 		echo 0 > brightness
 		echo none > trigger
 	fi
