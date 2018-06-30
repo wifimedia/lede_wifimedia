@@ -82,7 +82,7 @@ wr940v6() { #checking internet
 		echo timer > trigger
 	else
 		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
-		echo 0 > brightness
+		echo 1 > brightness
 		echo none > trigger
 	fi
 	
