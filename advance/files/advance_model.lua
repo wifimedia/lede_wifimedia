@@ -67,10 +67,14 @@ ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({encrypt="encryption"})
 
+pmk = s:taboption("ctrgroups",Flag,"ft_psk_generate_local","Generate PMK Locally")
+pmk:depends({ft="ieee80211r"})
+pmk.rmempty = false
+
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
 device = s:taboption("ctrgroups",Value, "macs", "APID")
-device:depends({ft="ieee80211r"})
+device:depends({ft="ieee80211r", ft_psk_generate_local=""})
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
