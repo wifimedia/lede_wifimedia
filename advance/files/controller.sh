@@ -26,6 +26,19 @@ wr840v4() { #checking internet
 	fi
 }
 
+wr841v14() { #checking internet
+
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		echo none > trigger
+	fi
+}
+
 wr840v13() { #checking internet
 
 	#check gateway
@@ -152,6 +165,8 @@ checking (){
 		wr940v6
 	elif [ "$eap_name" == "TL-WA901ND" ] ;then
 		wa901nd
+	elif [ "$model" == "TL-WR841N_v14" ] ;then	
+		wr841v14
 	fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
