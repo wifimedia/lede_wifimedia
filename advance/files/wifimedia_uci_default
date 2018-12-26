@@ -112,9 +112,9 @@ elif [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
 	echo "TL-WR940N v3" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR840N_v5" ];then
 	echo "TL-WR840N v5" >/etc/hardware
+#elif [ "$model_hardware" == "TL-WR841N_v14" ];then
+#	echo "TL-WR841N v14" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR841N_v14" ];then
-	echo "TL-WR841N v14" >/etc/hardware
-elif [ "$model_hardware" == "TL-WR840N_v6" ];then
 	echo "TL-WR840N v6" >/etc/hardware
 fi
 
