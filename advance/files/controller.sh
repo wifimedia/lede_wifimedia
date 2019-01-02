@@ -624,27 +624,68 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		touch $status
 		rm $lcs
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
-		if [ -f /etc/rc.d/S80privoxy ]; then
-			/etc/init.d/privoxy  stop
-			/etc/init.d/privoxy disable
-			chmod +x /etc/init.d/privoxy			
-		fi
+		#if [ -f /etc/rc.d/S80privoxy ]; then
+		#	/etc/init.d/privoxy  stop
+		#	/etc/init.d/privoxy disable
+		#	chmod +x /etc/init.d/privoxy			
+		#fi
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
 		uci commit wireless
 		wifi down
-		if [ -f /etc/rc.d/S80privoxy ]; then
-			/etc/init.d/privoxy  stop
-			/etc/init.d/privoxy disable
-			chmod -x /etc/init.d/privoxy
-			/etc/init.d/firewall restart
-			
-		fi
+		#if [ -f /etc/rc.d/S80privoxy ]; then
+		#	/etc/init.d/privoxy  stop
+		#	/etc/init.d/privoxy disable
+		#	chmod -x /etc/init.d/privoxy
+		#	/etc/init.d/firewall restart
+		#	
+		#fi
 		rm $status
 	fi
 fi
 }
+
+###Gateway
+license_local() {
+
+first_time=$(cat /etc/opt/first_time.txt)
+timenow=$(date +"%s")
+diff=$(expr $timenow - $first_time)
+days=$(expr $diff / 86400)
+diff=$(expr $diff \% 86400)
+hours=$(expr $diff / 3600)
+diff=$(expr $diff \% 3600)
+min=$(expr $diff / 60)
+
+#uptime="${days}"
+time=$(uci -q get wifimedia.@advance[0].time)
+time1=${days}
+uptime="${time:-$time1}"
+#uptime="${$(uci get license.active.time):-${days}}"
+#uptime="${days}d:${hours}h:${min}m"
+status=/etc/opt/wfm_status
+lcs=/etc/opt/wfm_lcs
+if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	cat /etc/opt/license/wifimedia >/etc/opt/license/status
+	touch $status
+	rm $lcs
+else
+	echo "Wrong License Code && auto reboot" >/etc/opt/license/status
+fi
+if [ "$uptime" -gt 15 ]; then #>15days
+	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+		touch $status
+		rm $lcs
+		cat /etc/opt/license/wifimedia >/etc/opt/license/status
+	else
+		echo "Wrong License Code && auto reboot" >/etc/opt/license/status
+		rm $status
+		sleep 120 && touch /etc/banner && reboot
+	fi
+fi
+}
+#end GW
 eap_manager() {
 
 rm -f /tmp/eap_mac
