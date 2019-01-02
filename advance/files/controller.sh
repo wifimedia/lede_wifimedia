@@ -25,6 +25,28 @@ wr840v4() { #checking internet
 		echo none > trigger
 	fi
 }
+wr840v6() { #checking internet
+
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
+		echo 500 > delay_on
+	else
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
+		echo 0 > delay_on
+	fi
+	
+	#check gateway
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		echo 500 > delay_on
+	else
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		echo 0 > delay_on
+	fi
+}
 
 wr841v14() { #checking internet
 
@@ -167,6 +189,10 @@ checking (){
 		wa901nd
 	elif [ "$model" == "TL-WR841N_v14" ] ;then	
 		wr841v14
+		eap_manager
+	elif [ "$model" == "TL-WR841N_v14" ] ;then	
+		wr840v6
+		eap_manager
 	fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
