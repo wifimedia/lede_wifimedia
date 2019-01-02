@@ -647,7 +647,7 @@ fi
 }
 
 ###Gateway
-license_local() {
+licensegw() {
 
 first_time=$(cat /etc/opt/first_time.txt)
 timenow=$(date +"%s")
