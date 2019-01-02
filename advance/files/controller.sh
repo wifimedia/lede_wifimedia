@@ -31,20 +31,20 @@ wr840v6() { #checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		echo 500 > delay_on
+		echo timer > trigger
 	else
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		echo 0 > delay_on
+		echo none > trigger
 	fi
 	
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		echo 500 > delay_on
+		echo timer > trigger
 	else
 		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		echo 0 > delay_on
+		echo none > trigger
 	fi
 }
 
