@@ -24,21 +24,15 @@ if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifime
 	touch $status
 	rm $lcs
 else
-	echo "Wrong License Code" >/etc/opt/license/status
+	echo "Wrong License Code & Auto Reboot" >/etc/opt/license/status
 fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-		uci set wireless.radio0.disabled="0"
-		uci commit wireless
-		wifi
 		touch $status
 		rm $lcs
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	else
-		echo "Wrong License Code" >/etc/opt/license/status
-		uci set wireless.radio0.disabled="1"
-		uci commit wireless
-		wifi down
+		echo "Wrong License Code & Auto Reboot" >/etc/opt/license/status
 		rm $status
 	fi
 fi
