@@ -57,6 +57,7 @@ grp_device_download="/tmp/upgrade/devices"
 
 #------------License srv checking-----------------
 licensekey=/tmp/upgrade/licensekey
+gwkey=/tmp/upgrade/licensekey
 device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
 license_srv="http://firmware.wifimedia.com.vn/hardware_active"
 apid=$(echo $device | sed 's/:/-/g')
