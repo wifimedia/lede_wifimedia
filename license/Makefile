@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=license
+PKG_NAME:=apls
 PKG_VERSION:=1.6.0
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Dungtd <dungtd8x@gmail.com>
@@ -15,37 +15,45 @@ PKG_LICENSE:=GPLv2
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/license
+define Package/apls
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  TITLE:=License Users
+  TITLE:=APs License
   URL:=http://wifimedia.vn
   MENU:=1
   PKGARCH:=all
   MAINTAINER:=DungTD <dungtd8x@gmail.com>
 endef
 
-define Package/license/description
+define Package/apls/description
 
 endef
 
 define Build/Compile
 endef
 
-define Package/license/install
-	$(INSTALL_DIR) $(1)
-	$(CP) ./files/* $(1)
+define Package/apls/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/opt
+	$(INSTALL_DIR) $(1)/etc/opt/license
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DIR) $(1)/usr/bin
+	
+	$(INSTALL_BIN) ./files/license_uci $(1)/etc/uci-defaults/license
+	$(INSTALL_BIN) ./files/license.sh $(1)/usr/bin/license.sh
+	$(INSTALL_BIN) ./files/initd_wifimedia_check $(1)/etc/init.d/wifimedia_check
 endef
 
-define Package/license/postinst
+#define Package/apls/postinst
 #!/bin/sh
 # check if we are on real system
-if [ -z "${IPKG_INSTROOT}" ]; then
-	echo "Fix the permissions for license"
-	chmod a+x /usr/bin/license.sh
-fi
-exit 0
-endef
+#if [ -z "${IPKG_INSTROOT}" ]; then
+#	echo "Fix the permissions for apls"
+#	chmod a+x /usr/bin/license.sh
+#fi
+#exit 0
+#endef
 
-$(eval $(call BuildPackage,license))
+$(eval $(call BuildPackage,apls))

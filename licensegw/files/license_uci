@@ -1,13 +1,18 @@
 #!/bin/sh
 #Copyright ©  dungtd8x@gmail.com
 
+model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 echo -e "wificode:x:0:0:wificode:/root:/bin/ash" >>/etc/passwd
 echo -e "wificode:*:0:0:99999:7:::" >>/etc/shadow
 temp_dir="/tmp/crontabs"
 if [ ! -d "$temp_dir" ]; then
 	mkdir $temp_dir
 fi
-echo "0 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw && sleep 90 && reboot" > $temp_dir/wificode
+if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ];then
+	echo "0 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw && sleep 90 && reboot" > $temp_dir/wificode
+else
+	echo "0 0 * * * /sbin/wifimedia/controller.sh license_local"
+fi	
 crontab $temp_dir/wificode -u wificode
 /etc/init.d/cron restart
 date +"%s" >/etc/opt/first_time.txt
