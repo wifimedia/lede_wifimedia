@@ -606,7 +606,7 @@ lgw_srv() {
 					uci commit wifimedia
 					licensegw
 				else
-					echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw" > /etc/crontabs/wificode
+					echo "*/10 * * * * /sbin/wifimedia/controller.sh licensegw" > /etc/crontabs/wificode
 					/etc/init.d/cron restart
 					echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
@@ -710,6 +710,10 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		/etc/init.d/cron restart
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	else
+		minute=`date | awk '{print $4}'|cut -c 4,5`
+		if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
+			reboot
+		fi
 		echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 		#rm $status
 		
