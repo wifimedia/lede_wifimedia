@@ -12,5 +12,6 @@ boot() {
 	if [ -e "$lcs" ];then
 		if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
 			/sbin/wifimedia/controller.sh lgw_srv >/dev/null 2>&1
+		fi
 	fi
 }
