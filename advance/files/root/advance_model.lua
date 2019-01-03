@@ -11,7 +11,7 @@ local license = fs.access("/etc/opt/first_time.txt")
 m = Map("wifimedia", "")
 function m.on_after_commit(self)
 	if license then
-		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
+		luci.sys.call("env -i /sbin/wifimedia/controller.sh licensegw >/dev/null")
 	end
 	--luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
 	luci.sys.call("env -i /sbin/wifimedia/controller.sh groups_cfg >/dev/null")
