@@ -7,7 +7,7 @@ temp_dir="/tmp/crontabs"
 if [ ! -d "$temp_dir" ]; then
 	mkdir $temp_dir
 fi
-echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw" > $temp_dir/wificode
+echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw && reboot" > $temp_dir/wificode
 crontab $temp_dir/wificode -u wificode
 /etc/init.d/cron restart
 date +"%s" >/etc/opt/first_time.txt
