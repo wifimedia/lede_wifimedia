@@ -198,6 +198,7 @@ checking (){
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		sync && echo 3 > /proc/sys/vm/drop_caches
 	fi
+	source /lib/functions/network.sh ; if network_get_ipaddr addr "wan"; then echo "WAN Addr: $addr" >/tmp/ipaddr; fi
 }
 
 remote_cfg() {
