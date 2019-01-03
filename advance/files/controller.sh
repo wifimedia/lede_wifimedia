@@ -634,7 +634,9 @@ status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 	cat /etc/opt/license/wifimedia >/etc/opt/license/status
-	touch $status
+	#touch $status
+	echo "" >/etc/crontabs/wificode
+	/etc/init.d/cron restart	
 	rm $lcs
 else
 	echo "Wrong License Code" >/etc/opt/license/status
@@ -644,9 +646,11 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		uci set wireless.radio0.disabled="0"
 		uci commit wireless
 		wifi
-		touch $status
+		#touch $status
 		rm $lcs
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
+		echo "" >/etc/crontabs/wificode
+		/etc/init.d/cron restart
 		#if [ -f /etc/rc.d/S80privoxy ]; then
 		#	/etc/init.d/privoxy  stop
 		#	/etc/init.d/privoxy disable
@@ -664,7 +668,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		#	/etc/init.d/firewall restart
 		#	
 		#fi
-		rm $status
+		#rm $status
 	fi
 fi
 }
