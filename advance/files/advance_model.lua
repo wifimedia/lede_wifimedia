@@ -147,8 +147,8 @@ s:tab("rssi",  translate("RSSI"))
 --[[END RSSI]]--		
 --License
 if wfm_lcs then
-	s:tab("license",  translate("License"))
-	wfm = s:taboption("license",Value,"wfm","Key")
+	s:tab("license",  translate("Activation code"))
+	wfm = s:taboption("license",Value,"wfm","Activation code")
 	wfm.rmempty = true
 end
 --[[END LICENS]]--

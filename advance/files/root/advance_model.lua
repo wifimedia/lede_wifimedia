@@ -138,8 +138,8 @@ admingr.password = true
 admingr:depends({admins="1"})
 
 if wfm_lcs then
-	s:tab("license",  translate("WIFIMEDIA CODE"))
-	wfm = s:taboption("license",Value,"wfm","Active")
+	s:tab("license",  translate("Activation code"))
+	wfm = s:taboption("license",Value,"wfm","Activation code")
 	wfm.rmempty = true
 end
 return m
