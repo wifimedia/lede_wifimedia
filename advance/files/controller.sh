@@ -571,7 +571,7 @@ echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
 license_srv() {
 
 echo "" > $licensekey
-wget -q "${license_srv}" -O $licensekey
+wget -q "${code_srv}" -O $licensekey
 curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
@@ -592,7 +592,7 @@ fi
 
 lgw_srv() {
 	echo "" > $gwkey
-	wget -q "${license_srv}" -O $gwkey
+	wget -q "${codegw}" -O $gwkey
 	curl_result=$?
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
@@ -601,9 +601,10 @@ lgw_srv() {
 					#Update License Key
 					uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					uci commit wifimedia
-					license_local
+					licensegw
 				else
-					#echo "we will maintain the existing settings."
+					echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw" > /etc/crontabs/wificode
+					/etc/init.d/cron restart
 					echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
 			done	
@@ -689,6 +690,8 @@ if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifime
 	cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	touch $status
 	rm $lcs
+	echo "" >/etc/crontabs/wificode
+	/etc/init.d/cron restart
 else
 	echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 fi
@@ -696,10 +699,11 @@ if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		touch $status
 		rm $lcs
+		echo "" >/etc/crontabs/wificode
+		/etc/init.d/cron restart
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	else
 		echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-		echo "" >/etc/crontabs/wificode
 		rm $status
 		
 	fi

@@ -50,16 +50,16 @@ sha256_check="/www/luci-static/resources/sha256.txt"
 url="http://local.wifimedia.vn/luci-static/resources/groups.txt" #remot_config
 grpd="http://local.wifimedia.vn/luci-static/resources/devices.txt" #remot_config
 sha_download="http://local.wifimedia.vn/luci-static/resources/sha256.txt" #remot_config
-device_cfg=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #remot_config
 sha256_download="/tmp/upgrade/sha256"
 grp_download="/etc/config/group"
 grp_device_download="/tmp/upgrade/devices"
-
+device_cfg=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #remot_config
 #------------License srv checking-----------------
 licensekey=/tmp/upgrade/licensekey
 gwkey=/tmp/upgrade/licensekey
+code_srv="http://firmware.wifimedia.com.vn/hardware_active"
+codegw="http://firmware.wifimedia.com.vn/gwactive"
 device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
-license_srv="http://firmware.wifimedia.com.vn/hardware_active"
 apid=$(echo $device | sed 's/:/-/g')
 #--------------RSSI------------------------------
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)
