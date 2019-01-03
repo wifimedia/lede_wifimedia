@@ -199,6 +199,8 @@ checking (){
 		sync && echo 3 > /proc/sys/vm/drop_caches
 	fi
 	source /lib/functions/network.sh ; if network_get_ipaddr addr "wan"; then echo "WAN: $addr" >/tmp/ipaddr; fi
+	#pidhostapd=`pidof hostapd`
+	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
 remote_cfg() {
