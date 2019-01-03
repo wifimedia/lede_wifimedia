@@ -35,7 +35,17 @@ endef
 
 define Package/gwls/install
 	$(INSTALL_DIR) $(1)
-	$(CP) ./files/* $(1)
+	#$(CP) ./files/* $(1)
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/opt
+	$(INSTALL_DIR) $(1)/etc/opt/license
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DIR) $(1)/usr/bin
+	
+	$(INSTALL_BIN) ./files/license_uci $(1)/etc/uci-defaults/license
+	$(INSTALL_BIN) ./files/license.sh $(1)/usr/bin/license.sh
+	$(INSTALL_BIN) ./files/initd_wifimedia_check $(1)/etc/init.d/wifimedia_check
 endef
 
 define Package/gwls/postinst
