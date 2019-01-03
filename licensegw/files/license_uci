@@ -10,7 +10,7 @@ fi
 echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw" > $temp_dir/wificode
 crontab $temp_dir/wificode -u wificode
 /etc/init.d/cron restart
-date +"%s" >/etc/opt/first_time.txt
+sleep 10 && date +"%s" >/etc/opt/first_time.txt
 
 A1=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  17,10,2,1 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
 A2=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  13,11,11,4 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
