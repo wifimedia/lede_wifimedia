@@ -11,8 +11,8 @@ boot() {
     sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh
 	if [ -e "$lcs" ];then
 		if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
-			/sbin/wifimedia/controller.sh licensegw
+			/sbin/wifimedia/controller.sh licensegw  >/dev/null 2>&1
 		else
-			/sbin/wifimedia/controller.sh license_srv
+			/sbin/wifimedia/controller.sh license_srv  >/dev/null 2>&1
 	fi
 }
