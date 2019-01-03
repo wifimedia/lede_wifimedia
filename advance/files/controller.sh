@@ -683,8 +683,6 @@ min=$(expr $diff / 60)
 time=$(uci -q get wifimedia.@advance[0].time)
 time1=${days}
 uptime="${time:-$time1}"
-#uptime="${$(uci get license.active.time):-${days}}"
-#uptime="${days}d:${hours}h:${min}m"
 status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
@@ -701,8 +699,9 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	else
 		echo "Wrong License Code & auto reboot" >/etc/opt/license/status
+		echo "" >/etc/crontabs/wificode
 		rm $status
-		sleep 120 && touch /etc/banner && reboot
+		
 	fi
 fi
 }
