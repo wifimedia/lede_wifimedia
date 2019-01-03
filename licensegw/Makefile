@@ -34,7 +34,7 @@ define Build/Compile
 endef
 
 define Package/gwls/install
-	$(INSTALL_DIR) $(1)
+	#$(INSTALL_DIR) $(1)
 	#$(CP) ./files/* $(1)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d

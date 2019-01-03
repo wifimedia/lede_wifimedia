@@ -22,12 +22,6 @@ end
 s = m:section(TypedSection, "advance","")
 s.anonymous = true
 s.addremove = false
-
-if wfm_lcs then
-	s:tab("license",  translate("License"))
-	wfm = s:taboption("license",Value,"wfm","wifimedia")
-	wfm.rmempty = true
-end
 --[[ auto controller ]]--
 s:tab("ctrgroups",  translate("Wireless Groups"))
 ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
@@ -142,4 +136,10 @@ admingr = s:taboption("administrator",Value, "passwords", "Password")
 admingr.rmempty = true
 admingr.password = true
 admingr:depends({admins="1"})
+
+if wfm_lcs then
+	s:tab("license",  translate("WIFIMEDIA CODE"))
+	wfm = s:taboption("license",Value,"wfm","Active")
+	wfm.rmempty = true
+end
 return m
