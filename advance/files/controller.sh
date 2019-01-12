@@ -586,8 +586,8 @@ if [ "${curl_result}" -eq 0 ]; then
 				cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
 			else
-				#echo "we will maintain the existing settings."
-				echo "Wrong License Code & auto reboot" >/etc/opt/license/status
+				echo "we will maintain the existing settings."
+				#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 			fi
 		done	
 	fi
@@ -610,7 +610,7 @@ lgw_srv() {
 				else
 					echo "*/10 * * * * /sbin/wifimedia/controller.sh licensegw" > /etc/crontabs/wificode
 					/etc/init.d/cron restart
-					echo "Wrong License Code & auto reboot" >/etc/opt/license/status
+					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
 			done	
 		fi
