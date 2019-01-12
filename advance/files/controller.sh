@@ -583,6 +583,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				#Update License Key
 				uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
+				cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
 			else
 				#echo "we will maintain the existing settings."
@@ -603,6 +604,7 @@ lgw_srv() {
 				if [ "$(echo $line | grep $apid)" ] ;then
 					#Update License Key
 					uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
+					cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					uci commit wifimedia
 					licensegw
 				else
