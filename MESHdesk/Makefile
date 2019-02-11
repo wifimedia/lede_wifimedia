@@ -32,12 +32,12 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/files
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/libs
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/tests
-	cp -r ./files/alfred_scripts/* $(1)/etc/MESHdesk/alfred_scripts
-	cp -r ./files/captive_portals/* $(1)/etc/MESHdesk/captive_portals
-	cp -r ./files/configs/* $(1)/etc/MESHdesk/configs
-	cp -r ./files/files/* $(1)/etc/MESHdesk/files
-	cp -r ./files/libs/* $(1)/etc/MESHdesk/libs
-	cp -r ./files/tests/* $(1)/etc/MESHdesk/tests
+	cp -r ./files/MESHdesk/alfred_scripts/* $(1)/etc/MESHdesk/alfred_scripts
+	cp -r ./files/MESHdesk/captive_portals/* $(1)/etc/MESHdesk/captive_portals
+	cp -r ./files/MESHdesk/configs/* $(1)/etc/MESHdesk/configs
+	cp -r ./files/MESHdesk/files/* $(1)/etc/MESHdesk/files
+	cp -r ./files/MESHdesk/libs/* $(1)/etc/MESHdesk/libs
+	cp -r ./files/MESHdesk/tests/* $(1)/etc/MESHdesk/tests
 	$(INSTALL_BIN) ./files/MESHdesk/a.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/actions_checker.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/batman_neighbours.lua $(1)/etc/MESHdesk/
@@ -46,15 +46,15 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_BIN) ./files/MESHdesk/led.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/main_led.lua $(1)/etc/MESHdesk/
 	mkdir -p $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/md_prerun $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/MESHdesk/md_prerun $(1)/etc/init.d
 	mkdir -p $(1)/etc/config
-	$(INSTALL_DATA) ./files/meshdesk $(1)/etc/config
+	$(INSTALL_DATA) ./files/MESHdesk/meshdesk $(1)/etc/config
 	mkdir -p $(1)/etc/hotplug.d/iface
-	cp ./files/common/70-meshdesk $(1)/etc/hotplug.d/iface/
+	cp ./files/MESHdesk/files/common/70-meshdesk $(1)/etc/hotplug.d/iface/
 	mkdir -p $(1)/etc/alfred
-	cp ./files/alfred_scripts/alfred_meshdesk_scripts.sh $(1)/etc/alfred
+	cp ./files/MESHdesk/alfred_scripts/alfred_meshdesk_scripts.sh $(1)/etc/alfred
 	mkdir -p $(1)/etc/chilli/www
-	cp ./files/common/radiusdesk.html $(1)/etc/chilli/www
+	cp ./files/MESHdesk/files/common/radiusdesk.html $(1)/etc/chilli/www
 endef
 
 define Package/zzz-MESHdesk/postinst
