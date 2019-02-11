@@ -12,6 +12,8 @@ define Package/zzz-MESHdesk
    CATEGORY:=Advance
    TITLE:=MESHdesk firmware
    URL:=http://radiusdesk.com/
+   MENU:=1
+   PKGARCH:=all
 endef
 
 
