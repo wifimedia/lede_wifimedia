@@ -34,6 +34,7 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/files
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/libs
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/tests
+	$(INSTALL_DIR) $(1)/usr/
 	cp -r ./files/alfred_scripts/* $(1)/etc/MESHdesk/alfred_scripts
 	cp -r ./files/captive_portals/* $(1)/etc/MESHdesk/captive_portals
 	cp -r ./files/configs/* $(1)/etc/MESHdesk/configs
@@ -47,6 +48,8 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_BIN) ./files/hotplug_lan.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/led.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/main_led.lua $(1)/etc/MESHdesk/
+	$(INSTALL_DATA) ./files/meshdeskcontrol.lua $(1)/usr/lib/lua/luci/controller
+	$(INSTALL_DATA) ./files/meshdeskcbi.lua $(1)/usr/lib/lua/luci/model/cbi
 	mkdir -p $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/md_prerun $(1)/etc/init.d
 	mkdir -p $(1)/etc/config
