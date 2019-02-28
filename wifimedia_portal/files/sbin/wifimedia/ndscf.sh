@@ -64,37 +64,4 @@ echo '<!doctype html>
 </html>' >/etc/nodogsplash/htdocs/infoskel.html
 
 #write file config
-echo 'GatewayInterface br-lan
-
-FirewallRuleSet authenticated-users {
-    FirewallRule allow all
-}
-
-FirewallRuleSet users-to-router {
-    FirewallRule allow all
-}
-
-FirewallRuleSet preauthenticated-users {
-    # DNS
-    FirewallRule allow tcp port 53
-    FirewallRule allow udp port 53
-
-    # Chỉ chặn port 80, còn lại mở hết
-    FirewallRule allow tcp port 0:79
-    FirewallRule allow tcp port 81:65535
-
-    # Phần whitelist cho domain www.wifiman.tech được thực hiện lúc startup,
-    # để sau mà đổi server thì các router sẽ tự update, không cần vào từng
-    # router chỉnh lại
-	FirewallRule allow to '$ip_gateway'
-	FirewallRule allow to 103.237.145.75
-    # include /tmp/preauthenticated_rules
-}
-'$redir'
-BinVoucher "/sbin/wifimedia/nodogsplash_preauth.sh"
-EnablePreAuth yes
-
-ClientIdleTimeout '$clidtimeout'
-#ClientIdleTimeout 240
-
-' >/etc/nodogsplash/nodogsplash.conf
+cat /sbin/wifimedia/nodogsplash_cfg >/etc/config/nodogsplash
