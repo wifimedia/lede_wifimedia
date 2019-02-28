@@ -6,14 +6,9 @@ ndsctl status > /tmp/ndsctl_status.txt
 
 # Update lại trạng thái đèn led
 if [ ${?} -eq 0 ]; then
-   	cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wps/
-	#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-    	echo timer > trigger
+	echo "Nodogsplash running"
 else
-    	cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wps/
-	#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-    	echo none > trigger
-
+	echo "Nodogsplash crash"
     # Tự động bật lại nodogsplash nếu crash
     sh /sbin/wifimedia/update_preauthenticated_rules.sh
 fi
@@ -44,7 +39,7 @@ UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%6
 NUM_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
 
 wget -q \
-     "http://crm.wifimedia.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&mac_device=${mac_wlan}" \
+     "http://portal.nextify.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&mac_device=${mac_wlan}" \
      -O /tmp/ssid.txt
 
 
