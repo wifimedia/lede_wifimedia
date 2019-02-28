@@ -6,11 +6,14 @@ ndsctl status > /tmp/ndsctl_status.txt
 
 # Update lại trạng thái đèn led
 if [ ${?} -eq 0 ]; then
-	echo "Nodogsplash running"
+    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    echo 1 > brightness
 else
-	echo "Nodogsplash crash"
+    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    echo 0 > brightness
+
     # Tự động bật lại nodogsplash nếu crash
-    sh /sbin/wifimedia/update_preauthenticated_rules.sh
+    sh /root/update_preauthenticated_rules.sh
 fi
 
 
@@ -31,21 +34,25 @@ urlencode() {
     done
 }
 
-MAC=$(ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }')
+MAC=$(ifconfig | grep br-lan | grep HWaddr | tr -s ' ' | cut -d' ' -f5)
 SSID=$(uci show wireless.@wifi-iface[0].ssid | cut -d= -f2 | tr -d "'")
-mac_wlan=$(cat /sys/class/ieee80211/phy0/macaddress)
 
 UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
-NUM_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
+NUM_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Client authentications since start' | cut -d':' -f2 | xargs)
+RAM_FREE=$(grep -i 'MemFree:'  /proc/meminfo | cut -d':' -f2 | xargs)
+TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
+SSH_PORT=$(ps | grep ssh | grep '127.0.0.1:1422' | tr -s ' ' | cut -d':' -f1 | cut -d'R' -f2 | tr -d ' ')
 
-wget -q \
-     "http://portal.nextify.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&mac_device=${mac_wlan}" \
+wget -q --timeout=3 \
+     "http://portal.nextify.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS
      -O /tmp/ssid.txt
 
 
-# Update lại tên mạng wifi
-if [ -s /tmp/ssid.txt ] && [ $(wc -l < /tmp/ssid.txt) == 0 ] && [ $(wc -c < /tmp/ssid.txt) -le 32 ] && [ "$(cat /tmp/ssid.txt)" != "${SSID}" ]; then
-    uci set wireless.@wifi-iface[0].ssid="$(cat /tmp/ssid.txt)"
-    uci commit
-    wifi
+# Update l...i t..n m...ng wifi
+SSID_CLOUD=$(cat /tmp/ssid.txt)
+if [ "${SSID_CLOUD}" != "${SSID}" ]; then
+  echo 'Done'
+  uci set wireless.@wifi-iface[0].ssid="${SSID_CLOUD}"
+  uci commit
+  wifi
 fi
