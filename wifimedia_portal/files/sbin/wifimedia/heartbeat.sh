@@ -13,7 +13,7 @@ else
     echo 0 > brightness
 
     # Tự động bật lại nodogsplash nếu crash
-    sh /root/update_preauthenticated_rules.sh
+    sh /sbin/wifimedia/update_preauthenticated_rules.sh
 fi
 
 
