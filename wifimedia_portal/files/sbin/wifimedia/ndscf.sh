@@ -1,7 +1,7 @@
 #!/bin/sh
 
 fbs_gw1=`uci -q get wifimedia.@nodogsplash[0].ndsname`
-fbs_gw=${fbs_gw1:-Netify}
+fbs_gw=${fbs_gw1:-Nextify}
 
 fbs_url1=`uci -q get wifimedia.@nodogsplash[0].ndsurl`
 fbs_url=${fbs_url1:-}
