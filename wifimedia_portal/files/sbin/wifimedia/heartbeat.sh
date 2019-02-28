@@ -6,12 +6,13 @@ ndsctl status > /tmp/ndsctl_status.txt
 
 # Update lại trạng thái đèn led
 if [ ${?} -eq 0 ]; then
-    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-    echo 1 > brightness
+    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    #echo 1 > brightness
+	echo "Nodogsplash running"
 else
-    cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-    echo 0 > brightness
-
+    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
+    #echo 0 > brightness
+	echo "Nodogsplash crash"
     # Tự động bật lại nodogsplash nếu crash
     sh /sbin/wifimedia/update_preauthenticated_rules.sh
 fi

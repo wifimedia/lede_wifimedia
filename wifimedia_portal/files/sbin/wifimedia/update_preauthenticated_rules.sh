@@ -53,8 +53,9 @@ kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')
 
 # Bật nodogsplash mới
 nodogsplash -c ${NODOGSPLASH_CONFIG}
-if [ ${?} -eq 0 ]; then
-   	cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wps/
+#if [ ${?} -eq 0 ]; then
+   	#cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wps/
 	#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-   	echo timer > trigger
-fi
+   	#echo timer > trigger
+#	echo "Nodogsplash running"
+#fi

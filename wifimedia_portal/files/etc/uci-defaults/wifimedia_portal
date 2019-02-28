@@ -4,7 +4,7 @@
 echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
 #write file crontabs
 _nds=/etc/cron_nds
-echo '* * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
+echo '0/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
 
 url=`uci -q get wifimedia.@nodogsplash[0].nds_url`
 #url=`uci -q get wifimedia.@nodogsplash[0].nds_domain`
