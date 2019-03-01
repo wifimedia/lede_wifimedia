@@ -45,6 +45,7 @@ status() {
 ' >/etc/init.d/nodogsplash
 
 #write file splash
+gateway=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #Gateway Portal
 echo '<!doctype html>
 <html lang="en">
   <head>
@@ -54,7 +55,7 @@ echo '<!doctype html>
   <body>
       <form id="info" method="POST" action="//'$url'">
           <input type="hidden" name="gateway_name" value="$gatewayname">
-          <input type="hidden" name="gateway_mac" value="$gatewaymac">
+          <input type="hidden" name="gateway_mac" value="'$gateway'">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
