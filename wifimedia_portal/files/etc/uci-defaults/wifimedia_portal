@@ -86,6 +86,7 @@ echo '<!doctype html>
 uci -q get wifimedia.@nodogsplash[0] || {
         uci batch <<EOF
         add wifimedia nodogsplash
+		set wifimedia.@nodogsplash[0].nds_url="portal.nextify.vn/splash"
         commit wifimedia
 EOF
 }

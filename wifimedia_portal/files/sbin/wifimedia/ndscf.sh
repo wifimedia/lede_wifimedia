@@ -13,8 +13,8 @@ MaxClients=${MaxClients1:-120}
 clidtimeout1=`uci -q get wifimedia.@nodogsplash[0].ndsidletimeout`
 clidtimeout=${clidtimeout1:-7200}
 
-_url=`uci -q get wifimedia.@nodogsplash[0].nds_url`
-url=${_url:-portal.nextify.vn/splash}
+url=`uci -q get wifimedia.@nodogsplash[0].nds_url`
+#url=${_url:-portal.nextify.vn/splash}
 
 
 key=`uci -q get wifimedia.@nodogsplash[0].nds_apkey`
