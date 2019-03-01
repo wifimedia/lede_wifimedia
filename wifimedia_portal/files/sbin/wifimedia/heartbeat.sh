@@ -52,9 +52,9 @@ wget -q --timeout=3 \
 
 # Update l...i t..n m...ng wifi
 SSID_CLOUD=$(cat /tmp/ssid.txt)
-if [ "${SSID_CLOUD}" != "${SSID}" ]; then
-  echo 'Done'
-  uci set wireless.@wifi-iface[0].ssid="${SSID_CLOUD}"
-  uci commit
-  wifi
-fi
+#if [ "${SSID_CLOUD}" != "${SSID}" ]; then
+#  echo 'Done'
+#  uci set wireless.@wifi-iface[0].ssid="${SSID_CLOUD}"
+#  uci commit
+#  wifi
+#fi
