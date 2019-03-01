@@ -494,7 +494,7 @@ if [ "$groups_en" == "1" ];then
 		uci del wireless.default_radio0.r1kh
 		echo "Fast-Secure Roaming" >/etc/FT
 	else
-		echo " " >/etc/FT
+		rm -f /etc/FT
 	fi
 	#NASID
 	if [ -z "$nasid" ];then
