@@ -46,7 +46,7 @@ TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' 
 SSH_PORT=$(ps | grep ssh | grep '127.0.0.1:1422' | tr -s ' ' | cut -d':' -f1 | cut -d'R' -f2 | tr -d ' ')
 
 wget -q --timeout=3 \
-     "http://portal.nextify.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS
+     "http://portal.nextify.vn/heartbeat?ssid=$(urlencode "${SSID}")&mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
      -O /tmp/ssid.txt
 
 
