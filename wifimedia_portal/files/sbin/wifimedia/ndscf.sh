@@ -86,7 +86,7 @@ FirewallRuleSet preauthenticated-users {
     FirewallRule allow tcp port 0:79
     FirewallRule allow tcp port 81:65535
 
-    # Phần whitelist cho domain www.wifiman.tech được thực hiện lúc startup,
+    # Phần whitelist cho domain nextify được thực hiện lúc startup,
     # để sau mà đổi server thì các router sẽ tự update, không cần vào từng
     # router chỉnh lại
 	FirewallRule allow to '$ip_gateway'
