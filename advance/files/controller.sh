@@ -485,7 +485,7 @@ if [ "$groups_en" == "1" ];then
 			uci del wireless.default_radio0.r1kh	
 		fi
 		#uci commit wireless
-	else
+	elif [ "ft" == "rsn_preauth" ];then
 		uci delete wireless.@wifi-iface[0].ieee80211r
 		uci delete wireless.@wifi-iface[0].ft_psk_generate_local
 		uci delete wireless.@wifi-iface[0].pmk_r1_push
@@ -493,6 +493,8 @@ if [ "$groups_en" == "1" ];then
 		uci del wireless.default_radio0.r0kh
 		uci del wireless.default_radio0.r1kh
 		echo "Fast-Secure Roaming" >/etc/FT
+	else
+		echo " " >/etc/FT
 	fi
 	#NASID
 	if [ -z "$nasid" ];then
