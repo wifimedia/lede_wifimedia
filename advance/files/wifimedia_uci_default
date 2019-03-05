@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=28/2/2019
+	set wifimedia.@builddate[0].date=2/1/2019
 	commit wifimedia
 EOF
 }
@@ -116,6 +116,8 @@ elif [ "$model_hardware" == "TL-WR841N_v14" ];then
 	echo "TL-WR840N v6" >/etc/hardware
 #elif [ "$model_hardware" == "TL-WR840N_v6" ];then
 #	echo "TL-WR840N v6" >/etc/hardware
+elif [ "$model_hardware" == "CF-E320N_v2" ];then
+	echo "WIFIMEDIA v2 - Viettel" >/etc/hardware
 fi
 
 #Add vitual SSID
