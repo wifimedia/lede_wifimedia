@@ -882,7 +882,7 @@ end
 do_fw_config()
 
 --Prep the LEDs if needs to
-prep_leds()
+--prep_leds()
 
 
 
