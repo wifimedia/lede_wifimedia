@@ -154,7 +154,7 @@ function do_fw_config()
 
 	-- LAN we flash "I"
 	log("Do Firmware configuration - if server running")
-	os.execute("/etc/MESHdesk/main_led.lua start config")
+	--os.execute("/etc/MESHdesk/main_led.lua start config")
     --Set meshdesk.settings.id_if (typically eth0) to a known IP Address
     local network = rdNetwork()
 	network:frmwrStart()
