@@ -182,7 +182,7 @@ function wait_for_lan()
 
 	-- LAN we flash "A"
 	log("Starting LAN wait")
-	os.execute("/etc/MESHdesk/main_led.lua start lan")
+	--os.execute("/etc/MESHdesk/main_led.lua start lan")
 	local start_time	= os.time()
 	local loop			= true
 	local lan_is_up		= false
@@ -340,13 +340,13 @@ function wait_for_wifi(radio_number)
 
 	-- WiFi we flash "C"
 	log("Try settings through WiFi network")
-	if(radio_number == 0)then
-	    os.execute("/etc/MESHdesk/main_led.lua start rone")
-    end
+	--if(radio_number == 0)then
+	--    os.execute("/etc/MESHdesk/main_led.lua start rone")
+    --end
 	
-	if(radio_number == 1)then
-	    os.execute("/etc/MESHdesk/main_led.lua start rtwo")
-    end
+	--if(radio_number == 1)then
+	--   os.execute("/etc/MESHdesk/main_led.lua start rtwo")
+    --end
 	
 	-- Start the WiF interface
 	require("rdWireless")
@@ -430,7 +430,7 @@ function check_for_previous_settings()
 		configure_device(previous_config_file)
 	else
 		--Nothing we can do but flash an SOS
-		os.execute("/etc/MESHdesk/main_led.lua start sos")
+		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
 		reboot_on_sos()
 	end
