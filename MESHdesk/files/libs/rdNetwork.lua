@@ -53,7 +53,7 @@ function rdNetwork:dhcpStart()
     end
     
     --Are we using 3G?
-    self:__includeMobileWan()
+    --self:__includeMobileWan()
     
     --Is there any Wifi Web specified
     self:__includeWebByWifi()

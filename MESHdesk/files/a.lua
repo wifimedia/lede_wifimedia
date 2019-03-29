@@ -589,7 +589,7 @@ function ap_wait_for_lan()
 	-- LAN we flash "1"
 	log("Starting LAN wait")
 	--os.execute("/etc/MESHdesk/main_led.lua start one")
-	os.execute("/etc/MESHdesk/main_led.lua start lan")
+	--os.execute("/etc/MESHdesk/main_led.lua start lan")
 	local start_time	= os.time()
 	local loop			= true
 	local lan_is_up		= false
