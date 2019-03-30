@@ -509,7 +509,7 @@ function configure_device(config)
 	    w:configureFromTable(o.config_settings.wireless) 
 	end
 	  
-    os.execute("/etc/init.d/network reload")
+    --os.execute("/etc/init.d/network reload")
     sleep(2)
     os.execute("/sbin/wifi")
 
@@ -717,7 +717,7 @@ function ap_check_for_previous_settings()
 		ap_configure_device(previous_config_file)
 	else
 		--Nothing we can do but flash an SOS
-		os.execute("/etc/MESHdesk/main_led.lua start sos")
+		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
 		reboot_on_sos();
 	end
@@ -787,7 +787,7 @@ function ap_configure_device(config)
 	    w:configureFromTable(o.config_settings.wireless) 
 	end
 	  
-    os.execute("/etc/init.d/network reload")
+    --os.execute("/etc/init.d/network reload")
 
 	-- Do we have some system settings?
 	if(o.config_settings.system ~= nil)then  
@@ -800,7 +800,7 @@ function ap_configure_device(config)
     -- Check if there are perhaps some captive portals to set up once everything has been done --
     sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
 
-    os.execute("/etc/init.d/firewall reload") --Activate the new firewall rules especiallt NAT to LAN
+    --os.execute("/etc/init.d/firewall reload") --Activate the new firewall rules especiallt NAT to LAN
 
     if(o.config_settings.captive_portals ~= nil)then
     	print("Doing Captive Portals")

@@ -190,7 +190,7 @@ function rdWireless.__connectClient(self,radio_number)
 		self.x.commit('wireless')
 
 		self:log("Reload the network and restart wifi")
-		os.execute("/etc/init.d/network reload")
+		--os.execute("/etc/init.d/network reload")
 		os.execute("wifi")
 	end
 end
