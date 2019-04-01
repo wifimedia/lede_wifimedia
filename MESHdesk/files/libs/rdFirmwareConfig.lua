@@ -360,27 +360,28 @@ function rdFirmwareConfig.__set_up_hardware(self,hw)
 	end
 
 	--Add a fresh one if different
-	local model_led 	= self.x.get('meshdesk',hw,'wifi_led')
-	local current_led	= self.x.get('system','wifi_led', 'sysfs')
-	if(model_led == current_led)then
-		self:log("Wifi LEDs same - return")
-		return
-	end
+	--local model_led 	= self.x.get('meshdesk',hw,'wifi_led')
+	--local current_led	= self.x.get('system','wifi_led', 'sysfs')
+	--if(model_led == current_led)then
+	--	self:log("Wifi LEDs same - return")
+	--	return
+	--end
 
-	if(model_led == nil)then
-		self:log("No WiFi LED defined - return")
-		return
-	end
+	--if(model_led == nil)then
+	--	self:log("No WiFi LED defined - return")
+	--	return
+	--end
 
-	self:log("Wifi LEDs new config")
+	--self:log("Wifi LEDs new config")
 
 	--Now we need to get rid of all the LED entries and populate it with ours
-	self.x.foreach('system','led', 
-		function(a)
-			self.x.delete('system',a['.name'])
-	end)
+	--self.x.foreach('system','led', 
+	--	function(a)
+	--		self.x.delete('system',a['.name'])
+	--end)
 
 	--Add a fresh one
+	--[[
 	local wifi_led = self.x.set('system', 'wifi_led', "led")
 	self.x.commit('system')	
 	self.x.set('system', 'wifi_led','name', 'wifi')
@@ -393,6 +394,7 @@ function rdFirmwareConfig.__set_up_hardware(self,hw)
 	self.x.commit('system')	
 	self.x.set('system', 'wifi_led', 'mode',  'link tx rx')
 	self.x.commit('system')	
+	]]--
 
 end
 

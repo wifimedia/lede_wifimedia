@@ -438,7 +438,7 @@ end
 
 function configure_device(config)
 
-    configure_mode();
+    --configure_mode();
     
 	print("Configuring device according to " .. config)
 	
@@ -541,9 +541,9 @@ function configure_device(config)
 	ext:startOne('/etc/MESHdesk/actions_checker.lua &','actions_checker.lua')
 	
     --os.execute("/etc/init.d/led start")
-	log("Ensure mesh0 and/or mesh1 if present is added to bat0")
-	os.execute("batctl if add mesh0")
-    os.execute("batctl if add mesh1")
+	--log("Ensure mesh0 and/or mesh1 if present is added to bat0")
+	--os.execute("batctl if add mesh0")
+    --os.execute("batctl if add mesh1")
 
     log('Starting Batman neighbour scan')
     ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')

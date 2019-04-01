@@ -67,7 +67,7 @@ function rdAlfred:masterEnableAndStart()
    	self.x.set('alfred','alfred','batmanif','bat0')
 
     self.x.commit('alfred')
-
+--[[
 	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
 	local f=io.open(self.bat_hosts,"r")                                                   
     if f~=nil then 
@@ -75,6 +75,7 @@ function rdAlfred:masterEnableAndStart()
  		os.remove(self.bat_hosts)
 		os.execute("/etc/init.d/alfred disable")
 	end
+	]]--
     --start the service
     self:log("**Start up alfred master**")
     os.execute("/etc/init.d/alfred start")
@@ -107,7 +108,7 @@ function rdAlfred:slaveEnableAndStart()
     --Enable this regardless
    	self.x.set('alfred','alfred','start_vis','1')
    	--Set this regardless
-   	self.x.set('alfred','alfred','batmanif','bat0')
+    --self.x.set('alfred','alfred','batmanif','bat0')
 
     self.x.commit('alfred')
 	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
@@ -144,10 +145,10 @@ function rdAlfred:masterNoBatmanEnableAndStart()
 	--Disable this regardless
    	self.x.set('alfred','alfred','start_vis','0')
    	--Set this to none since we don't use mesh
-   	self.x.set('alfred','alfred','batmanif','none')
+   	--self.x.set('alfred','alfred','batmanif','none')
 
     self.x.commit('alfred')
-
+	--[[
 	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
 	local f=io.open(self.bat_hosts,"r")                                                   
     if f~=nil then 
@@ -155,6 +156,7 @@ function rdAlfred:masterNoBatmanEnableAndStart()
  		os.remove(self.bat_hosts)
 		os.execute("/etc/init.d/alfred disable")
 	end
+	]]--
     --start the service
     self:log("**Start up alfred master NO MESH**")
     os.execute("/etc/init.d/alfred start")

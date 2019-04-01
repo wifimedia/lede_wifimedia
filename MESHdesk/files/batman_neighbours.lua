@@ -128,7 +128,7 @@ function batman_neighbour_count()
 end
 
 --=================================================
-
+--[[
 loop = true
 while(loop)do
 	if(not(pidof('a.lua')))then                   
@@ -142,3 +142,4 @@ while(loop)do
 	sleep(interval)
 end 
 
+]]--
