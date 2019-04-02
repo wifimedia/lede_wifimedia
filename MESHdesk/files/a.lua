@@ -142,7 +142,7 @@ end
 --===========================
 function do_fw_config()
     --kill potential existing batman_neighbours.lua instance
-	ext:stop('batman_neighbours.lua')
+	--ext:stop('batman_neighbours.lua')
 
 	-- Break down the gateways --
 	require("rdGateway")
@@ -175,7 +175,7 @@ end
 function wait_for_lan()
 	                 
 	--kill potential existing batman_neighbours.lua instance
-	ext:stop('batman_neighbours.lua')
+	--ext:stop('batman_neighbours.lua')
 	ext:stop('heartbeat.lua')
 	ext:stop('actions_checker')	
 	os.execute("/etc/init.d/alfred stop")
@@ -471,12 +471,12 @@ function configure_device(config)
 
 
 	-- Do we have any batman_adv settings? --
-	if(o.config_settings.batman_adv ~= nil)then   
+	--if(o.config_settings.batman_adv ~= nil)then   
 		--print("Doing Batman-adv")
-        require("rdBatman")
-	    local batman = rdBatman()
-	    batman:configureFromTable(o.config_settings.batman_adv)             
-	end 
+        --require("rdBatman")
+	    --local batman = rdBatman()
+	    --batman:configureFromTable(o.config_settings.batman_adv)             
+	-end 
 
 
 	-- Is this perhaps a gateway node? --
@@ -522,7 +522,7 @@ function configure_device(config)
 	end
     
     -- Do the LED's we have configured in /etc/config/system
-    os.execute("ifconfig bat0 up") 	--On the pico's it goes down
+    --os.execute("ifconfig bat0 up") 	--On the pico's it goes down
     
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
@@ -546,7 +546,7 @@ function configure_device(config)
     --os.execute("batctl if add mesh1")
 
     log('Starting Batman neighbour scan')
-    ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
+    --ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
     
     --We move it to last since it gave more trouble with 802.11s based transport
     -- Check if there are perhaps some captive portals to set up once everything has been done --
@@ -584,7 +584,7 @@ function ap_wait_for_lan()
 
     ext:stop('heartbeat.lua')
 	ext:stop('actions_checker')	
-	os.execute("/etc/init.d/alfred stop")
+	--os.execute("/etc/init.d/alfred stop")
 	                 
 	-- LAN we flash "1"
 	log("Starting LAN wait")
