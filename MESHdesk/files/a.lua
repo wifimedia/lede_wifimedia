@@ -2,7 +2,7 @@
 
 --[[--
 
-Startup script to get the config of the device from the config server
+Startup script to get the config of the device from the config server 
 
 --]]--
 
@@ -178,7 +178,7 @@ function wait_for_lan()
 	--ext:stop('batman_neighbours.lua')
 	ext:stop('heartbeat.lua')
 	ext:stop('actions_checker')	
-	os.execute("/etc/init.d/alfred stop")
+	--os.execute("/etc/init.d/alfred stop")
 
 	-- LAN we flash "A"
 	log("Starting LAN wait")
@@ -476,7 +476,7 @@ function configure_device(config)
         --require("rdBatman")
 	    --local batman = rdBatman()
 	    --batman:configureFromTable(o.config_settings.batman_adv)             
-	-end 
+	--end 
 
 
 	-- Is this perhaps a gateway node? --
@@ -545,7 +545,7 @@ function configure_device(config)
 	--os.execute("batctl if add mesh0")
     --os.execute("batctl if add mesh1")
 
-    log('Starting Batman neighbour scan')
+    --log('Starting Batman neighbour scan')
     --ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
     
     --We move it to last since it gave more trouble with 802.11s based transport
@@ -588,8 +588,6 @@ function ap_wait_for_lan()
 	                 
 	-- LAN we flash "1"
 	log("Starting LAN wait")
-	--os.execute("/etc/MESHdesk/main_led.lua start one")
-	--os.execute("/etc/MESHdesk/main_led.lua start lan")
 	local start_time	= os.time()
 	local loop			= true
 	local lan_is_up		= false
@@ -704,7 +702,6 @@ function ap_try_settings_through_lan()
 		ap_check_for_previous_settings()
 	else
 		--flash D--
-		--os.execute("/etc/MESHdesk/main_led.lua start three")
 		ap_configure_device(config_file)
 	end
 end
@@ -894,12 +891,12 @@ if(mode == 'ap')then
     print("Device in AP Mode");
     ap_wait_for_lan()
     --Make sure alfred started
-    os.execute("/etc/init.d/alfred start")
+    --os.execute("/etc/init.d/alfred start")
 elseif(mode == 'mesh')then
     print("Device in Mesh node");
     wait_for_lan()
     --Make sure alfred started
-    os.execute("/etc/init.d/alfred start")
+    --os.execute("/etc/init.d/alfred start")
 else
     print("Device in unknown mode of "..mode)    
 end

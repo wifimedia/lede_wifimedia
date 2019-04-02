@@ -56,7 +56,7 @@ function rdGateway:enable(exPoints)
     end
     
 	self:__addExPoints(exPoints)
-    os.execute("touch /tmp/gw")
+    --os.execute("touch /tmp/gw")
 
 	--We also have to remove (and re-enable the /etc/resolv.conf)
 	os.execute("rm /etc/resolv.conf")
@@ -76,7 +76,7 @@ function rdGateway:disable()
     self:__fwMasqDisable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
-    os.execute("rm /tmp/gw")
+    --os.execute("rm /tmp/gw")
 
 	--Tell batman we are a client
 	if(self.mode == 'mesh')then
@@ -87,7 +87,7 @@ end
 
 function rdGateway:addNat(network)
 	self:__fwGwEnable(network,'no')
-    os.execute("rm /tmp/gw")
+    --os.execute("rm /tmp/gw")
 end
 
 function rdGateway:restartServices()

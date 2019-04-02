@@ -17,12 +17,12 @@ start() {
 	echo "$FIRST_RUN"
 	if [ $FIRST_RUN == 1 ]; then
 		echo "First run - do some housekeeping"
-		if [ -e /etc/init.d/alfred ]; then
-                    echo "Disable rc.d symlink for Alfred"
-        	    /etc/init.d/alfred disable
-		    /etc/init.d/alfred stop
-		   cp /etc/MESHdesk/files/common/alfred /etc/init.d/alfred
-		fi
+		#if [ -e /etc/init.d/alfred ]; then
+        #            echo "Disable rc.d symlink for Alfred"
+        #	    /etc/init.d/alfred disable
+		#   /etc/init.d/alfred stop
+		#   cp /etc/MESHdesk/files/common/alfred /etc/init.d/alfred
+		#fi
 
 		if [ -e /etc/init.d/odhcpd ]; then
 		    echo "Disable rc.d symlink for Odhcpd"
