@@ -11,7 +11,6 @@ local uci = require "luci.model.uci".cursor()
 m = Map("wifimedia",translate(""))
 function m.on_after_commit(self)
 		luci.util.exec("/sbin/wifimedia/ndscf.sh start >/dev/null")
-		luci.util.exec("/sbin/wifimedia/ndscf.sh start >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
