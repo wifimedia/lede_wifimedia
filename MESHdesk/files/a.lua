@@ -798,7 +798,7 @@ function ap_configure_device(config)
     sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
 
     --os.execute("/etc/init.d/firewall reload") --Activate the new firewall rules especiallt NAT to LAN
-
+	--[[
     if(o.config_settings.captive_portals ~= nil)then
     	print("Doing Captive Portals")
     	require("rdCoovaChilli")
@@ -816,9 +816,9 @@ function ap_configure_device(config)
         v:configureFromTable(o.config_settings.openvpn_bridges)
         os.execute("/etc/init.d/openvpn start")
     end
-    
+    ]]--
     --Start Alfred for the collecting of data (No MESH)
-    alfred:masterNoBatmanEnableAndStart()
+    --alfred:masterNoBatmanEnableAndStart()
     --Start the heartbeat to the server
     ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
     --Start the actions checker

@@ -73,7 +73,7 @@ function submitReport()
 		vis_string = vis_feedback
 	end
 	
-    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..',"vpn_info":'..vpn_d..'}'
+    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..'}'
 
     local proto 	= fetch_config_value('meshdesk.internet1.protocol')
     local mode      = fetch_config_value('meshdesk.settings.mode')
