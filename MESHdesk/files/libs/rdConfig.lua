@@ -97,7 +97,7 @@ function rdConfig:fetchSettings(url,device_id,gateway)
 		return false
 	end
 
-	if(self:_checksum(self.new_file) ~= self:_checksum(self.old_file))then
+	if(self:_checksum(self.new_file) == self:_checksum(self.old_file))then
 	   self:log("Khong cap nhat cau hinh moi")
 		return true
 	end
@@ -124,4 +124,5 @@ end
 function rdConfig._checksum(self,name)
 	return (luci.sys.exec("md5sum %q" % name):match("^([^%s]+)"))
 end
+
 

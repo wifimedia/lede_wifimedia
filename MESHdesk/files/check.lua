@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
---[[-- 
+--[[--
 
 Startup script to get the config of the device from the config server 
 
@@ -148,7 +148,7 @@ function do_fw_config()
 	require("rdGateway")
 	local a = rdGateway()
 	a:disable()
-	--a:restartServices()
+	a:restartServices()
 
     require("rdNetwork")
 
@@ -480,6 +480,7 @@ function configure_device(config)
 
 
 	-- Is this perhaps a gateway node? --
+	--[[
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
 		require("rdGateway")
@@ -492,7 +493,7 @@ function configure_device(config)
 		local a = rdGateway()
 		a:disable()
 	end
-
+	]]--
 	-- Do we have some network settings?       
 	if(o.config_settings.network ~= nil)then   
 		print("Doing network")
@@ -596,8 +597,8 @@ function ap_wait_for_lan()
 	--Do a clean start with the wireless--
 	require("rdWireless")
 	
-	--local wireless = rdWireless()
-	--wireless:newWireless()
+	local wireless = rdWireless()
+	wireless:newWireless()
 	
     require("rdNetwork")
 	
@@ -823,7 +824,7 @@ function ap_configure_device(config)
     --Start the heartbeat to the server
     ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
     --Start the actions checker
-	--ext:startOne('/etc/MESHdesk/actions_checker.lua &','actions_checker.lua')
+	ext:startOne('/etc/MESHdesk/actions_checker.lua &','actions_checker.lua')
         
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
