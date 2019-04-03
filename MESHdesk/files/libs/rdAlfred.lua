@@ -159,7 +159,7 @@ function rdAlfred:masterNoBatmanEnableAndStart()
 	]]--
     --start the service
     self:log("**Start up alfred master NO MESH**")
-    os.execute("/etc/init.d/alfred start")
+    --os.execute("/etc/init.d/alfred start")
 end
 
 function rdAlfred:log(m,p)
@@ -210,9 +210,9 @@ function rdAlfred.__cleanUp(self)
                 found_problem = true
             end
         end
-        if(found_problem)then
-            os.execute('/etc/init.d/alfred restart')
-        end
+        --if(found_problem)then
+        --    os.execute('/etc/init.d/alfred restart')
+        --end
     end
 end
 

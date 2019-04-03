@@ -530,11 +530,11 @@ function configure_device(config)
 		local a = rdGateway()
 		a:restartServices()
         --start alfred in master mode
-        alfred:masterEnableAndStart()
+        --alfred:masterEnableAndStart()
 		--Only the gateway node
 		ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
-    else
-        alfred:slaveEnableAndStart()
+    --else
+    --    alfred:slaveEnableAndStart()
 	end
 
 	--Start the actions checker (on every node)
