@@ -454,7 +454,7 @@ function configure_device(config)
 	    if(o.error ~= nil)then
 	        print(o.error);
 	        log(o.error);
-	        reboot_on_sos();
+	       --reboot_on_sos();
 	        return;
 	    end
 
@@ -463,7 +463,7 @@ function configure_device(config)
             log("Setting new config server to " .. o.new_server);
             uci_cursor.set('meshdesk','internet1','ip',o.new_server);
             uci_cursor.commit('meshdesk');
-            reboot_on_sos();
+            --reboot_on_sos();
 	        return;  
         end
 
@@ -551,6 +551,7 @@ function configure_device(config)
     --We move it to last since it gave more trouble with 802.11s based transport
     -- Check if there are perhaps some captive portals to set up once everything has been done --
     sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+	--[[
     if(o.config_settings.captive_portals ~= nil)then
     	print("Doing Captive Portals")
     	require("rdCoovaChilli")
@@ -736,7 +737,7 @@ function ap_configure_device(config)
 	    if(o.error ~= nil)then
 	        print(o.error);
 	        log(o.error);
-	        reboot_on_sos();
+	        --reboot_on_sos();
 	        return;
 	    end
 
@@ -745,7 +746,7 @@ function ap_configure_device(config)
             log("Setting new config server to " .. o.new_server);
             uci_cursor.set('meshdesk','internet1','ip',o.new_server);
             uci_cursor.commit('meshdesk');
-            reboot_on_sos();
+            --reboot_on_sos();
 	        return;  
         end
 
@@ -837,33 +838,6 @@ end
 --=====================
 --END AP Specifics ----
 --=====================
-
-function prep_leds()
-    local hw        = uci_cursor.get('meshdesk','settings','hardware');
-    local sled      = uci_cursor.get('meshdesk',hw,'single_led');
-    local mled      = uci_cursor.get('meshdesk',hw,'meshed_led');
-    local sysled    = uci_cursor.get('meshdesk',hw,'system_led');
-    
-    if((sled ~= nil)and(mled ~= nil)and(sysled ~= nil))then
-        os.execute("echo '0' > '/sys/class/leds/"..sled.."/brightness'");   --Single off
-        os.execute("echo '0' > '/sys/class/leds/"..mled.."/brightness'");   --Multiple off
-        os.execute("echo '1' > '/sys/class/leds/"..sysled.."/brightness'"); --System on
-        uci_cursor.set('system','wifi_led','sysfs',sled);
-        uci_cursor.commit('system');
-        os.execute("/etc/init.d/led stop")
-        os.execute("/etc/init.d/led start")
-    end
-end
-
-function configure_mode()
-    local hw        = uci_cursor.get('meshdesk','settings','hardware');
-    local sled      = uci_cursor.get('meshdesk',hw,'single_led');
-    local sysled    = uci_cursor.get('meshdesk',hw,'system_led');
-    if(sysled ~= sled)then -- Only when the single mode is not the same LED (else we switch it off)
-        os.execute("echo '0' > '/sys/class/leds/"..sysled.."/brightness'"); --System on    
-    end
-end
-
 
 --Get the mode
 mode = fetch_config_value('meshdesk.settings.mode')
