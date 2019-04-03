@@ -210,7 +210,7 @@ function wait_for_lan()
 		end
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= gw_dhcp_timeout)then
-			log("LAN is not coming up. Try the WiFi")
+			--log("LAN is not coming up. Try the WiFi")
 			print("LAN is not coming up. Try the WiFi")
 			break
 		else
@@ -222,7 +222,7 @@ function wait_for_lan()
 		--Then we can assume the LAN is up as set the flag
 		--TODO This will be large on second runs! - fix this
 		if((os.time() > 4000) and (start_time < 4000))then
-			log('Detected a very large value for os time asume the LAN and NTP working')
+			--log('Detected a very large value for os time asume the LAN and NTP working')
 			lan_is_up 	= true
 			break	--no need to continiue
 		end
@@ -279,13 +279,13 @@ function try_settings_through_lan()
 		--Here we have a timer to limit the loops 
 	    local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= gw_dhcp_timeout)then
-		    log('No contact to Internet for '..gw_dhcp_timeout..' seconds')
+		    --log('No contact to Internet for '..gw_dhcp_timeout..' seconds')
 			print('No contact to Internet for '..gw_dhcp_timeout..' seconds')
 			break
         end
         --Here we break since NTP we assume is already up and adjusted.
         if((os.time() > 4000) and (start_time < 4000))then
-			log('Detected a very large value for os time asume the LAN and NTP working')
+			--log('Detected a very large value for os time asume the LAN and NTP working')
 			break	--no need to continiue
 		end           
     end
@@ -370,7 +370,7 @@ function wait_for_wifi(radio_number)
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= wifi_timeout)then
 			print("Failed to get settings through Wi-Fi see if older ones exists")
-			log("Failed to get settings through Wi-Fi see if older ones exists")
+			--log("Failed to get settings through Wi-Fi see if older ones exists")
 			break
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
@@ -389,14 +389,14 @@ function wait_for_wifi(radio_number)
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
 		print("Wifi is up try to get the settings through WiFi")
-		log("Wifi is up try to get the settings through WiFi")
+		--log("Wifi is up try to get the settings through WiFi")
 	end
 	return wifi_is_up
 end
 
 function try_settings_through_wifi()
 	print("Wifi up now try fetch the settings")
-	log("Wifi up now try fetch the settings")
+	--log("Wifi up now try fetch the settings")
 	
 	-- See if we can ping it
 	local server 		= fetch_config_value('meshdesk.internet1.ip')
@@ -428,11 +428,11 @@ function check_for_previous_settings()
 		print("Using previous settings")
 		--os.execute("/etc/MESHdesk/main_led.lua start e")
 		configure_device(previous_config_file)
-	else
+	--else
 		--Nothing we can do but flash an SOS
 		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
-		reboot_on_sos()
+	--	reboot_on_sos()
 	end
 end
 
@@ -712,11 +712,11 @@ function ap_check_for_previous_settings()
 		print("Using previous settings")
 		--os.execute("/etc/MESHdesk/main_led.lua start four")
 		ap_configure_device(previous_config_file)
-	else
+	--else
 		--Nothing we can do but flash an SOS
 		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
-		reboot_on_sos();
+	--	reboot_on_sos();
 	end
 end
 
@@ -784,7 +784,7 @@ function ap_configure_device(config)
 	    w:configureFromTable(o.config_settings.wireless) 
 	end
 	  
-    --os.execute("/etc/init.d/network reload")
+    os.execute("/etc/init.d/network reload")
 
 	-- Do we have some system settings?
 	if(o.config_settings.system ~= nil)then  
