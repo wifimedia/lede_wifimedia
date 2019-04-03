@@ -58,7 +58,7 @@ function rdNetwork:dhcpStart()
     --Is there any Wifi Web specified
     self:__includeWebByWifi()
 	  
-	os.execute("/etc/init.d/network reload")
+	--os.execute("/etc/init.d/network reload")
 end
 
 function rdNetwork:frmwrStart()
@@ -73,7 +73,7 @@ function rdNetwork:frmwrStart()
             os.execute("cp " .. self.frmwr_one .. " /etc/config/network") 
         end
     end
-	os.execute("/etc/init.d/network reload")
+	--os.execute("/etc/init.d/network reload")
 end
 
 function rdNetwork:getMac(int)

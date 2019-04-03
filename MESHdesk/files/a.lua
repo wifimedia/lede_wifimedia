@@ -480,6 +480,7 @@ function configure_device(config)
 
 
 	-- Is this perhaps a gateway node? --
+	--[[
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
 		require("rdGateway")
@@ -492,7 +493,7 @@ function configure_device(config)
 		local a = rdGateway()
 		a:disable()
 	end
-
+	]]--
 	-- Do we have some network settings?       
 	if(o.config_settings.network ~= nil)then   
 		print("Doing network")
