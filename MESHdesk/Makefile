@@ -31,7 +31,7 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/alfred_scripts
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/captive_portals
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/configs
-	$(INSTALL_DIR) $(1)/etc/MESHdesk/files
+	#$(INSTALL_DIR) $(1)/etc/MESHdesk/files
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/libs
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/tests
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
@@ -39,7 +39,7 @@ define Package/zzz-MESHdesk/install
 	cp -r ./files/alfred_scripts/* $(1)/etc/MESHdesk/alfred_scripts
 	cp -r ./files/captive_portals/* $(1)/etc/MESHdesk/captive_portals
 	cp -r ./files/configs/* $(1)/etc/MESHdesk/configs
-	cp -r ./files/* $(1)/etc/MESHdesk/files
+	#cp -r ./files/* $(1)/etc/MESHdesk/files
 	cp -r ./files/libs/* $(1)/etc/MESHdesk/libs
 	cp -r ./files/tests/* $(1)/etc/MESHdesk/tests
 	$(INSTALL_BIN) ./files/a.lua $(1)/etc/MESHdesk/
