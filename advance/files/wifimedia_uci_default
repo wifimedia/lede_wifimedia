@@ -117,7 +117,7 @@ elif [ "$model_hardware" == "TL-WR841N_v14" ];then
 #elif [ "$model_hardware" == "TL-WR840N_v6" ];then
 #	echo "TL-WR840N v6" >/etc/hardware
 elif [ "$model_hardware" == "CF-E320N_v2" ];then
-	echo "WIFIMEDIA v2 - Viettel" >/etc/hardware
+	echo "EAP320v2" >/etc/hardware
 fi
 
 #Add vitual SSID
