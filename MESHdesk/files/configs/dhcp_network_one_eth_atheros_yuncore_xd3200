@@ -10,15 +10,6 @@ config interface 'lan'
 	option type 'bridge'
 	option proto 'dhcp'
 
-config interface 'client'
-	option proto 'dhcp'
-
-config interface 'client_0'
-  	option proto 'dhcp' 
-        
-config interface 'client_1'
-  	option proto 'dhcp' 
-
 config switch
     option name 'switch0'
     option reset '1'

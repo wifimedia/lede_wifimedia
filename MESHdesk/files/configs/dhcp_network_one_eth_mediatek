@@ -9,15 +9,6 @@ config interface 'lan'
 	option ifname 'eth0.1'
 	option type 'bridge'
 	option proto 'dhcp'
-
-config interface 'client'
-	option proto 'dhcp'
-
-config interface 'client_0'
-  	option proto 'dhcp' 
-        
-config interface 'client_1'
-  	option proto 'dhcp' 
   	
 config switch
         option name 'switch0'
