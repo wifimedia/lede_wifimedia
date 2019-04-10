@@ -70,27 +70,3 @@ while(loop)do
 	sleep(interval)
 end 
 
-function last_check()
-	print("check-in")
-	
-	-- See if we can ping it
-	local server 		= fetch_config_value('meshdesk.internet1.ip')
-	local c 			= rdConfig()
-	local got_settings	=false                                          
-	if(c:pingTest(server))then
-		print("Ping os server was OK try to fetch the settings")
-		log("Ping os server was OK try to fetch the settings")
---		local id	="A8-40-41-13-60-E3"
-        local id_if     = fetch_config_value('meshdesk.settings.id_if')
-		local id	    = getMac(id_if)
-		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
-		local url   	= fetch_config_value('meshdesk.internet1.url')
-		local query     = proto .. "://" .. server .. "/" .. url 
-		print("Query url is " .. query )
-		if(c:fetchSettings(query,id,false))then
-			print("Funky -> got settings through WIFI")
-			got_settings=true
-		end
-	end
-	return got_settings
-end
