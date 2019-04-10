@@ -10,6 +10,10 @@ START=50
 STOP=50
 DIR='/etc/MESHdesk'
 
+
+boot() {
+	ifup lan
+}
 start() {
 
 	#Due to problems with the package postinstall script we will do a first run here
