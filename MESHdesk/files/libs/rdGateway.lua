@@ -56,7 +56,7 @@ function rdGateway:enable(exPoints)
     end
     
 	self:__addExPoints(exPoints)
-    os.execute("touch /tmp/gw")
+    --os.execute("touch /tmp/gw")
 
 	--We also have to remove (and re-enable the /etc/resolv.conf)
 	os.execute("rm /etc/resolv.conf")
