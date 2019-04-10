@@ -428,11 +428,11 @@ function check_for_previous_settings()
 		print("Using previous settings")
 		--os.execute("/etc/MESHdesk/main_led.lua start e")
 		configure_device(previous_config_file)
-	--else
+	else
 		--Nothing we can do but flash an SOS
 		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
-	--	reboot_on_sos()
+	reboot_on_sos()
 	end
 end
 
@@ -616,7 +616,7 @@ function ap_wait_for_lan()
 		if(time_diff >= gw_dhcp_timeout)then
 			log("LAN is not coming up. Try again")
 			print("LAN is not coming up. Try again")
-			reboot_on_sos();
+			--reboot_on_sos();
 			break
 		else
 			log("Waiting for LAN to come up now for " .. time_diff .. " seconds")
@@ -713,11 +713,11 @@ function ap_check_for_previous_settings()
 		print("Using previous settings")
 		--os.execute("/etc/MESHdesk/main_led.lua start four")
 		ap_configure_device(previous_config_file)
-	--else
+	else
 		--Nothing we can do but flash an SOS
 		--os.execute("/etc/MESHdesk/main_led.lua start sos")
 		--This will result in a reboot to try again
-	--	reboot_on_sos();
+	reboot_on_sos();
 	end
 end
 

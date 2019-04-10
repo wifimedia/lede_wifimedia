@@ -15,6 +15,7 @@ start() {
 	#Due to problems with the package postinstall script we will do a first run here
 	FIRST_RUN=`uci get meshdesk.settings.first_run`
 	echo "$FIRST_RUN"
+	ifup lan
 	if [ $FIRST_RUN == 1 ]; then
 		echo "First run - do some housekeeping"
 		#if [ -e /etc/init.d/alfred ]; then
