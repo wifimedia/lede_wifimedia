@@ -17,7 +17,7 @@ function supplyGateway()
     local a     = rdAlfred()
     local j     = require("json")
     local gw    = {}
-    local ip    = getIPAddress('br-one')
+    local ip    = getIPAddress('br-one')  --xem lai interface du lieu
     if(ip)then
         gw.ip_address   = ip
         gw.timestamp    = os.time() 

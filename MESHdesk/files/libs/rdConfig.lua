@@ -96,13 +96,15 @@ function rdConfig:fetchSettings(url,device_id,gateway)
         self:log("Failed to get latest config file")
 		return false
 	end
+end
+
+function rdConfig:_md5(new_file,old_file)
 
 	if(self:_checksum(self.new_file) == self:_checksum(self.old_file))then
 	   self:log("Khong cap nhat cau hinh moi")
 		return true
 	end
 end
-
 --[[--
 ========================================================
 === Private functions start here =======================
@@ -122,7 +124,8 @@ function rdConfig._file_size(self,name)
 end
 
 function rdConfig._checksum(self,name)
-	return (luci.sys.exec("md5sum %q" % name):match("^([^%s]+)"))
+	sum = luci.sys.exec("md5sum %q" % name):match("^([^%s]+)");
+	return sum
 end
 
 
