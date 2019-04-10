@@ -34,6 +34,7 @@ define Package/zzz-MESHdesk/install
 	#$(INSTALL_DIR) $(1)/etc/MESHdesk/files
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/libs
 	$(INSTALL_DIR) $(1)/etc/MESHdesk/tests
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi
 	cp -r ./files/alfred_scripts/* $(1)/etc/MESHdesk/alfred_scripts
@@ -53,6 +54,7 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_DATA) ./files/meshdeskcbi.lua $(1)/usr/lib/lua/luci/model/cbi/meshdesk.lua
 	mkdir -p $(1)/etc/init.d
 	#$(INSTALL_DATA) ./files/md_prerun $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/apstart $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/md_prerun $(1)/etc/init.d
 	mkdir -p $(1)/etc/config
 	$(INSTALL_DATA) ./files/meshdesk $(1)/etc/config
