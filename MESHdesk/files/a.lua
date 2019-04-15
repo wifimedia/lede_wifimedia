@@ -148,7 +148,7 @@ function do_fw_config()
 	require("rdGateway")
 	local a = rdGateway()
 	a:disable()
-	--a:restartServices()
+	a:restartServices()
 
     require("rdNetwork")
 
