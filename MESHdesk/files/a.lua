@@ -702,8 +702,19 @@ function ap_try_settings_through_lan()
 		log("Settings could not be fetched through LAN see if older ones exists")
 		ap_check_for_previous_settings()
 	else
-		--flash D--
-		ap_configure_device(config_file)
+		--flash D-- check compare file current
+		--meshdesk.settings.md5sumcurrent
+		--local md5new = os.execute("md5sum /etc/MESHdesk/configs/current.json | awk '{print $1}'")
+		
+		--if ( md5sum_current ~= md5new) then
+		--	print md5sum_current
+			ap_configure_device(config_file)
+		--	uci_cursor.set('meshdesk','settings','md5sumcurrent',md5new);
+		--	uci_cursor.commit('meshdesk');
+		--	print("Newconfig ciiiiiiii")
+		--else
+		--	print("Khong co cau hinh moi")
+		--end
 	end
 end
 
