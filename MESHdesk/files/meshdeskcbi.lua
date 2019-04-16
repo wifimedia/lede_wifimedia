@@ -1,3 +1,5 @@
+require("luci.sys")
+local sys = require "luci.sys"
 m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the following details"))
  
         d = m:section(NamedSection,"settings", "settings","Activation" )  -- info is the section called info in cbi_file
@@ -5,7 +7,7 @@ m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the followi
                 a.optional=false;
                 a.rmempty = false;
                 a:value("off","OFF");
-                a:value("mesh","Mesh");
+                --a:value("mesh","Mesh");
                 a:value("ap","AP");
  
         local s_internet = m:section(NamedSection,"internet1","internet","Settings");
@@ -22,6 +24,10 @@ m.on_parse = function(self)
                 if(new_mode == 'off')then
                         nixio.fs.copy("/etc/MESHdesk/configs/wireless_original","/etc/config/wireless");
                         nixio.fs.copy("/etc/MESHdesk/configs/network_original","/etc/config/network");
+						luci.sys.call("/etc/init.d/md_prerun disable");
+				else
+						
+						luci.sys.call("/etc/init.d/md_prerun enable & /etc/init.d/md_prerun start ");
                 end
         end
 end
