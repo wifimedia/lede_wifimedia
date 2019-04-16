@@ -60,7 +60,7 @@ while(loop)do
 		--print("Setup script running already wait for it to finish")
 		log("Setup script running already wait for it to finish")
 	end
-	--os.execute("/etc/MESHdesk/a.lua &")
+	os.execute("/etc/MESHdesk/a.lua &")
 	--Check if there are another interval besides the default of 30 seconds
 	local x = uci.cursor(nil,'/var/state')
 	local time_to_sleep = x.get('meshdesk','settings','heartbeat_interval')
@@ -69,4 +69,3 @@ while(loop)do
 	end
 	sleep(interval)
 end 
-
