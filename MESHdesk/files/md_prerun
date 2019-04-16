@@ -10,7 +10,6 @@ START=50
 STOP=50
 DIR='/etc/MESHdesk'
 
-
 boot() {
 	ifup lan
 }
