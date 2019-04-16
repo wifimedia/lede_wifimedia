@@ -77,6 +77,8 @@ define Package/zzz-MESHdesk/prerm
 if [ -z "$${IPKG_INSTROOT}" ]; then
         echo "Removing rc.d symlink for MESHdesk"
         /etc/init.d/md_prerun disable
+		echo "Fix the permissions for wifimesh"
+		chmod +x /etc/MESHdesk/alfred_scripts/*
 fi
 exit 0
 endef
