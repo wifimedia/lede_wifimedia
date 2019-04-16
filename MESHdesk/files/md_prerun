@@ -92,5 +92,13 @@ start() {
 
 stop() {
     echo stop
-    killall /etc/MESHdesk/a.lua
+    #killall /etc/MESHdesk/a.lua
+	PIDall=`pidof a.lua`
+	for PID in PIDall;do
+		kill $PID
+	done	
+	PIDs=`pidof heartbeat.lua`
+	for PID in $PIDs; do
+		kill $PID
+	done
 }
