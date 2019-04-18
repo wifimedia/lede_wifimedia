@@ -55,6 +55,7 @@ define Package/zzz-MESHdesk/install
 	mkdir -p $(1)/etc/init.d
 	#$(INSTALL_DATA) ./files/md_prerun $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/apstart $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./files/media_uci_default $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/md_prerun $(1)/etc/init.d
 	mkdir -p $(1)/etc/config
 	$(INSTALL_DATA) ./files/meshdesk $(1)/etc/config
