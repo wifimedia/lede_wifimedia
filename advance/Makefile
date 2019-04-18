@@ -19,7 +19,7 @@ define Package/advance
   SUBMENU:=Wifimedia
   SECTION:=dev
   CATEGORY:=Advance
-  DEPENDS:=+luci +luci-mod-admin-full
+  #DEPENDS:=+luci +luci-mod-admin-full
   TITLE:=advance ...
   URL:=http://wifimedia.vn
   MENU:=1
