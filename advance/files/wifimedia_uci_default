@@ -118,6 +118,8 @@ elif [ "$model_hardware" == "TL-WR841N_v14" ];then
 #	echo "TL-WR840N v6" >/etc/hardware
 elif [ "$model_hardware" == "CF-E320N_v2" ];then
 	echo "EAP320v2" >/etc/hardware
+	uci set meshdesk.settings.id_if="eth1"
+	uci commit meshdesk
 fi
 
 #Add vitual SSID
