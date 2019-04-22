@@ -9,4 +9,8 @@ if [ "$model_hardware" == "TL-WR940N_v6" ];then
 elif [ "$model_hardware" == "CF-E320N_v2" ];then
 	uci set meshdesk.settings.id_if="eth1"
 	uci commit meshdesk
-fi
+elif [ "$model_hardware" == "CF-E355AC_v2" ];then
+	uci set meshdesk.settings.hardware="e355ac"
+	uci set meshdesk.settings.id_if="eth1"
+	uci commit meshdesk
+fi	
