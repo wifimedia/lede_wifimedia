@@ -19,11 +19,18 @@ s.anonymous = true
 s.addremove = false
 --s:option( Value, "ndsname","Name")
 --s:option( Value, "nds_apkey","APKEY")
-s:option( Value, "nds_url","Domain")
-s:option( Value, "ndsurl","Redirect URL")
-s:option( Value, "nds_wg","Walled Garden")
---s:option( Value, "ndsclient","MaxClients")
---s:option( Value, "ndsidletimeout","Client Idle Timeout")
+s:tab("basic","Basic")
+s:tab("advance","Advanced")
+
+s:taboption( "basic",Value, "domain","Domain")
+s:taboption( "basic",Value, "redirecturl","Redirect URL")
+s:taboption( "basic",Value, "preauthenticated_users","Walled Garden")
+s:taboption( "advance",Value, "maxclients","Maxclients")
+s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","m")
+s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","m")
+s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","s")
+s:taboption( "advance",Value, "checkinterval","Checkinterval","s")
+s:taboption( "advance",Value, "ndsidletimeout","Client Idle Timeout")
 
 local pid = luci.util.exec("pidof nodogsplash")
 local message = luci.http.formvalue("message")
