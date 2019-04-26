@@ -21,7 +21,7 @@ s.addremove = false
 --s:option( Value, "nds_apkey","APKEY")
 s:tab("basic","Basic")
 s:tab("advance","Advanced")
-
+s:tab("network","Network")
 s:taboption( "basic",Value, "domain","Domain","portal.nextify.vn")
 s:taboption( "basic",Value, "redirecturl","Redirect URL")
 s:taboption( "basic",Value, "preauthenticated_users","Walled Garden")

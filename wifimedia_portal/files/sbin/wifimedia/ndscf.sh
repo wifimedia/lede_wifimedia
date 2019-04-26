@@ -1,32 +1,61 @@
 #!/bin/sh
 
-fbs_gw1=`uci -q get wifimedia.@nodogsplash[0].ndsname`
-fbs_gw=${fbs_gw1:-Nextify}
+domain=`uci -q get wifimedia.@nodogsplash[0].domain`
+domain_default=${domain:-portal.nextify.vn}
 
-fbs_url1=`uci -q get wifimedia.@nodogsplash[0].ndsurl`
-fbs_url=${fbs_url1:-}
-fbs_url=${fbs_url1:-http://google.com.vn}
+redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
+redirecturl_default=${redirecturl:-https://google.com.vn}
 
-MaxClients1=`uci -q get wifimedia.@nodogsplash[0].ndsclient`
-MaxClients=${MaxClients1:-120}
+preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
 
-clidtimeout1=`uci -q get wifimedia.@nodogsplash[0].ndsidletimeout`
-clidtimeout=${clidtimeout1:-7200}
+maxclients=`uci -q get wifimedia.@nodogsplash[0].maxclients`
+maxclients_default=${maxclients:-120}
 
-url=`uci -q get wifimedia.@nodogsplash[0].nds_url`
-#url=${_url:-portal.nextify.vn/splash}
+preauthidletimeout=`uci -q get wifimedia.@nodogsplash[0].preauthidletimeout`
+preauthidletimeout_default=${preauthidletimeout:-30}
 
-gateway=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z)
+authidletimeout=`uci -q get wifimedia.@nodogsplash[0].authidletimeout`
+authidletimeout_default=${authidletimeout:-120}
 
-key=`uci -q get wifimedia.@nodogsplash[0].nds_apkey`
-captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
-apkey=${key:-$captive_id}
-wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
+sessiontimeout=`uci -q get wifimedia.@nodogsplash[0].sessiontimeout`
+sessiontimeout_default=${sessiontimeout:-20}
 
-ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
-if [ "$fbs_url" != "" ];then
-	redir="RedirectURL "$fbs_url
+checkinterval=`uci -q get wifimedia.@nodogsplash[0].checkinterval`
+checkinterval_default=${checkinterval:-5}
+
+uci del nodogsplash.@nodogsplash[0].preauthenticated_users
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow tcp port 53'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow udp port 53'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow tcp port 0:79'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow tcp port 81:65535'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow to 172.16.99.1'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow to 125.212.224.252'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow to 171.244.6.33'
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users='allow to 103.104.116.6'
+uci commit
+
+MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g')
+
+if [ "$domain" != "" ];then
+	uci set nodogsplash.@nodogsplash[0].domain=$domain
+elif [ "$redirecturl" != "" ];then
+	uci set nodogsplash.@nodogsplash[0].redirecturl=$redirecturl_default	
+elif [ "$preauthenticated_users" != "" ];then
+	uci set nodogsplash.@nodogsplash[0].preauthenticated_users=$preauthenticated_users
+elif [ "$maxclients" != ""];then
+	uci -q get nodogsplash.@nodogsplash[0].maxclients=$maxclients
+elif [ "$preauthidletimeout" != "" ];then
+	uci -q get nodogsplash.@nodogsplash[0].preauthidletimeout=$preauthidletimeout
+elif [ "$authidletimeout" != "" ];then
+	uci set nodogsplash.@nodogsplash[0].authidletimeout=$authidletimeout
+elif [ "$sessiontimeout" != "" ];then
+	sessiontimeout_=$(expr $sessiontimeout_default * 60)
+	uci set nodogsplash.@nodogsplash[0].sessiontimeout=$sessiontimeout_	
+elif [ "$checkinterval" != "" ];then
+	checkinterval_=$(expr $checkinterval_default * 60)
+	uci set nodogsplash.@nodogsplash[0].checkinterval=$checkinterval_
 fi
+uci commit
 #write file splash
 
 echo '<!doctype html>
@@ -36,9 +65,9 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$url'">
+      <form id="info" method="POST" action="//'$domain'/splash">
           <input type="hidden" name="gateway_name" value="$gatewayname">
-          <input type="hidden" name="gateway_mac" value="'$gateway'">
+          <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
@@ -64,7 +93,7 @@ echo '<!doctype html>
         </style>
     </head>
     <body></body>
-</html>' >/etc/nodogsplash/htdocs/infoskel.html
+</html>' >/etc/nodogsplash/htdocs/status.html
 
 #write file config
 #cat /sbin/wifimedia/nodogsplash_cfg >/etc/config/nodogsplash

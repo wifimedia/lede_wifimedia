@@ -15,12 +15,13 @@ done
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
-whitelist=`uci get wifimedia.@nodogsplash[0].nds_wg`
+whitelist=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
+echo $whitelist
 echo '' > ${PREAUTHENTICATED_ADDRS}
 echo '' > ${PREAUTHENTICATED_RULES}
 
 # Whitelist IP
-for domain in portal.nextify.vn static.nextify.vn $whitelist; do
+for domain in $whitelist; do
     nslookup ${domain} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
