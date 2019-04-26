@@ -22,7 +22,7 @@ s.addremove = false
 s:tab("basic","Basic")
 s:tab("advance","Advanced")
 
-s:taboption( "basic",Value, "domain","Domain")
+s:taboption( "basic",Value, "domain","Domain","portal.nextify.vn")
 s:taboption( "basic",Value, "redirecturl","Redirect URL")
 s:taboption( "basic",Value, "preauthenticated_users","Walled Garden")
 s:taboption( "advance",Value, "maxclients","Maxclients")
@@ -59,11 +59,12 @@ t.anonymous = true
 
 t:option(DummyValue, "status","Captive portal status")
 
-	if nixio.fs.access("/etc/rc.d/S99nodogsplash") then
+	if nixio.fs.access("/etc/rc.d/S95nodogsplash") then
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
 			luci.util.exec("/etc/init.d/nodogsplash disable")
+			luci.util.exec("uci set nodogsplash.@nodogsplash[0].enabled='0' && uci commit")
 			luci.util.exec(" /etc/init.d/nodogsplash stop && /etc/init.d/firewall restart ")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.http.redirect(
@@ -75,6 +76,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
 			luci.util.exec("/etc/init.d/nodogsplash enable")
+			luci.util.exec("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit")
 			--luci.util.exec("kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart && /etc/init.d/nodogsplash start")
 			luci.http.redirect(
