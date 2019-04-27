@@ -1,14 +1,14 @@
-#!/bin/s h
+#!/bin/sh
 
 # Wait for network up & running
-while true; do
-    ping -c1 -W1 8.8.8.8
-    if [ ${?} -eq 0 ]; then
-        break
-    else
-        sleep 1
-    fi
-done
+#while true; do
+#    ping -c1 -W1 8.8.8.8
+#    if [ ${?} -eq 0 ]; then
+#        break
+#    else
+#        sleep 1
+#    fi
+#done
 
 #sh /root/create_ssh_tunnel.sh
 #Value
@@ -37,7 +37,7 @@ checkinterval_default=${checkinterval:-10}
 ctv=`expr $checkinterval_default \* 60`
 MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
 
-nds (){
+uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
 uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
@@ -103,8 +103,7 @@ echo '<!doctype html>
     </head>
     <body></body>
 </html>' >/etc/nodogsplash/htdocs/status.html
-#config option nodogsplash
-}
+
 
 #grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 
@@ -141,13 +140,15 @@ echo '<!doctype html>
 
 #Create Network
 nds_del() {
+/etc/init.d/nodogsplash disable
+uci set nodogsplash.@nodogsplash[0].enabled='0'
 uci batch << EOF
 	del network.${NET_ID}
 	del dhcp.${NET_ID}
 	del firewall.${FW_ZONE}
 EOF
+uci commit
 }
-nds_add_network(){
 	uci batch << EOF
 	set network.${NET_ID}=interface
 	set network.${NET_ID}.ifname=${NET_ID}
@@ -188,5 +189,5 @@ uci commit firewall
 service network reload
 service dnsmasq restart
 service firewall restart
-}
+
 
