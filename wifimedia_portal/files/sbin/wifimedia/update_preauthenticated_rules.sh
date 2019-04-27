@@ -76,7 +76,7 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$domain'/splash">
+      <form id="info" method="POST" action="//'$domain_default'/splash">
           <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
           <input type="hidden" name="client_mac" value="$clientmac">
