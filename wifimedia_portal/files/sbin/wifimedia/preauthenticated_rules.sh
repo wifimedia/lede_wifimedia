@@ -122,10 +122,10 @@ echo '<!doctype html>
 ## Remove comments
 #sed -i -e 's/#.*$//' ${NODOGSPLASH_CONFIG}
 #
-## Tắt nodogsplash cũ nếu có
+## T?t nodogsplash cu n?u c�
 #kill -9 $(ps | grep '[n]odogsplash' | awk '{print $1}')
 #
-## Bật nodogsplash mới
+## B?t nodogsplash m?i
 #nodogsplash -c ${NODOGSPLASH_CONFIG}
 ##if [ ${?} -eq 0 ]; then
 #   	#cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wps/
@@ -174,8 +174,7 @@ EOF
 uci commit network
 uci commit dhcp
 uci commit firewall
-service network restart
-service dnsmasq restart
-service firewall restart
-service nodogsplash restart
-
+/etc/init.d/network restart
+/etc/init.d/dnsmasq restart
+/etc/init.d/firewall restart
+/etc/init.d/nodogsplash restart

@@ -10,7 +10,7 @@ local uci = require "luci.model.uci".cursor()
 
 m = Map("wifimedia",translate(""))
 function m.on_after_commit(self)
-		luci.util.exec("/sbin/wifimedia/ndscf.sh start >/dev/null")
+		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
@@ -63,7 +63,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
-			luci.util.exec(" NET_ID=FW_ZONE='nextify' uci batch << EOF del network.${NET_ID} del dhcp.${NET_ID} del firewall.${FW_ZONE} commit EOF")
+			luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
@@ -73,8 +73,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  enable = t:option(Button, "_enable","Enable")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
-			luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh nds_start")
-			luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh nds_add_network")
+			luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
