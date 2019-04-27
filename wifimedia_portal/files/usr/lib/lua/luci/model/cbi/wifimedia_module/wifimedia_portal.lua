@@ -43,7 +43,7 @@ function captive_process_status()
 	  status = "Captive portal is running"
   end
 
-  if nixio.fs.access("/etc/rc.d/S99nodogsplash") then
+  if nixio.fs.access("/etc/rc.d/S95nodogsplash") then
     status = status .. ""
   else
     status = status .. ""
