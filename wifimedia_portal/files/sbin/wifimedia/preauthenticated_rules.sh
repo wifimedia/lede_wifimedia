@@ -56,6 +56,8 @@ for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledga
 done
 ###Read line file 
 uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
+uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
+uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 while read line; do
