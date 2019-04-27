@@ -63,7 +63,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
-			luci.util.exec(" /sbin/wifimedia/preauthenticated_rules.sh nds_del")
+			luci.util.exec(" NET_ID=FW_ZONE='nextify' uci batch << EOF del network.${NET_ID} del dhcp.${NET_ID} del firewall.${FW_ZONE} commit EOF")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")

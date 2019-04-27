@@ -1,16 +1,15 @@
 #!/bin/sh
 
 # Wait for network up & running
-#while true; do
-#    ping -c1 -W1 8.8.8.8
-#    if [ ${?} -eq 0 ]; then
-#        break
-#    else
-#        sleep 1
-#    fi
-#done
+while true; do
+    ping -c1 -W1 8.8.8.8
+    if [ ${?} -eq 0 ]; then
+        break
+    else
+        sleep 1
+    fi
+done
 
-#sh /root/create_ssh_tunnel.sh
 #Value
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
@@ -45,8 +44,6 @@ uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_defa
 uci set nodogsplash.@nodogsplash[0].authidletimeout="$authidletimeout_default";
 uci set nodogsplash.@nodogsplash[0].sessiontimeout="$std";
 uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
-uci commit
-
 # Whitelist IP
 for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do
     nslookup ${i} 8.8.8.8 2> /dev/null | \
@@ -103,7 +100,7 @@ echo '<!doctype html>
     </head>
     <body></body>
 </html>' >/etc/nodogsplash/htdocs/status.html
-
+/etc/init.d/nodogsplash enable
 
 #grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 
@@ -139,16 +136,6 @@ echo '<!doctype html>
 
 
 #Create Network
-nds_del() {
-/etc/init.d/nodogsplash disable
-uci set nodogsplash.@nodogsplash[0].enabled='0'
-uci batch << EOF
-	del network.${NET_ID}
-	del dhcp.${NET_ID}
-	del firewall.${FW_ZONE}
-EOF
-uci commit
-}
 uci batch << EOF
 	set network.${NET_ID}=interface
 	set network.${NET_ID}.ifname=${NET_ID}
@@ -182,13 +169,13 @@ uci batch << EOF
 	set firewall.${FW_ZONE}_dns.target=ACCEPT
 	set firewall.${FW_ZONE}_dns.proto=tcpudp
 	set firewall.${FW_ZONE}_dns.dest_port=53
+	commit
 EOF
 uci commit network
 uci commit dhcp
 uci commit firewall
-service network reload
+service network restart
 service dnsmasq restart
 service firewall restart
-
-
+service nodogsplash restart
 
