@@ -23,74 +23,143 @@ s.anonymous = true
 s.addremove = false
 
 --[[ auto controller ]]--
-s:tab("ctrgroups",  translate("Wireless"))
-ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable")
-ctrgs = s:taboption("ctrgroups",Value, "essid", "SSID")
-ctrgs:depends({ctrs_en="1"})
+s:tab("radio24","24G Wireless")
+ctrgs_en = s:taboption("radio24",Flag, "bw24g", "Enable")
+ctrgs = s:taboption("radio24",Value, "essid", "SSID")
+ctrgs:depends({bw24g="1"})
 
-ctrgsm = s:taboption("ctrgroups",ListValue, "mode", "MODE")
+ctrgsm = s:taboption("radio24",ListValue, "mode", "MODE")
 ctrgsm:value("ap","AP")
 ctrgsm:value("mesh","MESH")
 ctrgsm:value("wds","WDS")
-ctrgsm:depends({ctrs_en="1"})
+ctrgsm:depends({bw24g="1"})
 
-ch = s:taboption( "ctrgroups",ListValue, "channel", "Channel")
+ch = s:taboption( "radio24",ListValue, "channel", "Channel")
 local channel = 1
 while (channel < 14) do
 	ch:value(channel, channel .. " ")
 	channel = channel + 1
 end
 ch.default = "6"
-ch:depends({ctrs_en="1"})
+ch:depends({bw24g="1"})
 
-ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
-ctrgscnl:depends({ctrs_en="1"})
+ctrgscnl = s:taboption("radio24",Value, "maxassoc", "Connection Limit")
+ctrgscnl:depends({bw24g="1"})
 
-ctrgsn = s:taboption("ctrgroups",ListValue, "network", "Network")
+ctrgsn = s:taboption("radio24",ListValue, "network", "Network")
 ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
-ctrgsn:depends({ctrs_en="1"})
+ctrgsn:depends({bw24g="1"})
 
-ctrgsn = s:taboption("ctrgroups",ListValue, "encrypt", "Wireless Security")
+ctrgsn = s:taboption("radio24",ListValue, "encrypt", "Wireless Security")
 ctrgsn:value("","No Encryption")
 ctrgsn:value("encryption","WPA-PSK/WPA2-PSK")
-ctrgsn:depends({ctrs_en="1"})
+ctrgsn:depends({bw24g="1"})
 
-grwpa = s:taboption("ctrgroups",Value, "password", "Password")
+grwpa = s:taboption("radio24",Value, "password", "Password")
 grwpa.datatype = "wpakey"
 grwpa.rmempty = true
 grwpa.password = true
 grwpa:depends({encrypt="encryption"})
 
-ctrgsft = s:taboption("ctrgroups",ListValue, "ft", "Fast Roaming")
+ctrgsft = s:taboption("radio24",ListValue, "ft", "Fast Roaming")
 ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({encrypt="encryption"})
 
-pmk = s:taboption("ctrgroups",Flag,"ft_psk_generate_local","Generate PMK Locally")
+pmk = s:taboption("radio24",Flag,"ft_psk_generate_local","Generate PMK Locally")
 pmk:depends({ft="ieee80211r"})
 pmk.rmempty = false
 
-nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
+nasid = s:taboption("radio24",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
-device = s:taboption("ctrgroups",Value, "macs", "APID")
+device = s:taboption("radio24",Value, "macs", "APID")
 device:depends({ft="ieee80211r", ft_psk_generate_local=""})
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
-ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
+ctrgtx = s:taboption("radio24",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
 ctrgtx:value("low","Low")
 ctrgtx:value("medium","Medium")
 ctrgtx:value("high","High")
-ctrgtx:depends({ctrs_en="1"})
+ctrgtx:depends({bw24g="1"})
 
-hidessid = s:taboption("ctrgroups",Flag, "hidessid","Hide SSID")
+hidessid = s:taboption("radio24",Flag, "hidessid","Hide SSID")
 hidessid.rmempty = false
-hidessid:depends({ctrs_en="1"})
+hidessid:depends({bw24g="1"})
  
-apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
+apisolation = s:taboption("radio24",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
-apisolation:depends({ctrs_en="1"})
+apisolation:depends({bw24g="1"})
+
+s:tab("radio5","5G Wireless")
+ctrgs_en = s:taboption("radio5",Flag, "bw5g", "5G Enable")
+ctrgs = s:taboption("radio5",Value, "essidfive", "SSID")
+ctrgs:depends({bw5g="1"})
+
+ctrgsm = s:taboption("radio5",ListValue, "modefive", "MODE")
+ctrgsm:value("ap","AP")
+ctrgsm:value("mesh","MESH")
+ctrgsm:value("wds","WDS")
+ctrgsm:depends({bw5g="1"})
+
+ch = s:taboption( "radio5",ListValue, "channelfive", "Channel")
+--local channel = 1
+--while (channel < 14) do
+--	ch:value(channel, channel .. " ")
+--	channel = channel + 1
+--end
+--ch.default = "6"
+ch:depends({bw5g="1"})
+
+ctrgscnl = s:taboption("radio5",Value, "maxassocfive", "Connection Limit")
+ctrgscnl:depends({bw5g="1"})
+
+ctrgsn = s:taboption("radio5",ListValue, "networkfive", "Network")
+ctrgsn:value("wan","WAN")
+ctrgsn:value("lan","LAN")
+ctrgsn:depends({bw5g="1"})
+
+ctrgsn = s:taboption("radio5",ListValue, "encryptfive", "Wireless Security")
+ctrgsn:value("","No Encryption")
+ctrgsn:value("encryption","WPA-PSK/WPA2-PSK")
+ctrgsn:depends({bw5g="1"})
+
+grwpa = s:taboption("radio5",Value, "passwordfive", "Password")
+grwpa.datatype = "wpakey"
+grwpa.rmempty = true
+grwpa.password = true
+grwpa:depends({encryptfive="encryption"})
+
+ctrgsft = s:taboption("radio5",ListValue, "ftfive", "Fast Roaming")
+ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
+ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
+ctrgsft:depends({encryptfive="encryption"})
+
+pmk = s:taboption("radio5",Flag,"ft_psk_generate_local","Generate PMK Locally")
+pmk:depends({ftfive="ieee80211r"})
+pmk.rmempty = false
+
+nasid = s:taboption("radio5",Value, "nasidfive", "NAS ID")
+nasid:depends({ftfive="ieee80211r"})
+device = s:taboption("radio5",Value, "macsfive", "APID")
+device:depends({ftfive="ieee80211r", ft_psk_generate_local=""})
+--macs.datatype = "macaddr"
+--[[Tx Power]]--
+ctrgtx = s:taboption("radio5",ListValue, "txpowerfive", "Transmit Power")
+ctrgtx:value("auto","Auto")
+ctrgtx:value("low","Low")
+ctrgtx:value("medium","Medium")
+ctrgtx:value("high","High")
+ctrgtx:depends({bw5g="1"})
+
+hidessid = s:taboption("radio5",Flag, "hidessidfive","Hide SSID")
+hidessid.rmempty = false
+hidessid:depends({bw5g="1"})
+ 
+apisolation = s:taboption("radio5",Flag, "isolationfive","AP Isolation")
+apisolation.rmempty = false
+apisolation:depends({bw5g="1"})
 --[[
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
