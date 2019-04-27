@@ -149,7 +149,7 @@ uci batch << EOF
 EOF
 uci commit
 }
-	uci batch << EOF
+uci batch << EOF
 	set network.${NET_ID}=interface
 	set network.${NET_ID}.ifname=${NET_ID}
 	set network.${NET_ID}.proto=static
@@ -189,5 +189,6 @@ uci commit firewall
 service network reload
 service dnsmasq restart
 service firewall restart
+
 
 
