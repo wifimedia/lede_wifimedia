@@ -119,13 +119,13 @@ if [ "$bw24" == "1" ];then
 
 	#TxPower
 	if [ "$txpower24" == "auto"  ];then
-		uci delete wireless.default_radio1.txpower
+		uci delete wireless.radio1.txpower
 	elif [ "$txpower24" == "low"  ];then
-		uci set wireless.default_radio1.txpower="17"
+		uci set wireless.radio1.txpower="17"
 	elif [ "$txpower24" == "medium"  ];then
-		uci set wireless.default_radio1.txpower="20"
+		uci set wireless.radio1.txpower="20"
 	elif [ "$txpower24" == "high"  ];then
-		uci set wireless.default_radio1.txpower="22"
+		uci set wireless.radio1.txpower="22"
 	fi
 	
 	#Hide SSID
@@ -216,21 +216,24 @@ if [ "$bw5" == "1" ];then
 
 	#TxPower
 	if [ "$txpowerfive" == "auto"  ];then
-		uci delete wireless.default_radio0.txpower
+		uci delete wireless.radio0.txpower
 	elif [ "$txpowerfive" == "low"  ];then
-		uci set wireless.default_radio0.txpower="17"
+		uci set wireless.radio0.txpower="17"
 	elif [ "$txpowerfive" == "medium"  ];then
-		uci set wireless.default_radio0.txpower="20"
+		uci set wireless.radio0.txpower="20"
 	elif [ "$txpowerfive" == "high"  ];then
-		uci set wireless.default_radio0.txpower="22"
+		uci set wireless.radio0.txpower="22"
 	fi
 	
 	#Hide SSID
 	uci set wireless.default_radio0.hidden="$hidessidfive"
 	#ISO
 	uci set wireless.default_radio0.isolate="$isolationfive"
+	uci set wireless.radio0.disabled="0"
+	uci set wireless.radio1.disabled="0"
 	uci commit wireless
 fi
+
 sleep 5 && wifi
 
 }
