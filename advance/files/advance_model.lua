@@ -104,12 +104,31 @@ ctrgsm:value("wds","WDS")
 ctrgsm:depends({bw5g="1"})
 
 ch = s:taboption( "radio5",ListValue, "channelfive", "Channel")
---local channel = 1
---while (channel < 14) do
---	ch:value(channel, channel .. " ")
---	channel = channel + 1
---end
---ch.default = "6"
+ch:value("36","36 (low power)")
+ch:value("40","40 (low power)")
+ch:value("36","36 (low power)")
+ch:value("44","44 (low power)")
+ch:value("48","48 (low power)")
+ch:value("52","52 (DFS)")
+ch:value("56","56 (DFS)")
+ch:value("60","60 (DFS)")
+ch:value("64","64 (DFS)")
+ch:value("100","100 (high power)")
+ch:value("104","104 (high power)")
+ch:value("108","108 (high power)")
+ch:value("112","112 (high power)")
+ch:value("116","116 (high power)")
+ch:value("120","120 (high power)")
+ch:value("124","124 (high power)")
+ch:value("128","128 (high power)")
+ch:value("132","132 (high power)")
+ch:value("136","136 (high power)")
+ch:value("140","140 (high power)")
+ch:value("149","149 (high power)")
+ch:value("153","153 (high power)")
+ch:value("157","157 (high power)")
+ch:value("161","161 (high power)")
+ch:value("165","165 (high power)")
 ch:depends({bw5g="1"})
 
 ctrgscnl = s:taboption("radio5",Value, "maxassocfive", "Connection Limit")
@@ -122,35 +141,35 @@ ctrgsn:depends({bw5g="1"})
 
 ctrgsn = s:taboption("radio5",ListValue, "encryptfive", "Wireless Security")
 ctrgsn:value("","No Encryption")
-ctrgsn:value("encryption","WPA-PSK/WPA2-PSK")
+ctrgsn:value("encryptionfive","WPA-PSK/WPA2-PSK")
 ctrgsn:depends({bw5g="1"})
 
 grwpa = s:taboption("radio5",Value, "passwordfive", "Password")
 grwpa.datatype = "wpakey"
 grwpa.rmempty = true
 grwpa.password = true
-grwpa:depends({encryptfive="encryption"})
+grwpa:depends({encryptfive="encryptionfive"})
 
 ctrgsft = s:taboption("radio5",ListValue, "ftfive", "Fast Roaming")
-ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
-ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
-ctrgsft:depends({encryptfive="encryption"})
+ctrgsft:value("rsn_preauthfive","Fast-Secure Roaming")
+ctrgsft:value("ieee80211rfive","Fast Basic Service Set Transition (FT)")
+ctrgsft:depends({encryptfive="encryptionfive"})
 
-pmk = s:taboption("radio5",Flag,"ft_psk_generate_local","Generate PMK Locally")
-pmk:depends({ftfive="ieee80211r"})
+pmk = s:taboption("radio5",Flag,"ft_psk_generate_localfive","Generate PMK Locally")
+pmk:depends({ftfive="ieee80211rfive"})
 pmk.rmempty = false
 
 nasid = s:taboption("radio5",Value, "nasidfive", "NAS ID")
-nasid:depends({ftfive="ieee80211r"})
+nasid:depends({ftfive="ieee80211rfive"})
 device = s:taboption("radio5",Value, "macsfive", "APID")
-device:depends({ftfive="ieee80211r", ft_psk_generate_local=""})
+device:depends({ftfive="ieee80211rfive", ft_psk_generate_localfive=""})
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
 ctrgtx = s:taboption("radio5",ListValue, "txpowerfive", "Transmit Power")
-ctrgtx:value("auto","Auto")
-ctrgtx:value("low","Low")
-ctrgtx:value("medium","Medium")
-ctrgtx:value("high","High")
+ctrgtx:value("autofive","Auto")
+ctrgtx:value("lowfive","Low")
+ctrgtx:value("mediumfive","Medium")
+ctrgtx:value("highfive","High")
 ctrgtx:depends({bw5g="1"})
 
 hidessid = s:taboption("radio5",Flag, "hidessidfive","Hide SSID")
