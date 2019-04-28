@@ -85,20 +85,20 @@ if [ "$bw24" == "1" ];then
 			uci del wireless.default_radio1.r0kh
 			uci del wireless.default_radio1.r1kh
 			#group_mac=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
-			echo "$group_mac" | while read macaddr;do #add list R0KH va R1KH
-				uci add_list wireless.default_radio1.r0kh="$macaddr,$nasid,000102030405060708090a0b0c0d0e0f"
-				uci add_list wireless.default_radio1.r1kh="$macaddr,$macaddr,000102030405060708090a0b0c0d0e0f"
+			echo "$group_mac" | while read mac;do #add list R0KH va R1KH
+				uci add_list wireless.default_radio1.r0kh="$mac,$nasid,000102030405060708090a0b0c0d0e0f"
+				uci add_list wireless.default_radio1.r1kh="$mac,$mac,000102030405060708090a0b0c0d0e0f"
 			done
 		fi
 		#end config r0kh & r1kh
 		
-		if [ -z $(uci -q get wifimedia.@wireless[0].macs) ];then
+		if [ "$(uci -q get wifimedia.@wireless[0].macs)" == "" ];then
 		#echo "test rong"
 			uci del wireless.default_radio1.r0kh
 			uci del wireless.default_radio1.r1kh	
 		fi
 		#uci commit wireless
-	elif [ "ft24" == "rsn_preauth" ];then
+	elif [ "$ft24" == "rsn_preauth" ];then
 		uci delete wireless.default_radio1.ieee80211r
 		uci delete wireless.default_radio1.ft_psk_generate_local
 		uci delete wireless.default_radio1.pmk_r1_push
@@ -180,23 +180,22 @@ if [ "$bw5" == "1" ];then
 			#delete all r0kh r1kh
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh
-			nasidfive=`uci -q get wifimedia.@wireless[0].nasidfive`
-			group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
+			#nasidfive=`uci -q get wifimedia.@wireless[0].nasidfive`
+			#group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
 			echo "$group_macfive" | while read mac;do #add list R0KH va R1KH
-				echo $mac
 				uci add_list wireless.default_radio0.r0kh="$mac,$nasidfive,000102030405060708090a0b0c0d0e0f"
 				uci add_list wireless.default_radio0.r1kh="$mac,$mac,000102030405060708090a0b0c0d0e0f"
 			done
 		fi
 		#end config r0kh & r1kh
 		
-		if [ -z $(uci -q get wifimedia.@wireless[0].macsfive) ];then
+		if [ "$(uci -q get wifimedia.@wireless[0].macsfive)" == "" ];then
 		#echo "test rong"
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh	
 		fi
 		#uci commit wireless
-	elif [ "ftfive" == "rsn_preauth" ];then
+	elif [ "$ftfive" == "rsn_preauthfive" ];then
 		uci delete wireless.default_radio0.ieee80211r
 		uci delete wireless.default_radio0.ft_psk_generate_local
 		uci delete wireless.default_radio0.pmk_r1_push
