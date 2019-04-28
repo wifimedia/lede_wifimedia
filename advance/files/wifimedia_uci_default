@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=18/04/2019
+	set wifimedia.@builddate[0].date=28/04/2019
 	commit wifimedia
 EOF
 }
@@ -122,7 +122,7 @@ elif [ "$model_hardware" == "TL-WR840N_v5" ];then
 elif [ "$model_hardware" == "TL-WR841N_v14" ];then
 	echo "TL-WR840N v6" >/etc/hardware
 elif [ "$model_hardware" == "CF-E355AC_v2" ];then
-	echo "EAP35AC0v2" >/etc/hardware
+	echo "EAP35AC_v2" >/etc/hardware
 	uci set meshdesk.settings.id_if="eth1"
 	uci commit meshdesk
 elif [ "$model_hardware" == "CF-E320N_v2" ];then
