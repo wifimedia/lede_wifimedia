@@ -73,7 +73,8 @@ t:option(DummyValue, "status","Captive portal status")
 	  enable = t:option(Button, "_enable","Enable")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
-			luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
+			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
+			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
