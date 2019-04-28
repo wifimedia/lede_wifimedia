@@ -9,6 +9,7 @@ local uci = require "luci.model.uci".cursor()
 local wfm_lcs = fs.access("/etc/opt/wfm_lcs")
 local license = fs.access("/etc/opt/first_time.txt")
 local next_net = luci.util.exec("uci -q get network.nextify")
+local detect_5g = luci.util.exec("uci -q get wireless.radio0.hwmode")
 m = Map("wifimedia", "")
 function m.on_after_commit(self)
 	if license then
