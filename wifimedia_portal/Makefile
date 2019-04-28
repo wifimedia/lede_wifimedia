@@ -46,7 +46,7 @@ define Package/wifimedia_portal/install
 	$(INSTALL_BIN) ./files/heartbeat.sh $(1)/sbin/wifimedia/heartbeat.sh
 	$(INSTALL_BIN) ./files/nodogsplash_preauth.sh $(1)/sbin/wifimedia/nodogsplash_preauth.sh
 	$(INSTALL_BIN) ./files/preauthenticated_rules.sh $(1)/sbin/wifimedia/preauthenticated_rules.sh
-	$(INSTALL_DATA) ./files/wifimedia_portal.lua.lua $(1)/usr/lib/lua/luci/controller/wifimedia/wifimedia_portal.lua
+	$(INSTALL_DATA) ./files/wifimedia_portal.lua $(1)/usr/lib/lua/luci/controller/wifimedia/wifimedia_portal.lua
 	$(INSTALL_DATA) ./files/portal_model.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/wifimedia_portal.lua
 endef
 $(eval $(call BuildPackage,wifimedia_portal))
