@@ -55,6 +55,8 @@ for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledga
         grep -v ':' >> ${PREAUTHENTICATED_ADDRS}
 done
 ###Read line file 
+uci del nodogsplash.@nodogsplash[0].users_to_router
+uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
@@ -139,10 +141,11 @@ echo '<!doctype html>
 
 #Create Network
 
-uci commit network
-uci commit dhcp
-uci commit firewall
-/etc/init.d/network restart
-/etc/init.d/dnsmasq restart
-/etc/init.d/firewall restart
-/etc/init.d/nodogsplash restart
+#uci commit network
+#uci commit dhcp
+#uci commit firewall
+#/etc/init.d/network restart
+#/etc/init.d/dnsmasq restart
+#/etc/init.d/firewall restart
+/etc/init.d/nodogsplash stop
+/etc/init.d/nodogsplash start
