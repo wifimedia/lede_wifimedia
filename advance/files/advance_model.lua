@@ -18,13 +18,13 @@ function m.on_after_commit(self)
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
-s = m:section(TypedSection, "advance","")
+s = m:section(TypedSection, "wireless","")
 s.anonymous = true
 s.addremove = false
 
 --[[ auto controller ]]--
 s:tab("radio24","24G Wireless")
-ctrgs_en = s:taboption("radio24",Flag, "bw24g", "Enable")
+ctrgs_en = s:taboption("radio24",Flag, "bw24g", "2.4 Enable")
 ctrgs = s:taboption("radio24",Value, "essid", "SSID")
 ctrgs:depends({bw24g="1"})
 
@@ -92,6 +92,7 @@ apisolation = s:taboption("radio24",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({bw24g="1"})
 
+--s = m:section(TypedSection, "radio5","")
 s:tab("radio5","5G Wireless")
 ctrgs_en = s:taboption("radio5",Flag, "bw5g", "5G Enable")
 ctrgs = s:taboption("radio5",Value, "essidfive", "SSID")

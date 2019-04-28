@@ -31,6 +31,13 @@ uci -q get wifimedia.@builddate[0] || {
 EOF
 }
 
+uci -q get wifimedia.@wireless[0] || {
+	uci batch <<-EOF
+	add wifimedia wireless
+	set wifimedia.@builddate[0]=wireless
+	commit wifimedia
+EOF
+}
 #change ver  for upgrade
 uci set wifimedia.@sync[0].version=2.1.1
 uci set wifimedia.@sync[0].rsn=2.6
