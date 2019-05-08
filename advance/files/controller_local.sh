@@ -52,8 +52,10 @@ if [ "$bw24" == "1" ];then
 	#echo $NET_ID24G
 	#network24=`uci -q get wifimedia.@wireless[0].network`
 	if [ "$network24" == "vlanx24" ];then
+		vlan24g_add
 		uci set wireless.default_radio1.network="$NET_ID24G"
 	else
+		vlan24g_del
 		uci set wireless.default_radio1.network="$network24"
 	fi
 	#uci commit
@@ -154,8 +156,10 @@ fi
 if [ "$bw5" == "1" ];then
 	#Network
 	if [ "$networkfive" == "vlanx5" ];then
+		vlan5g_add
 		uci set wireless.default_radio0.network="$NET_ID5G"
 	else
+		vlan5g_del
 		uci set wireless.default_radio0.network="$networkfive"
 	fi	
 	#Mode
