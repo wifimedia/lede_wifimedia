@@ -153,8 +153,8 @@ fi
 #######Radio 5G
 if [ "$bw5" == "1" ];then
 	#Network
-	if [ "$network24" == "vlanx5" ];then
-		uci set wireless.default_radio0.network="$networkfive"
+	if [ "$networkfive" == "vlanx5" ];then
+		uci set wireless.default_radio0.network="$NET_ID5G"
 	else
 		uci set wireless.default_radio0.network="$networkfive"
 	fi	
