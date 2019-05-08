@@ -44,7 +44,17 @@ local_config(){
 
 if [ "$bw24" == "1" ];then
 	#Network
-	uci set wireless.default_radio1.network="$network24"
+	#VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+	#IFNAME="eth1"
+	#NET_ID="VLAN_${VLAN_ID}"
+	#echo $NET_ID
+	network24=`uci -q get wifimedia.@wireless[0].network`
+	if [ "$network24" == "vlanx" ];then
+		uci set wireless.default_radio1.network="$NET_ID"
+	else
+		uci set wireless.default_radio1.network="$network24"
+	fi
+	uci commit
 	#Mode
 	uci set wireless.default_radio1.mode="$mode24"
 	#ESSID
