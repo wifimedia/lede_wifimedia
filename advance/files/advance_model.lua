@@ -51,6 +51,9 @@ ctrgscnl:depends({bw24g="1"})
 ctrgsn = s:taboption("radio24",ListValue, "network", "Network")
 ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
+ctrgsn:value("vlanx","VLAN")
+vlanx = s:taboption("radio24",Value,"vlan","VLAN")
+vlanx:depends({network="vlanx"})
 if next_net ~= "" then
 	ctrgsn:value("nextify","Nextify")
 end
