@@ -51,9 +51,9 @@ ctrgscnl:depends({bw24g="1"})
 ctrgsn = s:taboption("radio24",ListValue, "network", "Network")
 ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
-ctrgsn:value("vlanx","VLAN")
-vlanx = s:taboption("radio24",Value,"vlan","VLAN")
-vlanx:depends({network="vlanx"})
+ctrgsn:value("vlanx24","VLAN")
+vlanx = s:taboption("radio24",Value,"vlan24g","VLAN")
+vlanx:depends({network="vlanx24"})
 if next_net ~= "" then
 	ctrgsn:value("nextify","Nextify")
 end
@@ -146,6 +146,9 @@ ctrgscnl:depends({bw5g="1"})
 ctrgsn = s:taboption("radio5",ListValue, "networkfive", "Network")
 ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
+ctrgsn:value("vlanx5","VLAN")
+vlanx5 = s:taboption("radio5",Value,"vlan5g","VLAN")
+vlanx5:depends({network="vlanx5"})
 if next_net ~= "" then
 	ctrgsn:value("nextify","Nextify")
 end
