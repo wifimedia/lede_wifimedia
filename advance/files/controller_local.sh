@@ -36,6 +36,9 @@ hidessidfive=`uci -q get wifimedia.@wireless[0].hidessidfive`
 isolationfive=`uci -q get wifimedia.@wireless[0].isolationfive`
 txpowerfive=`uci -q get wifimedia.@wireless[0].txpowerfive`
 group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
+VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+IFNAME="eth1"
+NET_ID="VLAN_${VLAN_ID}"
 echo $group_macfive
 local_config(){
 
@@ -237,6 +240,28 @@ fi
 sleep 5 && wifi
 
 }
+
+
+vlan_add(){
+	#VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+	#IFNAME="eth1"
+	#NET_ID="VLAN_${VLAN_ID}"
+	#echo $NET_ID
+	uci	set network.${NET_ID}=interface
+	uci	set network.${NET_ID}.ifname="${IFNAME}.${VLAN_ID}"
+	#uci	set network.${NET_ID}.proto=static
+	#uci	set network.${NET_ID}.type=bridge
+	#uci	set network.${NET_ID}.ipaddr=10.200.255.1
+	#uci	set network.${NET_ID}.netmask=255.255.255.0
+	uci	commit network
+}
+
+vlan_del(){
+	#NET_ID="VLAN_${VLAN_ID}"
+	uci	delete network.${NET_ID}
+	uci	commit network
+}
+
 
 
 rssi() {
