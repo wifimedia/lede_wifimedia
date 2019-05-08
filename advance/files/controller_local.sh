@@ -36,25 +36,27 @@ hidessidfive=`uci -q get wifimedia.@wireless[0].hidessidfive`
 isolationfive=`uci -q get wifimedia.@wireless[0].isolationfive`
 txpowerfive=`uci -q get wifimedia.@wireless[0].txpowerfive`
 group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
-VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+VLAN_ID24G=`uci -q get wifimedia.@wireless[0].vlan24g`
+VLAN_ID5G=`uci -q get wifimedia.@wireless[0].vlan5g`
 IFNAME="eth1"
-NET_ID="VLAN_${VLAN_ID}"
+NET_ID24G="VLAN_${VLAN_ID24G}"
+NET_ID5G="VLAN_${VLAN_ID5G}"
 echo $group_macfive
 local_config(){
 
 if [ "$bw24" == "1" ];then
 	#Network
-	#VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+	#VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan24g`
 	#IFNAME="eth1"
-	#NET_ID="VLAN_${VLAN_ID}"
-	#echo $NET_ID
-	network24=`uci -q get wifimedia.@wireless[0].network`
+	#NET_ID24G="VLAN_${VLAN_ID24G}"
+	#echo $NET_ID24G
+	#network24=`uci -q get wifimedia.@wireless[0].network`
 	if [ "$network24" == "vlanx" ];then
-		uci set wireless.default_radio1.network="$NET_ID"
+		uci set wireless.default_radio1.network="$NET_ID24G"
 	else
 		uci set wireless.default_radio1.network="$network24"
 	fi
-	uci commit
+	#uci commit
 	#Mode
 	uci set wireless.default_radio1.mode="$mode24"
 	#ESSID
@@ -151,7 +153,11 @@ fi
 #######Radio 5G
 if [ "$bw5" == "1" ];then
 	#Network
-	uci set wireless.default_radio0.network="$networkfive"
+	if [ "$network24" == "vlanx" ];then
+		uci set wireless.default_radio0.network="$networkfive"
+	else
+		uci set wireless.default_radio0.network="$networkfive"
+	fi	
 	#Mode
 	uci set wireless.default_radio0.mode="$modefive"
 	#ESSID
@@ -252,27 +258,45 @@ sleep 5 && wifi
 }
 
 
-vlan_add(){
-	#VLAN_ID=`uci -q get wifimedia.@wireless[0].vlan`
+vlan24g_add(){
+	#VLAN_ID24G=`uci -q get wifimedia.@wireless[0].vlan24g`
 	#IFNAME="eth1"
-	#NET_ID="VLAN_${VLAN_ID}"
-	#echo $NET_ID
-	uci	set network.${NET_ID}=interface
-	uci	set network.${NET_ID}.ifname="${IFNAME}.${VLAN_ID}"
-	#uci	set network.${NET_ID}.proto=static
-	#uci	set network.${NET_ID}.type=bridge
-	#uci	set network.${NET_ID}.ipaddr=10.200.255.1
-	#uci	set network.${NET_ID}.netmask=255.255.255.0
+	#NET_ID24G="VLAN_${VLAN_ID24G}"
+	#echo $NET_ID24G
+	uci	set network.${NET_ID24G}=interface
+	uci	set network.${NET_ID24G}.ifname="${IFNAME}.${VLAN_ID24G}"
+	#uci	set network.${NET_ID24G}.proto=static
+	#uci	set network.${NET_ID24G}.type=bridge
+	#uci	set network.${NET_ID24G}.ipaddr=10.200.255.1
+	#uci	set network.${NET_ID24G}.netmask=255.255.255.0
 	uci	commit network
 }
 
-vlan_del(){
+vlan24g_del(){
 	#NET_ID="VLAN_${VLAN_ID}"
-	uci	delete network.${NET_ID}
+	uci	delete network.${NET_ID24G}
 	uci	commit network
 }
 
+vlan5g_add(){
+	#NET_ID5G=`uci -q get wifimedia.@wireless[0].vlan5g`
+	#IFNAME="eth1"
+	#NET_ID5G="VLAN_${VLAN_ID5G}"
+	#echo $NET_ID5G
+	uci	set network.${NET_ID5G}=interface
+	uci	set network.${NET_ID5G}.ifname="${IFNAME}.${VLAN_ID5G}"
+	#uci	set network.${NET_ID5G}.proto=static
+	#uci	set network.${NET_ID5G}.type=bridge
+	#uci	set network.${NET_ID5G}.ipaddr=10.200.255.1
+	#uci	set network.${NET_ID5G}.netmask=255.255.255.0
+	uci	commit network
+}
 
+vlan5g_del(){
+	#NET_ID="VLAN_${VLAN_ID}"
+	uci	delete network.${NET_ID5G}
+	uci	commit network
+}
 
 rssi() {
 
