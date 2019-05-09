@@ -148,7 +148,7 @@ ctrgsn:value("wan","WAN")
 ctrgsn:value("lan","LAN")
 ctrgsn:value("vlanx5","VLAN")
 vlanx5 = s:taboption("radio5",Value,"vlan5g","VLAN")
-vlanx5:depends({network="vlanx5"})
+vlanx5:depends({networkfive="vlanx5"})
 if next_net ~= "" then
 	ctrgsn:value("nextify","Nextify")
 end
