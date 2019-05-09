@@ -269,6 +269,7 @@ vlan24g_add(){
 	#echo $NET_ID24G
 	uci	set network.${NET_ID24G}=interface
 	uci	set network.${NET_ID24G}.ifname="${IFNAME}.${VLAN_ID24G}"
+	uci	set wifimedia.@wireless[0].vlanx24="${NET_ID24G}"
 	#uci	set network.${NET_ID24G}.proto=static
 	#uci	set network.${NET_ID24G}.type=bridge
 	#uci	set network.${NET_ID24G}.ipaddr=10.200.255.1
@@ -278,7 +279,8 @@ vlan24g_add(){
 
 vlan24g_del(){
 	#NET_ID="VLAN_${VLAN_ID}"
-	uci	delete network.${NET_ID24G}
+	VLANX24=`uci -q get wifimedia.@wireless[0].vlanx24`
+	uci	delete network.${VLANX24}
 	uci	commit network
 }
 
@@ -289,6 +291,7 @@ vlan5g_add(){
 	#echo $NET_ID5G
 	uci	set network.${NET_ID5G}=interface
 	uci	set network.${NET_ID5G}.ifname="${IFNAME}.${VLAN_ID5G}"
+	uci	set wifimedia.@wireless[0].vlanx5="${NET_ID5G}"
 	#uci	set network.${NET_ID5G}.proto=static
 	#uci	set network.${NET_ID5G}.type=bridge
 	#uci	set network.${NET_ID5G}.ipaddr=10.200.255.1
@@ -298,7 +301,8 @@ vlan5g_add(){
 
 vlan5g_del(){
 	#NET_ID="VLAN_${VLAN_ID}"
-	uci	delete network.${NET_ID5G}
+	VLANX5=`uci -q get wifimedia.@wireless[0].vlanx5`
+	uci	delete network.${VLANX5}
 	uci	commit network
 }
 
