@@ -18,7 +18,7 @@ NET_ID="nextify"
 FW_ZONE="nextify"
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
-domain_default=${domain:-portal.nextify.vn}
+domain_default=${domain:-portal.nextify.vn/splash}
 redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
 redirecturl_default=${redirecturl:-https://google.com.vn}
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
@@ -75,7 +75,7 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$domain_default'/splash">
+      <form id="info" method="POST" action="//'$domain_default'">
           <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
           <input type="hidden" name="client_mac" value="$clientmac">
@@ -95,7 +95,7 @@ echo '<!doctype html>
     <head>
         <meta charset="utf-8">
         <title>Whoops...</title>
-        <meta http-equiv="refresh" content="0; url="//'$domain'/splash">
+        <meta http-equiv="refresh" content="0; url="//'$domain'">
         <style>
             html {
                 background: #F7F7F7;
