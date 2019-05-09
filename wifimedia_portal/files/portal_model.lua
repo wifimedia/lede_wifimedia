@@ -22,7 +22,7 @@ s.addremove = false
 s:tab("basic","Basic")
 s:tab("advance","Advanced")
 s:tab("network","Network")
-s:taboption( "basic",Value, "domain","Domain","portal.nextify.vn")
+s:taboption( "basic",Value, "domain","Nextify portal","portal.nextify.vn/splash")
 s:taboption( "basic",Value, "redirecturl","Redirect URL","https://google.com.vn")
 s:taboption( "basic",Value, "preauthenticated_users","Walled Garden","google.com.vn, vnexpress.net")
 s:taboption( "advance",Value, "maxclients","Maxclients","Max Clients:250")
