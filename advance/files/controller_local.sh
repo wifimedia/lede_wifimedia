@@ -258,6 +258,7 @@ if [ "$bw5" == "1" ];then
 fi
 
 sleep 5 && wifi
+/etc/init.d/network reload
 
 }
 
