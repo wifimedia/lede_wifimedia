@@ -8,7 +8,8 @@ EXTRA_HELP="        status  checking"
 lcs=/etc/opt/wfm_lcs
 model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 boot() {
-    sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh
+    sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh && /sbin/wifimedia/preauthenticated_rules.sh
+	
 	if [ -e "$lcs" ];then
 		if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
 			/sbin/wifimedia/controller.sh lgw_srv >/dev/null 2>&1
