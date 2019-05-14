@@ -160,7 +160,9 @@ uci batch <<-EOF
 	add_list wireless.radio1.ht_capab="SHORT-GI-40"
 	add_list wireless.radio1.ht_capab="RX-STBC1"
 	add_list wireless.radio1.ht_capab="DSSS_CCK-40"
-	set wireless.radio0.country="VN"
+	set wireless.radio0.country="US"
+	set wireless.radio0.txpower=23
+	set wireless.radio1.txpower=20
 	commit wireless
 EOF
 #enable wifi
