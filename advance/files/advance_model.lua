@@ -19,7 +19,7 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
-
+--[[
 s = m:section(TypedSection, "wireless","")
 s.anonymous = true
 s.addremove = false
@@ -194,6 +194,7 @@ hidessid:depends({bw5g="1"})
 apisolation = s:taboption("radio5",Flag, "isolationfive","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({bw5g="1"})
+]]--
 --[[
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
