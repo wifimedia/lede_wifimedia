@@ -1,6 +1,7 @@
 #!/bin/sh
 #Copyright ©  dungtd8x@gmail.com
 
+sleep 5
 _mon=$(uci -q get scheduled.days.Mon)
 _tue=$(uci -q get scheduled.days.Tue)
 _wed=$(uci -q get scheduled.days.Wed)
