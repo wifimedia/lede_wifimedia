@@ -19,12 +19,11 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
---[[
+
 s = m:section(TypedSection, "wireless","")
 s.anonymous = true
 s.addremove = false
-
---[[ auto controller ]]--
+--[[
 s:tab("radio24","24G Wireless")
 ctrgs_en = s:taboption("radio24",Flag, "bw24g", "2.4 Enable")
 ctrgs = s:taboption("radio24",Value, "essid", "SSID")
@@ -84,7 +83,7 @@ nasid:depends({ft="ieee80211r"})
 device = s:taboption("radio24",Value, "macs", "APID")
 device:depends({ft="ieee80211r", ft_psk_generate_local=""})
 --macs.datatype = "macaddr"
---[[Tx Power]]--
+
 ctrgtx = s:taboption("radio24",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
 ctrgtx:value("low","Low")
@@ -179,7 +178,7 @@ nasid:depends({ftfive="ieee80211rfive"})
 device = s:taboption("radio5",Value, "macsfive", "APID")
 device:depends({ftfive="ieee80211rfive", ft_psk_generate_localfive=""})
 --macs.datatype = "macaddr"
---[[Tx Power]]--
+
 ctrgtx = s:taboption("radio5",ListValue, "txpowerfive", "Transmit Power")
 ctrgtx:value("autofive","Auto")
 ctrgtx:value("lowfive","Low")
