@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=15/05/2019
+	set wifimedia.@builddate[0].date=08/05/2019
 	commit wifimedia
 EOF
 }
@@ -69,12 +69,12 @@ if [ "$model_hardware" == "CF-E355AC_v2" ] || [ "$model_hardware" == "CF-E320N_v
 	EOF
 
 	uci batch <<-EOF
-		set wireless.default_radio0.maxassoc=30
+		set wireless.@wifi-iface[0].maxassoc=30
 		set wireless.@wifi-iface[0].ssid=OPENWIFI
 		#set wireless.@wifi-iface[0].ssid=PDA_$rnd
 		#set wireless.@wifi-iface[0].encryption="psk2"
 		#set wireless.@wifi-iface[0].key="123456A@$rnd"
-		set wireless.radio0.disabled=0
+		set wireless.@wifi-iface[0].disabled=0
 		commit wireless
 	EOF
 
@@ -122,7 +122,7 @@ elif [ "$model_hardware" == "TL-WR840N_v5" ];then
 elif [ "$model_hardware" == "TL-WR841N_v14" ];then
 	echo "TL-WR840N v6" >/etc/hardware
 elif [ "$model_hardware" == "CF-E355AC_v2" ];then
-	echo "EAP35AC v2" >/etc/hardware
+	echo "EAP35AC_v2" >/etc/hardware
 	uci set meshdesk.settings.id_if="eth1"
 	uci commit meshdesk
 elif [ "$model_hardware" == "CF-E320N_v2" ];then
@@ -146,26 +146,22 @@ fi
 #}
 
 
-#uci batch <<-EOF
-#	#set wireless.@wifi-device[0].channel=36
-#	#set wireless.@wifi-device[-1].channel=6
-#	set wireless.radio0.disabled=0
-#	set wireless.radio1.disabled=0
-##XIAOMI
-#	#set wireless.default_radio0.ssid=OPENWIFI-5GHz
-#	set wireless.default_radio1.ssid=OPENWIFI-2.4GHz
-#	set wireless.default_radio1.maxassoc=30
-#	set wireless.wireless.radio1.macaddr=$(cat /sys/class/ieee80211/phy0/macaddress)
-#	add_list wireless.radio1.ht_capab="SHORT-GI-20"
-#	add_list wireless.radio1.ht_capab="SHORT-GI-40"
-#	add_list wireless.radio1.ht_capab="RX-STBC1"
-#	add_list wireless.radio1.ht_capab="DSSS_CCK-40"
-#	set wireless.radio0.country="US"
-#	set wireless.radio0.txpower=23
-#	set wireless.radio0.htmode=VHT40
-#	set wireless.radio1.txpower=26
-#	commit wireless
-#EOF
+uci batch <<-EOF
+	#set wireless.@wifi-device[0].channel=36
+	set wireless.@wifi-device[-1].channel=6
+	set wireless.@wifi-device[0].disabled=0
+	set wireless.@wifi-device[-1].disabled=0
+#XIAOMI
+	#set wireless.@wifi-iface[0].ssid=OPENWIFI-5GHz
+	set wireless.@wifi-iface[1].ssid=OPENWIFI-2.4GHz
+	set wireless.@wifi-device[-1].macaddr=$(cat /sys/class/ieee80211/phy0/macaddress)
+	add_list wireless.radio0.ht_capab="SHORT-GI-20"
+	add_list wireless.radio0.ht_capab="SHORT-GI-40"
+	add_list wireless.radio0.ht_capab="RX-STBC1"
+	add_list wireless.radio0.ht_capab="DSSS_CCK-40"
+	set wireless.radio0.country="TW"
+	commit wireless
+EOF
 #enable wifi
 uci set wireless.radio0.disabled="0"
 uci commit wireless
@@ -192,8 +188,7 @@ echo -e "09465670089\n09465670089" | passwd wifimedia
 #Change password for root
 word=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  10,11,13,14,16,17 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
 pwd=$(echo -n $word | md5sum | awk '{print $1}')
-#echo -e "$pwd\n$pwd" | passwd root
-echo -e "wifimedia\nwifimedia" | passwd root
+echo -e "$pwd\n$pwd" | passwd root
 #End
 
 #Info

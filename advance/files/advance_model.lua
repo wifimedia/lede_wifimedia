@@ -11,8 +11,7 @@ local license = fs.access("/etc/opt/first_time.txt")
 local next_net = luci.util.exec("uci -q get network.nextify")
 local detect_5g = luci.util.exec("uci -q get wireless.radio0.hwmode")
 m = Map("wifimedia", "")
-m.apply_on_parse = true
-function m.on_apply(self)
+function m.on_after_commit(self)
 	if license then
 		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
 	end
@@ -24,7 +23,8 @@ end
 s = m:section(TypedSection, "wireless","")
 s.anonymous = true
 s.addremove = false
---[[
+
+--[[ auto controller ]]--
 s:tab("radio24","24G Wireless")
 ctrgs_en = s:taboption("radio24",Flag, "bw24g", "2.4 Enable")
 ctrgs = s:taboption("radio24",Value, "essid", "SSID")
@@ -84,7 +84,7 @@ nasid:depends({ft="ieee80211r"})
 device = s:taboption("radio24",Value, "macs", "APID")
 device:depends({ft="ieee80211r", ft_psk_generate_local=""})
 --macs.datatype = "macaddr"
-
+--[[Tx Power]]--
 ctrgtx = s:taboption("radio24",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
 ctrgtx:value("low","Low")
@@ -100,101 +100,100 @@ apisolation = s:taboption("radio24",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({bw24g="1"})
 
---s = m:section(TypedSection, "radio5","")
-s:tab("radio5","5G Wireless")
-ctrgs_en = s:taboption("radio5",Flag, "bw5g", "5G Enable")
-ctrgs = s:taboption("radio5",Value, "essidfive", "SSID")
-ctrgs:depends({bw5g="1"})
-
-ctrgsm = s:taboption("radio5",ListValue, "modefive", "MODE")
-ctrgsm:value("ap","AP")
-ctrgsm:value("mesh","MESH")
-ctrgsm:value("wds","WDS")
-ctrgsm:depends({bw5g="1"})
-
-ch = s:taboption( "radio5",ListValue, "channelfive", "Channel")
-ch:value("36","36 (low power)")
-ch:value("40","40 (low power)")
-ch:value("36","36 (low power)")
-ch:value("44","44 (low power)")
-ch:value("48","48 (low power)")
-ch:value("52","52 (DFS)")
-ch:value("56","56 (DFS)")
-ch:value("60","60 (DFS)")
-ch:value("64","64 (DFS)")
-ch:value("100","100 (high power)")
-ch:value("104","104 (high power)")
-ch:value("108","108 (high power)")
-ch:value("112","112 (high power)")
-ch:value("116","116 (high power)")
-ch:value("120","120 (high power)")
-ch:value("124","124 (high power)")
-ch:value("128","128 (high power)")
-ch:value("132","132 (high power)")
-ch:value("136","136 (high power)")
-ch:value("140","140 (high power)")
-ch:value("149","149 (high power)")
-ch:value("153","153 (high power)")
-ch:value("157","157 (high power)")
-ch:value("161","161 (high power)")
-ch:value("165","165 (high power)")
-ch:depends({bw5g="1"})
-
-ctrgscnl = s:taboption("radio5",Value, "maxassocfive", "Connection Limit")
-ctrgscnl:depends({bw5g="1"})
-
-ctrgsn = s:taboption("radio5",ListValue, "networkfive", "Network")
-ctrgsn:value("wan","WAN")
-ctrgsn:value("lan","LAN")
-ctrgsn:value("vlanx5","VLAN")
-vlanx5 = s:taboption("radio5",Value,"vlan5g","VLAN")
-vlanx5:depends({networkfive="vlanx5"})
-if next_net ~= "" then
-	ctrgsn:value("nextify","Nextify")
-end
-ctrgsn:depends({bw5g="1"})
-
-ctrgsn = s:taboption("radio5",ListValue, "encryptfive", "Wireless Security")
-ctrgsn:value("","No Encryption")
-ctrgsn:value("encryptionfive","WPA-PSK/WPA2-PSK")
-ctrgsn:depends({bw5g="1"})
-
-grwpa = s:taboption("radio5",Value, "passwordfive", "Password")
-grwpa.datatype = "wpakey"
-grwpa.rmempty = true
-grwpa.password = true
-grwpa:depends({encryptfive="encryptionfive"})
-
-ctrgsft = s:taboption("radio5",ListValue, "ftfive", "Fast Roaming")
-ctrgsft:value("rsn_preauthfive","Fast-Secure Roaming")
-ctrgsft:value("ieee80211rfive","Fast Basic Service Set Transition (FT)")
-ctrgsft:depends({encryptfive="encryptionfive"})
-
-pmk = s:taboption("radio5",Flag,"ft_psk_generate_localfive","Generate PMK Locally")
-pmk:depends({ftfive="ieee80211rfive"})
-pmk.rmempty = false
-
-nasid = s:taboption("radio5",Value, "nasidfive", "NAS ID")
-nasid:depends({ftfive="ieee80211rfive"})
-device = s:taboption("radio5",Value, "macsfive", "APID")
-device:depends({ftfive="ieee80211rfive", ft_psk_generate_localfive=""})
---macs.datatype = "macaddr"
-
-ctrgtx = s:taboption("radio5",ListValue, "txpowerfive", "Transmit Power")
-ctrgtx:value("autofive","Auto")
-ctrgtx:value("lowfive","Low")
-ctrgtx:value("mediumfive","Medium")
-ctrgtx:value("highfive","High")
-ctrgtx:depends({bw5g="1"})
-
-hidessid = s:taboption("radio5",Flag, "hidessidfive","Hide SSID")
-hidessid.rmempty = false
-hidessid:depends({bw5g="1"})
- 
-apisolation = s:taboption("radio5",Flag, "isolationfive","AP Isolation")
-apisolation.rmempty = false
-apisolation:depends({bw5g="1"})
-]]--
+----s = m:section(TypedSection, "radio5","")
+--s:tab("radio5","5G Wireless")
+--ctrgs_en = s:taboption("radio5",Flag, "bw5g", "5G Enable")
+--ctrgs = s:taboption("radio5",Value, "essidfive", "SSID")
+--ctrgs:depends({bw5g="1"})
+--
+--ctrgsm = s:taboption("radio5",ListValue, "modefive", "MODE")
+--ctrgsm:value("ap","AP")
+--ctrgsm:value("mesh","MESH")
+--ctrgsm:value("wds","WDS")
+--ctrgsm:depends({bw5g="1"})
+--
+--ch = s:taboption( "radio5",ListValue, "channelfive", "Channel")
+--ch:value("36","36 (low power)")
+--ch:value("40","40 (low power)")
+--ch:value("36","36 (low power)")
+--ch:value("44","44 (low power)")
+--ch:value("48","48 (low power)")
+--ch:value("52","52 (DFS)")
+--ch:value("56","56 (DFS)")
+--ch:value("60","60 (DFS)")
+--ch:value("64","64 (DFS)")
+--ch:value("100","100 (high power)")
+--ch:value("104","104 (high power)")
+--ch:value("108","108 (high power)")
+--ch:value("112","112 (high power)")
+--ch:value("116","116 (high power)")
+--ch:value("120","120 (high power)")
+--ch:value("124","124 (high power)")
+--ch:value("128","128 (high power)")
+--ch:value("132","132 (high power)")
+--ch:value("136","136 (high power)")
+--ch:value("140","140 (high power)")
+--ch:value("149","149 (high power)")
+--ch:value("153","153 (high power)")
+--ch:value("157","157 (high power)")
+--ch:value("161","161 (high power)")
+--ch:value("165","165 (high power)")
+--ch:depends({bw5g="1"})
+--
+--ctrgscnl = s:taboption("radio5",Value, "maxassocfive", "Connection Limit")
+--ctrgscnl:depends({bw5g="1"})
+--
+--ctrgsn = s:taboption("radio5",ListValue, "networkfive", "Network")
+--ctrgsn:value("wan","WAN")
+--ctrgsn:value("lan","LAN")
+--ctrgsn:value("vlanx5","VLAN")
+--vlanx5 = s:taboption("radio5",Value,"vlan5g","VLAN")
+--vlanx5:depends({networkfive="vlanx5"})
+--if next_net ~= "" then
+--	ctrgsn:value("nextify","Nextify")
+--end
+--ctrgsn:depends({bw5g="1"})
+--
+--ctrgsn = s:taboption("radio5",ListValue, "encryptfive", "Wireless Security")
+--ctrgsn:value("","No Encryption")
+--ctrgsn:value("encryptionfive","WPA-PSK/WPA2-PSK")
+--ctrgsn:depends({bw5g="1"})
+--
+--grwpa = s:taboption("radio5",Value, "passwordfive", "Password")
+--grwpa.datatype = "wpakey"
+--grwpa.rmempty = true
+--grwpa.password = true
+--grwpa:depends({encryptfive="encryptionfive"})
+--
+--ctrgsft = s:taboption("radio5",ListValue, "ftfive", "Fast Roaming")
+--ctrgsft:value("rsn_preauthfive","Fast-Secure Roaming")
+--ctrgsft:value("ieee80211rfive","Fast Basic Service Set Transition (FT)")
+--ctrgsft:depends({encryptfive="encryptionfive"})
+--
+--pmk = s:taboption("radio5",Flag,"ft_psk_generate_localfive","Generate PMK Locally")
+--pmk:depends({ftfive="ieee80211rfive"})
+--pmk.rmempty = false
+--
+--nasid = s:taboption("radio5",Value, "nasidfive", "NAS ID")
+--nasid:depends({ftfive="ieee80211rfive"})
+--device = s:taboption("radio5",Value, "macsfive", "APID")
+--device:depends({ftfive="ieee80211rfive", ft_psk_generate_localfive=""})
+----macs.datatype = "macaddr"
+----[[Tx Power]]--
+--ctrgtx = s:taboption("radio5",ListValue, "txpowerfive", "Transmit Power")
+--ctrgtx:value("autofive","Auto")
+--ctrgtx:value("lowfive","Low")
+--ctrgtx:value("mediumfive","Medium")
+--ctrgtx:value("highfive","High")
+--ctrgtx:depends({bw5g="1"})
+--
+--hidessid = s:taboption("radio5",Flag, "hidessidfive","Hide SSID")
+--hidessid.rmempty = false
+--hidessid:depends({bw5g="1"})
+-- 
+--apisolation = s:taboption("radio5",Flag, "isolationfive","AP Isolation")
+--apisolation.rmempty = false
+--apisolation:depends({bw5g="1"})
 --[[
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
