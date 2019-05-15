@@ -162,7 +162,8 @@ uci batch <<-EOF
 	add_list wireless.radio1.ht_capab="DSSS_CCK-40"
 	set wireless.radio0.country="US"
 	set wireless.radio0.txpower=23
-	set wireless.radio1.txpower=20
+	set wireless.radio0.htmode=VHT40
+	set wireless.radio1.txpower=26
 	commit wireless
 EOF
 #enable wifi
