@@ -7,7 +7,8 @@ local sys = require "luci.sys"
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 m = Map("wifimedia", "")
-function m.on_after_commit(self)
+m.apply_on_parse = true
+function m.on_apply(self)
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
@@ -22,7 +23,7 @@ bridge_mode.rmempty = false
 			if value == self.enabled then
 				luci.sys.call("uci delete network.lan")
 				luci.sys.call("uci set network.wan.proto='dhcp'")
-				luci.sys.call("uci set network.wan.ifname='eth0 eth1.1'")
+				luci.sys.call("uci set network.wan.ifname='eth0 eth1'")
 				luci.sys.call("uci set wireless.@wifi-iface[0].network='wan'")
 				luci.sys.call("uci commit")
 			else
@@ -31,7 +32,7 @@ bridge_mode.rmempty = false
 				luci.sys.call("uci set network.lan.ipaddr='172.16.99.1'")
 				luci.sys.call("uci set network.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci set network.lan.type='bridge'")
-				luci.sys.call("uci set network.lan.ifname='eth1.1'")
+				luci.sys.call("uci set network.lan.ifname='eth1'")
 				luci.sys.call("uci set dhcp.lan.force='1'")
 				luci.sys.call("uci set dhcp.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci del dhcp.lan.dhcp_option")

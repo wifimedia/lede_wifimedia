@@ -1,5 +1,6 @@
 require("luci.sys")
 local sys = require "luci.sys"
+m.apply_on_parse = true
 m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the following details"))
  
         d = m:section(NamedSection,"settings", "settings","Activation" )  -- info is the section called info in cbi_file

@@ -9,7 +9,8 @@ local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 
 m = Map("wifimedia",translate(""))
-function m.on_after_commit(self)
+m.apply_on_parse = true
+function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end

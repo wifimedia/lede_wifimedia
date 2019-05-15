@@ -12,7 +12,8 @@ local ssid1= luci.util.exec("uci get wireless.@wifi-iface[1].ssid")
 
 m = Map("wifimedia",translate(""))
 
-function m.on_after_commit(self)
+m.apply_on_parse = true
+function m.on_apply(self)
 		luci.util.exec(" sleep 9 && reboot ")
 end
 s = m:section(TypedSection, "hotspot","")
