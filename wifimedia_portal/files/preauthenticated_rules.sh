@@ -60,6 +60,9 @@ uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 while read line; do
