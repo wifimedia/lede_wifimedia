@@ -55,6 +55,7 @@ uci -q get wifimedia.@nodogsplash[0] || {
         uci batch <<EOF
         add wifimedia nodogsplash
 		set wifimedia.@nodogsplash[0].domain="portal.nextify.vn/splash"
+		set wifimedia.@nodogsplash[0].https=1
         commit wifimedia
 EOF
 }
