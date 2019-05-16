@@ -31,7 +31,7 @@ s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","30 mins
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","120 mins")
 s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","20 mins")
 s:taboption( "advance",Value, "checkinterval","Checkinterval","10 mins")
---s:taboption( "advance",Value, "ndsidletimeout","Client Idle Timeout")
+s:taboption( "basic",Flag, "https","Bypass https")
 
 local pid = luci.util.exec("pidof nodogsplash")
 local message = luci.http.formvalue("message")

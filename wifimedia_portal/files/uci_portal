@@ -55,6 +55,7 @@ uci -q get wifimedia.@nodogsplash[0] || {
         uci batch <<EOF
         add wifimedia nodogsplash
 		set wifimedia.@nodogsplash[0].domain="portal.nextify.vn/splash"
+		set wifimedia.@nodogsplash[0].https=1
         commit wifimedia
 EOF
 }
@@ -92,6 +93,9 @@ uci batch << EOF
 	set firewall.${FW_ZONE}_dns.target=ACCEPT
 	set firewall.${FW_ZONE}_dns.proto=tcpudp
 	set firewall.${FW_ZONE}_dns.dest_port=53
+	set dhcp.${NET_ID}.force=1
+	set dhcp.${NET_ID}.netmask=255.255.255.0
+	add_list dhcp.${NET_ID}.dhcp_option=6,8.8.8.8,8.8.4.4
 	commit
 EOF
 
