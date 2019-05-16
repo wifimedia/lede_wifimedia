@@ -34,6 +34,7 @@ std=`expr $sessiontimeout_default \* 60`
 checkinterval=`uci -q get wifimedia.@nodogsplash[0].checkinterval`
 checkinterval_default=${checkinterval:-10}
 ctv=`expr $checkinterval_default \* 60`
+https=`uci -q get wifimedia.@nodogsplash[0].https`
 MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
 
 uci set nodogsplash.@nodogsplash[0].enabled='1'
@@ -57,17 +58,31 @@ done
 ###Read line file 
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
-uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
-uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
-uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
-#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
-#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
-while read line; do
-	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
-done <$PREAUTHENTICATED_ADDRS
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
+	uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
+uci commit
+if [ $https == "1" ];then
+	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+	#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
+	while read line; do
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
+	done <$PREAUTHENTICATED_ADDRS
+
+else
+	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+	#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
+	#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
+	while read line; do
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
+	done <$PREAUTHENTICATED_ADDRS
+fi
 uci commit
 rm -f $PREAUTHENTICATED_ADDRS
 #write file splash
