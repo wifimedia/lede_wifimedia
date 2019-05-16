@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=15/05/2019
+	set wifimedia.@builddate[0].date=16/05/2019
 	commit wifimedia
 EOF
 }
@@ -160,9 +160,9 @@ uci batch <<-EOF
 	add_list wireless.radio1.ht_capab="SHORT-GI-40"
 	add_list wireless.radio1.ht_capab="RX-STBC1"
 	add_list wireless.radio1.ht_capab="DSSS_CCK-40"
-	set wireless.radio0.country="US"
+	set wireless.radio0.country="CN"
 	set wireless.radio0.txpower=23
-	set wireless.radio0.htmode=VHT40
+	set wireless.radio0.htmode=VHT80
 	set wireless.radio1.txpower=26
 	commit wireless
 EOF
