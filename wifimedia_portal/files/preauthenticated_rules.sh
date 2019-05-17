@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # Wait for network up & running
-while true; do
-    ping -c1 -W1 8.8.8.8
-    if [ ${?} -eq 0 ]; then
-        break
-    else
-        sleep 1
-    fi
-done
+#while true; do
+#    ping -c1 -W1 8.8.8.8
+#    if [ ${?} -eq 0 ]; then
+#        break
+#    else
+#        sleep 1
+#    fi
+#done
 
 #Value
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
