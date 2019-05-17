@@ -82,8 +82,9 @@ if [ $network_1  == "nextify" ];then
 	
 	while read line;do
 		if [ "$(echo $line | grep SSID:)" ];then
-			uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
-			
+			if [ "$(echo $line | awk '{print $2}')" != "" ];then
+				uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
+			fi
 		elif [ "$(echo $line | grep 'PASSWORD:')" ];then
 			#echo $line | awk '{print $2}'
 			if [ "$(echo $line | awk '{print $2}')" == "" ];then
@@ -104,8 +105,9 @@ if [ $network_2  == "nextify" ];then
 	
 	while read line;do
 		if [ "$(echo $line | grep SSID:)" ];then
-			uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
-			
+			if [ "$(echo $line | awk '{print $2}')" != "" ];then
+				uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
+			fi
 		elif [ "$(echo $line | grep 'PASSWORD:')" ];then
 			#echo $line | awk '{print $2}'
 			if [ "$(echo $line | awk '{print $2}')" == "" ];then
@@ -136,6 +138,8 @@ while read line;do
 		uci commit nodogsplash
 		/etc/init.d/nodogsplash stop
 		/etc/init.d/nodogsplash start
+	elif [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
+		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
 	fi
 done < /tmp/config_setting
 	
