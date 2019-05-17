@@ -78,76 +78,69 @@ md5ndsconfig=`uci -q get wifimedia.@nodogsplash[0].md5sum`
 checkmd5file=`md5sum /tmp/config_setting | awk '{print $1}'`
 
 setting_config() {
-if [ $network_1  == "nextify" ];then
 	
 	while read line;do
+	
 		if [ "$(echo $line | grep SSID:)" ];then
-			if [ "$(echo $line | awk '{print $2}')" != "" ];then
-				uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
-			fi
-		elif [ "$(echo $line | grep 'PASSWORD:')" ];then
+			if [ "$network_1"  == "nextify" ];then
+				if [ "$(echo $line | awk '{print $2}')" != "" ];then
+					uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
+				fi
+			fi 
+			
+			if [ "$network_2"  == "nextify" ];then
+				if [ "$(echo $line | awk '{print $2}')" != "" ];then
+					uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
+				fi
+			fi 				
+			
+		elif [ "$(echo $line | grep 'PASSWORD:')" ];then 
+			if [ "$network_1"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
-			if [ "$(echo $line | awk '{print $2}')" == "" ];then
-				uci delete wireless.default_radio0.encryption &> /dev/null
-				uci delete wireless.default_radio0.key &> /dev/null
-				uci delete wireless.default_radio0.rsn_preauth &> /dev/null
+				if [ "$(echo $line | awk '{print $2}')" == "" ];then
+					uci delete wireless.default_radio0.encryption &> /dev/null
+					uci delete wireless.default_radio0.key &> /dev/null
+					uci delete wireless.default_radio0.rsn_preauth &> /dev/null
+				else	
+					uci set wireless.default_radio0.encryption="psk2"
+					uci set wireless.default_radio0.key="$(echo $line | awk '{print $2}')"
+					uci set wireless.default_radio0.rsn_preauth=1
+					
+				fi
+			if		
+			fi [ "$network_2"  == "nextify" ];then
+			#echo $line | awk '{print $2}'
+				if [ "$(echo $line | awk '{print $2}')" == "" ];then
+					uci delete wireless.default_radio1.encryption &> /dev/null
+					uci delete wireless.default_radio1.key &> /dev/null
+					uci delete wireless.default_radio1.rsn_preauth &> /dev/null
+				else	
+					uci set wireless.default_radio1.encryption="psk2"
+					uci set wireless.default_radio1.key="$(echo $line | awk '{print $2}')"
+					uci set wireless.default_radio1.rsn_preauth=1
+					
+				fi
+			fi	
+		elif [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
+			uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
+			uci set wifimedia.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
+		elif [ "$(echo $line | grep SERVICE:)" ];then
+			if [ "$(echo $line | awk '{print $2}')" == "enable" ];then
+				uci set nodogsplash.@nodogsplash[0].enabled='1'
+				/etc/init.d/nodogsplash enable
 			else	
-				uci set wireless.default_radio0.encryption="psk2"
-				uci set wireless.default_radio0.key="$(echo $line | awk '{print $2}')"
-				uci set wireless.default_radio0.rsn_preauth=1
-				
-			fi		
+				uci set nodogsplash.@nodogsplash[0].enabled='0'
+				/etc/init.d/nodogsplash disable
+			fi	
 		fi
 	done < /tmp/config_setting
 
-fi
-if [ $network_2  == "nextify" ];then
-	
-	while read line;do
-		if [ "$(echo $line | grep SSID:)" ];then
-			if [ "$(echo $line | awk '{print $2}')" != "" ];then
-				uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
-			fi
-		elif [ "$(echo $line | grep 'PASSWORD:')" ];then
-			#echo $line | awk '{print $2}'
-			if [ "$(echo $line | awk '{print $2}')" == "" ];then
-				uci delete wireless.default_radio1.encryption &> /dev/null
-				uci delete wireless.default_radio1.key &> /dev/null
-				uci delete wireless.default_radio1.rsn_preauth &> /dev/null
-			else	
-				uci set wireless.default_radio1.encryption="psk2"
-				uci set wireless.default_radio1.key="$(echo $line | awk '{print $2}')"
-				uci set wireless.default_radio1.rsn_preauth=1
-				
-			fi		
-		fi
-	done < /tmp/config_setting
-
-fi
 uci commit wireless && wifi
-
-while read line;do
-
-	if [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
-		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
-		uci set wifimedia.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
-	elif [ "$(echo $line | grep SERVICE:)" ];then
-		if [ "$(echo $line | awk '{print $2}')" == "enable" ];then
-			uci set nodogsplash.@nodogsplash[0].enabled='1'
-			/etc/init.d/nodogsplash enable
-		else	
-			uci set nodogsplash.@nodogsplash[0].enabled='0'
-			/etc/init.d/nodogsplash disable
-		fi
-	fi	
-	uci commit nodogsplash
-	uci commit nodogsplash
-	/etc/init.d/nodogsplash stop
-	/etc/init.d/nodogsplash start
-done < /tmp/config_setting
-	
+uci commit wifimedia
+uci commit nodogsplash
+/etc/init.d/nodogsplash stop
+/etc/init.d/nodogsplash start
 }
-
 
 if [ "$md5ndsconfig" != "$checkmd5file" ];then
 	echo "new config .........."
