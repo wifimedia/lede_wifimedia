@@ -155,7 +155,7 @@ uci batch <<-EOF
 	set wireless.default_radio0.ssid=OPENWIFI-5GHz
 	set wireless.default_radio1.ssid=OPENWIFI-2.4GHz
 	set wireless.default_radio1.maxassoc=30
-	set wireless.wireless.radio1.macaddr=$(cat /sys/class/ieee80211/phy1/macaddress)
+	set wireless.radio1.macaddr=$(cat /sys/class/ieee80211/phy1/macaddress)
 	add_list wireless.radio1.ht_capab="SHORT-GI-20"
 	add_list wireless.radio1.ht_capab="SHORT-GI-40"
 	add_list wireless.radio1.ht_capab="RX-STBC1"
