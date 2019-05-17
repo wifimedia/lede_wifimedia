@@ -43,7 +43,8 @@ uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
 uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
 uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_default";
 uci set nodogsplash.@nodogsplash[0].authidletimeout="$authidletimeout_default";
-uci set nodogsplash.@nodogsplash[0].sessiontimeout="$std";
+#uci set nodogsplash.@nodogsplash[0].sessiontimeout="$std";
+uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 # Whitelist IP
 for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do

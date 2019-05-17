@@ -58,7 +58,7 @@ SSH_PORT=$(ps | grep ssh | grep '127.0.0.1:1422' | tr -s ' ' | cut -d':' -f1 | c
 
 #Value Jsion
 wget -q --timeout=3 \
-     "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}&ssid=${ssid_}" \
+     "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
      -O /tmp/config_setting
 if [ $? -eq 0 ];then
 	echo "Checked in to file config_setting"
