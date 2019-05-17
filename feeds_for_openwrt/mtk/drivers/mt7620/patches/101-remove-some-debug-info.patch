@@ -1,0 +1,35 @@
+Index: mt7620-p4rev-120998/src/common/rtmp_init.c
+===================================================================
+--- mt7620-p4rev-120998.orig/src/common/rtmp_init.c
++++ mt7620-p4rev-120998/src/common/rtmp_init.c
+@@ -4212,7 +4212,7 @@ VOID	RTMP_TimerListAdd(
+ 	{
+ 		pObj->pRscObj = pRsc;
+ 		insertTailList(pRscList, (LIST_ENTRY *)pObj);
+-		DBGPRINT(RT_DEBUG_ERROR, ("%s: add timer obj %lx!\n", __FUNCTION__, (ULONG)pRsc));
++		//DBGPRINT(RT_DEBUG_ERROR, ("%s: add timer obj %lx!\n", __FUNCTION__, (ULONG)pRsc));
+ 	}
+ }
+ 
+Index: mt7620-p4rev-120998/src/common/ba_action.c
+===================================================================
+--- mt7620-p4rev-120998.orig/src/common/ba_action.c
++++ mt7620-p4rev-120998/src/common/ba_action.c
+@@ -776,7 +776,7 @@ BOOLEAN BARecSessionAdd(
+ 		/* initial sequence number */
+ 		pBAEntry->LastIndSeq = RESET_RCV_SEQ; /*pFrame->BaStartSeq.field.StartSeq;*/
+ 
+-		DBGPRINT(RT_DEBUG_OFF, ("Start Seq = %08x\n",  pFrame->BaStartSeq.field.StartSeq));
++		//DBGPRINT(RT_DEBUG_OFF, ("Start Seq = %08x\n",  pFrame->BaStartSeq.field.StartSeq));
+ 
+ 		if (pEntry->RXBAbitmap & (1<<TID))
+ 		{
+@@ -1332,7 +1332,7 @@ VOID PeerAddBAReqAction(
+ 		if ((pAd->CommonCfg.bBADecline == FALSE) && IS_HT_STA(pMacEntry))
+ 		{
+ 			pAddreqFrame = (PFRAME_ADDBA_REQ)(&Elem->Msg[0]);
+-			DBGPRINT(RT_DEBUG_OFF, ("Rcv Wcid(%d) AddBAReq\n", Elem->Wcid));
++			//DBGPRINT(RT_DEBUG_OFF, ("Rcv Wcid(%d) AddBAReq\n", Elem->Wcid));
+ 			if (BARecSessionAdd(pAd, &pAd->MacTab.Content[Elem->Wcid], pAddreqFrame))
+ 			{
+ #ifdef PEER_DELBA_TX_ADAPT

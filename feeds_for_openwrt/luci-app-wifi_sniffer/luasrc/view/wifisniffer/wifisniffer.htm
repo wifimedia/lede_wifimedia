@@ -1,0 +1,160 @@
+<%+header%>
+
+<h2 name="content"><%:WiFi Sniffer%></h2>
+
+<fieldset class="cbi-section">
+	<legend><%:Sniffer Control%></legend>
+	
+	<div class="cbi-value">
+		<label class="cbi-value-title" for="scan"><%:Channel Scan%></label>
+		<div class="cbi-value-field">
+			<input class="cbi-input-checkbox" type="checkbox" id="scan" name="scan">
+		</div>
+	</div>
+
+	<div class="cbi-value" id="channel-div">
+		<label class="cbi-value-title" for="channel"><%:Channel Select%></label>
+		<div class="cbi-value-field">
+			<select class="cbi-input-select" id="channel" name="channel">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="cbi-value" style="visibility:hidden" id="si-div">
+		<label class="cbi-value-title" for="si"><%:Switching interval%>(ms)</label>
+		<div class="cbi-value-field">
+			<input id="si" name="si" type="text" class="cbi-input-text" value="">
+		</div>
+	</div>
+	
+	<div class="cbi-value">
+		<label class="cbi-value-title" for="ssid"><%:SSID Filter%></label>
+		<div class="cbi-value-field">
+			<input id="ssid" name="ssid" type="text" class="cbi-input-text" value="">
+		</div>
+	</div>
+
+	<div class="cbi-value">
+		<label class="cbi-value-title" for="src"><%:Src MAC Filter%></label>
+		<div class="cbi-value-field">
+			<input id="src" name="src" type="text" class="cbi-input-text" value="">
+		</div>
+	</div>
+</fieldset>
+
+<fieldset class="cbi-section">
+	<legend><%:Sniffer Data%></legend>
+
+	<table class="cbi-section-table" id="list_table">
+		<tr class="cbi-section-table-titles">
+			<th class="cbi-section-table-cell"><%:Last Time%></th>
+			<th class="cbi-section-table-cell"><%:Wlan Type%></th>
+			<th class="cbi-section-table-cell"><%:Src MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:Dst MAC-Address%></th>
+			<th class="cbi-section-table-cell"><%:BSSID%></th>
+			<th class="cbi-section-table-cell"><%:Channel%></th>
+			<th class="cbi-section-table-cell"><%:Signal%></th>
+			<th class="cbi-section-table-cell"><%:ESSID%></th>
+			<th class="cbi-section-table-cell"><%:Encryption%></th>
+			<th class="cbi-section-table-cell"><%:Pkts%></th>
+		</tr>
+		<tr class="cbi-section-table-row">
+			<td colspan="4"><em><br /><%:Collecting data...%></em></td>
+		</tr>
+	</table>
+</fieldset>
+
+<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
+<script type="text/javascript">//<![CDATA[
+	var filter = {src: '', ssid: ''}
+	
+	function clear() {
+		var tb = document.getElementById('list_table');
+		/* clear all rows */
+		while(tb.rows.length > 1)
+			tb.deleteRow(1);
+	}
+	
+	XHR.poll(2, '<%=luci.dispatcher.build_url("admin", "services", "wifisniffer", "getList")%>', null, function(x, rsp) {
+		var tb = document.getElementById('list_table');
+		
+		clear();
+		
+		for(var i = 0; i < rsp.length; i++)
+		{
+			if (filter.src.length > 0 && rsp[i].src != filter.src)
+				continue;
+			
+			if (filter.ssid.length > 0 && rsp[i].essid.match(filter.ssid) == null)
+				continue;
+			
+			var tr = tb.insertRow(-1);
+			tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
+			
+			tr.insertCell(-1).innerHTML = rsp[i].timestamp;
+			tr.insertCell(-1).innerHTML = rsp[i].packet_type;
+			tr.insertCell(-1).innerHTML = rsp[i].src;
+			tr.insertCell(-1).innerHTML = rsp[i].dst;
+			tr.insertCell(-1).innerHTML = rsp[i].bssid;
+			tr.insertCell(-1).innerHTML = rsp[i].channel;
+			tr.insertCell(-1).innerHTML = rsp[i].signal;
+			tr.insertCell(-1).innerHTML = rsp[i].essid;
+			tr.insertCell(-1).innerHTML = rsp[i].encryption;
+			tr.insertCell(-1).innerHTML = rsp[i].pkts;
+		}
+	});
+	
+	cbi_bind(document.getElementById('scan'), 'change', function() {
+		var scan = this.checked;
+		XHR.get('<%=luci.dispatcher.build_url("admin", "services", "wifisniffer", "scan")%>', {scan: scan}, function(x, rsp) {
+			clear();
+			if (scan) {
+				document.getElementById('channel-div').style.visibility = 'hidden';
+				document.getElementById('si-div').style.visibility = 'visible';
+			} else {
+				document.getElementById('channel-div').style.visibility = 'visible';
+				document.getElementById('si-div').style.visibility = 'hidden';
+			}
+		});
+	});
+	
+	cbi_bind(document.getElementById('channel'), 'change', function() {
+		XHR.get('<%=luci.dispatcher.build_url("admin", "services", "wifisniffer", "chansel")%>', {channel: this.value}, function(x, rsp) {
+			clear();
+		});
+	});
+	
+	cbi_bind(document.getElementById('si'), 'change', function() {
+		XHR.get('<%=luci.dispatcher.build_url("admin", "services", "wifisniffer", "si")%>', {si: this.value}, function(x, rsp) {
+			clear();
+		});
+	});
+	
+	cbi_bind(document.getElementById('ssid'), 'change', function() {
+		filter.ssid = this.value;
+		clear();
+	});
+	
+	cbi_bind(document.getElementById('src'), 'change', function() {
+		var v = this.value;
+		if (v.match(/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/) != null || v == '') {
+			filter.src = this.value;
+			clear();
+		}
+	});
+//]]></script>
+
+<%+footer%>

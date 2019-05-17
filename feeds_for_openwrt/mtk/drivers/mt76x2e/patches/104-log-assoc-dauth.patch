@@ -1,0 +1,28 @@
+Index: mt76x2e-p4rev-113843/src/ap/ap_assoc.c
+===================================================================
+--- mt76x2e-p4rev-113843.orig/src/ap/ap_assoc.c
++++ mt76x2e-p4rev-113843/src/ap/ap_assoc.c
+@@ -934,7 +934,9 @@ VOID ap_cmm_peer_assoc_req_action(
+ 
+ 	DBGPRINT(RT_DEBUG_TRACE, ("%s - MBSS(%d), receive %s request from %02x:%02x:%02x:%02x:%02x:%02x\n",
+ 				sAssoc, pEntry->apidx, sAssoc, PRINT_MAC(ie_list->Addr2)));
+-    
++
++	printk("%s: %s from %02x:%02x:%02x:%02x:%02x:%02x\n", pAd->net_dev->name, sAssoc, PRINT_MAC(ie_list->Addr2));
++	
+ 	/* supported rates array may not be sorted. sort it and find the maximum rate */
+ 	for (i=0; i<ie_list->SupportedRatesLen; i++)
+ 	{
+Index: mt76x2e-p4rev-113843/src/ap/ap_auth.c
+===================================================================
+--- mt76x2e-p4rev-113843.orig/src/ap/ap_auth.c
++++ mt76x2e-p4rev-113843/src/ap/ap_auth.c
+@@ -208,6 +208,8 @@ static VOID APPeerDeauthReqAction(
+ 				 "%02x:%02x:%02x:%02x:%02x:%02x, reason=%d\n",
+ 				 SeqNum, PRINT_MAC(Addr2), Reason));
+ 
++		printk("%s: DE-AUTH from %02x:%02x:%02x:%02x:%02x:%02x\n", pAd->net_dev->name, PRINT_MAC(Addr2));
++		
+ #ifdef MAC_REPEATER_SUPPORT
+ 		if (pAd->ApCfg.bMACRepeaterEn == TRUE)
+ 		{

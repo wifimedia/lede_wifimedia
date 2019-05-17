@@ -1,0 +1,82 @@
+Index: mt7620-p4rev-120998/src/common/cmm_info.c
+===================================================================
+--- mt7620-p4rev-120998.orig/src/common/cmm_info.c
++++ mt7620-p4rev-120998/src/common/cmm_info.c
+@@ -3817,7 +3817,8 @@ VOID RTMPIoctlGetMacTableStaInfo(
+ 	RT_802_11_MAC_TABLE *pMacTab = NULL;
+ 	PRT_802_11_MAC_ENTRY pDst;
+ 	MAC_TABLE_ENTRY *pEntry;
+-
++	HTTRANSMIT_SETTING RxHTPhyMode;
++	
+ 	/* allocate memory */
+ 	os_alloc_mem(NULL, (UCHAR **)&pMacTab, sizeof(RT_802_11_MAC_TABLE));
+ 	if (pMacTab == NULL)
+@@ -3839,6 +3840,14 @@ VOID RTMPIoctlGetMacTableStaInfo(
+ 			pDst->Aid = (UCHAR)pEntry->Aid;
+ 			pDst->Psm = pEntry->PsMode;
+ 
++			pDst->TxPackets = pEntry->TxPackets.QuadPart;
++			pDst->RxPackets = pEntry->RxPackets.QuadPart;
++
++			pDst->InactiveTime = pEntry->NoDataIdleCount * 1000; /* unit: ms */
++			pDst->InactiveTime *= MLME_TASK_EXEC_MULTIPLE;
++			pDst->InactiveTime /= 20;
++
++			
+ #ifdef DOT11_N_SUPPORT
+ 			pDst->MimoPs = pEntry->MmpsMode;
+ #endif /* DOT11_N_SUPPORT */
+@@ -3847,12 +3856,24 @@ VOID RTMPIoctlGetMacTableStaInfo(
+ 			pDst->AvgRssi0 = pEntry->RssiSample.AvgRssi0;
+ 			pDst->AvgRssi1 = pEntry->RssiSample.AvgRssi1;
+ 			pDst->AvgRssi2 = pEntry->RssiSample.AvgRssi2;
++			pDst->Signal = RTMPAvgRssi(pAd, &pEntry->RssiSample);
++			pDst->Noise = RTMPMaxRssi(pAd, pAd->ApCfg.RssiSample.AvgRssi0, pAd->ApCfg.RssiSample.AvgRssi1,
++									pAd->ApCfg.RssiSample.AvgRssi2) - RTMPMinSnr(pAd, pAd->ApCfg.RssiSample.AvgSnr0,
++										pAd->ApCfg.RssiSample.AvgSnr1);
+ 
+ 			/* the connected time per entry*/
+ 			pDst->ConnectedTime = pEntry->StaConnectTime;
++
++			/* Tx Rate */
+ 			pDst->TxRate.word = pEntry->HTPhyMode.word;
++			getRate(pEntry->HTPhyMode, &pDst->TxBitRate);
+ 
++			/* Rx Rate */
+ 			pDst->LastRxRate = pEntry->LastRxRate;
++			RxHTPhyMode.word = (USHORT)(pEntry->LastRxRate);
++			pDst->RxRate.word = RxHTPhyMode.word;
++			getRate(RxHTPhyMode, &pDst->RxBitRate);
++			
+ #if defined (RT2883) || defined (RT3883)
+ 			if (IS_RT2883(pAd) || IS_RT3883(pAd))
+ 			{
+Index: mt7620-p4rev-120998/src/include/oid.h
+===================================================================
+--- mt7620-p4rev-120998.orig/src/include/oid.h
++++ mt7620-p4rev-120998/src/include/oid.h
+@@ -1144,8 +1144,13 @@ typedef struct _RT_802_11_MAC_ENTRY {
+ 	CHAR AvgRssi0;
+ 	CHAR AvgRssi1;
+ 	CHAR AvgRssi2;
++	CHAR Signal;
++	CHAR Noise;
+ 	UINT32 ConnectedTime;
+ 	MACHTTRANSMIT_SETTING TxRate;
++	MACHTTRANSMIT_SETTING RxRate;
++	ULONG TxBitRate;
++	ULONG RxBitRate;
+ #ifdef DPA_S //yiwei
+ 	UCHAR	DeviceName[OID_P2P_DEVICE_NAME_LEN];
+ 	UINT32	DeviceNameLen;
+@@ -1156,6 +1161,9 @@ typedef struct _RT_802_11_MAC_ENTRY {
+ 	SHORT		SoundingRespSnr[3];			/* SNR from Sounding Response. Units=0.25 dB. 22 dB offset removed */
+ /*	SHORT		TxPER;	*/					/* TX PER over the last second. Percent */
+ /*	SHORT		reserved;*/
++	UINT32		TxPackets;
++	UINT32		RxPackets;
++	UINT32		InactiveTime;				/* time since last activity (u32, msecs) */
+ } RT_802_11_MAC_ENTRY, *PRT_802_11_MAC_ENTRY;
+ 
+ typedef struct _RT_802_11_MAC_TABLE {

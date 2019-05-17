@@ -1,0 +1,666 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+
+msgid "English"
+msgstr "英语"
+
+msgid "中文 (Zhōngwén)"
+msgstr "简体中文"
+
+msgid "login-title"
+msgstr "登录"
+
+msgid "Please sign in"
+msgstr "请登录"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Sign in"
+msgstr "登录"
+
+msgid "Signing in..."
+msgstr "正在登录……"
+
+msgid "Please enter valid username and password!"
+msgstr "请输入有效的用户名和密码！"
+
+msgid "Logout"
+msgstr "注销"
+
+msgid "WAN IP Address"
+msgstr "WAN口IP地址"
+
+msgid "Basic Mode"
+msgstr "基本模式"
+
+msgid "Expert Mode"
+msgstr "专家模式"
+
+msgid "overview-title"
+msgstr "概述"
+
+msgid "menu-overview-title"
+msgstr "概述"
+
+msgid "WiFi"
+msgstr "WiFi"
+
+msgid "LAN"
+msgstr "LAN"
+
+msgid "WAN"
+msgstr "WAN"
+
+msgid "Schedule"
+msgstr "Schedule"
+
+msgid "on"
+msgstr "开"
+
+msgid "off"
+msgstr "关"
+
+msgid "WPS pin:"
+msgstr "WPS引脚:"
+
+msgid "Internet"
+msgstr "状态"
+
+msgid "ONLINE"
+msgstr "在线"
+
+msgid "OFFLINE"
+msgstr "离线"
+
+msgid "WAN IP(s)"
+msgstr "IP地址"
+
+msgid "Gateway(s)"
+msgstr "网关"
+
+msgid "Connection"
+msgstr "连接类型"
+
+msgid "DNS-Servers"
+msgstr "DNS服务器"
+
+msgid "WAN Uptime"
+msgstr "在线时长"
+
+msgid "USB"
+msgstr "USB"
+
+msgid "No usb devices connected!"
+msgstr "没有USB设备连接！"
+
+msgid "Wireless"
+msgstr "WIFI"
+
+msgid "Edit LAN Settings"
+msgstr "局域网设置"
+
+msgid "IPv4 Address"
+msgstr "IP地址"
+
+msgid "IPv4 Subnet Mask"
+msgstr "子网掩码"
+
+msgid "IPv4 Default Gateway"
+msgstr "默认网关"
+
+msgid "IPv4 Broadcast"
+msgstr "广播地址"
+
+msgid "DHCP Server"
+msgstr "DHCP服务器"
+
+msgid "Basic Settings"
+msgstr "基本设置"
+
+msgid "DHCP Pool Start"
+msgstr "地址池开始偏移"
+
+msgid "DHCP Pool Size"
+msgstr "地址池大小"
+
+msgid "DHCP Lease Time"
+msgstr "租期"
+
+msgid "Hours"
+msgstr "小时"
+
+msgid "Hour"
+msgstr "小时"
+
+msgid "Minutes"
+msgstr "分钟"
+
+msgid "Static DHCP"
+msgstr "静态DHCP"
+
+msgid "Add Connected Host"
+msgstr "添加已连接的设备"
+
+msgid "Device Name"
+msgstr "设备名称"
+
+msgid "MAC Address"
+msgstr "MAC地址"
+
+msgid "IP Address"
+msgstr "IP地址"
+
+msgid "DUID (IPv6)"
+msgstr "DUID (IPv6)"
+
+msgid "Host ID (IPv6)"
+msgstr "Host ID (IPv6)"
+
+msgid "Hostname"
+msgstr "主机名"
+
+msgid "MAC"
+msgstr "MAC地址"
+
+msgid "IPv6 Unique ID"
+msgstr "IPv6 Unique ID"
+
+msgid "IPv6 Address ID"
+msgstr "IPv6 Address ID"
+
+msgid "Edit DNS servers"
+msgstr "设置DNS服务器"
+
+msgid "Aquired DNS servers"
+msgstr "获取的DNS服务器"
+
+msgid "For WAN6 interface"
+msgstr "针对WAN6接口"
+
+msgid "For WAN interface"
+msgstr "针对WAN接口"
+
+msgid "Add/Remove custom DNS Servers"
+msgstr "添加/删除自定义DNS服务器"
+
+msgid "Aquired from"
+msgstr "获取"
+
+msgid "UNKNOWN INTERFACE"
+msgstr "未知接口"
+
+msgid "Do you want to:"
+msgstr "您想："
+
+msgid "Configure Port Mapping"
+msgstr "配置端口映射"
+
+msgid "Configure Firewall Rules"
+msgstr "配置防火墙规则"
+
+msgid "Configure Parental Control"
+msgstr "配置家长控制"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Cancel"
+msgstr "退出"
+
+msgid "Are you sure you want to reload settings from the router? All your current changes will be lost!"
+msgstr "确定要从路由器重新加载配置吗？您当前的所有更改将丢失！"
+
+msgid "menu-network-title"
+msgstr "网络"
+
+msgid "internet-ethernet-title"
+msgstr "以太网设备"
+
+msgid "menu-internet-ethernet-title"
+msgstr "设备"
+
+msgid "Layer-2 Devices"
+msgstr "2层设备"
+
+msgid "internet.ethernet.info"
+msgstr "以太网设备是MAC层设备，您能用它访问一个网络。这些都是MAC层设备，所以没有IP地址。您应该在连接部分配置IP地址。"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Adapter"
+msgstr "适配器"
+
+msgid "MTU"
+msgstr "MTU"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "internet-network-title"
+msgstr "连接"
+
+msgid "menu-internet-network-title"
+msgstr "连接"
+
+msgid "Connections"
+msgstr "连接"
+
+msgid "General"
+msgstr "通用"
+
+msgid "Physical Settings"
+msgstr "物理配置"
+
+msgid "Advanced"
+msgstr "高级"
+
+msgid "Device:"
+msgstr "设备："
+
+msgid "Protocol"
+msgstr "协议"
+
+msgid "Unmanaged"
+msgstr "未管理"
+
+msgid "Static Address"
+msgstr "静态地址"
+
+msgid "DHCP v4"
+msgstr "DHCP v4"
+
+msgid "PPP"
+msgstr "PPP"
+
+msgid "PPP over Ethernet"
+msgstr "PPPOE"
+
+msgid "PPP over ATM"
+msgstr "PPPOA"
+
+msgid "Point-to-Point Tunnel"
+msgstr "P2P隧道"
+
+msgid "Standalone"
+msgstr "标准"
+
+msgid "AnyWAN"
+msgstr "AnyWAN"
+
+msgid "Bridge"
+msgstr "桥接"
+
+msgid "DHCP"
+msgstr "DHCP"
+
+msgid "Protocol:"
+msgstr "协议："
+
+msgid "IPv4-Address ({{$index+1}}):"
+msgstr "IP地址({{$index+1}}):"
+
+msgid "Hostname to include in DHCP requests"
+msgstr "包含在DHCP请求中的主机名"
+
+msgid "Create default route"
+msgstr "创建默认网关"
+
+msgid "Automatically set up default route for this interface"
+msgstr "自动为该接口设备默认路由"
+
+msgid "UP"
+msgstr "启动"
+
+msgid "Interface Type"
+msgstr "接口类型"
+
+msgid "Bring up on boot"
+msgstr "开机自动启动"
+
+msgid "Use gateway metric"
+msgstr "Use gateway metric"
+
+msgid "Override MAC address"
+msgstr "MAC克隆"
+
+msgid "Override MTU"
+msgstr "自定义MTU"
+
+msgid "Use broadcast flag"
+msgstr "使用广播标记"
+
+msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
+msgstr "Required for certain ISPs, e.g. Charter with DOCSIS 3"
+
+msgid "Use default gateway"
+msgstr "使用默认网关"
+
+msgid "If uncchecked, no default rout is configured"
+msgstr "如果为选中，则不会配置默认路由"
+
+msgid "Use DNS servers advertised by peer"
+msgstr "使用对端通告的DNS服务器"
+
+msgid "help If unchecked, the advertised DNS server addresses are ignored"
+msgstr "如果未选中，则忽略对端通告的DNS服务器"
+
+msgid "Additional DHCP options to request from the server"
+msgstr "DHCP请求的额外选项"
+
+msgid "Client ID to send when requesting DHCP"
+msgstr "发送DHCP请求的Client ID"
+
+msgid "Vendor Class to send when requesting DHCP"
+msgstr "发送DHCP请求的厂家类"
+
+msgid "Custom client ID"
+msgstr "自定义客户端ID"
+
+msgid "Custom Vendor class"
+msgstr "自定义厂家类"
+
+msgid "settings.network.info"
+msgstr "此页允许配置您的家庭网络中使用的IP地址。"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "DHCP Server Enabled"
+msgstr "开启DHCP服务器"
+
+msgid "Pick network device"
+msgstr "挑选网络设备"
+
+msgid "Network device"
+msgstr "网络设备"
+
+msgid "-- Select One --"
+msgstr "-- 选择一个 --"
+
+msgid "internet-routes-title"
+msgstr "静态路由"
+
+msgid "menu-internet-routes-title"
+msgstr "静态路由"
+
+msgid "internet-firewall-title"
+msgstr "防火墙"
+
+msgid "menu-internet-firewall-title"
+msgstr "防火墙"
+
+msgid "internet-firewall-zones-title"
+msgstr "区域"
+
+msgid "menu-internet-firewall-zones-title"
+msgstr "区域"
+
+msgid "internet-firewall-rules-title"
+msgstr "防火墙规则"
+
+msgid "menu-internet-firewall-rules-title"
+msgstr "防火墙规则"
+
+msgid "internet-firewall-forwarding-title"
+msgstr "区域转发"
+
+msgid "menu-internet-firewall-forwarding-title"
+msgstr "区域转发"
+
+msgid "internet-parental-control-title"
+msgstr "家长控制"
+
+msgid "menu-internet-parental-control-title"
+msgstr "家长控制"
+
+msgid "menu-internet-services-title"
+msgstr "服务"
+
+msgid "internet-services-minidlna-title"
+msgstr "MiniDLNA"
+
+msgid "menu-internet-services-minidlna-title"
+msgstr "MiniDLNA"
+
+msgid "internet-services-ntp-title"
+msgstr "NTP"
+
+msgid "menu-internet-services-ntp-title"
+msgstr "NTP"
+
+msgid "upnpd-settings-title"
+msgstr "UPNP"
+
+msgid "menu-upnpd-settings-title"
+msgstr "UPNP"
+
+msgid "internet-services-ddns-title"
+msgstr "DDNS"
+
+msgid "menu-internet-services-ddns-title"
+msgstr "DDNS"
+
+msgid "dhcp-settings-title"
+msgstr "DHCP"
+
+msgid "menu-dhcp-settings-title"
+msgstr "DHCP"
+
+msgid "snmpd-config-title"
+msgstr "SNMP"
+
+msgid "menu-snmpd-config-title"
+msgstr "SNMP"
+
+msgid "internet-services-samba-title"
+msgstr "Samba"
+
+msgid "menu-internet-services-samba-title"
+msgstr "Samba"
+
+msgid "menu-wireless-title"
+msgstr "无线"
+
+msgid "wireless-general-title"
+msgstr "通用"
+
+msgid "menu-wireless-general-title"
+msgstr "通用"
+
+msgid "wireless-devices-title"
+msgstr "设备配置"
+
+msgid "menu-wireless-devices-title"
+msgstr "设备配置"
+
+msgid "wireless-interfaces-title"
+msgstr "接口配置"
+
+msgid "menu-wireless-interfaces-title"
+msgstr "接口配置"
+
+msgid "wireless-clients-title"
+msgstr "客户端"
+
+msgid "menu-wireless-clients-title"
+msgstr "客户端"
+
+msgid "menu-system-title"
+msgstr "系统"
+
+msgid "menu-system-title"
+msgstr "系统"
+
+msgid "settings-system-title"
+msgstr "设置"
+
+msgid "menu-settings-system-title"
+msgstr "设置"
+
+msgid "settings-password-title"
+msgstr "密码"
+
+msgid "menu-settings-password-title"
+msgstr "密码"
+
+msgid "settings-upgrade-title"
+msgstr "固件升级"
+
+msgid "menu-settings-upgrade-title"
+msgstr "固件升级"
+
+msgid "Firmware Upgrade"
+msgstr "固件升级"
+
+msgid "settings.upgrade.info"
+msgstr ""
+
+msgid "Current Firmware Version"
+msgstr "当前固件版本"
+
+msgid "Manual Firmware Upgrade"
+msgstr "手动升级"
+
+msgid "settings.upgrade.manual.info"
+msgstr ""
+
+msgid "Upload firmware image"
+msgstr "上传固件"
+
+msgid "Start upgrade"
+msgstr "开始升级"
+
+msgid "No image uploaded yet!"
+msgstr "还没有固件上传!"
+
+msgid "settings-configuration-title"
+msgstr "配置"
+
+msgid "menu-settings-configuration-title"
+msgstr "配置"
+
+msgid "settings-management-title"
+msgstr "管理"
+
+msgid "menu-settings-management-title"
+msgstr "管理"
+
+msgid "settings-management-dropbear-title"
+msgstr "SSH"
+
+msgid "menu-settings-management-dropbear-title"
+msgstr "SSH"
+
+msgid "page-uhttpd-settings-title"
+msgstr "HTTPD"
+
+msgid "menu-page-uhttpd-settings-title"
+msgstr "HTTPD"
+
+msgid "internet-firewall-services-title"
+msgstr "服务"
+
+msgid "menu-internet-firewall-services-title"
+msgstr "服务"
+
+msgid "settings-services-title"
+msgstr "服务"
+
+msgid "menu-settings-services-title"
+msgstr "服务"
+
+msgid "menu-status-title"
+msgstr "状态"
+
+msgid "status-system-title"
+msgstr "系统"
+
+msgid "menu-status-system-title"
+msgstr "系统"
+
+msgid "status-tv-title"
+msgstr "IGMP状态"
+
+msgid "menu-status-tv-title"
+msgstr "IGMP状态"
+
+msgid "status-usb-title"
+msgstr "USB状态"
+
+msgid "menu-status-usb-title"
+msgstr "USB状态"
+
+msgid "status-network-title"
+msgstr "Network状态"
+
+msgid "menu-status-network-title"
+msgstr "Network状态"
+
+msgid "netifd-status-clients-title"
+msgstr "客户端"
+
+msgid "menu-netifd-status-clients-title"
+msgstr "客户端"
+
+msgid "status-network-routes-title"
+msgstr "路由/ARP表"
+
+msgid "menu-status-network-routes-title"
+msgstr "路由/ARP表"
+
+msgid "upnpd-status-title"
+msgstr "UPNP"
+
+msgid "menu-upnpd-status-title"
+msgstr "UPNP"
+
+msgid "dhcp-status-title"
+msgstr "DHCP状态"
+
+msgid "menu-dhcp-status-title"
+msgstr "DHCP状态"
+
+msgid "status-network-nat-title"
+msgstr "NAT"
+
+msgid "menu-status-network-nat-title"
+msgstr "NAT"
+
+msgid "status-diagnostics-title"
+msgstr "诊断"
+
+msgid "menu-status-diagnostics-title"
+msgstr "诊断"
+
+msgid "status-restart-title"
+msgstr "重启"
+
+msgid "menu-status-restart-title"
+msgstr "重启"
