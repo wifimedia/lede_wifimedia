@@ -127,7 +127,11 @@ fi
 uci commit wireless && wifi
 
 while read line;do
-	if [ "$(echo $line | grep SERVICE:)" ];then
+
+	if [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
+		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
+		uci set wifimedia.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
+	elif [ "$(echo $line | grep SERVICE:)" ];then
 		if [ "$(echo $line | awk '{print $2}')" == "enable" ];then
 			uci set nodogsplash.@nodogsplash[0].enabled='1'
 			/etc/init.d/nodogsplash enable
@@ -135,12 +139,11 @@ while read line;do
 			uci set nodogsplash.@nodogsplash[0].enabled='0'
 			/etc/init.d/nodogsplash disable
 		fi
-		uci commit nodogsplash
-		/etc/init.d/nodogsplash stop
-		/etc/init.d/nodogsplash start
-	elif [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
-		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
-	fi
+	fi	
+	uci commit nodogsplash
+	uci commit nodogsplash
+	/etc/init.d/nodogsplash stop
+	/etc/init.d/nodogsplash start
 done < /tmp/config_setting
 	
 }
