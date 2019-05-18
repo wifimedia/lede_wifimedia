@@ -1,1 +1,0 @@
-logger -t "carrier-monitor" "$INTERFACE link $ACTION"
