@@ -29,8 +29,8 @@ s:taboption( "basic",Value, "preauthenticated_users","Walled Garden","google.com
 s:taboption( "advance",Value, "maxclients","Maxclients","Max Clients:250")
 s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","> 30 mins")
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","> 120 mins")
-s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","20 mins")
-s:taboption( "advance",Value, "checkinterval","Checkinterval","10 mins")
+s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default 20 mins")
+s:taboption( "advance",Value, "checkinterval","Checkinterval","Default 10 mins")
 s:taboption( "basic",Flag, "https","Bypass https")
 
 local pid = luci.util.exec("pidof nodogsplash")
