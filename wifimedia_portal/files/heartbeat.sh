@@ -22,7 +22,7 @@ else
 		fi
 	done
 
-    sh /sbin/wifimedia/update_preauthenticated_rules.sh
+    sh /sbin/wifimedia/preauthenticated_rules.sh
 fi
 
 
@@ -106,7 +106,7 @@ setting_config() {
 					uci set wireless.default_radio0.rsn_preauth=1
 					
 				fi
-			if		
+			fi		
 			#if [ "$network_2"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
 			#	if [ "$(echo $line | awk '{print $2}')" == "" ];then
