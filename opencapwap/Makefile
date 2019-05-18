@@ -12,6 +12,9 @@ define Package/opencapwap/Default
   CATEGORY:=Advance
   TITLE:=OpenCAPWAP
   DEPENDS:=+libpthread +libnl +libopenssl +kmod-tun
+  MENU:=1
+  PKGARCH:=all
+  MAINTAINER:=DungTD <dungtd8x@gmail.com>  
 endef
 
 define Package/opencapwap-ac
