@@ -4,7 +4,8 @@
 echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
 #write file crontabs
 _nds=/etc/cron_nds
-echo '0/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
+echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
+echo ''>/etc/crontabs/nds && /etc/init.d/cron restart
 NET_ID="nextify"
 FW_ZONE="nextify"
 IFNAME="nextify0.1" #VLAN1
