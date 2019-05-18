@@ -37,6 +37,7 @@ ctv=`expr $checkinterval_default \* 60`
 https=`uci -q get wifimedia.@nodogsplash[0].https`
 #MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
 MAC_E0=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #For TPLINK
+
 uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
 #uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
