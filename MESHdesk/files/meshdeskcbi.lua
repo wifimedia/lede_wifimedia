@@ -1,8 +1,8 @@
 require("luci.sys")
 local sys = require "luci.sys"
-m.apply_on_parse = true
+
 m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the following details"))
- 
+m.apply_on_parse = true 
         d = m:section(NamedSection,"settings", "settings","Activation" )  -- info is the section called info in cbi_file
                 a = d:option(ListValue, "mode", "Mode");
                 a.optional=false;
@@ -15,7 +15,8 @@ m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the followi
                 local protocol = s_internet:option(ListValue,"protocol", "Protocol");
                 protocol:value("http","HTTP");
                 protocol:value("https","HTTPS");
-                local ip = s_internet:option(Value,'ip','IP Address','IP Address of Cloud Controller');
+                --local ip = s_internet:option(Value,'ip','IP Address','IP Address of Cloud Controller');
+				local dns = s_internet:option(Value,'dns','DNS Address','DNS Address of Cloud Controller');
  
 m.on_parse = function(self)
         -- all written config names are in self.parsechain
