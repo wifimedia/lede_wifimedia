@@ -7,8 +7,8 @@ EXTRA_COMMANDS="status"
 EXTRA_HELP="        status  checking"
 lcs=/etc/opt/wfm_lcs
 model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
-dnsctl=$(uci -q get meshdesk.internet1.dns)
-ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
+#dnsctl=$(uci -q get meshdesk.internet1.dns)
+#ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
 #if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
 #	uci set meshdesk.internet1.ip=$ip
 #	uci commit meshdesk
@@ -26,9 +26,8 @@ boot() {
 		fi
 	fi
 	
-	if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
-		uci set meshdesk.internet1.ip=$ip
-		uci commit meshdesk
+	if [ -e /etc/config/meshdesk ];then
+		sbin/wifimedia/controller.sh meshdesk >/dev/null 2>&1
 	fi
 	
 }

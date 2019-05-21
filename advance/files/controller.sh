@@ -158,6 +158,14 @@ wa901nd() { #checking internet
 }
 
 
+meshdesk(){
+dnsctl=$(uci -q get meshdesk.internet1.dns)
+ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
+if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
+	uci set meshdesk.internet1.ip=$ip
+	uci commit meshdesk
+fi
+}
 #eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-19)
 #
 #eap(){
