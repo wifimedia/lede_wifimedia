@@ -12,6 +12,7 @@ m = Map("wifimedia",translate(""))
 m.apply_on_parse = true
 function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
+		luci.util.exec("/sbin/wifimedia/controller_local.sh next_net >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
@@ -29,8 +30,8 @@ s:taboption( "basic",Value, "preauthenticated_users","Walled Garden","google.com
 s:taboption( "advance",Value, "maxclients","Maxclients","Max Clients:250")
 s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","> 30 mins")
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","> 120 mins")
-s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default 20 mins")
-s:taboption( "advance",Value, "checkinterval","Checkinterval","Default 10 mins")
+s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","20 mins")
+s:taboption( "advance",Value, "checkinterval","Checkinterval","10 mins")
 s:taboption( "basic",Flag, "https","Bypass https")
 
 local pid = luci.util.exec("pidof nodogsplash")
@@ -59,7 +60,7 @@ t = m:section(Table, captive_process_status())
 t.anonymous = true
 
 t:option(DummyValue, "status","Captive portal status")
-
+--[[
 	if nixio.fs.access("/etc/rc.d/S95nodogsplash") then
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
@@ -82,5 +83,5 @@ t:option(DummyValue, "status","Captive portal status")
 			)			
 	  end
 	end
-
+]]--
 return m
