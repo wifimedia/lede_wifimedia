@@ -8,7 +8,7 @@ echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
 echo ''>/etc/crontabs/nds && /etc/init.d/cron restart
 NET_ID="nextify"
 FW_ZONE="nextify"
-IFNAME="nextify0.1" #VLAN1
+IFNAME="eth0.1" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
 MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
