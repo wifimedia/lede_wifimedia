@@ -12,6 +12,7 @@ m = Map("wifimedia",translate(""))
 m.apply_on_parse = true
 function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
+		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh next_net >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
