@@ -16,7 +16,7 @@ ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' 
 	
 #echo $ip
 boot() {
-    sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh && /sbin/wifimedia/preauthenticated_rules.sh >/dev/null 2>&1
+    #sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh && /sbin/wifimedia/preauthenticated_rules.sh >/dev/null 2>&1
 	
 	if [ -e "$lcs" ];then
 		if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
