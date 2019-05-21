@@ -5,14 +5,14 @@ echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
 #write file crontabs
 _nds=/etc/cron_nds
 echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
-echo ''>/etc/crontabs/nds && /etc/init.d/cron restart
+echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >/etc/crontabs/nds && /etc/init.d/cron restart
 NET_ID="nextify"
 FW_ZONE="nextify"
-IFNAME="nextify0.1" #VLAN1
+IFNAME="eth0.1" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
-#MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
 MAC_E0=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #For TPLINK
+#MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
 #write file splash
 #write file splash
 echo '<!doctype html>
@@ -57,7 +57,7 @@ uci -q get wifimedia.@nodogsplash[0] || {
         uci batch <<EOF
         add wifimedia nodogsplash
 		set wifimedia.@nodogsplash[0].domain="portal.nextify.vn/splash"
-		set wifimedia.@nodogsplash[0].https=1
+		set wifimedia.@nodogsplash[0].https=0
         commit wifimedia
 EOF
 }
@@ -102,7 +102,7 @@ uci batch << EOF
 EOF
 
 /etc/init.d/nodogsplash disable
-uci set nodogsplash.@nodogsplash[0].enabled='0'
+uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-nextify";
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
@@ -110,7 +110,8 @@ uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 125.21
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 171.244.6.33"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 103.104.116.6"
 uci commit nodogsplash
-/etc/init.d/nodogsplash stop
+/etc/init.d/nodogsplash enable
+/etc/init.d/nodogsplash start
 uci commit network
 uci commit dhcp
 uci commit firewall
