@@ -307,49 +307,48 @@ vlan5g_del(){
 	uci	commit network
 }
 
-rssi() {
-
-if [ $rssi_on == "1" ];then
-	level_defaults=-80
-	level=$(uci -q get wifimedia.@advance[0].level)
-	level=${level%dBm}
-	LOWER=${level:-$level_defaults}
-	#echo $LOWER	
-	dl_time=$(uci -q get wifimedia.@advance[0].delays)
-	dl_time=${dl_time%s}
-	ban_time=$(expr $dl_time \* 1000)
-	touch /tmp/denyclient
-	chmod a+x /tmp/denyclient
-	NEWLINE_IFS='
-'
-	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
-	signal=''
-	host=''
-	mac=''
-
-	for iface in `iw dev | grep Interface | awk '{print $2}'`; do
-		for line in `iw $iface station dump`; do
-			if echo "$line" | grep -q "Station"; then
-				if [ -f /etc/ethers ]; then
-					mac=$(echo $line | awk '{print $2}' FS=" ")
-					host=$(awk -v MAC=$mac 'tolower($1)==MAC {print $2}' FS=" " /etc/ethers)
-				fi
-			fi
-			if echo "$line" | grep -q "signal:"; then
-				signal=`echo "$line" | awk '{print $2}'`
-				#echo "$mac (on $iface) $signal $host"
-				if [ "$signal" -lt "$LOWER" ]; then
-					#echo $MAC IS $SNR - LOWER THAN $LOWER DEAUTH THEM
-					echo "ubus call hostapd.$iface "del_client" '{\"addr\":\"$mac\", \"reason\": 1, \"deauth\": True, \"ban_time\": $ban_time}'" >>/tmp/denyclient
-				fi
-			fi
-		done
-	done
-	IFS="$OLD_IFS"
-	/tmp/denyclient
-	echo "#!/bin/sh" >/tmp/denyclient
-fi #END RSSI
-
+next_net(){
+	NET_ID="nextify"
+	FW_ZONE="nextify"
+	IFNAME="eth0.1" #VLAN1
+	uci set network.${NET_ID}=interface
+	uci set network.${NET_ID}.ifname=${IFNAME}
+	uci set network.${NET_ID}.proto=static
+	uci set network.${NET_ID}.type=bridge
+	uci set network.${NET_ID}.ipaddr=10.68.255.1
+	uci set network.${NET_ID}.netmask=255.255.255.0
+	uci set dhcp.${NET_ID}=dhcp
+	uci set dhcp.${NET_ID}.interface=${NET_ID}
+	uci set dhcp.${NET_ID}.start=100
+	uci set dhcp.${NET_ID}.leasetime=1h
+	uci set dhcp.${NET_ID}.limit=150
+	uci set firewall.${FW_ZONE}=zone
+	uci set firewall.${FW_ZONE}.name=${FW_ZONE}
+	uci set firewall.${FW_ZONE}.network=${NET_ID}
+	uci set firewall.${FW_ZONE}.forward=REJECT
+	uci set firewall.${FW_ZONE}.output=ACCEPT
+	uci set firewall.${FW_ZONE}.input=REJECT 
+	uci set firewall.${FW_ZONE}_fwd=forwarding
+	uci set firewall.${FW_ZONE}_fwd.src=${FW_ZONE}
+	uci set firewall.${FW_ZONE}_fwd.dest=wan
+	uci set firewall.${FW_ZONE}_dhcp=rule
+	uci set firewall.${FW_ZONE}_dhcp.name=${FW_ZONE}_DHCP
+	uci set firewall.${FW_ZONE}_dhcp.src=${FW_ZONE}
+	uci set firewall.${FW_ZONE}_dhcp.target=ACCEPT
+	uci set firewall.${FW_ZONE}_dhcp.proto=udp
+	uci set firewall.${FW_ZONE}_dhcp.dest_port=67-68
+	uci set firewall.${FW_ZONE}_dns=rule
+	uci set firewall.${FW_ZONE}_dns.name=${FW_ZONE}_DNS
+	uci set firewall.${FW_ZONE}_dns.src=${FW_ZONE}
+	uci set firewall.${FW_ZONE}_dns.target=ACCEPT
+	uci set firewall.${FW_ZONE}_dns.proto=tcpudp
+	uci set firewall.${FW_ZONE}_dns.dest_port=53
+	#uci set dhcp.${NET_ID}.force=1
+	#uci set dhcp.${NET_ID}.netmask=255.255.255.0
+	#uci add_list dhcp.${NET_ID}.dhcp_option=6,8.8.8.8,8.8.4.4
+	commit network
+	commit firewall
+	/etc/init.d/network reload
+	/etc/init.d/firewall restart
 }
 
-"$@"
