@@ -11,7 +11,8 @@ local license = fs.access("/etc/opt/first_time.txt")
 local next_net = luci.util.exec("uci -q get network.nextify")
 local detect_5g = luci.util.exec("uci -q get wireless.radio0.hwmode")
 m = Map("wifimedia", "")
-function m.on_after_commit(self)
+m.apply_on_parse = true
+function m.on_apply(self)
 	if license then
 		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
 	end
@@ -19,12 +20,11 @@ function m.on_after_commit(self)
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
-
+--[[
 s = m:section(TypedSection, "wireless","")
 s.anonymous = true
 s.addremove = false
 
---[[ auto controller ]]--
 s:tab("radio24","24G Wireless")
 ctrgs_en = s:taboption("radio24",Flag, "bw24g", "2.4 Enable")
 ctrgs = s:taboption("radio24",Value, "essid", "SSID")
@@ -84,7 +84,7 @@ nasid:depends({ft="ieee80211r"})
 device = s:taboption("radio24",Value, "macs", "APID")
 device:depends({ft="ieee80211r", ft_psk_generate_local=""})
 --macs.datatype = "macaddr"
---[[Tx Power]]--
+
 ctrgtx = s:taboption("radio24",ListValue, "txpower", "Transmit Power")
 ctrgtx:value("auto","Auto")
 ctrgtx:value("low","Low")
@@ -99,7 +99,7 @@ hidessid:depends({bw24g="1"})
 apisolation = s:taboption("radio24",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({bw24g="1"})
-
+]]--
 ----s = m:section(TypedSection, "radio5","")
 --s:tab("radio5","5G Wireless")
 --ctrgs_en = s:taboption("radio5",Flag, "bw5g", "5G Enable")
