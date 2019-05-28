@@ -181,27 +181,27 @@ fi
 #}
 
 checking (){
-	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
-	eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
-	if [ "$model" == "TL-WR840N_v4" ];then
-		wr840v4
-		eap_manager
-	elif [ "$model" == "TL-WR841N_v13" ];then
-		wr841v13
-		eap_manager
-	elif [ "$model" == "TL-WR940N_v4" ];then
-		wr940v5
-	elif [ "$model" == "TL-WR940N_v6" ];then
-		wr940v6
-	elif [ "$eap_name" == "TL-WA901ND" ] ;then
-		wa901nd
-	elif [ "$model" == "TL-WR841N_v14" ] ;then	
-		wr841v14
-		eap_manager
-	elif [ "$model" == "TL-WR840N_v6" ] ;then	
-		wr840v6
-		eap_manager
-	fi
+	#model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+	#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
+	#if [ "$model" == "TL-WR840N_v4" ];then
+	#	wr840v4
+	#	eap_manager
+	#elif [ "$model" == "TL-WR841N_v13" ];then
+	#	wr841v13
+	#	eap_manager
+	#elif [ "$model" == "TL-WR940N_v4" ];then
+	#	wr940v5
+	#elif [ "$model" == "TL-WR940N_v6" ];then
+	#	wr940v6
+	#elif [ "$eap_name" == "TL-WA901ND" ] ;then
+	#	wa901nd
+	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
+	#	wr841v14
+	#	eap_manager
+	#elif [ "$model" == "TL-WR840N_v6" ] ;then	
+	#	wr840v6
+	#	eap_manager
+	#fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 40000 ]; then
 		echo "Clear Cach"
