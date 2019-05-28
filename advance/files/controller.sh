@@ -203,8 +203,9 @@ checking (){
 		eap_manager
 	fi
 	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
-		sync && echo 3 > /proc/sys/vm/drop_caches
+	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 40000 ]; then
+		echo "Clear Cach"
+		free && sync && echo 3 > /proc/sys/vm/drop_caches && free
 	fi
 	source /lib/functions/network.sh ; if network_get_ipaddr addr "wan"; then echo "WAN: $addr" >/tmp/ipaddr; fi
 	#pidhostapd=`pidof hostapd`
