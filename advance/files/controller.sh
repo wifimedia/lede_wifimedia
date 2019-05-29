@@ -203,7 +203,7 @@ checking (){
 	#	eap_manager
 	#fi
 	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 40000 ]; then
+	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 10000 ]; then
 		echo "Clear Cach"
 		free && sync && echo 3 > /proc/sys/vm/drop_caches && free
 	fi
