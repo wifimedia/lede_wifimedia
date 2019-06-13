@@ -25,6 +25,7 @@ start() {
 	radiusconfig
 	#ifconfig br-lan 0.0.0.0
 	brctl stp br-wan on
+	brctl delif tun0 eth1
 	sleep 1
 	/usr/sbin/chilli -c /etc/chilli.conf  --acctupdate --dnsparanoia
 	touch /var/lock/subsys/chilli
