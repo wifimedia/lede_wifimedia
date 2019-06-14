@@ -1,5 +1,6 @@
 require("luci.sys")
 local sys = require "luci.sys"
+local uci 	= require("uci")
 
 m = Map("meshdesk", translate("Cloud Controller"), translate("Supply the following details"))
 m.apply_on_parse = true 
