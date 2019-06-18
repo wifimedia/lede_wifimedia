@@ -38,8 +38,9 @@ define Package/wifimedia_portal/install
 	#$(CP) ./files/* $(1)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_DIR) $(1)/sbin/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
 	$(INSTALL_BIN) ./files/uci_portal $(1)/etc/uci-defaults/uci_portal

@@ -12,7 +12,7 @@ define Package/$(PKG_NAME)
   SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+mongoose +kmod-wifi-portal
+  DEPENDS:= +kmod-wifi-portal
   TITLE:=A very efficient captive portal solution
 endef
 
