@@ -9,6 +9,7 @@ echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >/etc/crontabs/nds && /etc/init.
 NET_ID="nextify"
 FW_ZONE="nextify"
 IFNAME="eth0.1" #VLAN1
+IFNAME99="eth0.99" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
 MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
@@ -99,15 +100,19 @@ uci batch << EOF
 	add_list dhcp.${NET_ID}.dhcp_option=6,8.8.8.8,8.8.4.4
 	commit
 EOF
+
 FW_ZONE_RELAY=relay
+AP_NEXTIFY=dhcp_external
+NET_RELAY=relay_ap
 uci batch << EOF
-	set network.${NET_ID}=interface
-	set network.${NET_ID}.ifname=${IFNAME}
-	set network.${NET_ID}.proto=static
-	set network.${NET_ID}.type=bridge
-	set network.${NET_ID}.ipaddr=10.68.255.1
-	set network.${NET_ID}.netmask=255.255.255.0
-	
+	set network.${AP_NEXTIFY}=interface
+	set network.${AP_NEXTIFY}.ifname=${IFNAME99}
+	set network.${AP_NEXTIFY}.proto=static
+	set network.${AP_NEXTIFY}.type=bridge
+	set network.${AP_NEXTIFY}.ipaddr=10.69.255.1
+	set network.${AP_NEXTIFY}.netmask=255.255.255.0
+	set dhcp.${AP_NEXTIFY}.ignore=1
+
 	set firewall.${FW_ZONE_RELAY}=zone
 	set firewall.${FW_ZONE_RELAY}.name=${FW_ZONE_RELAY}	
 	set firewall.${FW_ZONE_RELAY}.forward=ACCEPT
@@ -118,6 +123,14 @@ uci batch << EOF
 	set firewall.${FW_ZONE_RELAY}_fwd=forwarding
 	set firewall.${FW_ZONE_RELAY}_fwd.src=${FW_ZONE_RELAY}
 	set firewall.${FW_ZONE_RELAY}_fwd.dest=wan
+	#Config Relay WAN-->NET_RELAY
+
+	set network.${NET_RELAY}=interface
+	set network.${NET_RELAY}.ifname=${IFNAME}
+	set network.${NET_RELAY}.proto=relay
+	set network.${NET_RELAY}.ipaddr=10.69.255.1	
+	add_list network.${NET_RELAY}.network=${AP_NEXTIFY}
+	add_list network.${NET_RELAY}.network=wan
 
 EOF
 /etc/init.d/nodogsplash disable
@@ -137,5 +150,7 @@ uci commit firewall
 /etc/init.d/network restart
 /etc/init.d/dnsmasq restart
 /etc/init.d/firewall restart
+iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
+
 
 
