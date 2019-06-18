@@ -99,7 +99,27 @@ uci batch << EOF
 	add_list dhcp.${NET_ID}.dhcp_option=6,8.8.8.8,8.8.4.4
 	commit
 EOF
+FW_ZONE_RELAY=relay
+uci batch << EOF
+	set network.${NET_ID}=interface
+	set network.${NET_ID}.ifname=${IFNAME}
+	set network.${NET_ID}.proto=static
+	set network.${NET_ID}.type=bridge
+	set network.${NET_ID}.ipaddr=10.68.255.1
+	set network.${NET_ID}.netmask=255.255.255.0
+	
+	set firewall.${FW_ZONE_RELAY}=zone
+	set firewall.${FW_ZONE_RELAY}.name=${FW_ZONE_RELAY}	
+	set firewall.${FW_ZONE_RELAY}.forward=ACCEPT
+	set firewall.${FW_ZONE_RELAY}.output=ACCEPT
+	set firewall.${FW_ZONE_RELAY}.input=ACCEPT 
+	set firewall.${FW_ZONE_RELAY}.masq=1 
 
+	set firewall.${FW_ZONE_RELAY}_fwd=forwarding
+	set firewall.${FW_ZONE_RELAY}_fwd.src=${FW_ZONE_RELAY}
+	set firewall.${FW_ZONE_RELAY}_fwd.dest=wan
+
+EOF
 /etc/init.d/nodogsplash disable
 uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-nextify";
