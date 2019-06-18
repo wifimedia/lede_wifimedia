@@ -104,6 +104,7 @@ EOF
 FW_ZONE_RELAY=relay
 AP_NEXTIFY=dhcp_external
 NET_RELAY=relay_ap
+IFNAME99="eth0.2" #VLAN1
 uci batch << EOF
 	set network.${AP_NEXTIFY}=interface
 	set network.${AP_NEXTIFY}.ifname=${IFNAME99}
