@@ -127,7 +127,6 @@ uci batch << EOF
 	#Config Relay WAN-->NET_RELAY
 
 	set network.${NET_RELAY}=interface
-	set network.${NET_RELAY}.ifname=${IFNAME}
 	set network.${NET_RELAY}.proto=relay
 	set network.${NET_RELAY}.ipaddr=10.69.255.1	
 	add_list network.${NET_RELAY}.network=${AP_NEXTIFY}
