@@ -15,7 +15,7 @@ NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 #NET_ID="nextify"
-NET_ID="dhcp_external"
+NET_ID="nextify"
 FW_ZONE="nextify"
 IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
@@ -170,5 +170,6 @@ echo '<!doctype html>
 #/etc/init.d/firewall restart
 /etc/init.d/nodogsplash stop
 /etc/init.d/nodogsplash start
+sleep 5
 iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
 
