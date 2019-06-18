@@ -38,7 +38,8 @@ define Package/wifimedia_portal/install
 	#$(CP) ./files/* $(1)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_DIR) $(1)/sbin/wifimedia
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
 	$(INSTALL_BIN) ./files/uci_portal $(1)/etc/uci-defaults/uci_portal
@@ -48,5 +49,6 @@ define Package/wifimedia_portal/install
 	$(INSTALL_BIN) ./files/preauthenticated_rules.sh $(1)/sbin/wifimedia/preauthenticated_rules.sh
 	$(INSTALL_DATA) ./files/wifimedia_portal.lua $(1)/usr/lib/lua/luci/controller/wifimedia/wifimedia_portal.lua
 	$(INSTALL_DATA) ./files/portal_model.lua $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module/wifimedia_portal.lua
+	$(INSTALL_BIN) ./files/nodogsplash_init $(1)/etc/init.d/nodogsplash
 endef
 $(eval $(call BuildPackage,wifimedia_portal))
