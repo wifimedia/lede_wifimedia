@@ -43,7 +43,7 @@ define Package/wifimedia_portal/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller/wifimedia
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/wifimedia_module
 	$(INSTALL_BIN) ./files/uci_portal $(1)/etc/uci-defaults/uci_portal
-	$(INSTALL_BIN) ./files/del_network_nds.sh $(1)/sbin/wifimedia/del_network_nds.sh
+	#$(INSTALL_BIN) ./files/del_network_nds.sh $(1)/sbin/wifimedia/del_network_nds.sh
 	$(INSTALL_BIN) ./files/heartbeat.sh $(1)/sbin/wifimedia/heartbeat.sh
 	$(INSTALL_BIN) ./files/nodogsplash_preauth.sh $(1)/sbin/wifimedia/nodogsplash_preauth.sh
 	$(INSTALL_BIN) ./files/preauthenticated_rules.sh $(1)/sbin/wifimedia/preauthenticated_rules.sh
