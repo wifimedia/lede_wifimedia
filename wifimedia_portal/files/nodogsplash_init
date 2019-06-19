@@ -184,7 +184,7 @@ create_instance() {
   procd_set_param respawn
   procd_set_param file "/tmp/etc/nodogsplash_$cfg.conf"
   procd_close_instance
-  iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
+  #iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
 }
 
 start_service() {
