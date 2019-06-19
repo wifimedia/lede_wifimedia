@@ -111,7 +111,7 @@ NET_RELAY=relay
 uci batch << EOF
 	set network.${NET_RELAY}=interface
 	set network.${NET_RELAY}.proto=relay
-	set network.${NET_RELAY}.forward_bcast=0
+	#set network.${NET_RELAY}.forward_bcast=0
 	set network.${NET_RELAY}.delegate=0	
 	set network.${NET_RELAY}.ipaddr=172.16.99.1
 	add_list network.${NET_RELAY}.network=lan
