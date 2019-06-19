@@ -99,11 +99,11 @@ uci batch << EOF
 	set firewall.${FW_ZONE}_dns.target=ACCEPT
 	set firewall.${FW_ZONE}_dns.proto=tcpudp
 	set firewall.${FW_ZONE}_dns.dest_port=53
-	set network.${NET_ID}=interface
-	set network.${NET_ID}.proto=relay
-	set network.${NET_ID}.ipaddr=10.68.255.1	
-	add_list network.${NET_ID}.network=${NET_ID}
-	add_list network.${NET_ID}.network=wan	
+	#set network.${NET_ID}=interface
+	#set network.${NET_ID}.proto=relay
+	#set network.${NET_ID}.ipaddr=10.68.255.1	
+	#add_list network.${NET_ID}.network=${NET_ID}
+	#add_list network.${NET_ID}.network=wan	
 	commit
 EOF
 
