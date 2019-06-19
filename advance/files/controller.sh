@@ -220,22 +220,22 @@ curl_result=$?
 
 if [ "${curl_result}" -eq 0 ]; then
 echo "Checking download sha256sum"
-	if [ "$(uci -q get wifimedia.@advance[0].sha256)" != "$(cat $sha256_download | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
+	if [ "$(uci -q get wifimedia.@wireless[0].sha256)" != "$(cat $sha256_download | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
 
 		wget -q "${url}" -O $grp_download
 		wget -q "${grpd}" -O $grp_device_download
 		cat "$grp_device_download" | while read line ; do
 			if [ "$(echo $line | grep $device_cfg)" ] ;then #tim thiet bi xem co trong groups hay khong
-					uci set wifimedia.@advance[0].ctrs_en="1" #update config
+					uci set wifimedia.@wireless[0].ctrs_en="1" #update config
 				cat "$grp_download" | while read line ; do
 				
 					if [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
 						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@advance[0].network="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@wireless[0].network="$(echo $line | awk '{print $2}')"
 						
 					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
 						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@advance[0].mode="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@wireless[0].mode="$(echo $line | awk '{print $2}')"
 						
 					elif [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
 						essid="$(echo $line | awk '{print $2}')"
@@ -245,11 +245,11 @@ echo "Checking download sha256sum"
 						else 
 							uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
 						fi
-						uci set wifimedia.@advance[0].essid="$essid"
+						uci set wifimedia.@wireless[0].essid="$essid"
 						
 					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim maxassoc
 						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@advance[0].maxassoc="$(echo $line | awk '{print $2}')"
+						uci set wifimedia.@wireless[0].maxassoc="$(echo $line | awk '{print $2}')"
 						
 					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
 						if [ "$(echo $line | awk '{print $2}')" == " " ];then
@@ -257,14 +257,14 @@ echo "Checking download sha256sum"
 							uci delete wireless.@wifi-iface[0].key
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].rsn_preauth
-							uci delete wifimedia.@advance[0].encrypt
+							uci delete wifimedia.@wireless[0].encrypt
 							uci commit wireless
 							rm -f >/etc/FT
 						else	
 							uci set wireless.@wifi-iface[0].encryption="psk2"
 							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@advance[0].password="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@advance[0].encrypt="encryption"
+							uci set wifimedia.@wireless[0].password="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@wireless[0].encrypt="encryption"
 						fi
 						
 					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
@@ -274,7 +274,7 @@ echo "Checking download sha256sum"
 							uci set wireless.@wifi-iface[0].pmk_r1_push="1"
 							#uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
 							uci delete wireless.@wifi-iface[0].rsn_preauth
-							uci set wifimedia.@advance[0].ft="ieee80211r"
+							uci set wifimedia.@wireless[0].ft="ieee80211r"
 							echo "Fast BSS Transition Roaming" >/etc/FT
 							#Delete List r0kh r1kh
 							uci del wireless.default_radio0.r0kh
@@ -290,7 +290,7 @@ echo "Checking download sha256sum"
 							uci delete wireless.@wifi-iface[0].ft_psk_generate_local
 							uci delete wireless.@wifi-iface[0].pmk_r1_push
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
-							uci set wifimedia.@advance[0].ft="rsn_preauth"
+							uci set wifimedia.@wireless[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
 						fi	
 					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
@@ -302,21 +302,21 @@ echo "Checking download sha256sum"
 							uci del wireless.default_radio0.r1kh
 						else	
 							uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@advance[0].nasid="$(echo $line | awk '{print $2}')"
+							uci set wifimedia.@wireless[0].nasid="$(echo $line | awk '{print $2}')"
 						fi	
 						cat "$grp_device_download" | while read line ; do
 							if [ "$(echo $line | grep $(echo $line | awk '{print $2}'))" ];then
 								echo $line | awk '{print $2}' >>$mactmp
 							fi
 						done
-						uci set wifimedia.@advance[0].macs="$(cat $mactmp | xargs | sed 's/:/-/g' | sed 's/ /,/g')"
+						uci set wifimedia.@wireless[0].macs="$(cat $mactmp | xargs | sed 's/:/-/g' | sed 's/ /,/g')"
 					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].hidden="1"
-							uci set wifimedia.@advance[0].hidessid="1"
+							uci set wifimedia.@wireless[0].hidessid="1"
 						else
 							uci set wireless.@wifi-iface[0].hidden="0"
-							uci set wifimedia.@advance[0].hidessid="0"
+							uci set wifimedia.@wireless[0].hidessid="0"
 							#uci delete wireless.@wifi-iface[0].hidden #uci: Entry not found
 						fi					
 					
@@ -327,37 +327,37 @@ echo "Checking download sha256sum"
 
 						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
 							uci set wireless.@wifi-iface[0].isolate="1"
-							uci set wifimedia.@advance[0].isolation="1"
+							uci set wifimedia.@wireless[0].isolation="1"
 						else
 							#uci delete wireless.@wifi-iface[0].isolate
 							uci set wireless.@wifi-iface[0].isolate="0"
-							uci set wifimedia.@advance[0].isolation="0"
+							uci set wifimedia.@wireless[0].isolation="0"
 						fi
 					#Txpower
 					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
 
 						if [ "$(echo $line | grep 'auto')"  ];then
 							uci delete wireless.@wifi-device[0].txpower
-							uci set wifimedia.@advance[0].txpower="auto"
+							uci set wifimedia.@wireless[0].txpower="auto"
 						elif [ "$(echo $line | grep 'low')"  ];then
 							uci set wireless.@wifi-device[0].txpower=17
-							uci set wifimedia.@advance[0].txpower="low"
+							uci set wifimedia.@wireless[0].txpower="low"
 						elif [ "$(echo $line | grep 'medium')"  ];then
 							uci set wireless.@wifi-device[0].txpower=20
-							uci set wifimedia.@advance[0].txpower="medium"
+							uci set wifimedia.@wireless[0].txpower="medium"
 						elif [ "$(echo $line | grep 'high')"  ];then
 							uci set wireless.@wifi-device[0].txpower=22
-							uci set wifimedia.@advance[0].txpower="high"
+							uci set wifimedia.@wireless[0].txpower="high"
 						fi
 					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
 						rssi="$(echo $line | awk '{print $2}')"
 						if [ -z "$rssi" ];then
-							uci set wifimedia.@advance[0].enable="0"
+							uci set wifimedia.@wireless[0].enable="0"
 							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
 						else
-							uci set wifimedia.@advance[0].enable="1"
+							uci set wifimedia.@wireless[0].enable="1"
 							/etc/init.d/watchcat start && /etc/init.d/watchcat enable
-							uci set wifimedia.@advance[0].level="$rssi"
+							uci set wifimedia.@wireless[0].level="$rssi"
 						fi
 					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
 					
@@ -366,7 +366,7 @@ echo "Checking download sha256sum"
 							uci set network.wan.proto='dhcp'
 							uci set network.wan.ifname='eth0 eth1.1'
 							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@advance[0].bridge_mode='1'
+							uci set wifimedia.@wireless[0].bridge_mode='1'
 						else
 							uci set network.lan='interface'
 							uci commit network
@@ -381,7 +381,7 @@ echo "Checking download sha256sum"
 							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
 							uci set network.wan.ifname='eth0'
 							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@advance[0].bridge_mode='0'
+							uci set wifimedia.@wireless[0].bridge_mode='0'
 						fi						
 					fi
 					wifi up
@@ -413,11 +413,11 @@ echo "Checking download sha256sum"
 					fi
 					####END Auto reboot every day
 					#commit sha256
-					uci set wifimedia.@advance[0].sha256="$(sha256sum $grp_download | awk '{print $1}')"
+					uci set wifimedia.@wireless[0].sha256="$(sha256sum $grp_download | awk '{print $1}')"
 					#switch interface wireless
-					#if [ "$(uci -q get wifimedia.@advance[0].wireless_cfg)" == "0" ]; then
+					#if [ "$(uci -q get wifimedia.@wireless[0].wireless_cfg)" == "0" ]; then
 					#	cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
-					#	uci set wifimedia.@advance[0].wireless_cfg=1
+					#	uci set wifimedia.@wireless[0].wireless_cfg=1
 					#fi	
 				done
 				uci commit wifimedia
@@ -488,7 +488,7 @@ if [ "$groups_en" == "1" ];then
 		fi
 		#end config r0kh & r1kh
 		
-		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
+		if [ -z $(uci -q get wifimedia.@wireless[0].macs) ];then
 		#echo "test rong"
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh	
@@ -592,7 +592,7 @@ if [ "${curl_result}" -eq 0 ]; then
 		cat "$licensekey" | while read line ; do
 			if [ "$(echo $line | grep $cf_apid)" ] ;then
 				#Update License Key
-				uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
+				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
 				cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
