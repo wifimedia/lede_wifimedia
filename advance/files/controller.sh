@@ -648,7 +648,7 @@ uptime="${time:-$time1}"
 status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-	cat /etc/opt/license/wifimedia >/etc/opt/license/status
+	echo "Activated" >/etc/opt/license/status
 	#touch $status
 	echo "" >/etc/crontabs/wificode
 	/etc/init.d/cron restart	
@@ -663,7 +663,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		wifi
 		#touch $status
 		rm $lcs
-		cat /etc/opt/license/wifimedia >/etc/opt/license/status
+		echo "Activated" >/etc/opt/license/status
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
 		#if [ -f /etc/rc.d/S80privoxy ]; then
@@ -707,7 +707,7 @@ uptime="${time:-$time1}"
 #status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-	cat /etc/opt/license/wifimedia >/etc/opt/license/status
+	echo "Activated" >/etc/opt/license/status
 	#touch $status
 	rm $lcs
 	echo "" >/etc/crontabs/wificode
@@ -721,7 +721,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		rm $lcs
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
-		cat /etc/opt/license/wifimedia >/etc/opt/license/status
+		echo "Activated" >/etc/opt/license/status
 	else
 		minute=`date | awk '{print $4}'|cut -c 4,5`
 		if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
