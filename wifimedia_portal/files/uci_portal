@@ -119,6 +119,16 @@ uci batch << EOF
 	commit
 EOF
 
+uci del dhcp.lan 
+uci commit dhcp
+NET_ID_LAN=lan
+uci batch << EOF
+	set dhcp.${NET_ID_LAN}=dhcp
+	set dhcp.${NET_ID_LAN}.interface=${NET_ID_LAN}
+	set dhcp.${NET_ID_LAN}.ignore=1
+	commit dhcp
+EOF
+
 #FW_ZONE_RELAY=relay
 #AP_NEXTIFY=dhcp_external
 #NET_RELAY=relay_ap
