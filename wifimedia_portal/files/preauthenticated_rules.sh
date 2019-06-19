@@ -15,7 +15,7 @@ NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 #NET_ID="nextify"
-NET_ID="nextify"
+NET_ID="lan"
 FW_ZONE="nextify"
 IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
@@ -61,8 +61,9 @@ done
 ###Read line file 
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
-	uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
+uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
+uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
 uci commit
 if [ $https == "1" ];then
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
