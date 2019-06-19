@@ -163,8 +163,12 @@ EOF
 #EOF
 /etc/init.d/nodogsplash disable
 uci set nodogsplash.@nodogsplash[0].enabled='1'
-uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-lan";
+uci del nodogsplash.@nodogsplash[0].users_to_router
+uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
+uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
 uci set dhcp.lan.ignore=1
