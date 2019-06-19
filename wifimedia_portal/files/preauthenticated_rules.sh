@@ -64,6 +64,9 @@ uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 125.212.224.252"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 171.244.6.33"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 103.104.116.6"
 uci commit
 if [ $https == "1" ];then
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
