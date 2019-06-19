@@ -614,7 +614,7 @@ lgw_srv() {
 			cat "$licensekey" | while read line ; do
 				if [ "$(echo $line | grep $cf_apid)" ] ;then
 					#Update License Key
-					uci set wifimedia.@advance[0].wfm="$(cat /etc/opt/license/wifimedia)"
+					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					uci commit wifimedia
 					licensegw
@@ -640,14 +640,14 @@ diff=$(expr $diff \% 3600)
 min=$(expr $diff / 60)
 
 #uptime="${days}"
-time=$(uci -q get wifimedia.@advance[0].time)
+time=$(uci -q get wifimedia.@wireless[0].time)
 time1=${days}
 uptime="${time:-$time1}"
 #uptime="${$(uci get license.active.time):-${days}}"
 #uptime="${days}d:${hours}h:${min}m"
 status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
-if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 	cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	#touch $status
 	echo "" >/etc/crontabs/wificode
@@ -657,7 +657,7 @@ else
 	echo "Wrong License Code" >/etc/opt/license/status
 fi
 if [ "$uptime" -gt 15 ]; then #>15days
-	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		uci set wireless.radio0.disabled="0"
 		uci commit wireless
 		wifi
@@ -701,12 +701,12 @@ diff=$(expr $diff \% 3600)
 min=$(expr $diff / 60)
 
 #uptime="${days}"
-time=$(uci -q get wifimedia.@advance[0].time)
+time=$(uci -q get wifimedia.@wireless[0].time)
 time1=${days}
 uptime="${time:-$time1}"
 #status=/etc/opt/wfm_status
 lcs=/etc/opt/wfm_lcs
-if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 	cat /etc/opt/license/wifimedia >/etc/opt/license/status
 	#touch $status
 	rm $lcs
@@ -716,7 +716,7 @@ else
 	echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 fi
 if [ "$uptime" -gt 15 ]; then #>15days
-	if [ "$(uci -q get wifimedia.@advance[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		#touch $status
 		rm $lcs
 		echo "" >/etc/crontabs/wificode
@@ -784,11 +784,11 @@ rssi() {
 
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
-	level=$(uci -q get wifimedia.@advance[0].level)
+	level=$(uci -q get wifimedia.@wireless[0].level)
 	level=${level%dBm}
 	LOWER=${level:-$level_defaults}
 	#echo $LOWER	
-	dl_time=$(uci -q get wifimedia.@advance[0].delays)
+	dl_time=$(uci -q get wifimedia.@wireless[0].delays)
 	dl_time=${dl_time%s}
 	ban_time=$(expr $dl_time \* 1000)
 	touch /tmp/denyclient
