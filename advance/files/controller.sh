@@ -659,6 +659,7 @@ fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		uci set wireless.radio0.disabled="0"
+		uci set wireless.radio1.disabled="0"
 		uci commit wireless
 		wifi
 		#touch $status
@@ -674,6 +675,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
+		uci set wireless.radio1.disabled="1"
 		uci commit wireless
 		wifi down
 		#if [ -f /etc/rc.d/S80privoxy ]; then
@@ -712,12 +714,24 @@ if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifim
 	rm $lcs
 	echo "" >/etc/crontabs/wificode
 	/etc/init.d/cron restart
+	uci set wireless.radio0.disabled="0"
+	uci set wireless.radio1.disabled="0"
+	uci commit wireless
+	wifi
 else
+	minute=`date | awk '{print $4}'|cut -c 4,5`
+	if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
+		reboot
+	fi
 	echo "Wrong License Code & auto reboot" >/etc/opt/license/status
+	
 fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-		#touch $status
+		uci set wireless.radio0.disabled="0"
+		uci set wireless.radio1.disabled="0"
+		uci commit wireless
+		wifi
 		rm $lcs
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
