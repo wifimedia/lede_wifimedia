@@ -6,10 +6,10 @@ echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
 _nds=/etc/cron_nds
 echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
 echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >/etc/crontabs/nds && /etc/init.d/cron restart
-NET_ID="nextify"
-FW_ZONE="nextify"
-IFNAME="eth0.1" #VLAN1
-IFNAME99="eth0.99" #VLAN1
+#NET_ID="nextify"
+#FW_ZONE="nextify"
+#IFNAME="eth0.1" #VLAN1
+#IFNAME99="eth0.99" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
 MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
@@ -156,9 +156,7 @@ uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-lan";
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 125.212.224.252"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 171.244.6.33"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 103.104.116.6"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
 uci set dhcp.lan.ignore=1
 uci commit nodogsplash
 /etc/init.d/nodogsplash enable
@@ -169,8 +167,9 @@ uci commit firewall
 /etc/init.d/network restart
 /etc/init.d/dnsmasq restart
 /etc/init.d/firewall restart
-sleep 5
-iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
+/etc/init.d/relayd restart
+#sleep 5
+#iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
 
 
 

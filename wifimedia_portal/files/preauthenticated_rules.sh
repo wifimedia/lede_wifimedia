@@ -16,8 +16,8 @@ PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 #NET_ID="nextify"
 NET_ID="lan"
-FW_ZONE="nextify"
-IFNAME="nextify0.1" #VLAN1
+#FW_ZONE="nextify"
+#IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
@@ -64,9 +64,7 @@ uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 125.212.224.252"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 171.244.6.33"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 103.104.116.6"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
 uci commit
 if [ $https == "1" ];then
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
