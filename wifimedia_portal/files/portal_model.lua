@@ -60,7 +60,7 @@ t = m:section(Table, captive_process_status())
 t.anonymous = true
 
 t:option(DummyValue, "status","Captive portal status")
---[[
+
 	if nixio.fs.access("/etc/rc.d/S95nodogsplash") then
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
@@ -83,5 +83,5 @@ t:option(DummyValue, "status","Captive portal status")
 			)			
 	  end
 	end
-]]--
+
 return m

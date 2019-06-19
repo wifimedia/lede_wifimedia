@@ -112,7 +112,7 @@ uci batch << EOF
 	set network.${NET_RELAY}=interface
 	set network.${NET_RELAY}.proto=relay
 	set network.${NET_RELAY}.ipaddr=172.16.99.1	
-	add_list network.${NET_RELAY}.network=${NET_RELAY}
+	add_list network.${NET_RELAY}.network=lan
 	add_list network.${NET_RELAY}.network=wan	
 	commit
 EOF
