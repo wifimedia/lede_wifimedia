@@ -162,7 +162,7 @@ EOF
 #
 #EOF
 /etc/init.d/nodogsplash disable
-#uci set nodogsplash.@nodogsplash[0].enabled='1'
+uci set nodogsplash.@nodogsplash[0].enabled='0'
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
