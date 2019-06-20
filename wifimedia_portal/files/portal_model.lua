@@ -12,7 +12,7 @@ m = Map("wifimedia",translate(""))
 m.apply_on_parse = true
 function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
-		luci.util.exec("/sbin/wifimedia/controller_local.sh next_net >/dev/null")
+		--luci.util.exec("/sbin/wifimedia/controller_local.sh next_net >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
@@ -79,7 +79,6 @@ t:option(DummyValue, "status","Captive portal status")
 	  function enable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
 			luci.sys.call("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit nodogsplash")
-			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
