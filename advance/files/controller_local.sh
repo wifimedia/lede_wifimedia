@@ -38,7 +38,8 @@ txpowerfive=`uci -q get wifimedia.@wireless[0].txpowerfive`
 group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
 VLAN_ID24G=`uci -q get wifimedia.@wireless[0].vlan24g`
 VLAN_ID5G=`uci -q get wifimedia.@wireless[0].vlan5g`
-IFNAME="eth1"
+#IFNAME="eth1" #for comfast
+IFNAME="eth0" #for TPLINK
 NET_ID24G="VLAN_${VLAN_ID24G}"
 NET_ID5G="VLAN_${VLAN_ID5G}"
 echo $group_macfive
@@ -53,129 +54,27 @@ if [ "$bw24" == "1" ];then
 	#network24=`uci -q get wifimedia.@wireless[0].network`
 	if [ "$network24" == "vlanx24" ];then
 		vlan24g_add
-		uci set wireless.default_radio1.network="$NET_ID24G"
+		uci set wireless.default_radio0.network="$NET_ID24G"
 	else
 		vlan24g_del
-		uci set wireless.default_radio1.network="$network24"
+		uci set wireless.default_radio0.network="$network24"
 	fi
 	#uci commit
 	#Mode
-	uci set wireless.default_radio1.mode="$mode24"
+	uci set wireless.default_radio0.mode="$mode24"
 	#ESSID
 	if [ -z "$essid" ];then
 		echo "no change SSID"
 	else 
-		uci set wireless.default_radio1.ssid="$essid"
+		uci set wireless.default_radio0.ssid="$essid"
 	fi
 	#channel
-	uci set wireless.radio1.channel="$channel24"
+	uci set wireless.radio0.channel="$channel24"
 	#Connect Limit
-	uci set wireless.default_radio1.maxassoc="$maxassoc24"
+	uci set wireless.default_radio0.maxassoc="$maxassoc24"
 	#Passwd ssid
 	if [ -z "$passwd24" ];then
-		uci delete wireless.default_radio1.encryption
-		uci delete wireless.default_radio1.key
-		uci delete wireless.default_radio1.ieee80211r
-		uci delete wireless.default_radio1.rsn_preauth
-		rm -f >/etc/FT
-	else
-		uci set wireless.default_radio1.encryption="psk2"
-		uci set wireless.default_radio1.key="$passwd24"
-		uci set wireless.default_radio1.rsn_preauth="1"
-	fi
-	#Fast Roaming
-	if [ "$ft24" == "ieee80211r"  ];then
-		uci set wireless.default_radio1.ieee80211r="1"
-		uci set wireless.default_radio1.ft_psk_generate_local="0"
-		uci set wireless.default_radio1.pmk_r1_push="1"
-		uci delete wireless.default_radio1.rsn_preauth
-		echo "Fast BSS Transition Roaming" >/etc/FT
-		##fix PMK if pmk locally = 1
-		if [ "$ft_psk_generate_local24" == "1" ];then
-			uci set wireless.default_radio1.ft_psk_generate_local="1"
-			#delete all r0kh r1kh
-			uci del wireless.default_radio1.r0kh
-			uci del wireless.default_radio1.r1kh
-		elif [ "$ft_psk_generate_local24" == "0" ];then #if pmk locally = ""
-			uci set wireless.default_radio1.ft_psk_generate_local="0"
-			#delete all r0kh r1kh
-			uci del wireless.default_radio1.r0kh
-			uci del wireless.default_radio1.r1kh
-			#group_mac=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
-			echo "$group_mac" | while read mac;do #add list R0KH va R1KH
-				uci add_list wireless.default_radio1.r0kh="$mac,$nasid,000102030405060708090a0b0c0d0e0f"
-				uci add_list wireless.default_radio1.r1kh="$mac,$mac,000102030405060708090a0b0c0d0e0f"
-			done
-		fi
-		#end config r0kh & r1kh
-		
-		if [ "$(uci -q get wifimedia.@wireless[0].macs)" == "" ];then
-		#echo "test rong"
-			uci del wireless.default_radio1.r0kh
-			uci del wireless.default_radio1.r1kh	
-		fi
-		#uci commit wireless
-	elif [ "$ft24" == "rsn_preauth" ];then
-		uci delete wireless.default_radio1.ieee80211r
-		uci delete wireless.default_radio1.ft_psk_generate_local
-		uci delete wireless.default_radio1.pmk_r1_push
-		uci set wireless.default_radio1.rsn_preauth="1"
-		uci del wireless.default_radio1.r0kh
-		uci del wireless.default_radio1.r1kh
-		echo "Fast-Secure Roaming" >/etc/FT
-	else
-		rm -f /etc/FT
-	fi
-	#NASID
-	if [ -z "$nasid" ];then
-		uci del wireless.default_radio1.r0kh
-		uci del wireless.default_radio1.r1kh
-	else
-		uci set wireless.default_radio1.nasid="$nasid"
-	fi	
 
-	#TxPower
-	if [ "$txpower24" == "auto"  ];then
-		uci delete wireless.radio1.txpower
-	elif [ "$txpower24" == "low"  ];then
-		uci set wireless.radio1.txpower="17"
-	elif [ "$txpower24" == "medium"  ];then
-		uci set wireless.radio1.txpower="20"
-	elif [ "$txpower24" == "high"  ];then
-		uci set wireless.radio1.txpower="22"
-	fi
-	
-	#Hide SSID
-	uci set wireless.default_radio1.hidden="$hidessid24"
-	#ISO             default_radio1
-	uci set wireless.default_radio1.isolate="$isolation24"
-	uci commit wireless
-fi
-
-#######Radio 5G
-if [ "$bw5" == "1" ];then
-	#Network
-	if [ "$networkfive" == "vlanx5" ];then
-		vlan5g_add
-		uci set wireless.default_radio0.network="$NET_ID5G"
-	else
-		vlan5g_del
-		uci set wireless.default_radio0.network="$networkfive"
-	fi	
-	#Mode
-	uci set wireless.default_radio0.mode="$modefive"
-	#ESSID
-	if [ -z "$essidfive" ];then
-		echo "no change SSID"
-	else 
-		uci set wireless.default_radio0.ssid="$essidfive"
-	fi
-	#channel
-	uci set wireless.radio0.channel="$channelfive"
-	#Connect Limit
-	uci set wireless.default_radio0.maxassoc="$maxassocfive"
-	#Passwd ssid
-	if [ -z "$passwordfive" ];then
 		uci delete wireless.default_radio0.encryption
 		uci delete wireless.default_radio0.key
 		uci delete wireless.default_radio0.ieee80211r
@@ -183,42 +82,43 @@ if [ "$bw5" == "1" ];then
 		rm -f >/etc/FT
 	else
 		uci set wireless.default_radio0.encryption="psk2"
-		uci set wireless.default_radio0.key="$passwordfive"
+		uci set wireless.default_radio0.key="$passwd24"
+		uci set wireless.default_radio0.rsn_preauth="1"
 	fi
 	#Fast Roaming
-	if [ "$ftfive" == "ieee80211rfive"  ];then
+	if [ "$ft24" == "ieee80211r"  ];then
 		uci set wireless.default_radio0.ieee80211r="1"
 		uci set wireless.default_radio0.ft_psk_generate_local="0"
 		uci set wireless.default_radio0.pmk_r1_push="1"
 		uci delete wireless.default_radio0.rsn_preauth
 		echo "Fast BSS Transition Roaming" >/etc/FT
 		##fix PMK if pmk locally = 1
-		if [ "$ft_psk_generate_localfive" == "1" ];then
+		if [ "$ft_psk_generate_local24" == "1" ];then
 			uci set wireless.default_radio0.ft_psk_generate_local="1"
 			#delete all r0kh r1kh
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh
-		elif [ "$ft_psk_generate_localfive" == "0" ];then #if pmk locally = ""
+		elif [ "$ft_psk_generate_local24" == "0" ];then #if pmk locally = ""
 			uci set wireless.default_radio0.ft_psk_generate_local="0"
 			#delete all r0kh r1kh
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh
-			#nasidfive=`uci -q get wifimedia.@wireless[0].nasidfive`
-			#group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
-			echo "$group_macfive" | while read mac;do #add list R0KH va R1KH
-				uci add_list wireless.default_radio0.r0kh="$mac,$nasidfive,000102030405060708090a0b0c0d0e0f"
+														   
+			#group_mac=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
+			echo "$group_mac" | while read mac;do #add list R0KH va R1KH
+				uci add_list wireless.default_radio0.r0kh="$mac,$nasid,000102030405060708090a0b0c0d0e0f"
 				uci add_list wireless.default_radio0.r1kh="$mac,$mac,000102030405060708090a0b0c0d0e0f"
 			done
 		fi
 		#end config r0kh & r1kh
 		
-		if [ "$(uci -q get wifimedia.@wireless[0].macsfive)" == "" ];then
+		if [ "$(uci -q get wifimedia.@wireless[0].macs)" == "" ];then
 		#echo "test rong"
 			uci del wireless.default_radio0.r0kh
 			uci del wireless.default_radio0.r1kh	
 		fi
 		#uci commit wireless
-	elif [ "$ftfive" == "rsn_preauthfive" ];then
+	elif [ "$ft24" == "rsn_preauth" ];then
 		uci delete wireless.default_radio0.ieee80211r
 		uci delete wireless.default_radio0.ft_psk_generate_local
 		uci delete wireless.default_radio0.pmk_r1_push
@@ -230,32 +130,137 @@ if [ "$bw5" == "1" ];then
 		rm -f /etc/FT
 	fi
 	#NASID
-	if [ -z "$nasidfive" ];then
+	if [ -z "$nasid" ];then
 		uci del wireless.default_radio0.r0kh
 		uci del wireless.default_radio0.r1kh
 	else
-		uci set wireless.default_radio0.nasid="$nasidfive"
+		uci set wireless.default_radio0.nasid="$nasid"
 	fi	
 
 	#TxPower
-	if [ "$txpowerfive" == "auto"  ];then
+	if [ "$txpower24" == "auto"  ];then
 		uci delete wireless.radio0.txpower
-	elif [ "$txpowerfive" == "low"  ];then
-		uci set wireless.radio0.txpower="17"
-	elif [ "$txpowerfive" == "medium"  ];then
+	elif [ "$txpower24" == "low"  ];then
+		uci set wireless.radio0.txpower="15"
+	elif [ "$txpower24" == "medium"  ];then
 		uci set wireless.radio0.txpower="20"
-	elif [ "$txpowerfive" == "high"  ];then
+	elif [ "$txpower24" == "high"  ];then
 		uci set wireless.radio0.txpower="22"
 	fi
 	
 	#Hide SSID
-	uci set wireless.default_radio0.hidden="$hidessidfive"
-	#ISO
-	uci set wireless.default_radio0.isolate="$isolationfive"
-	uci set wireless.radio0.disabled="0"
-	uci set wireless.radio1.disabled="0"
+	uci set wireless.default_radio0.hidden="$hidessid24"
+	#ISO             default_radio0
+	uci set wireless.default_radio0.isolate="$isolation24"
+									 
+									 
 	uci commit wireless
 fi
+
+########Radio 5G
+#if [ "$bw5" == "1" ];then
+#	#Network
+#	if [ "$networkfive" == "vlanx5" ];then
+#		vlan5g_add
+#		uci set wireless.default_radio0.network="$NET_ID5G"
+#	else
+#		vlan5g_del
+#		uci set wireless.default_radio0.network="$networkfive"
+#	fi	
+#	#Mode
+#	uci set wireless.default_radio0.mode="$modefive"
+#	#ESSID
+#	if [ -z "$essidfive" ];then
+#		echo "no change SSID"
+#	else 
+#		uci set wireless.default_radio0.ssid="$essidfive"
+#	fi
+#	#channel
+#	uci set wireless.radio0.channel="$channelfive"
+#	#Connect Limit
+#	uci set wireless.default_radio0.maxassoc="$maxassocfive"
+#	#Passwd ssid
+#	if [ -z "$passwordfive" ];then
+#		uci delete wireless.default_radio0.encryption
+#		uci delete wireless.default_radio0.key
+#		uci delete wireless.default_radio0.ieee80211r
+#		uci delete wireless.default_radio0.rsn_preauth
+#		rm -f >/etc/FT
+#	else
+#		uci set wireless.default_radio0.encryption="psk2"
+#		uci set wireless.default_radio0.key="$passwordfive"
+#	fi
+#	#Fast Roaming
+#	if [ "$ftfive" == "ieee80211rfive"  ];then
+#		uci set wireless.default_radio0.ieee80211r="1"
+#		uci set wireless.default_radio0.ft_psk_generate_local="0"
+#		uci set wireless.default_radio0.pmk_r1_push="1"
+#		uci delete wireless.default_radio0.rsn_preauth
+#		echo "Fast BSS Transition Roaming" >/etc/FT
+#		##fix PMK if pmk locally = 1
+#		if [ "$ft_psk_generate_localfive" == "1" ];then
+#			uci set wireless.default_radio0.ft_psk_generate_local="1"
+#			#delete all r0kh r1kh
+#			uci del wireless.default_radio0.r0kh
+#			uci del wireless.default_radio0.r1kh
+#		elif [ "$ft_psk_generate_localfive" == "0" ];then #if pmk locally = ""
+#			uci set wireless.default_radio0.ft_psk_generate_local="0"
+#			#delete all r0kh r1kh
+#			uci del wireless.default_radio0.r0kh
+#			uci del wireless.default_radio0.r1kh
+#			#nasidfive=`uci -q get wifimedia.@wireless[0].nasidfive`
+#			#group_macfive=`uci -q get wifimedia.@wireless[0].macsfive |sed 's/-/:/g' | sed  's/,/ /g'|xargs -n1` 
+#			echo "$group_macfive" | while read mac;do #add list R0KH va R1KH
+#				uci add_list wireless.default_radio0.r0kh="$mac,$nasidfive,000102030405060708090a0b0c0d0e0f"
+#				uci add_list wireless.default_radio0.r1kh="$mac,$mac,000102030405060708090a0b0c0d0e0f"
+#			done
+#		fi
+#		#end config r0kh & r1kh
+#		
+#		if [ "$(uci -q get wifimedia.@wireless[0].macsfive)" == "" ];then
+#		#echo "test rong"
+#			uci del wireless.default_radio0.r0kh
+#			uci del wireless.default_radio0.r1kh	
+#		fi
+#		#uci commit wireless
+#	elif [ "$ftfive" == "rsn_preauthfive" ];then
+#		uci delete wireless.default_radio0.ieee80211r
+#		uci delete wireless.default_radio0.ft_psk_generate_local
+#		uci delete wireless.default_radio0.pmk_r1_push
+#		uci set wireless.default_radio0.rsn_preauth="1"
+#		uci del wireless.default_radio0.r0kh
+#		uci del wireless.default_radio0.r1kh
+#		echo "Fast-Secure Roaming" >/etc/FT
+#	else
+#		rm -f /etc/FT
+#	fi
+#	#NASID
+#	if [ -z "$nasidfive" ];then
+#		uci del wireless.default_radio0.r0kh
+#		uci del wireless.default_radio0.r1kh
+#	else
+#		uci set wireless.default_radio0.nasid="$nasidfive"
+#	fi	
+#
+#	#TxPower
+#	if [ "$txpowerfive" == "auto"  ];then
+#		uci delete wireless.radio0.txpower
+#	elif [ "$txpowerfive" == "low"  ];then
+#		uci set wireless.radio0.txpower="17"
+#	elif [ "$txpowerfive" == "medium"  ];then
+#		uci set wireless.radio0.txpower="20"
+#	elif [ "$txpowerfive" == "high"  ];then
+#		uci set wireless.radio0.txpower="22"
+#	fi
+#	
+#	#Hide SSID
+#	uci set wireless.default_radio0.hidden="$hidessidfive"
+#	#ISO
+#	uci set wireless.default_radio0.isolate="$isolationfive"
+#	uci set wireless.radio0.disabled="0"
+#	uci set wireless.radio1.disabled="0"
+#	uci commit wireless
+#fi
 
 sleep 5 && wifi
 /etc/init.d/network reload
@@ -307,48 +312,49 @@ vlan5g_del(){
 	uci	commit network
 }
 
-next_net(){
-	NET_ID="nextify"
-	FW_ZONE="nextify"
-	IFNAME="eth0.1" #VLAN1
-	uci set network.${NET_ID}=interface
-	uci set network.${NET_ID}.ifname=${IFNAME}
-	uci set network.${NET_ID}.proto=static
-	uci set network.${NET_ID}.type=bridge
-	uci set network.${NET_ID}.ipaddr=10.68.255.1
-	uci set network.${NET_ID}.netmask=255.255.255.0
-	uci set dhcp.${NET_ID}=dhcp
-	uci set dhcp.${NET_ID}.interface=${NET_ID}
-	uci set dhcp.${NET_ID}.start=100
-	uci set dhcp.${NET_ID}.leasetime=1h
-	uci set dhcp.${NET_ID}.limit=150
-	uci set firewall.${FW_ZONE}=zone
-	uci set firewall.${FW_ZONE}.name=${FW_ZONE}
-	uci set firewall.${FW_ZONE}.network=${NET_ID}
-	uci set firewall.${FW_ZONE}.forward=REJECT
-	uci set firewall.${FW_ZONE}.output=ACCEPT
-	uci set firewall.${FW_ZONE}.input=REJECT 
-	uci set firewall.${FW_ZONE}_fwd=forwarding
-	uci set firewall.${FW_ZONE}_fwd.src=${FW_ZONE}
-	uci set firewall.${FW_ZONE}_fwd.dest=wan
-	uci set firewall.${FW_ZONE}_dhcp=rule
-	uci set firewall.${FW_ZONE}_dhcp.name=${FW_ZONE}_DHCP
-	uci set firewall.${FW_ZONE}_dhcp.src=${FW_ZONE}
-	uci set firewall.${FW_ZONE}_dhcp.target=ACCEPT
-	uci set firewall.${FW_ZONE}_dhcp.proto=udp
-	uci set firewall.${FW_ZONE}_dhcp.dest_port=67-68
-	uci set firewall.${FW_ZONE}_dns=rule
-	uci set firewall.${FW_ZONE}_dns.name=${FW_ZONE}_DNS
-	uci set firewall.${FW_ZONE}_dns.src=${FW_ZONE}
-	uci set firewall.${FW_ZONE}_dns.target=ACCEPT
-	uci set firewall.${FW_ZONE}_dns.proto=tcpudp
-	uci set firewall.${FW_ZONE}_dns.dest_port=53
-	#uci set dhcp.${NET_ID}.force=1
-	#uci set dhcp.${NET_ID}.netmask=255.255.255.0
-	#uci add_list dhcp.${NET_ID}.dhcp_option=6,8.8.8.8,8.8.4.4
-	commit network
-	commit firewall
-	/etc/init.d/network reload
-	/etc/init.d/firewall restart
+rssi() {
+
+if [ $rssi_on == "1" ];then
+	level_defaults=-80
+	level=$(uci -q get wifimedia.@advance[0].level)
+	level=${level%dBm}
+	LOWER=${level:-$level_defaults}
+	#echo $LOWER	
+	dl_time=$(uci -q get wifimedia.@advance[0].delays)
+	dl_time=${dl_time%s}
+	ban_time=$(expr $dl_time \* 1000)
+	touch /tmp/denyclient
+	chmod a+x /tmp/denyclient
+	NEWLINE_IFS='
+'
+	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
+	signal=''
+	host=''
+	mac=''
+
+	for iface in `iw dev | grep Interface | awk '{print $2}'`; do
+		for line in `iw $iface station dump`; do
+			if echo "$line" | grep -q "Station"; then
+				if [ -f /etc/ethers ]; then
+					mac=$(echo $line | awk '{print $2}' FS=" ")
+					host=$(awk -v MAC=$mac 'tolower($1)==MAC {print $2}' FS=" " /etc/ethers)
+				fi
+			fi
+			if echo "$line" | grep -q "signal:"; then
+				signal=`echo "$line" | awk '{print $2}'`
+				#echo "$mac (on $iface) $signal $host"
+				if [ "$signal" -lt "$LOWER" ]; then
+					#echo $MAC IS $SNR - LOWER THAN $LOWER DEAUTH THEM
+					echo "ubus call hostapd.$iface "del_client" '{\"addr\":\"$mac\", \"reason\": 1, \"deauth\": True, \"ban_time\": $ban_time}'" >>/tmp/denyclient
+				fi
+			fi
+		done
+	done
+	IFS="$OLD_IFS"
+	/tmp/denyclient
+	echo "#!/bin/sh" >/tmp/denyclient
+fi #END RSSI
+
 }
 
+"$@"
