@@ -107,7 +107,7 @@ EOF
 #	commit
 #EOF
 
-NET_RELAY=relay
+NET_RELAY=local
 uci batch << EOF
 	set network.${NET_RELAY}=interface
 	set network.${NET_RELAY}.proto=relay
