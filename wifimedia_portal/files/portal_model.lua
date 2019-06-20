@@ -65,8 +65,10 @@ t:option(DummyValue, "status","Captive portal status")
 	  disable = t:option(Button, "_disable","Disable")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
-			luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
+			--luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
+			luci.sys.exec("uci set nodogsplash.@nodogsplash[0].enabled='0' && uci commit nodogsplash")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
+			luci.util.exec("/etc/init.d/nodogsplash disable")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
 			)			
@@ -76,8 +78,10 @@ t:option(DummyValue, "status","Captive portal status")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
+			luci.sys.call("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit nodogsplash")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
+			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
 			)			
