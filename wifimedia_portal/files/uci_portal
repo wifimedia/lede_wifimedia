@@ -162,7 +162,7 @@ EOF
 #
 #EOF
 /etc/init.d/nodogsplash disable
-uci set nodogsplash.@nodogsplash[0].enabled='1'
+#uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
@@ -173,8 +173,7 @@ uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
 uci set dhcp.lan.ignore=1
 uci commit nodogsplash
-/etc/init.d/nodogsplash enable
-/etc/init.d/nodogsplash start
+/etc/init.d/nodogsplash stop
 uci commit network
 uci commit dhcp
 uci commit firewall
