@@ -203,7 +203,7 @@ checking (){
 	#	eap_manager
 	#fi
 	#Clear memory
-	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
+	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 10000 ]; then
 		echo "Clear Cach"
 		free && sync && echo 3 > /proc/sys/vm/drop_caches && free
 	fi
@@ -590,7 +590,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
 		cat "$licensekey" | while read line ; do
-			if [ "$(echo $line | grep $apid)" ] ;then
+			if [ "$(echo $line | grep $cf_apid)" ] ;then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
@@ -612,7 +612,7 @@ lgw_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $apid)" ] ;then
+				if [ "$(echo $line | grep $cf_apid)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
