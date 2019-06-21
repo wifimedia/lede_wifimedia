@@ -63,6 +63,10 @@ device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
 apid=$(echo $device | sed 's/:/-/g')
 cf_device=`ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
 cf_apid=$(echo $cf_device | sed 's/:/-/g')
+
+wr940_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
+wr940_apid=$(echo $cf_device | sed 's/:/-/g')
+
 #--------------RSSI------------------------------
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 #------------------------------------------------
