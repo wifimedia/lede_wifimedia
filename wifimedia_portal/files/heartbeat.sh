@@ -46,7 +46,7 @@ urlencode() {
 
 #MAC=$(ifconfig | grep br-lan | grep HWaddr | tr -s ' ' | cut -d' ' -f5)
 #MAC=$(cat /sys/class/ieee80211/phy0/macaddress | tr a-z A-Z) #For TPLINK
-MAC=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
+MAC=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 SSID=$(uci show wireless.@wifi-iface[0].ssid | cut -d= -f2 | tr -d "'")
 
 UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
@@ -82,20 +82,20 @@ setting_config() {
 	while read line;do
 	
 		if [ "$(echo $line | grep SSID:)" ];then
-			if [ "$network_1"  == "nextify" ];then
+			#if [ "$network_1"  == "nextify" ];then
 				if [ "$(echo $line | awk '{print $2}')" != "" ];then
 					uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
 				fi
-			fi 
+			#fi 
 			
-			if [ "$network_2"  == "nextify" ];then
+			#if [ "$network_2"  == "nextify" ];then
 				if [ "$(echo $line | awk '{print $2}')" != "" ];then
 					uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
 				fi
-			fi 				
+			#fi 				
 			
 		elif [ "$(echo $line | grep 'PASSWORD:')" ];then 
-			if [ "$network_1"  == "nextify" ];then
+			#if [ "$network_1"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
 				if [ "$(echo $line | awk '{print $2}')" == "" ];then
 					uci delete wireless.default_radio0.encryption &> /dev/null
@@ -107,8 +107,8 @@ setting_config() {
 					uci set wireless.default_radio0.rsn_preauth=1
 					
 				fi
-			fi		
-			if [ "$network_2"  == "nextify" ];then
+			#fi		
+			#if [ "$network_2"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
 				if [ "$(echo $line | awk '{print $2}')" == "" ];then
 					uci delete wireless.default_radio1.encryption &> /dev/null
@@ -120,7 +120,7 @@ setting_config() {
 					uci set wireless.default_radio1.rsn_preauth=1
 					
 				fi
-			fi	
+			#fi	
 		elif [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
 			uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
 			uci set wifimedia.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
