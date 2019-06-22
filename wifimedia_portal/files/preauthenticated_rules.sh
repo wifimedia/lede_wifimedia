@@ -37,7 +37,7 @@ checkinterval=`uci -q get wifimedia.@nodogsplash[0].checkinterval`
 checkinterval_default=${checkinterval:-10}
 ctv=`expr $checkinterval_default \* 60`
 https=`uci -q get wifimedia.@nodogsplash[0].https`
-MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
+MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 
 #uci set nodogsplash.@nodogsplash[0].enabled='1'
 uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
