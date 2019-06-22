@@ -31,7 +31,7 @@ preauthidletimeout_default=${preauthidletimeout:-30}
 authidletimeout=`uci -q get wifimedia.@nodogsplash[0].authidletimeout`
 authidletimeout_default=${authidletimeout:-120}
 sessiontimeout=`uci -q get wifimedia.@nodogsplash[0].sessiontimeout`
-sessiontimeout_default=${sessiontimeout:-0}
+sessiontimeout_default=${sessiontimeout:-120}
 std=`expr $sessiontimeout_default \* 60`
 checkinterval=`uci -q get wifimedia.@nodogsplash[0].checkinterval`
 checkinterval_default=${checkinterval:-10}
@@ -63,8 +63,6 @@ uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
-
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
 uci commit
 if [ $https == "1" ];then
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
