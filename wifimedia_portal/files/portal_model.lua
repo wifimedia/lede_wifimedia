@@ -30,7 +30,7 @@ s:taboption( "basic",Value, "preauthenticated_users","Walled Garden","google.com
 s:taboption( "advance",Value, "maxclients","Maxclients","Max Clients:250")
 s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","Default: > 30 Mins")
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","Default: > 120 Mins")
-s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default : Unlimited")
+s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default : 120 Mins")
 s:taboption( "advance",Value, "checkinterval","Checkinterval","Default: 10 Mins")
 s:taboption( "basic",Flag, "https","Bypass https")
 
