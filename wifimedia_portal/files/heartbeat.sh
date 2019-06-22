@@ -82,20 +82,20 @@ setting_config() {
 	while read line;do
 	
 		if [ "$(echo $line | grep SSID:)" ];then
-			if [ "$network_1"  == "nextify" ];then
+			#if [ "$network_1"  == "nextify" ];then
 				if [ "$(echo $line | awk '{print $2}')" != "" ];then
 					uci set wireless.default_radio0.ssid="$(echo $line | awk '{print $2}')"
 				fi
-			fi 
+			#fi 
 			
-			if [ "$network_2"  == "nextify" ];then
+			#if [ "$network_2"  == "nextify" ];then
 				if [ "$(echo $line | awk '{print $2}')" != "" ];then
 					uci set wireless.default_radio1.ssid="$(echo $line | awk '{print $2}')"
 				fi
-			fi 				
+			#fi 				
 			
 		elif [ "$(echo $line | grep 'PASSWORD:')" ];then 
-			if [ "$network_1"  == "nextify" ];then
+			#if [ "$network_1"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
 				if [ "$(echo $line | awk '{print $2}')" == "" ];then
 					uci delete wireless.default_radio0.encryption &> /dev/null
@@ -107,8 +107,8 @@ setting_config() {
 					uci set wireless.default_radio0.rsn_preauth=1
 					
 				fi
-			fi		
-			if [ "$network_2"  == "nextify" ];then
+			#fi		
+			#if [ "$network_2"  == "nextify" ];then
 			#echo $line | awk '{print $2}'
 				if [ "$(echo $line | awk '{print $2}')" == "" ];then
 					uci delete wireless.default_radio1.encryption &> /dev/null
@@ -120,7 +120,7 @@ setting_config() {
 					uci set wireless.default_radio1.rsn_preauth=1
 					
 				fi
-			fi	
+			#fi	
 		elif [ "$(echo $line | grep SESSIONTIMEOUT:)" ];then
 			uci set nodogsplash.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
 			uci set wifimedia.@nodogsplash[0].sessiontimeout="$(echo $line | awk '{print $2}')";
