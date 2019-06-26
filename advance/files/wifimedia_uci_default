@@ -107,6 +107,8 @@ fi
 
 if [ "$model_hardware" == "TL-WR840N_v4" ];then
 	echo "TL-WR840N v4" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR740N_v4" ];then
+	echo "TL-WR740N v4" >/etc/hardware	
 elif [ "$model_hardware" == "TL-WA901ND_v3" ];then
 	echo "TL-WA901ND v3" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR841N_v13" ];then
