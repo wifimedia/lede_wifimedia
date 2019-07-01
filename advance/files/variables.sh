@@ -65,7 +65,7 @@ cf_device=`ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | 
 cf_apid=$(echo $cf_device | sed 's/:/-/g')
 
 wr940_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
-wr940_apid=$(echo $cf_device | sed 's/:/-/g')
+#wr940_apid=$(echo $cf_device | sed 's/:/-/g')
 
 #--------------RSSI------------------------------
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)

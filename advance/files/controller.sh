@@ -590,7 +590,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
 		cat "$licensekey" | while read line ; do
-			if [ "$(echo $line | grep $wr940_apid)" ] ;then
+			if [ "$(echo $line | grep $wr940_device)" ] ;then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
@@ -612,7 +612,7 @@ lgw_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940_apid)" ] ;then
+				if [ "$(echo $line | grep $wr940_device)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
