@@ -44,11 +44,11 @@ if value == self.enabled then
 		luci.sys.call("uci add_list network.local.network='lan'")
 		luci.sys.call("uci add_list network.local.network='wan'")
 		luci.sys.call("uci set dhcp.lan.ignore='1'")
-		--luci.sys.call("uci commit")
+		luci.sys.call("uci set wireless.@wifi-iface[0].network='lan'")
 	else
 		luci.sys.call("uci del network.local")
 		luci.sys.call("uci set dhcp.lan.ignore='0'")
-		--luci.sys.call("uci commit")
+		luci.sys.call("uci set wireless.@wifi-iface[0].network='lan'")
 	end
 	return Flag.write(self, section, value)
 end
