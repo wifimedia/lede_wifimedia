@@ -12,7 +12,7 @@ m = Map("wifimedia",translate(""))
 m.apply_on_parse = true
 function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
-		--luci.util.exec("/sbin/wifimedia/controller_local.sh next_net >/dev/null")
+		luci.util.exec("/etc/init.d/network restart >/dev/null")
 		--luci.util.exec("sleep 15 && reboot >/dev/null")
 end
 
@@ -32,7 +32,29 @@ s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","Default
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","Default: > 120 Mins")
 s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default : 120 Mins")
 s:taboption( "advance",Value, "checkinterval","Checkinterval","Default: 10 Mins")
+dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
+dhcpextension.rmempty = false
 s:taboption( "basic",Flag, "https","Bypass https")
+		
+function dhcpextension.write(self, section, value)
+if value == self.enabled then
+		luci.sys.call("uci set network.local='interface'")
+		luci.sys.call("uci set network.local.proto='relay'")
+		luci.sys.call("uci set network.local.ipaddr='172.16.99.1'")
+		luci.sys.call("uci add_list network.local.network='lan'")
+		luci.sys.call("uci add_list network.local.network='wan'")
+		luci.sys.call("uci set dhcp.lan.ignore='1'")
+		--luci.sys.call("uci commit")
+	else
+		luci.sys.call("uci del network.local")
+		luci.sys.call("uci set dhcp.lan.ignore='0'")
+		--luci.sys.call("uci commit")
+	end
+	return Flag.write(self, section, value)
+end
+		-- retain server list even if disabled
+function dhcpextension.remove() end
+
 
 local pid = luci.util.exec("pidof nodogsplash")
 local message = luci.http.formvalue("message")

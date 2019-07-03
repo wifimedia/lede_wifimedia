@@ -107,27 +107,27 @@ EOF
 #	commit
 #EOF
 
-#NET_RELAY=local
-#uci batch << EOF
-#	set network.${NET_RELAY}=interface
-#	set network.${NET_RELAY}.proto=relay
-#	#set network.${NET_RELAY}.forward_bcast=0
-#	set network.${NET_RELAY}.delegate=0	
-#	set network.${NET_RELAY}.ipaddr=172.16.99.1
-#	add_list network.${NET_RELAY}.network=lan
-#	add_list network.${NET_RELAY}.network=wan	
-#	commit
-#EOF
-#
-#uci del dhcp.lan 
-#uci commit dhcp
-#NET_ID_LAN=lan
-#uci batch << EOF
-#	set dhcp.${NET_ID_LAN}=dhcp
-#	set dhcp.${NET_ID_LAN}.interface=${NET_ID_LAN}
-#	set dhcp.${NET_ID_LAN}.ignore=1
-#	commit dhcp
-#EOF
+NET_RELAY=local
+uci batch << EOF
+	set network.${NET_RELAY}=interface
+	set network.${NET_RELAY}.proto=relay
+	#set network.${NET_RELAY}.forward_bcast=0
+	set network.${NET_RELAY}.delegate=0	
+	set network.${NET_RELAY}.ipaddr=172.16.99.1
+	add_list network.${NET_RELAY}.network=lan
+	add_list network.${NET_RELAY}.network=wan	
+	commit
+EOF
+
+uci del dhcp.lan 
+uci commit dhcp
+NET_ID_LAN=lan
+uci batch << EOF
+	set dhcp.${NET_ID_LAN}=dhcp
+	set dhcp.${NET_ID_LAN}.interface=${NET_ID_LAN}
+	set dhcp.${NET_ID_LAN}.ignore=1
+	commit dhcp
+EOF
 
 #FW_ZONE_RELAY=relay
 #AP_NEXTIFY=dhcp_external
