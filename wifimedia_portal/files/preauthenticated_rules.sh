@@ -176,6 +176,7 @@ nds_stop=`uci get nodogsplash.@nodogsplash[0].enabled`
 if [ $nds_stop -eq "0" ];then
  /etc/init.d/firewall restart
 fi
+/etc/init.d/relayd restart
 wifi
 /etc/init.d/nodogsplash stop
 sleep 5
