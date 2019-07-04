@@ -176,7 +176,14 @@ nds_stop=`uci get nodogsplash.@nodogsplash[0].enabled`
 if [ $nds_stop -eq "0" ];then
  /etc/init.d/firewall restart
 fi
-/etc/init.d/relayd restart
+relay=`uci -q get network.local`
+if [ $relay != "" ];then
+	uci add_list network.local.network='lan'
+	uci add_list network.local.network='wan'
+	uci commit network
+	/etc/init.d/relayd restart
+fi
+
 wifi
 /etc/init.d/nodogsplash stop
 sleep 5
