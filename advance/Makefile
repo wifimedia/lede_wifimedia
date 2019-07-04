@@ -51,7 +51,7 @@ define Package/advance/install
 	$(INSTALL_BIN) ./files/controller_srv.sh $(1)/sbin/wifimedia/controller_srv.sh
 	$(INSTALL_BIN) ./files/settings.sh $(1)/sbin/wifimedia/settings.sh
 	$(INSTALL_BIN) ./files/variables.sh $(1)/sbin/wifimedia/variables.sh
-	$(INSTALL_BIN) ./files/initd_upwifi $(1)/etc/init.d/upwifi
+	#$(INSTALL_BIN) ./files/initd_upwifi $(1)/etc/init.d/upwifi
 	$(INSTALL_BIN) ./files/00-button.hotplus $(1)/etc/hotplug.d/button/00-button
 	$(INSTALL_BIN) ./files/30-wlan.hotplus $(1)/etc/hotplug.d/iface/30-wlan
 	$(INSTALL_BIN) ./files/35-wan_detect.hotplus $(1)/etc/hotplug.d/iface/35-wan_detect
