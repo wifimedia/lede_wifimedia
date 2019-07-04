@@ -88,7 +88,7 @@ else
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
 	done <$PREAUTHENTICATED_ADDRS
 fi
-uci commit
+uci commit nodogsplash
 rm -f $PREAUTHENTICATED_ADDRS
 #write file splash
 echo '<!doctype html>
@@ -181,7 +181,7 @@ if [ $relay != "" ];then
 	uci add_list network.local.network='lan'
 	uci add_list network.local.network='wan'
 	uci commit network
-	/etc/init.d/network restart
+	#/etc/init.d/network restart
 fi
 
 wifi
