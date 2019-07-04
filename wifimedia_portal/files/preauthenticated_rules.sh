@@ -181,7 +181,7 @@ if [ $relay != "" ];then
 	uci add_list network.local.network='lan'
 	uci add_list network.local.network='wan'
 	uci commit network
-	/etc/init.d/relayd restart
+	/etc/init.d/network restart
 fi
 
 wifi
