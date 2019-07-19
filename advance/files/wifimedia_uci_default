@@ -163,8 +163,8 @@ uci batch <<-EOF
 	add_list wireless.radio0.ht_capab="SHORT-GI-40"
 	add_list wireless.radio0.ht_capab="RX-STBC1"
 	add_list wireless.radio0.ht_capab="DSSS_CCK-40"
-	set wireless.radio0.country="US"
-	set wireless.radio0.txpower=22
+	set wireless.radio0.country="CN"
+	set wireless.radio0.txpower=19
 	#set wireless.radio0.htmode=VHT40
 	#set wireless.radio1.txpower=20
 	commit wireless
