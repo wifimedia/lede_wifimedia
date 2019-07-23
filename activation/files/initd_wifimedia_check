@@ -7,12 +7,12 @@ EXTRA_COMMANDS="status"
 EXTRA_HELP="        status  checking"
 lcs=/etc/opt/wfm_lcs
 model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
-val1=$(ifconfig eth1 | grep 'HW' | awk '{print $5}' | cut -c 13,14,15,16,17 | tr A-Z a-z)
-macaddr="80:a9:ef:63:"$val1
+#val1=$(ifconfig eth1 | grep 'HW' | awk '{print $5}' | cut -c 13,14,15,16,17 | tr A-Z a-z)
+#macaddr="80:a9:ef:63:"$val1
 #echo ${macaddr}
-chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
-echo ${macaddr} >/sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
-wifi
+#chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
+#echo ${macaddr} >/sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
+#wifi
 #echo "80:A9:EF:63:.F3:00" > /sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
 #dnsctl=$(uci -q get meshdesk.internet1.dns)
 #ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
