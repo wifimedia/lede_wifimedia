@@ -4,5 +4,5 @@ START=9
 STOP=12
 
 boot() {
-    sleep 20 &&  wifi up
+    sleep 5 &&  wifi up
 }
