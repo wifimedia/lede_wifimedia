@@ -40,7 +40,7 @@ https=`uci -q get wifimedia.@nodogsplash[0].https`
 MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 
 #uci set nodogsplash.@nodogsplash[0].enabled='1'
-uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
+#uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
 #uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
 uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_default";
@@ -88,7 +88,7 @@ else
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
 	done <$PREAUTHENTICATED_ADDRS
 fi
-uci commit
+uci commit nodogsplash
 rm -f $PREAUTHENTICATED_ADDRS
 #write file splash
 echo '<!doctype html>
@@ -170,12 +170,21 @@ echo '<!doctype html>
 #/etc/init.d/network restart
 #/etc/init.d/dnsmasq restart
 #/etc/init.d/firewall restart
-/etc/init.d/nodogsplash stop
-/etc/init.d/nodogsplash start
 #sleep 5
 #iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
 nds_stop=`uci get nodogsplash.@nodogsplash[0].enabled`
-
 if [ $nds_stop -eq "0" ];then
  /etc/init.d/firewall restart
 fi
+relay=`uci -q get network.local`
+if [ $relay != "" ];then
+	uci add_list network.local.network='lan'
+	uci add_list network.local.network='wan'
+	uci commit network
+	#/etc/init.d/network restart
+fi
+
+wifi
+/etc/init.d/nodogsplash stop
+sleep 5
+/etc/init.d/nodogsplash start
