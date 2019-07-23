@@ -12,7 +12,7 @@ echo '*/5 * * * * /sbin/wifimedia/heartbeat.sh' >/etc/crontabs/nds && /etc/init.
 #IFNAME99="eth0.99" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
-MAC_E0=$(ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }')
+MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 #write file splash
 #write file splash
 echo '<!doctype html>
@@ -107,27 +107,27 @@ EOF
 #	commit
 #EOF
 
-NET_RELAY=local
-uci batch << EOF
-	set network.${NET_RELAY}=interface
-	set network.${NET_RELAY}.proto=relay
-	#set network.${NET_RELAY}.forward_bcast=0
-	set network.${NET_RELAY}.delegate=0	
-	set network.${NET_RELAY}.ipaddr=172.16.99.1
-	add_list network.${NET_RELAY}.network=lan
-	add_list network.${NET_RELAY}.network=wan	
-	commit
-EOF
-
-uci del dhcp.lan 
-uci commit dhcp
-NET_ID_LAN=lan
-uci batch << EOF
-	set dhcp.${NET_ID_LAN}=dhcp
-	set dhcp.${NET_ID_LAN}.interface=${NET_ID_LAN}
-	set dhcp.${NET_ID_LAN}.ignore=1
-	commit dhcp
-EOF
+#NET_RELAY=local
+#uci batch << EOF
+#	set network.${NET_RELAY}=interface
+#	set network.${NET_RELAY}.proto=relay
+#	#set network.${NET_RELAY}.forward_bcast=0
+#	set network.${NET_RELAY}.delegate=0	
+#	set network.${NET_RELAY}.ipaddr=172.16.99.1
+#	add_list network.${NET_RELAY}.network=lan
+#	add_list network.${NET_RELAY}.network=wan	
+#	commit
+#EOF
+#
+#uci del dhcp.lan 
+#uci commit dhcp
+#NET_ID_LAN=lan
+#uci batch << EOF
+#	set dhcp.${NET_ID_LAN}=dhcp
+#	set dhcp.${NET_ID_LAN}.interface=${NET_ID_LAN}
+#	set dhcp.${NET_ID_LAN}.ignore=1
+#	commit dhcp
+#EOF
 
 #FW_ZONE_RELAY=relay
 #AP_NEXTIFY=dhcp_external
@@ -171,7 +171,7 @@ uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
-uci set dhcp.lan.ignore=1
+#uci set dhcp.lan.ignore=1
 uci commit nodogsplash
 /etc/init.d/nodogsplash stop
 uci commit network
