@@ -73,9 +73,18 @@ ctrgsft:value("rsn_preauth","Fast-Secure Roaming")
 ctrgsft:value("ieee80211r","Fast Basic Service Set Transition (FT)")
 ctrgsft:depends({encrypt="encryption"})
 
+pmk = s:taboption("ctrgroups",Flag,"ft_psk_generate_local","Generate PMK Locally")
+pmk:depends({ft="ieee80211r"})
+pmk.rmempty = false
+
 nasid = s:taboption("ctrgroups",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
+<<<<<<< HEAD
 
+=======
+device = s:taboption("ctrgroups",Value, "macs", "APID")
+device:depends({ft="ieee80211r", ft_psk_generate_local=""})
+>>>>>>> update_09102018
 --macs.datatype = "macaddr"
 --[[Tx Power]]--
 ctrgtx = s:taboption("ctrgroups",ListValue, "txpower", "Transmit Power")
@@ -92,6 +101,7 @@ hidessid:depends({ctrs_en="1"})
 apisolation = s:taboption("ctrgroups",Flag, "isolation","AP Isolation")
 apisolation.rmempty = false
 apisolation:depends({ctrs_en="1"})
+<<<<<<< HEAD
 
 s:tab("device",  translate("APID Groups"))
 device = s:taboption("device",Flag, "gpd_en","Enable Groups")
@@ -99,6 +109,9 @@ device.rmempty = false
 device = s:taboption("device",Value, "macs", "APID")
 device:depends({gpd_en="1"})
 
+=======
+--[[
+>>>>>>> update_09102018
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
 bridge_mode.rmempty = false
@@ -150,6 +163,7 @@ mi:depends({Everyday="1"})
 			return Flag.write(self, section, value)
 		end
 		function bridge_mode.remove() end
+]]--		
 --RSSI--
 >>>>>>> origin/wr84xx
 s:tab("rssi",  translate("RSSI"))

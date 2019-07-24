@@ -28,6 +28,7 @@ uci -q get wifimedia.@builddate[0] || {
 	set wifimedia.@builddate[0]=builddate
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set wifimedia.@builddate[0].date=18-01-2018
 =======
 	set wifimedia.@builddate[0].date=19-01-2018
@@ -46,6 +47,9 @@ uci -q get wifimedia.@builddate[0] || {
 	set wifimedia.@builddate[0].date=15/04/2018
 >>>>>>> origin/wr84xx
 >>>>>>> master
+=======
+	set wifimedia.@builddate[0].date=22/12/2018
+>>>>>>> update_09102018
 	commit wifimedia
 EOF
 }
@@ -66,11 +70,12 @@ uci commit wifimedia
 
 uci batch <<-EOF
 	set system.@system[0]=system
-	set system.@system[0].hostname="wifimedia.com.vn"
+	set system.@system[0].hostname="WIFIMEDIA"
 	set system.@system[0].zonename='Asia/Ho Chi Minh'
 	set system.@system[0].timezone=ICT-7
 EOF
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 uci batch <<-EOF
 	set network.lan.ipaddr=192.168.5.1
@@ -97,8 +102,12 @@ uci batch <<-EOF
 EOF
 =======
 #if [ "$model_hardware" == "TL-WR940N_v4" ] || [ "$model_hardware" == "TL-WR940N_v6" ] || [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
+=======
+if [ "$model_hardware" == "TL-WR940N_v4" ] || [ "$model_hardware" == "TL-WR940N_v6" ] || [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
+>>>>>>> update_09102018
 	uci batch <<-EOF
 		set network.lan.ipaddr=172.16.99.1
+		#set network.lan.ipaddr=192.168.6.1 #set commit ipaddr for TPLink 940V3 WR841V11
 		set network.wan.type=bridge
 		delete network.globals
 		set dhcp.lan.force=1
@@ -117,9 +126,9 @@ EOF
 		commit wireless
 	EOF
 
-#fi
+fi
 
-if [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_v13" ] || [ "$model_hardware" == "TL-WR840N_v5" ];then
+if [ "$model_hardware" == "TL-WR841N_v14" ] || [ "$model_hardware" == "TL-WR840N_v4" ] || [ "$model_hardware" == "TL-WR841N_v13" ] || [ "$model_hardware" == "TL-WR840N_v5" ];then
 	uci batch <<-EOF
 		#set network.lan.ipaddr=192.168.5.1
 		#set network.lan.ipaddr=172.16.99.1
@@ -147,6 +156,8 @@ fi
 
 if [ "$model_hardware" == "TL-WR840N_v4" ];then
 	echo "TL-WR840N v4" >/etc/hardware
+elif [ "$model_hardware" == "TL-WA901ND_v3" ];then
+	echo "TL-WA901ND v3" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR841N_v13" ];then
 	echo "TL-WR841N v13" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR940N_v4" ];then
@@ -156,7 +167,9 @@ elif [ "$model_hardware" == "TL-WR940N_v6" ];then
 elif [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
 	echo "TL-WR940N v3" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR840N_v5" ];then
-	echo "TL-WR840N v5" >/etc/hardware	
+	echo "TL-WR840N v5" >/etc/hardware
+elif [ "$model_hardware" == "TL-WR841N_v14" ];then
+	echo "TL-WR841N v14" >/etc/hardware	
 fi
 >>>>>>> origin/wr84xx
 
@@ -239,10 +252,14 @@ EOF
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
 <<<<<<< HEAD
+<<<<<<< HEAD
 DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)" GW"
 =======
 DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)"GWPortal"
 >>>>>>> origin/wr84xx
+=======
+DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)""
+>>>>>>> update_09102018
 echo 'DISTRIB_ID="'"$DISTRIB_ID"'"' >> /etc/openwrt_release
 echo 'DISTRIB_RELEASE="'"$DISTRIB_RELEASE"'"' >> /etc/openwrt_release
 echo 'DISTRIB_REVISION="'" "'"' >> /etc/openwrt_release

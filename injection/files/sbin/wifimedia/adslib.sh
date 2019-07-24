@@ -15,6 +15,7 @@ action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter
 filter=/etc/privoxy/user.filter
 ##IMG
+<<<<<<< HEAD
 link5=$(uci -q get wifimedia.@adnetwork[0].link)
 img5=$(uci -q get wifimedia.@adnetwork[0].img)
 #title5=$(uci -q get wifimedia.@adnetwork[0].title)
@@ -34,6 +35,23 @@ img3=$(uci -q get wifimedia.@adnetwork[0].img3)
 link4=$(uci -q get wifimedia.@adnetwork[0].link4)
 img4=$(uci -q get wifimedia.@adnetwork[0].img4)
 #title4=$(uci -q get wifimedia.@adnetwork[0].title4)
+=======
+link1=$(uci -q get wifimedia.@adnetwork[0].link1)
+img1=$(uci -q get wifimedia.@adnetwork[0].img1)
+
+link2=$(uci -q get wifimedia.@adnetwork[0].link2)
+img2=$(uci -q get wifimedia.@adnetwork[0].img2)
+
+link3=$(uci -q get wifimedia.@adnetwork[0].link3)
+img3=$(uci -q get wifimedia.@adnetwork[0].img3)
+
+link4=$(uci -q get wifimedia.@adnetwork[0].link4)
+img4=$(uci -q get wifimedia.@adnetwork[0].img4)
+
+link5=$(uci -q get wifimedia.@adnetwork[0].link)
+img5=$(uci -q get wifimedia.@adnetwork[0].img)
+
+>>>>>>> update_09102018
 ##END IMG
 fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
 fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)
@@ -45,14 +63,14 @@ youtube=$(uci -q get wifimedia.@adnetwork[0].youtube)
 
 ip_lan=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 
-ads_random=`head /dev/urandom | tr -dc "356789" | head -c1`
-ads_img_random=`head /dev/urandom | tr -dc "12345" | head -c1`
+#ads_random=`head /dev/urandom | tr -dc "56789" | head -c1`
+ads_img_random=`head /dev/urandom | tr -dc "56789" | head -c1`
 
 adsrandom=`uci -q get wifimedia.@adnetwork[0].random_status`
 adsimgrandom=`uci -q get wifimedia.@adnetwork[0].random_image_status`
 
 gateway=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
-apkey=$(ifconfig br-wan | grep 'HWaddr'| awk '{ print $5}'| sed 's/://g'|tr A-Z a-z)
+apkey=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g'|tr A-Z a-z)
 dns=$(uci -q get wifimedia.@adnetwork[0].domain)
 dns_acl=$(uci -q get wifimedia.@adnetwork[0].domain_acl)
 apkey=$(uci -q get wifimedia.@adnetwork[0].gw)

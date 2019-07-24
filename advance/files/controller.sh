@@ -26,6 +26,19 @@ wr840v4() { #checking internet
 	fi
 }
 
+wr841v14() { #checking internet
+
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		echo none > trigger
+	fi
+}
+
 wr840v13() { #checking internet
 
 	#check gateway
@@ -78,11 +91,11 @@ wr940v6() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
 		echo timer > trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:red:wan/
-		echo 0 > brightness
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
+		echo 1 > brightness
 		echo none > trigger
 	fi
 	
@@ -97,8 +110,49 @@ wr940v6() { #checking internet
 	fi
 }
 
+
+wa901nd() { #checking internet
+
+	#check gateway
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
+		echo 1 > brightness
+		echo none > trigger
+	fi
+	
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
+		echo none > trigger
+	fi
+}
+
+
+#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-19)
+#
+#eap(){
+#if [ "$eap_name" == "TL-WA901ND" ] ;then
+#	ping -c 3 "$gateway" > /dev/null
+#	if [ $? -eq "0" ];then
+#		echo "dhcp client"
+#	else
+#		uci set network.lan
+#		
+#	fi
+#fi
+#}
+
 checking (){
 	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+	eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
 	if [ "$model" == "TL-WR840N_v4" ];then
 		wr840v4
 		eap_manager
@@ -113,6 +167,10 @@ checking (){
 		wr940v5
 	elif [ "$model" == "TL-WR940N_v6" ];then
 		wr940v6
+	elif [ "$eap_name" == "TL-WA901ND" ] ;then
+		wa901nd
+	elif [ "$model" == "TL-WR841N_v14" ] ;then	
+		wr841v14
 	fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
@@ -179,7 +237,8 @@ echo "Checking download sha256sum"
 
 						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
 							uci set wireless.@wifi-iface[0].ieee80211r="1"
-							uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
+							uci set wireless.@wifi-iface[0].pmk_r1_push="1"
+							#uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
 							uci delete wireless.@wifi-iface[0].rsn_preauth
 							uci set wifimedia.@advance[0].ft="ieee80211r"
 							echo "Fast BSS Transition Roaming" >/etc/FT
@@ -195,6 +254,7 @@ echo "Checking download sha256sum"
 						else #Fast Roaming Preauth RSN C
 							uci delete wireless.@wifi-iface[0].ieee80211r
 							uci delete wireless.@wifi-iface[0].ft_psk_generate_local
+							uci delete wireless.@wifi-iface[0].pmk_r1_push
 							uci set wireless.@wifi-iface[0].rsn_preauth="1"
 							uci set wifimedia.@advance[0].ft="rsn_preauth"
 							echo "Fast-Secure Roaming" >/etc/FT
@@ -372,18 +432,28 @@ if [ "$groups_en" == "1" ];then
 	#Fast Roaming
 	if [ "$ft" == "ieee80211r"  ];then
 		uci set wireless.@wifi-iface[0].ieee80211r="1"
-		uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
+		uci set wireless.@wifi-iface[0].ft_psk_generate_local="0"
+		uci set wireless.@wifi-iface[0].pmk_r1_push="1"
 		uci delete wireless.@wifi-iface[0].rsn_preauth
 		echo "Fast BSS Transition Roaming" >/etc/FT
+		##fix PMK if pmk locally = 1
+		if [ "$pmk" == "1" ];then
+			uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
+			#delete all r0kh r1kh
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh
+		elif [ "$pmk" == "0" ];then #if pmk locally = ""
+			uci set wireless.@wifi-iface[0].ft_psk_generate_local="0"
+			#delete all r0kh r1kh
+			uci del wireless.default_radio0.r0kh
+			uci del wireless.default_radio0.r1kh
+			echo "$macs"  | while read  line;do #add list R0KH va R1KH
+				uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
+				uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
+			done
+		fi
+		#end config r0kh & r1kh
 		
-		#delete all r0kh r1kh
-		uci del wireless.default_radio0.r0kh
-		uci del wireless.default_radio0.r1kh
-		echo "$macs"  | while read  line;do #add list R0KH va R1KH
-			uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
-			uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-		done
-
 		if [ -z $(uci -q get wifimedia.@advance[0].macs) ];then
 		#echo "test rong"
 			uci del wireless.default_radio0.r0kh
@@ -393,6 +463,7 @@ if [ "$groups_en" == "1" ];then
 	else
 		uci delete wireless.@wifi-iface[0].ieee80211r
 		uci delete wireless.@wifi-iface[0].ft_psk_generate_local
+		uci delete wireless.@wifi-iface[0].pmk_r1_push
 		uci set wireless.@wifi-iface[0].rsn_preauth="1"
 		uci del wireless.default_radio0.r0kh
 		uci del wireless.default_radio0.r1kh

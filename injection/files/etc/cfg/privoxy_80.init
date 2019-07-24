@@ -96,6 +96,8 @@ _uci2conf() {
 
 	# move temp to final privoxy readable configuration
 	mv -f $CFGTEMP $CFGFILE
+	uci set privoxy.privoxy.listen_address=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'):8118
+	uci commit privoxy
 	return 0
 }
 

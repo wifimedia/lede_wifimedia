@@ -28,6 +28,7 @@ s:tab("adv","Advanced")
 --s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
 --s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
 --s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
+<<<<<<< HEAD:injection/files/usr/lib/lua/luci/model/cbi/wifimedia_module/adnetwork.lua
 
 s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 --s:taboption("image", Value,"title1","Title").placeholder = "Support langue english"
@@ -48,6 +49,23 @@ s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px").placeh
 --s:taboption("image", Value,"title4","Title").placeholder = "Support langue english"
 url_web=s:taboption("image", Value,"link4","Website")
 url_web.placeholder = "http://ads.wifimedia.vn/"
+=======
+
+s:taboption("image", Value,"img1","Link1 image")
+url_web=s:taboption("image", Value,"link1","Link1 website")
+
+s:taboption("image", Value,"img2","Link2 image")
+url_web=s:taboption("image", Value,"link2","Link2 website")
+
+s:taboption("image", Value,"img3","Link3 image")
+url_web=s:taboption("image", Value,"link3","Link3 website")
+
+s:taboption("image", Value,"img4","Link4 image")
+url_web=s:taboption("image", Value,"link4","Link4 website")
+
+s:taboption("image", Value,"img5","Link5 image")
+url_web=s:taboption("image", Value,"link5","Link5 website")
+>>>>>>> update_09102018:injection/files/usr/lib/lua/luci/model/cbi/wifimedia_module/filter.lua
 
 s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
 --s:taboption("image", Value,"title5","Title").placeholder = "Support langue english"
@@ -66,12 +84,13 @@ rd_image = s:taboption("image", Flag,"random_image_status","Random Option")
 --end
 
 s:taboption("adv", Value, "domain_acl","Domain").placeholder = "exp: .vnexpress.net, ..."
-
+--[[
 ads_st = s:taboption("adv", Flag,"ads_status","Status")
 rd = s:taboption("adv", Flag,"random_status","Random Option")
 rd:depends({ads_status="1"})
+]]--
 st = s:taboption("adv", ListValue,"status","Option")
-st:depends({ads_status="1"})
+--st:depends({ads_status="1"})
 
 --local data = {"Chatbot","Facebook_Page","Facebook_Videos", "Facebook_Like_Share","Youtube","Image1","Image2", "Image3","Image4","Image5" }
 local data = {"Image1","Image2", "Image3","Image4","Image5" }
@@ -81,7 +100,7 @@ end
 
 sec = s:taboption("adv", ListValue, "second", "Second")
 sec.default = "20"
-sec:depends({ads_status="1"})
+--sec:depends({ads_status="1"})
 local second = 9
 while (second < 301) do
 	sec:value(second, second .. " ")
@@ -96,16 +115,16 @@ local pid = luci.util.exec("pidof privoxy")
 local message = luci.http.formvalue("message")
 
 function advertis_network_process_status()
-  local status = "Ad network is not running now and "
+  local status = "Filter is not running"
 
   if pid ~= "" then
-      status = "Ad network is running PID: "..pid.. "and "
+      status = "Filter is running PID: "..pid.. " "
   end
 
   if nixio.fs.access("/etc/rc.d/80privoxy") then
-    status = status .. "it's enabled on the startup"
+    status = status .. ""
   else
-    status = status .. "it's disabled on the startup"
+    status = status .. ""
   end
 
   local status = { status=status, message=message }
@@ -116,21 +135,21 @@ end
 t = m:section(Table, advertis_network_process_status())
 t.anonymous = true
 
-t:option(DummyValue, "status","Ad network status")
+t:option(DummyValue, "status","Filter status")
 
 if nixio.fs.access("/etc/rc.d/S80privoxy") then
-  disable = t:option(Button, "_disable","Disable from startup")
+  disable = t:option(Button, "_disable","Disable")
   disable.inputstyle = "remove"
   function disable.write(self, section)
 		luci.util.exec("echo ''>/etc/crontabs/adnetwork && /etc/init.d/cron restart")
 		luci.util.exec("/etc/init.d/privoxy disable")
 		luci.util.exec(" /etc/init.d/privoxy  stop && /etc/init.d/firewall restart")
 		luci.http.redirect(
-        		luci.dispatcher.build_url("admin", "wifimedia", "adnetwork")
+        		luci.dispatcher.build_url("admin", "wifimedia", "filter")
 		)			
   end
 else
-  enable = t:option(Button, "_enable","Enable on startup")
+  enable = t:option(Button, "_enable","Enable")
   enable.inputstyle = "apply"
   function enable.write(self, section)
 		luci.util.exec("uci set privoxy.privoxy.permit_access=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'|cut -c 1,2,3,4,5,6,7,8,9,10,11)0/24:8118 && uci commit privoxy")
@@ -139,7 +158,7 @@ else
 		luci.util.exec(" /etc/init.d/privoxy start ")
 		luci.util.exec("crontab /etc/cron_ads -u adnetwork && /etc/init.d/cron restart")
 		luci.http.redirect(
-        		luci.dispatcher.build_url("admin", "wifimedia", "adnetwork")
+        		luci.dispatcher.build_url("admin", "wifimedia", "filter")
 		)			
   end
 end

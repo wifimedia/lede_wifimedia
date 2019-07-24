@@ -38,6 +38,8 @@ enable_rssi=`uci -q get wifimedia.@advance[0].enable` #enable rssi
 admins_=`uci -q get wifimedia.@advance[0].admins`
 passwd_=`uci -q get wifimedia.@advance[0].passwords`
 
+##PMK
+pmk=`uci -q get wifimedia.@advance[0].ft_psk_generate_local`
 #groups_cfg
 group_cfg="/www/luci-static/resources/groups.txt"
 devices_cfg="/www/luci-static/resources/devices.txt"
@@ -75,3 +77,4 @@ url_v="http://firmware.wifimedia.com.vn/tplink/version"
 #echo "Waiting a bit..."
 #sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 if [ ! -d "/tmp/upgrade" ]; then mkdir /tmp/upgrade; fi
+

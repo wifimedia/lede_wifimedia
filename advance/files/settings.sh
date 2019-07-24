@@ -43,3 +43,4 @@ else
 fi
 
 #mesh_version=$(opkg list_installed | grep 'ath9k - ' | awk '{ print $3 }' |cut -d + -f 2)	#install ath9k for mesh
+
