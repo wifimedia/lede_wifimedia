@@ -22,12 +22,13 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$domain_default'">
+      <form id="info" method="POST" action="//crm.wifimedia.vn/back_end/'$MAC_E0'/1">
           <input type="hidden" name="gateway_name" value="$gatewayname">
-          <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
+          <input type="hidden" name="gateway_mac" value="$gatewaymac">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
+		  <input type="hidden" name="splashcheck" value="1">
           <input type="hidden" name="auth_target" value="$authtarget">
       </form>
       <script>
@@ -170,7 +171,7 @@ uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
-uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
+uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 45.118.145.52"
 #uci set dhcp.lan.ignore=1
 uci commit nodogsplash
 /etc/init.d/nodogsplash stop

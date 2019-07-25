@@ -49,7 +49,7 @@ uci set nodogsplash.@nodogsplash[0].authidletimeout="$authidletimeout_default";
 uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 # Whitelist IP
-for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do
+for i in crm.wifimedia.vn wifimedia.vn $walledgadent; do
     nslookup ${i} 8.8.8.8 2> /dev/null | \
         grep 'Address ' | \
         grep -v '127\.0\.0\.1' | \
@@ -98,14 +98,15 @@ echo '<!doctype html>
       <title>$gatewayname</title>
   </head>
   <body>
-      <form id="info" method="POST" action="//'$domain_default'">
+      <form id="info" method="POST" action="//crm.wifimedia.vn/back_end/'$MAC_E0'/1">
           <input type="hidden" name="gateway_name" value="$gatewayname">
-          <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
+          <input type="hidden" name="gateway_mac" value="$gatewaymac">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
           <input type="hidden" name="uptime" value="$uptime">
+		  <input type="hidden" name="splashcheck" value="1">
           <input type="hidden" name="auth_target" value="$authtarget">
-      </form>
+      </form>	  
       <script>
           document.getElementById("info").submit();
       </script>
@@ -178,6 +179,7 @@ if [ $nds_stop -eq "0" ];then
 fi
 relay=`uci -q get network.local`
 if [ $relay != "" ];then
+	uci del network.local.network
 	uci add_list network.local.network='lan'
 	uci add_list network.local.network='wan'
 	uci commit network
