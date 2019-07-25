@@ -43,7 +43,7 @@ echo '<!doctype html>
     <head>
         <meta charset="utf-8">
         <title>Whoops...</title>
-        <meta http-equiv="refresh" content="0; url="//'$domain'">
+        <meta http-equiv="refresh" content="0; url="//crm.wifimedia.vn/back_end/'$MAC_E0'/1">
         <style>
             html {
                 background: #F7F7F7;
