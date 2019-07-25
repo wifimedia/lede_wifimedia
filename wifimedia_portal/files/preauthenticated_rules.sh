@@ -21,8 +21,8 @@ NET_ID="lan"
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
-#redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
-#redirecturl_default=${redirecturl:-https://google.com.vn}
+redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
+redirecturl_default=${redirecturl:-https://google.com.vn}
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
 maxclients=`uci -q get wifimedia.@nodogsplash[0].maxclients`
 maxclients_default=${maxclients:-250}
@@ -48,6 +48,7 @@ uci set nodogsplash.@nodogsplash[0].authidletimeout="$authidletimeout_default";
 #uci set nodogsplash.@nodogsplash[0].sessiontimeout="$std";
 uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
+uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 # Whitelist IP
 for i in crm.wifimedia.vn wifimedia.vn $walledgadent; do
     nslookup ${i} 8.8.8.8 2> /dev/null | \
