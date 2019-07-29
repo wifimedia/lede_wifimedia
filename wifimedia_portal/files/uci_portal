@@ -171,7 +171,7 @@ uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
 uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 115.84.183.186"
-uci set dhcp.lan.ignore=1
+#uci set dhcp.lan.ignore=1
 uci commit nodogsplash
 /etc/init.d/nodogsplash stop
 uci commit network
