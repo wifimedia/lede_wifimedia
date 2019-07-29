@@ -7,6 +7,7 @@ val1=$(ifconfig eth1 | grep 'HW' | awk '{print $5}' | cut -c 13,14,15,16,17 | tr
 macaddr="80:a9:ef:63:"$val1
 chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
 echo ${macaddr} >/sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
-boot() {
-    sleep 5 &&  wifi up
-}
+wifi up
+#boot() {
+#    sleep 5 &&  wifi up
+#}
