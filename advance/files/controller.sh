@@ -3,6 +3,11 @@
 # All rights reserved.
 
 . /sbin/wifimedia/variables.sh
+
+ip_public(){
+	PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`
+	#echo $PUBLIC_IP
+}
 wr840v4() { #checking internet
 
 	#check gateway
