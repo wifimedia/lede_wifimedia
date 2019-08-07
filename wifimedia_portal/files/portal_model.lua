@@ -32,9 +32,10 @@ s:taboption( "advance",Value, "preauthidletimeout","Preauthidletimeout","Default
 s:taboption( "advance",Value, "authidletimeout","Authidletimeoutt","Default: > 120 Mins")
 s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default : 120 Mins")
 s:taboption( "advance",Value, "checkinterval","Checkinterval","Default: 10 Mins")
+s:taboption( "basic",Flag, "facebook","Bypass Facebook")
+s:taboption( "basic",Flag, "https","Bypass https")
 dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
 dhcpextension.rmempty = false
-s:taboption( "basic",Flag, "https","Bypass https")
 		
 function dhcpextension.write(self, section, value)
 if value == self.enabled then
@@ -92,7 +93,7 @@ t:option(DummyValue, "status","Captive portal status")
 			--luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
 			luci.sys.exec("uci set nodogsplash.@nodogsplash[0].enabled='0' && uci commit nodogsplash")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
-			luci.util.exec("/etc/init.d/nodogsplash disable")
+			luci.util.exec("/etc/init.d/nodogsplash disable && /etc/init.d/nodogsplash stop")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
 			)			
