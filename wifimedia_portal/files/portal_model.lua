@@ -87,7 +87,7 @@ t.anonymous = true
 t:option(DummyValue, "status","Captive portal status")
 
 	if nixio.fs.access("/etc/rc.d/S95nodogsplash") then
-	  disable = t:option(Button, "_disable","Disable")
+	  disable = t:option(Button, "_disable","Disable Startup")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
@@ -99,7 +99,7 @@ t:option(DummyValue, "status","Captive portal status")
 			)			
 	  end
 	else
-	  enable = t:option(Button, "_enable","Enable")
+	  enable = t:option(Button, "_enable","Enable Startup")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
