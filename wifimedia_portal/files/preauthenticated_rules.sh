@@ -83,21 +83,10 @@ else
 	uci del nodogsplash.@nodogsplash[0].users_to_router
 	uci del nodogsplash.@nodogsplash[0].authenticated_users
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 22"
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 53"
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 53"
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 67"
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 80"
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 443"
 	uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 	uci commit
 	if [ $https == "1" ];then
-		#uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
-		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
+
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
 		if network_get_ipaddr addr "wan"; then
 			#echo "IP is $addr"
@@ -115,14 +104,14 @@ else
 		#while read fb; do
 		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $fb)"
 		#done <$PREAUTHENTICATED_ADDR_FB
-	else
-		#uci del nodogsplash.@nodogsplash[0].preauthenticated_users && uci commit
+
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
 		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
-		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"		
+	else
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"	
 		if network_get_ipaddr addr "wan"; then
 			#echo "IP is $addr"
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $addr"
@@ -138,8 +127,20 @@ else
 		fi
 		#while read fb; do
 		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $fb)"
-		#done <$PREAUTHENTICATED_ADDR_FB	
+		#done <$PREAUTHENTICATED_ADDR_FB
+
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
+		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"	
 	fi
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 22"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 67"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 80"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 443"	
 	uci commit nodogsplash
 	rm -f $PREAUTHENTICATED_ADDRS $PREAUTHENTICATED_ADDR_FB
 	#write file splash
