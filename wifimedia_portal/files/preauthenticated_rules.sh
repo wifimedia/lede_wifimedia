@@ -83,7 +83,12 @@ else
 	uci del nodogsplash.@nodogsplash[0].users_to_router
 	uci del nodogsplash.@nodogsplash[0].authenticated_users
 	uci del nodogsplash.@nodogsplash[0].preauthenticated_users
-	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow all"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 22"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 53"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 67"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 80"
+	uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 443"
 	uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 	uci commit
 	if [ $https == "1" ];then
