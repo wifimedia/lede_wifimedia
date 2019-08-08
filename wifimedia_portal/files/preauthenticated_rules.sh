@@ -41,6 +41,7 @@ https=`uci -q get wifimedia.@nodogsplash[0].https`
 facebook=`uci -q get wifimedia.@nodogsplash[0].facebook`
 MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 nds_status=`uci get nodogsplash.@nodogsplash[0].enabled`
+source /lib/functions/network.sh
 if [ "$nds_status" == "0" ];then
 	/etc/init.d/nodogsplash stop
 	/etc/init.d/firewall restart
@@ -93,6 +94,10 @@ else
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
+		if network_get_ipaddr addr "wan"; then
+			#echo "IP is $addr"
+			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $addr"
+		fi			
 		while read line; do
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
 		done <$PREAUTHENTICATED_ADDRS
@@ -113,6 +118,10 @@ else
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"
 		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 172.16.99.1"
+		if network_get_ipaddr addr "wan"; then
+			#echo "IP is $addr"
+			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $addr"
+		fi		
 		while read line; do
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $(echo $line)"
 		done <$PREAUTHENTICATED_ADDRS
