@@ -224,6 +224,7 @@ else
 	# /etc/init.d/firewall restart
 	#fi
 	relay=`uci -q get network.local`
+	uci del network.local.network
 	if [ $relay != "" ];then
 		uci add_list network.local.network='lan'
 		uci add_list network.local.network='wan'
