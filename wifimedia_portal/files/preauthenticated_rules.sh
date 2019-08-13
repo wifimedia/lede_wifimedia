@@ -39,7 +39,8 @@ checkinterval_default=${checkinterval:-10}
 ctv=`expr $checkinterval_default \* 60`
 https=`uci -q get wifimedia.@nodogsplash[0].https`
 facebook=`uci -q get wifimedia.@nodogsplash[0].facebook`
-MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
+#MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }') #for TPLINK940V6.1
+MAC_E0=$(cat /sys/class/ieee80211/phy0/macaddress) #For TPLINK940V6.0
 nds_status=`uci get nodogsplash.@nodogsplash[0].enabled`
 source /lib/functions/network.sh
 if [ "$nds_status" == "0" ];then

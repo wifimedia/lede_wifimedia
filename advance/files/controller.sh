@@ -595,7 +595,7 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
 		cat "$licensekey" | while read line ; do
-			if [ "$(echo $line | grep $wr940_device)" ] ;then
+			if [ "$(echo $line | grep $wr940v60)" ] ;then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
@@ -617,7 +617,7 @@ lgw_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940_device)" ] ;then
+				if [ "$(echo $line | grep $wr940v60)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
@@ -664,7 +664,7 @@ fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		uci set wireless.radio0.disabled="0"
-		uci set wireless.radio1.disabled="0"
+		#uci set wireless.radio1.disabled="0"
 		uci commit wireless
 		wifi
 		#touch $status
@@ -680,7 +680,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
-		uci set wireless.radio1.disabled="1"
+		#uci set wireless.radio1.disabled="1"
 		uci commit wireless
 		wifi down
 		#if [ -f /etc/rc.d/S80privoxy ]; then

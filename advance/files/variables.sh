@@ -60,7 +60,7 @@ gwkey=/tmp/upgrade/licensekey
 code_srv="http://firmware.wifimedia.com.vn/hardware_active"
 codegw="http://firmware.wifimedia.com.vn/gwactive"
 device=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
-apid=$(echo $device | sed 's/:/-/g')
+wr940v60=$(echo $device | sed 's/:/-/g')
 cf_device=`ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
 cf_apid=$(echo $cf_device | sed 's/:/-/g')
 
