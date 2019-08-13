@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=21/06/2019
+	set wifimedia.@builddate[0].date=13/08/2019
 	commit wifimedia
 EOF
 }
@@ -116,7 +116,7 @@ elif [ "$model_hardware" == "TL-WR841N_v13" ];then
 elif [ "$model_hardware" == "TL-WR940N_v4" ];then
 	echo "TL-WR940N v5" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR940N_v6" ];then
-	echo "TL-WR940N v6.1" >/etc/hardware
+	echo "TL-WR940N v6.0" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR941N/ND_v6" ];then
 	echo "TL-WR940N v3" >/etc/hardware
 elif [ "$model_hardware" == "TL-WR840N_v5" ];then
