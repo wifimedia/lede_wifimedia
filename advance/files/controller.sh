@@ -162,6 +162,17 @@ wa901nd() { #checking internet
 	fi
 }
 
+asus56u(){
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
+		echo timer > trigger
+	else
+		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
+		echo none > trigger
+		echo 1 > brightness
+	fi
+}
 
 meshdesk(){
 dnsctl=$(uci -q get meshdesk.internet1.dns)
@@ -207,6 +218,7 @@ checking (){
 	#	wr840v6
 	#	eap_manager
 	#fi
+	asus56u
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		echo "Clear Cach"

@@ -188,7 +188,7 @@ uci batch <<-EOF
 	
 NET_ID="private"
 FW_ZONE="private"
-IFNAME="eth0.1" #VLAN1
+IFNAME="eth0.300" #VLAN1
 uci batch << EOF
 	set network.${NET_ID}=interface
 	set network.${NET_ID}.ifname=${IFNAME}
