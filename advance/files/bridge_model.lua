@@ -13,17 +13,17 @@ function m.on_apply(self)
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
-s = m:section(TypedSection, "advance","Ethernet Switch")
+s = m:section(TypedSection, "switchmode","Ethernet Switch")
 s.anonymous = true
 s.addremove = false
 
-bridge_mode = s:option(Flag, "bridge_mode","Bridge","")
+bridge_mode = s:option(Flag, "switch_port","All port LAN & WAN","")
 bridge_mode.rmempty = false
 		function bridge_mode.write(self, section, value)
 			if value == self.enabled then
 				luci.sys.call("uci delete network.lan")
 				luci.sys.call("uci set network.wan.proto='dhcp'")
-				luci.sys.call("uci set network.wan.ifname='eth0 eth1'")
+				luci.sys.call("uci set network.wan.ifname='eth0 eth1.1'")
 				luci.sys.call("uci set wireless.@wifi-iface[0].network='wan'")
 				luci.sys.call("uci commit")
 			else
@@ -32,7 +32,7 @@ bridge_mode.rmempty = false
 				luci.sys.call("uci set network.lan.ipaddr='172.16.99.1'")
 				luci.sys.call("uci set network.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci set network.lan.type='bridge'")
-				luci.sys.call("uci set network.lan.ifname='eth1'")
+				luci.sys.call("uci set network.lan.ifname='eth1.1'")
 				luci.sys.call("uci set dhcp.lan.force='1'")
 				luci.sys.call("uci set dhcp.lan.netmask='255.255.255.0'")
 				luci.sys.call("uci del dhcp.lan.dhcp_option")
