@@ -19,7 +19,7 @@ s.addremove = false
 
 switch_mode = s:option(Flag, "switch_port","All port LAN & WAN","")
 switch_mode.rmempty = false
-		function bridge_mode.write(self, section, value)
+		function switch_mode.write(self, section, value)
 			if value == self.enabled then
 				luci.sys.call("uci delete network.lan")
 				luci.sys.call("uci set network.wan.proto='dhcp'")
