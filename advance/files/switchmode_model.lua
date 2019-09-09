@@ -17,8 +17,8 @@ s = m:section(TypedSection, "switchmode","Ethernet Switch")
 s.anonymous = true
 s.addremove = false
 
-bridge_mode = s:option(Flag, "switch_port","All port LAN & WAN","")
-bridge_mode.rmempty = false
+switch_mode = s:option(Flag, "switch_port","All port LAN & WAN","")
+switch_mode.rmempty = false
 		function bridge_mode.write(self, section, value)
 			if value == self.enabled then
 				luci.sys.call("uci delete network.lan")
@@ -43,5 +43,5 @@ bridge_mode.rmempty = false
 			end
 			return Flag.write(self, section, value)
 		end
-		function bridge_mode.remove() end
+		function switch_mode.remove() end
 return m
