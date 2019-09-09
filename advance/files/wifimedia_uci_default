@@ -34,7 +34,7 @@ EOF
 uci -q get wifimedia.@switchmode[0] || {
 	uci batch <<-EOF
 	add wifimedia switchmode
-	set wifimedia.@wireless[0].switch_port=0
+	set wifimedia.@switchmode[0].switch_port=0
 	commit wifimedia
 EOF
 }
