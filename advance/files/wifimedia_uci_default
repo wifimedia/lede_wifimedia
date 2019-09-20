@@ -281,11 +281,6 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 /etc/init.d/system reload
 /etc/init.d/led reload
 
-######Cron job
-echo "* * * * * /sbin/wifimedia/controller.sh checking" >>/etc/crontabs/root
-echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
-echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
-
 /etc/init.d/cron start
 /etc/init.d/cron enable
 /etc/init.d/wifimedia_upgrade enable
