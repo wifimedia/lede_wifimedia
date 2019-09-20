@@ -600,7 +600,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				#echo "we will maintain the existing settings."
 				echo "enable check key"
 				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
-				/etc/init.d/cron restart
+				#/etc/init.d/cron restart
 			fi
 		done	
 	fi
@@ -623,7 +623,7 @@ lgw_srv() {
 				else
 					echo "enable check key"
 					echo "0 0 * * * /sbin/wifimedia/controller.sh lgw_srv" > /etc/crontabs/wificode
-					/etc/init.d/cron restart
+					#/etc/init.d/cron restart
 					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
 			done	
