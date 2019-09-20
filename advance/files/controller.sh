@@ -599,10 +599,10 @@ if [ "${curl_result}" -eq 0 ]; then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
-				cat /etc/opt/license/wifimedia >/etc/opt/license/status
+				#cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
 			else
-				echo "enable check key"
+				#echo "enable check key"
 				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 				#/etc/init.d/cron restart
 			fi
@@ -621,7 +621,7 @@ lgw_srv() {
 				if [ "$(echo $line | grep $wr940_device)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
-					cat /etc/opt/license/wifimedia >/etc/opt/license/status
+					#cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					uci commit wifimedia
 					licensegw
 				else
@@ -670,10 +670,11 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		uci commit wireless
 		wifi
 		#touch $status
-		rm $lcs
 		echo "Activated" >/etc/opt/license/status
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
+		/etc/init.d/wifimedia_check disable
+		rm $lcs
 		#if [ -f /etc/rc.d/S80privoxy ]; then
 		#	/etc/init.d/privoxy  stop
 		#	/etc/init.d/privoxy disable
@@ -718,13 +719,14 @@ lcs=/etc/opt/wfm_lcs
 if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 	echo "Activated" >/etc/opt/license/status
 	#touch $status
-	rm $lcs
 	echo "" >/etc/crontabs/wificode
 	/etc/init.d/cron restart
 	uci set wireless.radio0.disabled="0"
 	uci set wireless.radio1.disabled="0"
 	uci commit wireless
 	wifi
+	/etc/init.d/wifimedia_check disable
+	rm $lcs
 else
 	minute=`date | awk '{print $4}'|cut -c 4,5`
 	if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
@@ -743,6 +745,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
 		echo "Activated" >/etc/opt/license/status
+		/etc/init.d/wifimedia_check disable
 	else
 		minute=`date | awk '{print $4}'|cut -c 4,5`
 		if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
