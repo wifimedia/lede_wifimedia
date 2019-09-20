@@ -10,8 +10,8 @@ if [ ! -d "$temp_dir" ]; then
 fi
 if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ];then
 	echo "*/10 * * * * /sbin/wifimedia/controller.sh licensegw" > $temp_dir/wificode
-else
-	echo "0 0 * * * /sbin/wifimedia/controller.sh license_local"
+else 
+	echo "0 0 * * * /sbin/wifimedia/controller.sh license_local" >$temp_dir/wificode
 fi	
 echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 crontab $temp_dir/wificode -u wificode
