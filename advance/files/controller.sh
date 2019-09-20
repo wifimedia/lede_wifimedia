@@ -603,7 +603,7 @@ if [ "${curl_result}" -eq 0 ]; then
 				license_local
 			else
 				echo "we will maintain the existing settings."
-				echo "*/10 * * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
+				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 				/etc/init.d/cron restart
 				#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 			fi
@@ -626,7 +626,7 @@ lgw_srv() {
 					uci commit wifimedia
 					licensegw
 				else
-					echo "*/10 * * * * /sbin/wifimedia/controller.sh lgw_srv" > /etc/crontabs/wificode
+					echo "0 0 * * * /sbin/wifimedia/controller.sh lgw_srv" > /etc/crontabs/wificode
 					/etc/init.d/cron restart
 					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
