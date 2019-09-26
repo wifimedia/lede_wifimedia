@@ -35,21 +35,25 @@ wr840v6() { #checking internet
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		echo timer > trigger
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/ #openwrt 18
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger #Openwrt19
+		#echo timer > trigger
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		echo none > trigger
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
+		#echo none > trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger ##Openwrt19
 	fi
 	
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		echo timer > trigger
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		#echo timer > trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		echo none > trigger
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		#echo none > trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger ##Openwrt19
 	fi
 }
 
@@ -58,11 +62,14 @@ wr841v14() { #checking internet
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		#echo timer > trigger
+		
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		echo none > trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger ##Openwrt19
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
+		#echo none > trigger
 	fi
 }
 
