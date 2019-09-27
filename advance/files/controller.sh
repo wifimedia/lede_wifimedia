@@ -221,11 +221,11 @@ checking (){
 	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
 	#	wr841v14
 	#	eap_manager
-	elif [ "$model" == "TL-WR840N_v6" ] ;then	
+	if [ "$model" == "TL-WR840N_v6" ] ;then	
 		wr840v6
 	#	eap_manager
 	fi
-	asus56u
+	#asus56u
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		echo "Clear Cach"
