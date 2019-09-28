@@ -244,7 +244,7 @@ checking (){
 	#	wr841v14
 	#	eap_manager
 	if [ "$model" == "TL-WR840N_v6" ] ;then	
-		wr840v6.20
+		wr840v620
 	fi
 	#asus56u
 	#Clear memory
