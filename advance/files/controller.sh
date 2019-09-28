@@ -96,8 +96,10 @@ wr841v14() { #checking internet
 		echo 1 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/brightness
 		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
 	else
-		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
-		echo 1 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/brightness
+		echo 500 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/delay_on
+		echo 0 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/delay_off
+		#echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
+		#echo 1 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/brightness		
 	fi	
 }
 
