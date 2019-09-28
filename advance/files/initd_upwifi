@@ -19,5 +19,6 @@ STOP=12
 #wifi up
 boot() {
     sleep 10 &&  /etc/init.d/network restart
+	/sbin/wifimedia/controller.sh checking
 }
 
