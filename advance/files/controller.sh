@@ -57,7 +57,7 @@ wr840v6() { #checking internet
 	fi
 }
 
-wr840v6.20() { #checking internet
+wr840v620() { #checking internet
 
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
@@ -226,7 +226,7 @@ fi
 #}
 
 checking (){
-	#model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 	#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
 	#if [ "$model" == "TL-WR840N_v4" ];then
 	#	wr840v4
