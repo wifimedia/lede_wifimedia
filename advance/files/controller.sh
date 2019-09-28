@@ -94,6 +94,7 @@ wr841v14() { #checking internet
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
 		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
 	else
 		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
 		echo 1 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/brightness
