@@ -84,15 +84,20 @@ wr841v14() { #checking internet
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		#echo timer > trigger
-		
+		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wan/trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:orange:wan/trigger
 	else
-		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger ##Openwrt19
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		#echo none > trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wan/trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:orange:wan/trigger
 	fi
+	#check gateway
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
+	else
+		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/trigger
+		echo 1 >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:lan/brightness
+	fi	
 }
 
 wr840v13() { #checking internet
@@ -243,9 +248,9 @@ checking (){
 	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
 	#	wr841v14
 	#	eap_manager
-	if [ "$model" == "TL-WR840N_v6" ] ;then	
+	if [ "$model" == "TL-WR840N_v6" ];then	
 		wr840v620
-	elif [ "$model" == "TL-WR841N_v14" ] ;then	
+	elif [ "$model" == "TL-WR841N_v14" ];then	
 		wr841v14		
 	fi
 	#asus56u
