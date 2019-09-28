@@ -57,6 +57,28 @@ wr840v6() { #checking internet
 	fi
 }
 
+wr840v6.20() { #checking internet
+
+	#checking internet
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
+	else
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
+	fi
+	
+	#check gateway
+	ping -c 3 "$gateway" > /dev/null
+	if [ $? -eq "0" ];then
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
+	else
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
+		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/brightness
+	fi
+}
+
 wr841v14() { #checking internet
 
 	#checking internet
@@ -222,8 +244,7 @@ checking (){
 	#	wr841v14
 	#	eap_manager
 	if [ "$model" == "TL-WR840N_v6" ] ;then	
-		wr840v6
-	#	eap_manager
+		wr840v6.20
 	fi
 	#asus56u
 	#Clear memory
