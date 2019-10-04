@@ -850,6 +850,24 @@ cat "/tmp/eap_mac" | while read line ; do
 done
 }
 
+
+action_port_gateway(){
+echo "" > $find_mac_gateway
+wget -q "${codegw}" -O $find_mac_gateway
+curl_result=$?
+if [ "${curl_result}" -eq 0 ]; then
+	cat "$find_mac_gateway" | while read line ; do
+		if [ "$(echo $line | grep DISABLE_PORT)" ] ;then
+			for i in 1 2 3 4 5 ; do
+				swconfig dev switch0 port $i set disable 1
+			done
+			swconfig dev switch0 set apply
+		fi
+	done	
+fi
+}
+
+}
 rssi() {
 
 if [ $rssi_on == "1" ];then
