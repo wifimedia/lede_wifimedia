@@ -853,11 +853,11 @@ done
 
 action_port_gateway(){
 echo "" > $find_mac_gateway
-wget -q "${codegw}" -O $find_mac_gateway
+wget -q "${blacklist}" -O $find_mac_gateway
 curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	cat "$find_mac_gateway" | while read line ; do
-		if [ "$(echo $line | grep DISABLE_PORT)" ] ;then
+		if [ "$(echo $line | grep $gateway_wr84x)" ] ;then
 			for i in 1 2 3 4 5 ; do
 				swconfig dev switch0 port $i set disable 1
 			done

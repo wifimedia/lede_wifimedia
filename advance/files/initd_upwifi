@@ -20,5 +20,6 @@ STOP=12
 boot() {
     sleep 10 &&  /etc/init.d/network restart
 	/sbin/wifimedia/controller.sh checking
+	/sbin/wifimedia/controller.sh action_port_gateway
 }
 
