@@ -19,6 +19,15 @@ STOP=12
 #wifi up
 boot() {
     sleep 10 &&  /etc/init.d/network restart
+	# Wait for network up & running
+	while true; do
+    	ping -c1 -W1 8.8.8.8
+    	if [ ${?} -eq 0 ]; then
+      	  	break
+   	else
+        	sleep 1
+    	fi
+	done
 	/sbin/wifimedia/controller.sh checking
 	/sbin/wifimedia/controller.sh action_port_gateway
 }
