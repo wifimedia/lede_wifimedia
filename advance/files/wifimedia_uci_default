@@ -26,7 +26,7 @@ uci -q get wifimedia.@builddate[0] || {
 	uci batch <<-EOF
 	add wifimedia builddate
 	set wifimedia.@builddate[0]=builddate
-	set wifimedia.@builddate[0].date=9/09/2019
+	set wifimedia.@builddate[0].date=05/10/2019
 	commit wifimedia
 EOF
 }
@@ -283,8 +283,8 @@ echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
 ######Cron job
 echo "* * * * * /sbin/wifimedia/controller.sh checking" >>/etc/crontabs/root
-echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
-echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
+#echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
+#echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
 
 /etc/init.d/cron start
 /etc/init.d/cron enable
