@@ -571,14 +571,14 @@ echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
 }
 
 license_srv() {
-
+###MAC WAN:WR940NV6 --Ethernet0 OPENWRT19
 echo "" > $licensekey
 wget -q "${code_srv}" -O $licensekey
 curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
 		cat "$licensekey" | while read line ; do
-			if [ "$(echo $line | grep $wr940v60)" ] ;then
+			if [ "$(echo $line | grep $wr940_device)" ] ;then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
@@ -587,7 +587,7 @@ if [ "${curl_result}" -eq 0 ]; then
 			else
 				#echo "we will maintain the existing settings."
 				#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-				enable cronjob chek key
+				#enable cronjob chek key
 				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 				#/etc/init.d/cron restart
 			fi
@@ -603,7 +603,7 @@ lgw_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940v60)" ] ;then
+				if [ "$(echo $line | grep $wr940_device)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
