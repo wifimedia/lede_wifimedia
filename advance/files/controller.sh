@@ -3,6 +3,11 @@
 # All rights reserved.
 
 . /sbin/wifimedia/variables.sh
+
+ip_public(){
+	PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`
+	#echo $PUBLIC_IP
+}
 wr840v4() { #checking internet
 
 	#check gateway
@@ -25,30 +30,32 @@ wr840v4() { #checking internet
 		echo none > trigger
 	fi
 }
-wr840v620() { #checking internet
+wr840v6() { #checking internet
 
 	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
-		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
-	else
-		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
-	fi
+	#ping -c 10 "8.8.8.8" > /dev/null
+	#if [ $? -eq "0" ];then
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/ #openwrt 18
+	#	echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger #Openwrt19
+		#echo timer > trigger
+	#else
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
+		#echo none > trigger
+	#	echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
+	#fi
 	
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		#echo timer > trigger
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
 	else
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
-		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/brightness
-		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/brightness
+		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
+		#echo none > trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
 	fi
 }
-
 
 wr841v14() { #checking internet
 
@@ -594,14 +601,16 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	if grep -q "." $licensekey; then
 		cat "$licensekey" | while read line ; do
-			if [ "$(echo $line | grep $wr940_device)" ] ;then
+			if [ "$(echo $line | grep $wr940v60)" ] ;then
 				#Update License Key
 				uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 				uci commit wifimedia
 				cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
 			else
-				echo "enable check key"
+				#echo "we will maintain the existing settings."
+				#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
+				enable cronjob chek key
 				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 				#/etc/init.d/cron restart
 			fi
@@ -617,16 +626,18 @@ lgw_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $gwkey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940_device)" ] ;then
+				if [ "$(echo $line | grep $wr940v60)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					uci commit wifimedia
 					licensegw
 				else
+					#enable cronjob chek key
 					echo "enable check key"
 					echo "0 0 * * * /sbin/wifimedia/controller.sh lgw_srv" > /etc/crontabs/wificode
 					#/etc/init.d/cron restart
+					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 				fi
 			done	
 		fi
@@ -664,7 +675,7 @@ fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		uci set wireless.radio0.disabled="0"
-		uci set wireless.radio1.disabled="0"
+		#uci set wireless.radio1.disabled="0"
 		uci commit wireless
 		wifi
 		#touch $status
@@ -797,36 +808,6 @@ cat "/tmp/eap_mac" | while read line ; do
 		fi
 	done	
 done
-}
-
-action_port_gateway(){
-echo "" > $find_mac_gateway
-wget -q "${blacklist}" -O $find_mac_gateway
-curl_result=$?
-if [ "${curl_result}" -eq 0 ]; then
-	cat "$find_mac_gateway" | while read line ; do
-		if [ "$(echo $line | grep $gateway_wr84x)" ] ;then
-			for i in 1 2 3 4 5 ; do
-				swconfig dev switch0 port $i set disable 1
-			done
-			swconfig dev switch0 set apply
-		fi
-	done	
-fi
-}
-
-action_wlan_dhcp_lan(){
-echo "" > $find_mac_gateway
-wget -q "${blacklist}" -O $find_mac_gateway
-curl_result=$?
-if [ "${curl_result}" -eq 0 ]; then
-	cat "$find_mac_gateway" | while read line ; do
-		if [ "$(echo $line | grep $wr940_device)" ] ;then
-			wifi down
-			ifdown lan
-		fi
-	done	
-fi
 }
 
 rssi() {
