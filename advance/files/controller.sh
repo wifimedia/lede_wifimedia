@@ -867,7 +867,6 @@ if [ "${curl_result}" -eq 0 ]; then
 fi
 }
 
-}
 rssi() {
 
 if [ $rssi_on == "1" ];then
