@@ -25,32 +25,30 @@ wr840v4() { #checking internet
 		echo none > trigger
 	fi
 }
-wr840v6() { #checking internet
+wr840v620() { #checking internet
 
 	#checking internet
-	#ping -c 10 "8.8.8.8" > /dev/null
-	#if [ $? -eq "0" ];then
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/ #openwrt 18
-	#	echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger #Openwrt19
-		#echo timer > trigger
-	#else
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		#echo none > trigger
-	#	echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
-	#fi
+	ping -c 10 "8.8.8.8" > /dev/null
+	if [ $? -eq "0" ];then
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
+	else
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
+	fi
 	
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		#echo timer > trigger
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
 	else
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		#echo none > trigger
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
+		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/brightness
+		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/brightness
 	fi
 }
+
 
 wr841v14() { #checking internet
 
@@ -799,6 +797,36 @@ cat "/tmp/eap_mac" | while read line ; do
 		fi
 	done	
 done
+}
+
+action_port_gateway(){
+echo "" > $find_mac_gateway
+wget -q "${blacklist}" -O $find_mac_gateway
+curl_result=$?
+if [ "${curl_result}" -eq 0 ]; then
+	cat "$find_mac_gateway" | while read line ; do
+		if [ "$(echo $line | grep $gateway_wr84x)" ] ;then
+			for i in 1 2 3 4 5 ; do
+				swconfig dev switch0 port $i set disable 1
+			done
+			swconfig dev switch0 set apply
+		fi
+	done	
+fi
+}
+
+action_wlan_dhcp_lan(){
+echo "" > $find_mac_gateway
+wget -q "${blacklist}" -O $find_mac_gateway
+curl_result=$?
+if [ "${curl_result}" -eq 0 ]; then
+	cat "$find_mac_gateway" | while read line ; do
+		if [ "$(echo $line | grep $wr940_device)" ] ;then
+			wifi down
+			ifdown lan
+		fi
+	done	
+fi
 }
 
 rssi() {
