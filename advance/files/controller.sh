@@ -179,8 +179,9 @@ checking (){
 	#	eap_manager
 	#elif [ "$model" == "TL-WR940N_v4" ];then
 	#	wr940v5
-	#elif [ "$model" == "TL-WR940N_v6" ];then
-	#	wr940v6
+	if [ "$model" == "TL-WR940N_v6" ];then
+		wr940v6
+	fi	
 	#elif [ "$eap_name" == "TL-WA901ND" ] ;then
 	#	wa901nd
 	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
