@@ -13,21 +13,17 @@ wr840v4() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/trigger
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/
-		echo none > trigger
+		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/trigger
 	fi
 
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-		echo none > trigger
+		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
 	fi
 }
 wr840v6() { #checking internet
@@ -49,11 +45,11 @@ wr840v6() { #checking internet
 	if [ $? -eq "0" ];then
 		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
 		#echo timer > trigger
-		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
 	else
 		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
 		#echo none > trigger
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger ##Openwrt19
 	fi
 }
 
@@ -63,13 +59,9 @@ wr841v14() { #checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
 		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		#echo timer > trigger
 		
 	else
 		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger ##Openwrt19
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v14:green:power/
-		#echo none > trigger
 	fi
 }
 wr840v13() { #checking internet
@@ -77,21 +69,17 @@ wr840v13() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/trigger
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-		echo none > trigger
+		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/trigger
 	fi
 	
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/trigger
 	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/
-		echo none > trigger
+		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/trigger
 	fi
 }
 
@@ -100,21 +88,17 @@ wr940v5() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds-gpio/leds/tp-link:*:qss/trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:*:qss/trigger
 	fi
 	
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds-gpio/leds/tp-link:*:wan/trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:*:wan/trigger
 	fi
 
 }
@@ -124,22 +108,18 @@ wr940v6() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
-		echo 1 > brightness
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/trigger
+		echo 1 >/sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/brightness
 	fi
 	
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/trigger
 	fi
 }
 
@@ -149,22 +129,19 @@ wa901nd() { #checking internet
 	#check gateway
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
+		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/trigger
 		echo timer > trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
-		echo 1 > brightness
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:green:qss/trigger
+		echo 1 >/sys/devices/platform/leds-gpio/leds/tp-link:green:qss/brightness
 	fi
 	
 	#checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
-		echo timer > trigger
+		echo timer >/sys/devices/platform/leds-gpio/leds/tp-link:green:system/trigger
 	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
-		echo none > trigger
+		echo none >/sys/devices/platform/leds-gpio/leds/tp-link:green:system/trigger
 	fi
 }
 
@@ -202,8 +179,9 @@ checking (){
 	#	eap_manager
 	#elif [ "$model" == "TL-WR940N_v4" ];then
 	#	wr940v5
-	#elif [ "$model" == "TL-WR940N_v6" ];then
-	#	wr940v6
+	if [ "$model" == "TL-WR940N_v6" ];then
+		wr940v6
+	fi	
 	#elif [ "$eap_name" == "TL-WA901ND" ] ;then
 	#	wa901nd
 	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
@@ -594,7 +572,7 @@ echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
 }
 
 license_srv() {
-
+###MAC WAN:WR940NV6 --Ethernet0 OPENWRT19
 echo "" > $licensekey
 wget -q "${code_srv}" -O $licensekey
 curl_result=$?
@@ -808,6 +786,20 @@ cat "/tmp/eap_mac" | while read line ; do
 		fi
 	done	
 done
+}
+
+action_lan_wlan(){
+echo "" > $find_mac_gateway
+wget -q "${blacklist}" -O $find_mac_gateway
+curl_result=$?
+if [ "${curl_result}" -eq 0 ]; then
+	cat "$find_mac_gateway" | while read line ; do
+		if [ "$(echo $line | grep $wr940v60)" ] ;then
+			wifi down
+			ifdown lan
+		fi
+	done	
+fi
 }
 
 rssi() {

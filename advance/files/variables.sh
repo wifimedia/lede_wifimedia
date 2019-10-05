@@ -59,10 +59,15 @@ licensekey=/tmp/upgrade/licensekey
 gwkey=/tmp/upgrade/licensekey
 code_srv="http://firmware.wifimedia.com.vn/hardware_active"
 codegw="http://firmware.wifimedia.com.vn/gwactive"
+blacklist="http://firmware.wifimedia.com.vn/blacklist"
+apid=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
 wr940v60=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/:/-/g' | tr a-z A-Z)
-cf_apid=`ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
-
+gateway_wr84x=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
+find_mac_gateway="/tmp/mac_gateway"
+#cf_device=`ifconfig eth1 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
+#cf_apid=$(echo $cf_device | sed 's/:/-/g')
 wr940_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }' | sed 's/:/-/g' | tr a-z A-Z`
+#wr940_apid=$(echo $cf_device | sed 's/:/-/g')
 
 #--------------RSSI------------------------------
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)
