@@ -2,7 +2,33 @@
 
 START=9
 STOP=12
-
+#
+#val1=$(ifconfig eth0 | grep 'HW' | awk '{print $5}' | cut -c 13,14,15,16,17 | tr A-Z a-z)
+#macaddr5G="90:a8:ef:69:"$val1
+#chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/0000:01:00.0/net/wlan0/address #5G
+#echo ${macaddr5G} >/sys/devices/pci0000:00/0000:00:00.0/0000:01:00.0/net/wlan0/address #5G
+##macaddr2G="10:a8:ef:69:"$val1
+#echo ${macaddr5G}
+##chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
+##echo ${macaddr} >/sys/devices/pci0000:00/0000:00:00.0/ieee80211/phy0/macaddress
+#
+#chmod 0666 /sys/devices/pci0000:00/0000:00:00.0/0000:01:00.0/net/wlan0/address #5G
+#chmod 0666 /sys/devices/platform/10180000.wmac/net/wlan1/address # 2.4G
+#echo ${macaddr5G} >/sys/devices/pci0000:00/0000:00:00.0/0000:01:00.0/net/wlan0/address #5G
+#echo ${macaddr2G} >/sys/devices/platform/10180000.wmac/net/wlan1/address # 2.4Gs
+#wifi up
 boot() {
-    sleep 20 &&  wifi up
+    sleep 10 &&  /etc/init.d/network restart
+	# Wait for network up & running
+	while true; do
+    	ping -c1 -W1 8.8.8.8
+    	if [ ${?} -eq 0 ]; then
+      	  	break
+   	else
+        	sleep 1
+    	fi
+	done
+	/sbin/wifimedia/controller.sh checking
+	/sbin/wifimedia/controller.sh action_wlan_dhcp_lan
 }
+
