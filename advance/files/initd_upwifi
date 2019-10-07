@@ -33,4 +33,3 @@ boot() {
 	/sbin/wifimedia/controller.sh checking
 	/sbin/wifimedia/controller.sh action_lan_wlan
 }
-
