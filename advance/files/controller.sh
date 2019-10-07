@@ -655,7 +655,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		uci set wireless.radio0.disabled="0"
 		#uci set wireless.radio1.disabled="0"
 		uci commit wireless
-		wifi
+		#wifi
 		#touch $status
 		rm $lcs
 		echo "Activated" >/etc/opt/license/status
@@ -711,7 +711,7 @@ if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifim
 	uci set wireless.radio0.disabled="0"
 	uci set wireless.radio1.disabled="0"
 	uci commit wireless
-	wifi
+	#wifi
 else
 	minute=`date | awk '{print $4}'|cut -c 4,5`
 	if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
@@ -725,7 +725,7 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		uci set wireless.radio0.disabled="0"
 		uci set wireless.radio1.disabled="0"
 		uci commit wireless
-		wifi
+		#wifi
 		rm $lcs
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
