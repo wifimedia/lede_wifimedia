@@ -48,14 +48,14 @@ define Package/gwls/install
 	$(INSTALL_BIN) ./files/initd_wifimedia_check $(1)/etc/init.d/wifimedia_check
 endef
 
-#define Package/gwls/postinst
-##!/bin/sh
-## check if we are on real system
-#if [ -z "${IPKG_INSTROOT}" ]; then
-#	echo "Fix the permissions for gwls"
-#	chmod a+x /usr/bin/license.sh
-#fi
-#exit 0
-#endef
+define Package/gwls/postinst
+#!/bin/sh
+# check if we are on real system
+if [ -z "${IPKG_INSTROOT}" ]; then
+	echo "Removing rc.d symlink for upwifi"
+	/etc/init.d/upwifi disable
+fi
+exit 0
+endef
 
 $(eval $(call BuildPackage,gwls))
