@@ -795,8 +795,8 @@ curl_result=$?
 if [ "${curl_result}" -eq 0 ]; then
 	cat "$find_mac_gateway" | while read line ; do
 		if [ "$(echo $line | grep $wr940_device)" ] ;then
-			wifi down
 			ifdown lan
+			wifi down
 		fi
 	done	
 fi

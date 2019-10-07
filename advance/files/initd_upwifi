@@ -18,7 +18,9 @@ STOP=12
 #echo ${macaddr2G} >/sys/devices/platform/10180000.wmac/net/wlan1/address # 2.4Gs
 #wifi up
 boot() {
-    /etc/init.d/network restart
+    #/etc/init.d/network restart
+	wifi up
+	sleep 5
 	# Wait for network up & running
 	while true; do
     	ping -c1 -W1 8.8.8.8
