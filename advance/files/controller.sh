@@ -484,25 +484,12 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		echo "Activated" >/etc/opt/license/status
 		echo "" >/etc/crontabs/wificode
 		/etc/init.d/cron restart
-		#if [ -f /etc/rc.d/S80privoxy ]; then
-		#	/etc/init.d/privoxy  stop
-		#	/etc/init.d/privoxy disable
-		#	chmod +x /etc/init.d/privoxy			
-		#fi
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
 		uci set wireless.radio1.disabled="1"
 		uci commit wireless
 		wifi down
-		#if [ -f /etc/rc.d/S80privoxy ]; then
-		#	/etc/init.d/privoxy  stop
-		#	/etc/init.d/privoxy disable
-		#	chmod -x /etc/init.d/privoxy
-		#	/etc/init.d/firewall restart
-		#	
-		#fi
-		#rm $status
 	fi
 fi
 }
