@@ -23,15 +23,15 @@ boot() {
     #sleep 10 && /sbin/wifimedia/controller_srv.sh upgrade_srv && /sbin/wifimedia/updates.sh && /sbin/wifimedia/preauthenticated_rules.sh >/dev/null 2>&1
 	
 	if [ -e "$lcs" ];then
-		if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
-			/sbin/wifimedia/controller.sh lgw_srv >/dev/null 2>&1
-		else 
+		#if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_v14" ]; then
+		#	/sbin/wifimedia/controller.sh lgw_srv >/dev/null 2>&1
+		#else 
 			/sbin/wifimedia/controller.sh license_srv >/dev/null 2>&1
-		fi
+		#fi
 	fi
 	
-	if [ -e /etc/config/meshdesk ];then
-		sbin/wifimedia/controller.sh meshdesk >/dev/null 2>&1
-	fi
+	#if [ -e /etc/config/meshdesk ];then
+	#	sbin/wifimedia/controller.sh meshdesk >/dev/null 2>&1
+	#fi
 	
 }
