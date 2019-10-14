@@ -22,8 +22,8 @@ NET_ID="lan"
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-crm.wifimedia.vn/back_end}
-#redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
-#redirecturl_default=${redirecturl:-https://google.com.vn}
+redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
+redirecturl_default=${redirecturl:-https://google.com.vn}
 cpn_keys=`uci -q get wifimedia.@nodogsplash[0].cpn_key`
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
 maxclients=`uci -q get wifimedia.@nodogsplash[0].maxclients`
@@ -51,7 +51,7 @@ else
 
 	#uci set nodogsplash.@nodogsplash[0].enabled='1'
 	#uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
-	#uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
+	uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 	uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
 	uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_default";
 	uci set nodogsplash.@nodogsplash[0].authidletimeout="$authidletimeout_default";
