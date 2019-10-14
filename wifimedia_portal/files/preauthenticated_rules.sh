@@ -21,9 +21,10 @@ NET_ID="lan"
 #IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
-domain_default=${domain:-portal.nextify.vn/splash}
+domain_default=${domain:-crm.wifimedia.vn/back_end}
 #redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
 #redirecturl_default=${redirecturl:-https://google.com.vn}
+cpn_keys=`uci -q get wifimedia.@nodogsplash[0].cpn_key`
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
 maxclients=`uci -q get wifimedia.@nodogsplash[0].maxclients`
 maxclients_default=${maxclients:-250}
@@ -58,7 +59,7 @@ else
 	uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 	uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 	# Whitelist IP
-	for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do
+	for i in wifimedia.vn crm.wifimedia.vn $walledgadent; do
 		nslookup ${i} 8.8.8.8 2> /dev/null | \
 			grep 'Address ' | \
 			grep -v '127\.0\.0\.1' | \
@@ -151,14 +152,15 @@ else
 		  <title>$gatewayname</title>
 	  </head>
 	  <body>
-		  <form id="info" method="POST" action="//'$domain_default'">
-			  <input type="hidden" name="gateway_name" value="$gatewayname">
-			  <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
-			  <input type="hidden" name="client_mac" value="$clientmac">
-			  <input type="hidden" name="num_clients" value="$nclients">
-			  <input type="hidden" name="uptime" value="$uptime">
-			  <input type="hidden" name="auth_target" value="$authtarget">
-		  </form>
+      <form id="info" method="POST" action="//'$domain_default'/'$cpn_keys'/1">
+          <input type="hidden" name="gateway_name" value="$gatewayname">
+          <input type="hidden" name="gateway_mac" value="$gatewaymac">
+          <input type="hidden" name="client_mac" value="$clientmac">
+          <input type="hidden" name="num_clients" value="$nclients">
+          <input type="hidden" name="uptime" value="$uptime">
+		  <input type="hidden" name="splashcheck" value="1">
+          <input type="hidden" name="auth_target" value="$authtarget">
+      </form>
 		  <script>
 			  document.getElementById("info").submit();
 		  </script>
@@ -171,7 +173,7 @@ else
 		<head>
 			<meta charset="utf-8">
 			<title>Whoops...</title>
-			<meta http-equiv="refresh" content="0; url="//'$domain'">
+			<meta http-equiv="refresh" content="0; url="//crm.wifimedia.vn">
 			<style>
 				html {
 					background: #F7F7F7;
