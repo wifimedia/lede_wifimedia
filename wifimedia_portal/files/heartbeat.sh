@@ -2,16 +2,9 @@
 
 # Lấy thông tin từ nodogsplash
 ndsctl status > /tmp/ndsctl_status.txt
-
-
-# Update lại trạng thái đèn led
 if [ ${?} -eq 0 ]; then
-    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-    #echo 1 > brightness
 	echo "Nodogsplash running"
 else
-    #cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-    #echo 0 > brightness
 	echo "Nodogsplash crash"
     # Tự động bật lại nodogsplash nếu crash
 	while true; do
@@ -78,7 +71,10 @@ md5ndsconfig=`uci -q get wifimedia.@nodogsplash[0].md5sum`
 checkmd5file=`md5sum /tmp/config_setting | awk '{print $1}'`
 
 setting_config() {
-	
+	local network_1=$(uci -q get wireless.default_radio0.network)
+	local network_2=$(uci -q get wireless.default_radio1.network)
+	local md5ndsconfig=`uci -q get wifimedia.@nodogsplash[0].md5sum`
+	local checkmd5file=`md5sum /tmp/config_setting | awk '{print $1}'`
 	while read line;do
 	
 		if [ "$(echo $line | grep SSID:)" ];then
