@@ -802,8 +802,49 @@ if [ "${curl_result}" -eq 0 ]; then
 fi
 }
 
-rssi() {
+get_captive_portal_clients() {
+     #trap "error_trap get_captive_portal_clients '$*'" $GUARD_TRAPS
+     local line
+     local key
+     local value
+     local ip_address=
+     local mac_address=
+     local connection_timestamp=
+     local activity_timestamp=
+     local traffic_download=
+     local traffic_upload=
+     # erzwinge eine leere Zeile am Ende fuer die finale Ausgabe des letzten Clients
+     (ndsctl clients; echo) | while read line; do
+         key=$(echo "$line" | cut -f 1 -d =)
+         value=$(echo "$line" | cut -f 2- -d =)
+         [ "$key" = "ip" ] && ip_address="$value"
+         [ "$key" = "mac" ] && mac_address="$value"
+         [ "$key" = "added" ] && connection_timestamp="$value"
+         [ "$key" = "active" ] && activity_timestamp="$value"
+         [ "$key" = "downloaded" ] && traffic_download="$value"
+         [ "$key" = "uploaded" ] && traffic_upload="$value"
+         if [ -z "$key" -a -n "$ip_address" ]; then
+             # leere Eingabezeile trennt Clients: Ausgabe des vorherigen Clients
+             printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
+                 "$ip_address" "$mac_address" "$connection_timestamp" \
+                 "$activity_timestamp" "$traffic_download" "$traffic_upload"
+	     data=";$mac_address"
+	     echo $data >>/tmp/captive_portal_clients
+             ip_address=
+             mac_address=
+             connection_timestamp=
+             activity_timestamp=
+             traffic_download=
+             traffic_upload=
+         fi
+     done
+	 clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
+	###2>/dev/null
+	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
+    rm /tmp/captive_portal_clients	
+ }
 
+rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
 	level=$(uci -q get wifimedia.@wireless[0].level)
