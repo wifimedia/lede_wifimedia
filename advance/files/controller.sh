@@ -788,7 +788,34 @@ if [ "${curl_result}" -eq 0 ]; then
 	done	
 fi
 }
- 
+##Sent Client MAC to server Nextify
+get_client_connect_wlan(){
+	NEWLINE_IFS='
+'
+	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
+	signal=''
+	host=''
+	mac=''
+	touch /tmp/client_connect_wlan
+	for iface in `iw dev | grep Interface | awk '{print $2}'`; do
+		for line in `iwinfo $iface assoclist`; do
+			if echo "$line" | grep -q "SNR"; then
+				if [ -f /etc/ethers ]; then
+					mac=$(echo $line | awk '{print $1}' FS=" ")
+					host=$(awk -v MAC=$mac 'tolower($1)==MAC {print $1}' FS=" " /etc/ethers)
+					data=";$mac"
+					echo $data >>/tmp/client_connect_wlan
+				fi
+			fi
+		done
+	done
+	IFS="$OLD_IFS"
+	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;/,/g'| tr a-z A-Z)
+	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around -O /dev/null
+	echo $client_connect_wlan
+	rm /tmp/client_connect_wlan
+}
+
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
