@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-#Value
+#Variable
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_ADDR_FB=/tmp/preauthenticated_addr_fb
@@ -10,7 +10,7 @@ PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
 NET_ID="lan"
 #FW_ZONE="nextify"
 #IFNAME="nextify0.1" #VLAN1
-walledgadent=`uci get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
+walledgadent=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
 #redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
@@ -31,10 +31,10 @@ ctv=`expr $checkinterval_default \* 60`
 https=`uci -q get wifimedia.@nodogsplash[0].https`
 facebook=`uci -q get wifimedia.@nodogsplash[0].facebook`
 MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
-nds_status=`uci get nodogsplash.@nodogsplash[0].enabled`
+nds_status=`uci -q get nodogsplash.@nodogsplash[0].enabled`
 source /lib/functions/network.sh
 config_captive_portal() {
-	if [ "$nds_status" == "0" ];then
+	if [ $nds_status -eq 0 ];then
 		/etc/init.d/nodogsplash stop
 		/etc/init.d/firewall restart
 		exit;
@@ -135,53 +135,8 @@ config_captive_portal() {
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 443"	
 		uci commit nodogsplash
 		rm -f $PREAUTHENTICATED_ADDRS $PREAUTHENTICATED_ADDR_FB
-		#write file splash
-		echo '<!doctype html>
-		<html lang="en">
-		  <head>
-			  <meta charset="utf-8">
-			  <title>$gatewayname</title>
-		  </head>
-		  <body>
-			  <form id="info" method="POST" action="//'$domain_default'">
-				  <input type="hidden" name="gateway_name" value="$gatewayname">
-				  <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
-				  <input type="hidden" name="client_mac" value="$clientmac">
-				  <input type="hidden" name="num_clients" value="$nclients">
-				  <input type="hidden" name="uptime" value="$uptime">
-				  <input type="hidden" name="auth_target" value="$authtarget">
-			  </form>
-			  <script>
-				  document.getElementById("info").submit();
-			  </script>
-		  </body>
-		</html>' >/etc/nodogsplash/htdocs/splash.html
 
-		#write file infoskel
-		echo '<!doctype html>
-		<html lang="en">
-			<head>
-				<meta charset="utf-8">
-				<title>Whoops...</title>
-				<meta http-equiv="refresh" content="0; url="//'$domain'">
-				<style>
-					html {
-						background: #F7F7F7;
-					}
-				</style>
-			</head>
-			<body></body>
-		</html>' >/etc/nodogsplash/htdocs/status.html
-
-		relay=`uci -q get network.local`
-		uci del network.local.network
-		if [ $relay != "" ];then
-			uci add_list network.local.network='lan'
-			uci add_list network.local.network='wan'
-			uci commit network
-			#/etc/init.d/network restart
-		fi
-
+		dhcp_extension
 		wifi
 		/etc/init.d/nodogsplash stop
 		sleep 5
@@ -189,7 +144,6 @@ config_captive_portal() {
 
 	fi
 }
-
 
 captive_portal_restart(){
 	# Get status nodogsplash
@@ -297,10 +251,63 @@ get_config(){
 	if [ "$md5ndsconfig" != "$checkmd5file" ];then
 		echo "new config .........."
 		
-		uci -q set wifimedia.@nodogsplash[0].md5sum=$checkmd5file
+		uci set wifimedia.@nodogsplash[0].md5sum=$checkmd5file
 		uci commit wifimedia
 		setting_config
 	else
 		echo "maintain the existing settings "
 	fi
 }
+
+write_logiin(){
+
+	#write file splash
+	echo '<!doctype html>
+	<html lang="en">
+	  <head>
+		  <meta charset="utf-8">
+		  <title>$gatewayname</title>
+	  </head>
+	  <body>
+		  <form id="info" method="POST" action="//'$domain_default'">
+			  <input type="hidden" name="gateway_name" value="$gatewayname">
+			  <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
+			  <input type="hidden" name="client_mac" value="$clientmac">
+			  <input type="hidden" name="num_clients" value="$nclients">
+			  <input type="hidden" name="uptime" value="$uptime">
+			  <input type="hidden" name="auth_target" value="$authtarget">
+		  </form>
+		  <script>
+			  document.getElementById("info").submit();
+		  </script>
+	  </body>
+	</html>' >/etc/nodogsplash/htdocs/splash.html
+
+	#write file infoskel
+	echo '<!doctype html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<title>Whoops...</title>
+			<meta http-equiv="refresh" content="0; url="//'$domain'">
+			<style>
+				html {
+					background: #F7F7F7;
+				}
+			</style>
+		</head>
+		<body></body>
+	</html>' >/etc/nodogsplash/htdocs/status.html
+}
+
+dhcp_extension(){
+	relay=`uci -q get network.local`
+	uci del network.local.network
+	if [ $relay != "" ];then
+		uci add_list network.local.network='lan'
+		uci add_list network.local.network='wan'
+		uci commit network
+		#/etc/init.d/network restart
+	fi
+}
+"$@"
