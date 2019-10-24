@@ -165,7 +165,7 @@ captive_portal_restart(){
 	fi
 }
 
-total_clients(){
+heartbeat(){
 	MAC=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 	UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
 	NUM_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Client authentications since start' | cut -d':' -f2 | xargs)
