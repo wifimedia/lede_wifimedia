@@ -11,9 +11,7 @@ local uci = require "luci.model.uci".cursor()
 m = Map("wifimedia",translate(""))
 m.apply_on_parse = true
 function m.on_apply(self)
-		luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh >/dev/null")
-		--luci.util.exec("/etc/init.d/network reload >/dev/null")
-		--luci.util.exec("sleep 15 && reboot >/dev/null")
+	luci.util.exec("/sbin/wifimedia/captive_portal.sh config_captive_portal >/dev/null")
 end
 
 s = m:section(TypedSection, "nodogsplash", "")
