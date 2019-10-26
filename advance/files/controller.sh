@@ -844,7 +844,11 @@ fi
 }
 
 monitor_port(){
-
+swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
+	echo ";$line" >>/tmp/monitor_port
+done
+ports_data==$(cat /tmp/monitor_port | xargs| sed 's/;/,/g')
+wget --post-data="ports_data=${ports_data}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around -O >/dev/null
 }
 
 get_captive_portal_clients() {
