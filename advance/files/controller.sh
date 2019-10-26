@@ -843,6 +843,10 @@ if [ "${curl_result}" -eq 0 ]; then
 fi
 }
 
+monitor_port(){
+
+}
+
 get_captive_portal_clients() {
      #trap "error_trap get_captive_portal_clients '$*'" $GUARD_TRAPS
      local line
