@@ -151,10 +151,10 @@ licensegw() {
 			/etc/init.d/cron restart
 			echo "Activated" >/etc/opt/license/status
 		else
-			minute=`date | awk '{print $4}'|cut -c 4,5`
-			if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
-				reboot
-			fi
+			#minute=`date | awk '{print $4}'|cut -c 4,5`
+			#if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
+			#	reboot
+			#fi
 			echo "Wrong License Code & auto reboot" >/etc/opt/license/status
 			#rm $status
 			
