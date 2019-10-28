@@ -9,8 +9,6 @@ ip_public(){
 	#echo $PUBLIC_IP
 }
 
-
-
 meshdesk(){
 	dnsctl=$(uci -q get meshdesk.internet1.dns)
 	ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
