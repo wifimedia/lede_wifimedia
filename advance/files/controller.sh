@@ -218,6 +218,17 @@ action_lan_wlan(){
 		done	
 	fi
 }
+
+monitor_port(){
+swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
+	echo "$line," >>/tmp/monitor_port
+done
+ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
+echo $ports_data
+wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_post -O /dev/null
+rm /tmp/monitor_port
+}
+
 ##Sent Client MAC to server Nextify
 get_client_connect_wlan(){
     ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
@@ -242,6 +253,7 @@ get_client_connect_wlan(){
 	done
 	IFS="$OLD_IFS"
 	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;/,/g'| tr a-z A-Z)
+	#monitor_port
 	wget --post-data="clients=${client_connect_wlan}&vpn=${ip_opvn}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around -O /dev/null
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
