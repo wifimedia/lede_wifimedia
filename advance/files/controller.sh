@@ -37,7 +37,9 @@ wr840v620() { #checking internet
 	ping -c 10 "8.8.8.8" > /dev/null
 	if [ $? -eq "0" ];then
 		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
-		echo 250 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/delay_on
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wlan/trigger
+		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/trigger
+		echo 250 >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wlan/delay_on
 		echo 100 >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange:wan/delay_on
 	else
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
@@ -49,6 +51,7 @@ wr840v620() { #checking internet
 	if [ $? -eq "0" ];then
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
 	else
+		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
 		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger
 		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/brightness
 		echo 1 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/brightness
