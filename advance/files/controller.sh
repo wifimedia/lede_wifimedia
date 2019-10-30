@@ -39,7 +39,7 @@ wr840v620() { #checking internet
 		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
 		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/trigger
-		echo 350 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/delay_on
+		echo 650 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/delay_on
 		echo 450 >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wan/delay_on
 	else
 		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:orange\:wan/trigger
