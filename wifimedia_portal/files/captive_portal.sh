@@ -12,7 +12,7 @@ NET_ID="lan"
 #IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
-domain_default=${domain:-portal.nextify.vn/splash}
+domain_default=${domain:-tplink-dev.telitads.vn}
 #redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
 #redirecturl_default=${redirecturl:-https://google.com.vn}
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
@@ -50,7 +50,7 @@ config_captive_portal() {
 		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 		uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 		# Whitelist IP
-		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do
+		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn tplink-dev.telitads.vn $walledgadent; do
 			nslookup ${i} 8.8.8.8 2> /dev/null | \
 				grep 'Address ' | \
 				grep -v '127\.0\.0\.1' | \
@@ -174,10 +174,10 @@ heartbeat(){
 	#TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
-	wget -q --timeout=3 \
-		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
-		 -O /tmp/config_setting
-	get_config	 
+	#wget -q --timeout=3 \
+	#	 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
+	#	 -O /tmp/config_setting
+	#get_config	 
 }
 
 setting_config() {
@@ -284,11 +284,11 @@ get_captive_portal_clients() {
              traffic_download=
              traffic_upload=
          fi
-     done
-	 clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
+    done
+	#clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
 	###2>/dev/null
-	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
-    rm /tmp/captive_portal_clients	
+	#wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
+    #rm /tmp/captive_portal_clients	
  }
  
 get_config(){
