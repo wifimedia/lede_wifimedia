@@ -314,7 +314,6 @@ write_login(){
 	  </head>
 	  <body>
 		  <form id="info" method="POST" action="//'$domain_default'">
-			  <input type="hidden" name="gateway_name" value="$gatewayname">
 			  <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
 			  <input type="hidden" name="client_mac" value="$clientmac">
 			  <input type="hidden" name="num_clients" value="$nclients">

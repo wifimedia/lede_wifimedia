@@ -25,7 +25,6 @@ echo '<!doctype html>
   </head>
   <body>
       <form id="info" method="GET" action="//'$domain_default'">
-          <input type="hidden" name="gateway_name" value="$gatewayname">
           <input type="hidden" name="gateway_mac" value="'$MAC_E0'">
           <input type="hidden" name="client_mac" value="$clientmac">
           <input type="hidden" name="num_clients" value="$nclients">
@@ -165,7 +164,7 @@ EOF
 #EOF
 /etc/init.d/nodogsplash disable
 uci set nodogsplash.@nodogsplash[0].enabled='0'
-uci set nodogsplash.@nodogsplash[0].gatewayname="Nextify CRM";
+#uci set nodogsplash.@nodogsplash[0].gatewayname="Nextify CRM";
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
