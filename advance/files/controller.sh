@@ -129,55 +129,6 @@ wr940v5() { #checking internet
 
 }
 
-wr940v6() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:orange:diag/
-		echo 1 > brightness
-		echo none > trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:blue:wan/
-		echo none > trigger
-	fi
-}
-
-
-wa901nd() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:qss/
-		echo 1 > brightness
-		echo none > trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:green:system/
-		echo none > trigger
-	fi
-}
-
 asus56u(){
 	ping -c 3 "$gateway" > /dev/null
 	if [ $? -eq "0" ];then
