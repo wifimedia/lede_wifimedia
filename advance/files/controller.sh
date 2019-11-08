@@ -8,28 +8,6 @@ ip_public(){
 	PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`
 	#echo $PUBLIC_IP
 }
-wr840v4() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/
-		echo none > trigger
-	fi
-
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-		echo none > trigger
-	fi
-}
 
 wr840v620() { #checking internet
 
@@ -82,87 +60,6 @@ wr841v14() { #checking internet
 	fi	
 }
 
-wr840v13() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/
-		echo none > trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/
-		echo none > trigger
-	fi
-}
-
-wr940v5() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo none > trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo none > trigger
-	fi
-
-}
-
-asus56u(){
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
-		echo none > trigger
-		echo 1 > brightness
-	fi
-}
-
-meshdesk(){
-dnsctl=$(uci -q get meshdesk.internet1.dns)
-ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
-if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
-	uci set meshdesk.internet1.ip=$ip
-	uci commit meshdesk
-fi
-}
-#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-19)
-#
-#eap(){
-#if [ "$eap_name" == "TL-WA901ND" ] ;then
-#	ping -c 3 "$gateway" > /dev/null
-#	if [ $? -eq "0" ];then
-#		echo "dhcp client"
-#	else
-#		uci set network.lan
-#		
-#	fi
-#fi
-#}
-
 checking (){
 	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
@@ -180,54 +77,6 @@ checking (){
 	source /lib/functions/network.sh ; if network_get_ipaddr addr "wan"; then echo "WAN: $addr" >/tmp/ipaddr; fi
 	#pidhostapd=`pidof hostapd`
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
-}
-
-groups_cfg(){
-echo "" > $devices_cfg
-echo "" > $group_cfg
-if [ "$gpd_en" == "1" ];then
-	echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices_cfg
-fi
-
-if [ "$groups_en" == "1" ];then
-	echo "ESSID: $essid" > $group_cfg
-	echo "MODE: $mode_" >> $group_cfg
-	echo "NETWORK: $networks_" >> $group_cfg
-	echo "CLN: $cnl" >> $group_cfg
-	echo "HIDE: $hide_ssid" >>$group_cfg
-	echo "BRIDGE: $br_network" >>$group_cfg
-	if [ $enable_rssi == "1" ];then
-		echo "RSSI: $rssi" >>$group_cfg
-	else
-		echo "RSSI:" >>$group_cfg
-	fi	
-	#echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
-	echo "Isolation: $isolation_" >> $group_cfg
-	echo "TxPower: $txpower_" >> $group_cfg
-	echo "Wireless_off: $wireless_off" >> $group_cfg
-	if [ $encr == "encryption" ] ; then
-		echo "PASSWORD: $passwd" >> $group_cfg
-		echo "FT: $ft" >> $group_cfg
-	fi	
-	if [ $ft == "ieee80211r" ] ; then
-		echo "NASID: $nasid" >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices_cfg
-	else 
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices_cfg
-	fi
-
-	if [ $admins_ == "1" ] ; then
-		echo "admin: $passwd_" >> $group_cfg
-	fi
-fi
-
-if [ "$reboot" == "1" ]; then
-	echo "Reboot: $reboot $hour_ $minute_ " >> $group_cfg
-fi
-#ap_manager
-echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
-
 }
 
 license_srv() {
@@ -302,52 +151,6 @@ if [ "$uptime" -gt 15 ]; then #>15days
 fi
 }
 
-eap_manager() {
-
-rm -f /tmp/eap_mac
-rm -f /tmp/eap
-cat "$eap_device" | while read line ; do
-	mac=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f1-5)
-	maclast=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f6)
-	#echo $maclast
-	zero=$(echo $maclast | cut -c 1)
-	echo $zero
-	#echo "Mac address= $mac:$maclast"
-
-	decmac=$(echo "ibase=16; $maclast"|bc)
-	if [ $decmac -eq '241' ]
-	then
-	macinc='00'
-	else
-	incout=`expr $decmac + 1 `
-	macinc=$(echo "obase=16; $incout"|bc)
-
-	fi
-		
-	if [ $zero -eq '0' ];then
-		#echo "Mac address= $mac:$zero$macinc"
-		echo "$mac:$zero$macinc" >>/tmp/eap_mac
-	else
-		#echo "Mac address= $mac:$macinc"
-		echo "$mac:$macinc" >>/tmp/eap_mac
-	fi
-done
-#EXPORT DATA AP IP MAC
-cat "/tmp/eap_mac" | while read line ; do
-
-	#linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	#arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-	#echo $linedeap
-	eapmac=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	cat "/proc/net/arp" | while read line ; do
-		arpmac=$(echo $line | awk '{print $4}' | sed 's/-/:/g' )
-		if [ "$eapmac" == "$arpmac" ] ;then
-			echo $line | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-		fi
-	done	
-done
-}
-
 disable_3_port(){
 	for i in 2 3 4; do
 		swconfig dev switch0 port $i set disable 1
@@ -381,48 +184,6 @@ wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_p
 rm /tmp/monitor_port
 }
 
-get_captive_portal_clients() {
-     #trap "error_trap get_captive_portal_clients '$*'" $GUARD_TRAPS
-     local line
-     local key
-     local value
-     local ip_address=
-     local mac_address=
-     local connection_timestamp=
-     local activity_timestamp=
-     local traffic_download=
-     local traffic_upload=
-     # erzwinge eine leere Zeile am Ende fuer die finale Ausgabe des letzten Clients
-     (ndsctl clients; echo) | while read line; do
-         key=$(echo "$line" | cut -f 1 -d =)
-         value=$(echo "$line" | cut -f 2- -d =)
-         [ "$key" = "ip" ] && ip_address="$value"
-         [ "$key" = "mac" ] && mac_address="$value"
-         [ "$key" = "added" ] && connection_timestamp="$value"
-         [ "$key" = "active" ] && activity_timestamp="$value"
-         [ "$key" = "downloaded" ] && traffic_download="$value"
-         [ "$key" = "uploaded" ] && traffic_upload="$value"
-         if [ -z "$key" -a -n "$ip_address" ]; then
-             # leere Eingabezeile trennt Clients: Ausgabe des vorherigen Clients
-             printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
-                 "$ip_address" "$mac_address" "$connection_timestamp" \
-                 "$activity_timestamp" "$traffic_download" "$traffic_upload"
-	     data=";$mac_address"
-	     echo $data >>/tmp/captive_portal_clients
-             ip_address=
-             mac_address=
-             connection_timestamp=
-             activity_timestamp=
-             traffic_download=
-             traffic_upload=
-         fi
-     done
-	 clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
-	###2>/dev/null
-	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
-    rm /tmp/captive_portal_clients	
- }
- 
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
