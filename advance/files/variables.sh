@@ -28,8 +28,6 @@ global_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }'`
 #--------------RSSI------------------------------
 rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 #------------------------------------------------
-#eap_manager
-eap_device="/www/luci-static/resources/devices.txt"
 #---------------controller online----------------
 hardware=/tmp/upgrade/hardware
 url_srv="http://firmware.wifimedia.com.vn/hardware"
