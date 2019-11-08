@@ -95,7 +95,7 @@ if [ "$model_hardware" == "TL-WR840N_v6" ] || [ "$model_hardware" == "TL-WR841N_
 		#set wireless.@wifi-iface[0].maxassoc=30
 		set wireless.@wifi-iface[0].ssid="LoopPos"
 		#set wireless.@wifi-iface[0].ssid=WIFIMEDIA_$rnd
-		set wireless.@wifi-iface[0].ssid=WIFIMEDIA.VN
+		#set wireless.@wifi-iface[0].ssid=WIFIMEDIA.VN
 		set wireless.@wifi-iface[0].encryption="psk2"
 		set wireless.@wifi-iface[0].key="loopposA@"
 		#set wireless.@wifi-iface[0].disabled=0
