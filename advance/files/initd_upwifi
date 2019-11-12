@@ -18,6 +18,8 @@ STOP=12
 #echo ${macaddr2G} >/sys/devices/platform/10180000.wmac/net/wlan1/address # 2.4Gs
 #wifi up
 boot() {
+#turn off power USB3.0
+    echo 0 >/sys/class/gpio/power_usb3/value
     sleep 5 && /etc/init.d/network restart
 	# Wait for network up & running
 	while true; do
