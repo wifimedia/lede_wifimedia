@@ -303,4 +303,15 @@ fi #END RSSI
 
 }
 
+dhcp_extension(){
+	relay=`uci -q get network.local`
+	uci del network.local.network
+	if [ $relay != "" ];then
+		uci add_list network.local.network='lan'
+		uci add_list network.local.network='wan'
+		uci commit network
+		#/etc/init.d/network restart
+	fi
+}
+
 "$@"
