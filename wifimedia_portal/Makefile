@@ -24,6 +24,7 @@ define Package/wifimedia_portal
   MENU:=1
   PKGARCH:=all
   MAINTAINER:=DungTD <dungtd8x@gmail.com>
+  DEPENDS:=+relayd
 endef
 
 define Package/wifimedia_portal/description
