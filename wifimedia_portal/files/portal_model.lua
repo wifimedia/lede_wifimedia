@@ -33,7 +33,7 @@ s:taboption( "advance",Value, "checkinterval","Checkinterval","Default: 10 Mins"
 s:taboption( "basic",Flag, "facebook","Bypass Facebook")
 s:taboption( "basic",Flag, "https","Bypass https")
 dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
-dhcpextension.rmempty = false
+dhcpextension.rmempty = falsmaie
 		
 cpn = s:taboption( "basic",Flag, "cpn","CPN Clients detect")
 cpn.rmempty = false
@@ -61,9 +61,9 @@ function dhcpextension.remove() end
 
 function cpn.write(self, section, value)
 if value == self.enabled then
-		luci.sys.call("echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
-	else
 		luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
+	--else
+	--	luci.sys.call("echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
 	end
 	return Flag.write(self, section, value)
 end
@@ -116,7 +116,8 @@ t:option(DummyValue, "status","Captive portal status")
 	  function enable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
 			luci.sys.call("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit nodogsplash")
-			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
+			luci.sys.call("echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
+			--luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "services", "wifimedia_portal")
