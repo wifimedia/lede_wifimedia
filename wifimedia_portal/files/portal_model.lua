@@ -104,7 +104,7 @@ t:option(DummyValue, "status","Captive portal status")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash disable && /etc/init.d/nodogsplash stop")
 			luci.http.redirect(
-            		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
+            		luci.dispatcher.build_url("admin", "services", "wifimedia_portal")
 			)			
 	  end
 	else
@@ -116,7 +116,7 @@ t:option(DummyValue, "status","Captive portal status")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
-            		luci.dispatcher.build_url("admin", "wifimedia", "wifimedia_portal")
+            		luci.dispatcher.build_url("admin", "services", "wifimedia_portal")
 			)			
 	  end
 	end
