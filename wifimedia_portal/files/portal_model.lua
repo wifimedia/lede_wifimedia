@@ -35,6 +35,9 @@ s:taboption( "basic",Flag, "https","Bypass https")
 dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
 dhcpextension.rmempty = false
 		
+cpn = s:taboption( "basic",Flag, "cpn","CPN Clients detect")
+cpn.rmempty = false
+		
 function dhcpextension.write(self, section, value)
 if value == self.enabled then
 		luci.sys.call("uci set network.local='interface'")
@@ -55,6 +58,17 @@ if value == self.enabled then
 end
 		-- retain server list even if disabled
 function dhcpextension.remove() end
+
+function cpn.write(self, section, value)
+if value == self.enabled then
+		luci.sys.call("echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
+	else
+		luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
+	end
+	return Flag.write(self, section, value)
+end
+		-- retain server list even if disabled
+function cpn.remove() end
 
 
 local pid = luci.util.exec("pidof nodogsplash")
