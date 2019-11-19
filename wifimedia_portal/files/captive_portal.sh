@@ -141,8 +141,8 @@ config_captive_portal() {
 		/etc/init.d/nodogsplash stop
 		sleep 5
 		/etc/init.d/nodogsplash start
-
 	fi
+	cpn_detect
 }
 
 captive_portal_restart(){
@@ -354,4 +354,12 @@ dhcp_extension(){
 		#/etc/init.d/network restart
 	fi
 }
+
+cpn_detect(){
+	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpn`
+	if [ $cpn_status -eq 0 ];then
+		echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart
+	fi
+}
+
 "$@"
