@@ -85,6 +85,7 @@ device_fw=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z
 url_fw="http://firmware.wifimedia.com.vn/tplink/$board_name.bin"
 url_v="http://firmware.wifimedia.com.vn/tplink/version"
 link_post=`uci -q get wifimedia.@server[0].links`
+cpn_url=`uci -q get wifimedia.@nodogsplash[0].server`
 #echo "Waiting a bit..."
 #sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 if [ ! -d "/tmp/upgrade" ]; then mkdir /tmp/upgrade; fi

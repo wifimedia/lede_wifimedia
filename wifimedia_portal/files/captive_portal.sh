@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 #Variable
 NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
@@ -50,7 +49,7 @@ config_captive_portal() {
 		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 		uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 		# Whitelist IP
-		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn $walledgadent; do
+		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn tplink-dev.telitads.vn $walledgadent; do
 			nslookup ${i} 8.8.8.8 2> /dev/null | \
 				grep 'Address ' | \
 				grep -v '127\.0\.0\.1' | \
@@ -141,8 +140,8 @@ config_captive_portal() {
 		/etc/init.d/nodogsplash stop
 		sleep 5
 		/etc/init.d/nodogsplash start
-
 	fi
+	cpn_detect
 }
 
 captive_portal_restart(){
@@ -174,10 +173,10 @@ heartbeat(){
 	#TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
-	wget -q --timeout=3 \
-		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
-		 -O /tmp/config_setting
-	get_config	 
+	#wget -q --timeout=3 \
+	#	 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
+	#	 -O /tmp/config_setting
+	#get_config	 
 }
 
 setting_config() {
@@ -285,10 +284,10 @@ get_captive_portal_clients() {
              traffic_upload=
          fi
     done
-	clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
+	#clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
 	###2>/dev/null
-	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
-    rm /tmp/captive_portal_clients	
+	#wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
+    #rm /tmp/captive_portal_clients	
  }
  
 get_config(){
@@ -351,6 +350,12 @@ dhcp_extension(){
 		uci add_list network.local.network='wan'
 		uci commit network
 		#/etc/init.d/network restart
+	fi
+}
+cpn_detect(){
+	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpn`
+	if [ $cpn_status -eq 0 ];then
+		echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart
 	fi
 }
 "$@"
