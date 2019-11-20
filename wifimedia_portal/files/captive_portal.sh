@@ -49,7 +49,7 @@ config_captive_portal() {
 		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 		uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 		# Whitelist IP
-		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn tplink-dev.telitads.vn $walledgadent; do
+		for i in googletagmanager.com tplink-dev.telitads.vn $walledgadent; do
 			nslookup ${i} 8.8.8.8 2> /dev/null | \
 				grep 'Address ' | \
 				grep -v '127\.0\.0\.1' | \
