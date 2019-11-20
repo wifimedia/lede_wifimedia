@@ -29,6 +29,28 @@ s:tab("adv","Advanced")
 --s:taboption("chatbot", Value,"facebook_id","Facebook ID").placeholder = "Facebook ID"
 --s:taboption("chatbot", Value,"ref","Messenger").placeholder = "User ID: vnpictures"
 --s:taboption("youtube", Value,"youtube","Youtube").placeholder = "Video ID: X8AOQRz6m8Q"
+<<<<<<< HEAD:injection/files/usr/lib/lua/luci/model/cbi/wifimedia_module/adnetwork.lua
+
+s:taboption("image", Value,"img1","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title1","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link1","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img2","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title2","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link2","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img3","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title3","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link3","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+
+s:taboption("image", Value,"img4","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title4","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link4","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
+=======
 
 s:taboption("image", Value,"img1","Link1 image")
 url_web=s:taboption("image", Value,"link1","Link1 website")
@@ -44,6 +66,12 @@ url_web=s:taboption("image", Value,"link4","Link4 website")
 
 s:taboption("image", Value,"img5","Link5 image")
 url_web=s:taboption("image", Value,"link5","Link5 website")
+>>>>>>> update_09102018:injection/files/usr/lib/lua/luci/model/cbi/wifimedia_module/filter.lua
+
+s:taboption("image", Value,"img5","Imge","Min-width:360px, Height:120px").placeholder = "http://ads.wifimedia.vn/../picture.jpg"
+--s:taboption("image", Value,"title5","Title").placeholder = "Support langue english"
+url_web=s:taboption("image", Value,"link5","Website")
+url_web.placeholder = "http://ads.wifimedia.vn/"
 
 --ads_image = s:taboption("image", Flag,"ads_image_status","Status")
 rd_image = s:taboption("image", Flag,"random_image_status","Random Option")

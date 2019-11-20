@@ -5,11 +5,21 @@ echo -e "live:*:0:0:99999:7:::" >>/etc/shadow
 echo "*/10 * * * * /sbin/wifimedia/updates.sh" >>/etc/crontabs/live
 /etc/init.d/cron start
 /etc/init.d/cron enable
+<<<<<<< HEAD
 /sbin/wifimedia/updates.sh
+
+/etc/init.d/cron start
+/etc/init.d/cron enable
+=======
+>>>>>>> master
 
 uci -q get wifimedia.@advance[0] || {
         uci batch <<EOF
         add wifimedia advance
+<<<<<<< HEAD
+        #set wifimedia.@advance[0].online=0
+=======
+>>>>>>> origin/wr84xx
         commit wifimedia
 EOF
 }

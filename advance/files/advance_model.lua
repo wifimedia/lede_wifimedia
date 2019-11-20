@@ -16,8 +16,22 @@ function m.on_apply(self)
 	if license then
 		luci.sys.call("env -i /sbin/wifimedia/controller.sh license_local >/dev/null")
 	end
+<<<<<<< HEAD
 	luci.sys.call("env -i /sbin/wifimedia/controller_local.sh local_config >/dev/null")
+=======
+<<<<<<< HEAD
+	--luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
+	luci.sys.call("env -i /sbin/wifimedia/controller.sh groups_cfg >/dev/null")
+	--luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
+=======
+	luci.sys.call("env -i /sbin/wifimedia/controller.sh local_config >/dev/null")
+>>>>>>> master
 	luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
+<<<<<<< HEAD
+>>>>>>> origin/wifimedia_dev
+=======
+>>>>>>> origin/wr84xx
+>>>>>>> master
 	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
 end
 
@@ -30,12 +44,28 @@ ctrgs_en = s:taboption("radio24",Flag, "bw24g", "2.4 Enable")
 ctrgs = s:taboption("radio24",Value, "essid", "SSID")
 ctrgs:depends({bw24g="1"})
 
+<<<<<<< HEAD
 ctrgsm = s:taboption("radio24",ListValue, "mode", "MODE")
+=======
+if wfm_lcs then
+	s:tab("license",  translate("License"))
+	wfm = s:taboption("license",Value,"wfm","wifimedia")
+	wfm.rmempty = true
+end
+--[[ auto controller ]]--
+s:tab("ctrgroups",  translate("Wireless Groups"))
+ctrgs_en = s:taboption("ctrgroups",Flag, "ctrs_en", "Enable Groups")
+ctrgs = s:taboption("ctrgroups",Value, "essid", "SSIDs")
+ctrgs:depends({ctrs_en="1"})
+
+ctrgsm = s:taboption("ctrgroups",ListValue, "mode", "MODE")
+>>>>>>> master
 ctrgsm:value("ap","AP")
 ctrgsm:value("mesh","MESH")
 ctrgsm:value("wds","WDS")
 ctrgsm:depends({bw24g="1"})
 
+<<<<<<< HEAD
 ch = s:taboption( "radio24",ListValue, "channel", "Channel")
 local channel = 1
 while (channel < 14) do
@@ -47,6 +77,10 @@ ch:depends({bw24g="1"})
 
 ctrgscnl = s:taboption("radio24",Value, "maxassoc", "Connection Limit")
 ctrgscnl:depends({bw24g="1"})
+=======
+ctrgscnl = s:taboption("ctrgroups",Value, "maxassoc", "Connection Limit")
+ctrgscnl:depends({ctrs_en="1"})
+>>>>>>> master
 
 ctrgsn = s:taboption("radio24",ListValue, "network", "Network")
 ctrgsn:value("wan","WAN")
@@ -81,8 +115,16 @@ pmk.rmempty = false
 
 nasid = s:taboption("radio24",Value, "nasid", "NAS ID")
 nasid:depends({ft="ieee80211r"})
+<<<<<<< HEAD
 device = s:taboption("radio24",Value, "macs", "APID")
+=======
+<<<<<<< HEAD
+
+=======
+device = s:taboption("ctrgroups",Value, "macs", "APID")
+>>>>>>> master
 device:depends({ft="ieee80211r", ft_psk_generate_local=""})
+>>>>>>> update_09102018
 --macs.datatype = "macaddr"
 
 ctrgtx = s:taboption("radio24",ListValue, "txpower", "Transmit Power")
@@ -193,12 +235,49 @@ hidessid:depends({bw5g="1"})
  
 apisolation = s:taboption("radio5",Flag, "isolationfive","AP Isolation")
 apisolation.rmempty = false
+<<<<<<< HEAD
 apisolation:depends({bw5g="1"})
 ]]--
+=======
+apisolation:depends({ctrs_en="1"})
+<<<<<<< HEAD
+
+s:tab("device",  translate("APID Groups"))
+device = s:taboption("device",Flag, "gpd_en","Enable Groups")
+device.rmempty = false
+device = s:taboption("device",Value, "macs", "APID")
+device:depends({gpd_en="1"})
+
+=======
+>>>>>>> master
 --[[
+>>>>>>> update_09102018
 s:tab("bridge_network",  translate("Bridge Network"))
 bridge_mode = s:taboption("bridge_network", Flag, "bridge_mode","Bridge","Ethernet:  wan => lan")
 bridge_mode.rmempty = false
+<<<<<<< HEAD
+
+--[[Auto Reboot ]]--
+s:tab("autoreboot",  translate("Reboot Groups"))
+Everyday = s:taboption("autoreboot",Flag, "Everyday","Everyday Auto Reboot")
+Everyday.rmempty = false
+
+h = s:taboption("autoreboot", ListValue, "hour", "Hours")
+local time = 0
+while (time < 24) do
+	h:value(time, time .. " ")
+	time = time + 1
+end
+h:depends({Everyday="1"})
+mi = s:taboption("autoreboot", ListValue, "minute", "Minutes")
+local minute = 0
+while (minute < 60) do
+	mi:value(minute, minute .. " ")
+	minute = minute + 1
+end
+mi:depends({Everyday="1"})
+
+=======
 		function bridge_mode.write(self, section, value)
 			if value == self.enabled then
 				luci.sys.call("uci delete network.lan")
@@ -226,7 +305,9 @@ bridge_mode.rmempty = false
 		function bridge_mode.remove() end
 ]]--		
 --RSSI--
+>>>>>>> origin/wr84xx
 s:tab("rssi",  translate("RSSI"))
+<<<<<<< HEAD
 	--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
 	rssi = s:taboption("rssi", Flag, "enable","Enable")
 	rssi.rmempty = false
@@ -254,6 +335,33 @@ if wfm_lcs then
 	s:tab("license",  translate("Activation code"))
 	wfm = s:taboption("license",Value,"wfm","Activation code")
 	wfm.rmempty = true
+=======
+
+rssi = s:taboption("rssi", Flag, "enable","Enable")
+rssi.rmempty = false
+t = s:taboption("rssi", Value, "level","RSSI:","Received signal strength indication: Range:-60dBm ~ -90dBm")
+t.datatype = "min(-90)"
+--s:taboption("rssi", Value, "pinginterval","Interval (s)").placeholder = "interval"
+--[[
+function rssi.write(self, section, value)
+	if value == self.enabled then
+		luci.sys.call("env -i /etc/init.d/watchcat start >/dev/null")
+		luci.sys.call("env -i /etc/init.d/watchcat enable >/dev/null")
+	else
+		luci.sys.call("env -i /etc/init.d/watchcat stop >/dev/null")
+		luci.sys.call("env -i /etc/init.d/watchcat disable >/dev/null")
+	end
+	return Flag.write(self, section, value)
+>>>>>>> master
 end
---[[END LICENS]]--
+function rssi.remove() end
+--else 
+--	m.pageaction = false
+]]--
+s:tab("administrator",  translate("Administrators"))
+admingr = s:taboption("administrator",Flag, "admins", "Enable Groups")
+admingr = s:taboption("administrator",Value, "passwords", "Password")
+admingr.rmempty = true
+admingr.password = true
+admingr:depends({admins="1"})
 return m
