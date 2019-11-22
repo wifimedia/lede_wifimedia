@@ -60,12 +60,6 @@ define Package/$(PKG_NAME)/description
 	LuCI Support for Brook.
 endef
 
-define Build/Prepare
-	$(foreach po,$(wildcard ${CURDIR}/files/luci/i18n/*.po), \
-		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.lmo,$(notdir $(po)));)
-
-	wget -O $(PKG_BUILD_DIR)/brook https://github.com/txthinking/brook/releases/download/$(RELEASE_VERSION)/$(BROOK_NAME)
-endef
 
 define Build/Configure
 endef
@@ -114,7 +108,6 @@ endef
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DATA) ./files/luci/controller/brook.lua $(1)/usr/lib/lua/luci/controller/brook.lua
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/i18n
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/brook.*.lmo $(1)/usr/lib/lua/luci/i18n
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/brook
 	$(INSTALL_DATA) ./files/luci/model/cbi/brook/*.lua $(1)/usr/lib/lua/luci/model/cbi/brook/
