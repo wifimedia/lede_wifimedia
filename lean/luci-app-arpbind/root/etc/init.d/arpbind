@@ -5,8 +5,7 @@
 . /lib/functions.sh
 . /lib/functions/network.sh
 
-#清除单接口ARP
-#参数：$1:接口名称
+#clear ARP
 if_clean_arp()
 {
 	[ -z "$1" ] && return
@@ -14,8 +13,7 @@ if_clean_arp()
 	ip link set arp on dev $1
 }
 
-#清除系统所有ARP
-#参数：无
+
 clean_arp()
 {
 	for i in $(ls /sys/class/net)
@@ -24,8 +22,7 @@ clean_arp()
 	done
 }
 
-#添加静态ARP绑定
-#参数：$1:IP地址 $2:MAC地址 $3:接口名称
+#add ip macaddr
 add_arp()
 {
 	[ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] && return
