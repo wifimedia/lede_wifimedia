@@ -33,3 +33,15 @@ ap.upgade
 ap.reset
 
 
+git clone -n <repo_name> 
+git checkout <commit_sha>
+
+https://coderwall.com/p/xyuoza/git-cloning-specific-commits
+
+git clone https://github.com/openwrt/openwrt.git
+
+cd openwrt/
+git checkout c52054e568d1707b8d191e639b64c919831cb767
+
+or 
+git checkout -b openwrt-19.07 c52054e568d1707b8d191e639b64c919831cb767
