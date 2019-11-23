@@ -8,7 +8,7 @@ local sys = require "luci.sys"
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 
-m = Map("wifimedia",translate(""))
+m = Map("wifimedia",translate("Support Nextify service"))
 m.apply_on_parse = true
 function m.on_apply(self)
 		luci.util.exec("/sbin/wifimedia/captive_portal.sh config_captive_portal >/dev/null")
