@@ -44,9 +44,10 @@ license_srv() {
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					license_local
 				else
-					#echo "we will maintain the existing settings."
-					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-					#enable cronjob chek key
+					uci set wireless.radio0.disabled="1"
+					uci set wireless.radio1.disabled="1"
+					uci commit wireless
+					wifi
 					echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 					#/etc/init.d/cron restart
 				fi
