@@ -31,7 +31,7 @@ end)
 
 a = s:option(ListValue, "ifname", translate("Interface"))
 for _, iface in ipairs(ifaces) do
-	if iface ~= "lo" then 
+	if iface ~= "lo" and iface ~= "eth0" and iface ~= "eth0.1" and iface ~= "eth0.2" and iface ~= "eth0.3" and iface ~= "wlan0"  and iface ~= "wlan1"  and iface ~= "bond0" then 
 		a:value(iface) 
 	end
 end
