@@ -212,7 +212,7 @@ action_lan_wlan(){
 	curl_result=$?
 	if [ "${curl_result}" -eq 0 ]; then
 		cat "$find_mac_gateway" | while read line ; do
-			if [ "$(echo $line | grep $wr940_device)" ] ;then
+			if [ "$(echo $line | grep $mac_ether0)" ] ;then
 				wifi down
 				ifdown lan
 			fi
