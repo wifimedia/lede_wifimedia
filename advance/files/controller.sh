@@ -85,7 +85,7 @@ license_local() {
 	if [ "$uptime" -gt 15 ]; then #>15days
 		if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 			uci set wireless.radio0.disabled="0"
-			#uci set wireless.radio1.disabled="0"
+			uci set wireless.radio1.disabled="0"
 			uci commit wireless
 			wifi
 			#touch $status
