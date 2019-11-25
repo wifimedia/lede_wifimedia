@@ -105,64 +105,6 @@ wr840v13() { #checking internet
 	fi
 }
 
-wr940v5() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:qss/
-		echo none > trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds-gpio/leds/tp-link:*:wan/
-		echo none > trigger
-	fi
-
-}
-
-asus56u(){
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
-		echo timer > trigger
-	else
-		cd /sys/devices/platform/leds/leds/rt-ac51u:blue:power
-		echo none > trigger
-		echo 1 > brightness
-	fi
-}
-
-meshdesk(){
-dnsctl=$(uci -q get meshdesk.internet1.dns)
-ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
-if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
-	uci set meshdesk.internet1.ip=$ip
-	uci commit meshdesk
-fi
-}
-#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-19)
-#
-#eap(){
-#if [ "$eap_name" == "TL-WA901ND" ] ;then
-#	ping -c 3 "$gateway" > /dev/null
-#	if [ $? -eq "0" ];then
-#		echo "dhcp client"
-#	else
-#		uci set network.lan
-#		
-#	fi
-#fi
-#}
-
 checking (){
 	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 
@@ -182,7 +124,6 @@ checking (){
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
-groups_cfg(){
 echo "" > $devices_cfg
 echo "" > $group_cfg
 if [ "$gpd_en" == "1" ];then
@@ -381,7 +322,7 @@ wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_p
 rm /tmp/monitor_port
 }
 
-get_captive_portal_clients() {
+
      #trap "error_trap get_captive_portal_clients '$*'" $GUARD_TRAPS
      local line
      local key
@@ -421,8 +362,7 @@ get_captive_portal_clients() {
 	###2>/dev/null
 	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
     rm /tmp/captive_portal_clients	
- }
- 
+ } 
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
