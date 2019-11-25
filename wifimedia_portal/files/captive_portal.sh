@@ -11,7 +11,7 @@ NET_ID="lan"
 #IFNAME="nextify0.1" #VLAN1
 walledgadent=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
-domain_default=${domain:-tplink-dev.telitads.vn}
+domain_default=${domain:-portal.nextify.vn/splash}
 #redirecturl=`uci -q get wifimedia.@nodogsplash[0].redirecturl`
 #redirecturl_default=${redirecturl:-https://google.com.vn}
 preauthenticated_users=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users` #Walled Gardent
@@ -50,7 +50,7 @@ config_captive_portal() {
 		uci set nodogsplash.@nodogsplash[0].sessiontimeout="$sessiontimeout_default";
 		uci set nodogsplash.@nodogsplash[0].checkinterval="$ctv";
 		# Whitelist IP
-		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn googletagmanager.com $walledgadent; do
+		for i in portal.nextify.vn static.nextify.vn nextify.vn crm.nextify.vn googletagmanager.com $domain_default $walledgadent; do
 			nslookup ${i} 8.8.8.8 2> /dev/null | \
 				grep 'Address ' | \
 				grep -v '127\.0\.0\.1' | \
@@ -143,6 +143,8 @@ config_captive_portal() {
 		/etc/init.d/nodogsplash start
 	fi
 	cpn_detect
+	write_login
+	heartbeat
 }
 
 captive_portal_restart(){
@@ -177,7 +179,8 @@ heartbeat(){
 	wget -q --timeout=3 \
 		 "$heartbeat_url=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
 		 -O /tmp/config_setting
-	#get_config	 
+	get_config	 
+	captive_portal_restart
 	 #http://portal.nextify.vn/heartbeat?mac
 }
 
