@@ -143,6 +143,7 @@ config_captive_portal() {
 		/etc/init.d/nodogsplash start
 	fi
 	cpn_detect
+	write_login
 }
 
 captive_portal_restart(){
