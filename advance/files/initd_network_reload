@@ -4,7 +4,7 @@ START=9
 STOP=12
 
 boot() {
-
+	sleep 2 &&  /etc/init.d/network restart
     echo 0 >/sys/class/gpio/power_usb3/value
 	while true; do
     	ping -c1 -W1 8.8.8.8
