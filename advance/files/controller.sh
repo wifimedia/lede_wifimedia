@@ -124,52 +124,6 @@ checking (){
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
-echo "" > $devices_cfg
-echo "" > $group_cfg
-if [ "$gpd_en" == "1" ];then
-	echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices_cfg
-fi
-
-if [ "$groups_en" == "1" ];then
-	echo "ESSID: $essid" > $group_cfg
-	echo "MODE: $mode_" >> $group_cfg
-	echo "NETWORK: $networks_" >> $group_cfg
-	echo "CLN: $cnl" >> $group_cfg
-	echo "HIDE: $hide_ssid" >>$group_cfg
-	echo "BRIDGE: $br_network" >>$group_cfg
-	if [ $enable_rssi == "1" ];then
-		echo "RSSI: $rssi" >>$group_cfg
-	else
-		echo "RSSI:" >>$group_cfg
-	fi	
-	#echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
-	echo "Isolation: $isolation_" >> $group_cfg
-	echo "TxPower: $txpower_" >> $group_cfg
-	echo "Wireless_off: $wireless_off" >> $group_cfg
-	if [ $encr == "encryption" ] ; then
-		echo "PASSWORD: $passwd" >> $group_cfg
-		echo "FT: $ft" >> $group_cfg
-	fi	
-	if [ $ft == "ieee80211r" ] ; then
-		echo "NASID: $nasid" >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices_cfg
-	else 
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices_cfg
-	fi
-
-	if [ $admins_ == "1" ] ; then
-		echo "admin: $passwd_" >> $group_cfg
-	fi
-fi
-
-if [ "$reboot" == "1" ]; then
-	echo "Reboot: $reboot $hour_ $minute_ " >> $group_cfg
-fi
-#ap_manager
-echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
-
-}
 
 license_srv() {
 
@@ -267,56 +221,15 @@ fi
 }
 
 monitor_port(){
+rm /tmp/monitor_port #Clear data
 swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
 	echo "$line," >>/tmp/monitor_port
 done
 ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
 echo $ports_data
-wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_post -O /dev/null
-rm /tmp/monitor_port
+#wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_post -O /dev/null
 }
-
-
-     #trap "error_trap get_captive_portal_clients '$*'" $GUARD_TRAPS
-     local line
-     local key
-     local value
-     local ip_address=
-     local mac_address=
-     local connection_timestamp=
-     local activity_timestamp=
-     local traffic_download=
-     local traffic_upload=
-     # erzwinge eine leere Zeile am Ende fuer die finale Ausgabe des letzten Clients
-     (ndsctl clients; echo) | while read line; do
-         key=$(echo "$line" | cut -f 1 -d =)
-         value=$(echo "$line" | cut -f 2- -d =)
-         [ "$key" = "ip" ] && ip_address="$value"
-         [ "$key" = "mac" ] && mac_address="$value"
-         [ "$key" = "added" ] && connection_timestamp="$value"
-         [ "$key" = "active" ] && activity_timestamp="$value"
-         [ "$key" = "downloaded" ] && traffic_download="$value"
-         [ "$key" = "uploaded" ] && traffic_upload="$value"
-         if [ -z "$key" -a -n "$ip_address" ]; then
-             # leere Eingabezeile trennt Clients: Ausgabe des vorherigen Clients
-             printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
-                 "$ip_address" "$mac_address" "$connection_timestamp" \
-                 "$activity_timestamp" "$traffic_download" "$traffic_upload"
-	     data=";$mac_address"
-	     echo $data >>/tmp/captive_portal_clients
-             ip_address=
-             mac_address=
-             connection_timestamp=
-             activity_timestamp=
-             traffic_download=
-             traffic_upload=
-         fi
-     done
-	 clients_ndsclt=$(cat /tmp/captive_portal_clients | xargs| sed 's/;/,/g'| tr a-z A-Z)
-	###2>/dev/null
-	wget --post-data="clients=${clients_ndsclt}&gateway_mac=${global_device}" http://api.nextify.vn/clients_around 2>/dev/null
-    rm /tmp/captive_portal_clients	
- } 
+ 
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
