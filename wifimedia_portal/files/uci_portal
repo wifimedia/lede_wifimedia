@@ -14,7 +14,7 @@ echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat ' >>/etc/crontabs/
 #IFNAME="eth0.1" #VLAN1
 #IFNAME99="eth0.99" #VLAN1
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
-domain_default=${domain:-tplink-dev.telitads.vn}
+domain_default=${domain:-tplink.telitads.vn}
 MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 #write file splash
 echo '<!doctype html>
@@ -57,9 +57,9 @@ echo '<!doctype html>
 uci -q get wifimedia.@nodogsplash[0] || {
         uci batch <<EOF
         add wifimedia nodogsplash
-		set wifimedia.@nodogsplash[0].domain="tplink-dev.telitads.vn"
+		set wifimedia.@nodogsplash[0].domain="tplink.telitads.vn"
 		set wifimedia.@nodogsplash[0].https=0
-		set wifimedia.@nodogsplash[0].server="https://tplink-dev.telitads.vn"
+		set wifimedia.@nodogsplash[0].server="https://tplink.telitads.vn"
         commit wifimedia
 EOF
 }
