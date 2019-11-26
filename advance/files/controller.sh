@@ -4,6 +4,10 @@
 
 . /sbin/wifimedia/variables.sh
 
+ip_dhcp=$(ifconfig br-wan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
+ip_lan_gw=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
+ip_gateway=$(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }')
+
 ip_public(){
 	PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`
 	#echo $PUBLIC_IP
