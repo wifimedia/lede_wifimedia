@@ -85,6 +85,7 @@ config_captive_portal() {
 		while read line; do
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80 to $(echo $line)"
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $line)"
+			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
 		done <$PREAUTHENTICATED_ADDRS
 
 		if [ "$facebook" == "1" ];then
