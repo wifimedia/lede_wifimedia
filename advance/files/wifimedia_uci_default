@@ -39,10 +39,10 @@ uci -q get wifimedia.@switchmode[0] || {
 EOF
 }
 
-uci -q get wifimedia.@wireless[0] || {
+uci -q get wifimedia.@hash256[0] || {
 	uci batch <<-EOF
-	add wifimedia wireless
-	set wifimedia.@wireless[0]=wireless
+	add wifimedia hash256
+	set wifimedia.@hash256[0]=hash256
 	commit wifimedia
 EOF
 }
