@@ -8,80 +8,6 @@ ip_public(){
 	PUBLIC_IP=`wget http://ipecho.net/plain -O - -q ; echo`
 	#echo $PUBLIC_IP
 }
-wr840v4() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/trigger
-	else
-		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wps/trigger
-	fi
-
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-	else
-		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr840n-v4:*:wan/
-	fi
-}
-wr840v6() { #checking internet
-
-	#checking internet
-	#ping -c 10 "8.8.8.8" > /dev/null
-	#if [ $? -eq "0" ];then
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/ #openwrt 18
-	#	echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger #Openwrt19
-		#echo timer > trigger
-	#else
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:green:power/
-		#echo none > trigger
-	#	echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:lan/trigger ##Openwrt19
-	#fi
-	
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		#echo timer > trigger
-		echo timer >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger
-	else
-		#cd /sys/devices/platform/gpio-leds/leds/tl-wr840n-v6:orange:power/
-		#echo none > trigger
-		echo none >/sys/devices/platform/leds/leds/tl-wr840n-v6:green:wlan/trigger ##Openwrt19
-	fi
-}
-
-wr841v14() { #checking internet
-
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger
-		
-	else
-		echo none >/sys/devices/platform/leds/leds/tl-wr841n-v14:green:wlan/trigger ##Openwrt19
-	fi
-}
-wr840v13() { #checking internet
-
-	#check gateway
-	ping -c 3 "$gateway" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/trigger
-	else
-		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wps/trigger
-	fi
-	
-	#checking internet
-	ping -c 10 "8.8.8.8" > /dev/null
-	if [ $? -eq "0" ];then
-		echo timer >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/trigger
-	else
-		echo none >/sys/devices/platform/gpio-leds/leds/tl-wr841n-v13:*:wan/trigger
-	fi
-}
 
 wr940v5() { #checking internet
 
@@ -145,8 +71,6 @@ wa901nd() { #checking internet
 	fi
 }
 
-
-meshdesk(){
 dnsctl=$(uci -q get meshdesk.internet1.dns)
 ip=`nslookup $dnsctl | grep 'Address' | grep -v '127.0.0.1' | grep -v '8.8.8.8' | grep -v '0.0.0.0'|grep -v '::' | awk '{print $3}'`
 if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
@@ -171,26 +95,9 @@ fi
 checking (){
 	#model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 	#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
-	#if [ "$model" == "TL-WR840N_v4" ];then
-	#	wr840v4
-	#	eap_manager
-	#elif [ "$model" == "TL-WR841N_v13" ];then
-	#	wr841v13
-	#	eap_manager
-	#elif [ "$model" == "TL-WR940N_v4" ];then
-	#	wr940v5
 	if [ "$model" == "TL-WR940N_v6" ];then
 		wr940v6
 	fi	
-	#elif [ "$eap_name" == "TL-WA901ND" ] ;then
-	#	wa901nd
-	#elif [ "$model" == "TL-WR841N_v14" ] ;then	
-	#	wr841v14
-	#	eap_manager
-	#elif [ "$model" == "TL-WR840N_v6" ] ;then	
-	#	wr840v6
-	#	eap_manager
-	#fi
 	#Clear memory
 	if [ "$(cat /proc/meminfo | grep 'MemFree:' | awk '{print $2}')" -lt 5000 ]; then
 		echo "Clear Cach"
@@ -201,374 +108,189 @@ checking (){
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
-remote_cfg() {
+wireless_cfg(){
 
-echo "" > $sha256_download
-wget -q "${sha_download}" -O $sha256_download
-curl_result=$?
+response_file=/tmp/wireless_cfg
+local key
+local value
 
-if [ "${curl_result}" -eq 0 ]; then
-echo "Checking download sha256sum"
-	if [ "$(uci -q get wifimedia.@wireless[0].sha256)" != "$(cat $sha256_download | awk '{print $2}')" ]; then #Checking SHA neu thay do thi moi apply
-
-		wget -q "${url}" -O $grp_download
-		wget -q "${grpd}" -O $grp_device_download
-		cat "$grp_device_download" | while read line ; do
-			if [ "$(echo $line | grep $device_cfg)" ] ;then #tim thiet bi xem co trong groups hay khong
-					uci set wifimedia.@wireless[0].ctrs_en="1" #update config
-				cat "$grp_download" | while read line ; do
-				
-					if [ "$(echo $line | grep 'NETWORK')" ] ;then #Tim LAN/WAN
-						uci set wireless.@wifi-iface[0].network="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@wireless[0].network="$(echo $line | awk '{print $2}')"
-						
-					elif [ "$(echo $line | grep 'MODE')" ] ;then #Tim ap/mesh/wds
-						uci set wireless.@wifi-iface[0].mode="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@wireless[0].mode="$(echo $line | awk '{print $2}')"
-						
-					elif [ "$(echo $line | grep 'ESSID')" ] ;then #Tim ten ESSID WIFI
-						essid="$(echo $line | awk '{print $2}')"
-						echo "ESSID: $essid"
-						if [ -z "$essid" ];then
-							echo "no change SSID"
-						else 
-							uci set wireless.@wifi-iface[0].ssid="$(echo $line | awk '{print $2}')"
-						fi
-						uci set wifimedia.@wireless[0].essid="$essid"
-						
-					elif [ "$(echo $line | grep 'CLN')" ] ;then #Tim maxassoc
-						uci set wireless.@wifi-iface[0].maxassoc="$(echo $line | awk '{print $2}')"
-						uci set wifimedia.@wireless[0].maxassoc="$(echo $line | awk '{print $2}')"
-						
-					elif [ "$(echo $line | grep 'PASSWORD')" ] ;then #Tim mat khau
-						if [ "$(echo $line | awk '{print $2}')" == " " ];then
-							uci delete wireless.@wifi-iface[0].encryption
-							uci delete wireless.@wifi-iface[0].key
-							uci delete wireless.@wifi-iface[0].ieee80211r
-							uci delete wireless.@wifi-iface[0].rsn_preauth
-							uci delete wifimedia.@wireless[0].encrypt
-							uci commit wireless
-							rm -f >/etc/FT
-						else	
-							uci set wireless.@wifi-iface[0].encryption="psk2"
-							uci set wireless.@wifi-iface[0].key="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@wireless[0].password="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@wireless[0].encrypt="encryption"
-						fi
-						
-					elif [ "$(echo $line | grep 'FT')" ] ;then #enable Fast Roaming
-
-						if [ "$(echo $line | awk '{print $2}')" == "ieee80211r"  ];then
-							uci set wireless.@wifi-iface[0].ieee80211r="1"
-							uci set wireless.@wifi-iface[0].pmk_r1_push="1"
-							#uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
-							uci delete wireless.@wifi-iface[0].rsn_preauth
-							uci set wifimedia.@wireless[0].ft="ieee80211r"
-							echo "Fast BSS Transition Roaming" >/etc/FT
-							#Delete List r0kh r1kh
-							uci del wireless.default_radio0.r0kh
-							uci del wireless.default_radio0.r1kh
-							#add List r0kh r1kh
-							cat "$grp_device_download" | while read  line;do #add list R0KH va R1KH
-								uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-								uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $2}'),$(echo $line | awk '{print $2}'),000102030405060708090a0b0c0d0e0f"
-							done
-
-						else #Fast Roaming Preauth RSN C
-							uci delete wireless.@wifi-iface[0].ieee80211r
-							uci delete wireless.@wifi-iface[0].ft_psk_generate_local
-							uci delete wireless.@wifi-iface[0].pmk_r1_push
-							uci set wireless.@wifi-iface[0].rsn_preauth="1"
-							uci set wifimedia.@wireless[0].ft="rsn_preauth"
-							echo "Fast-Secure Roaming" >/etc/FT
-						fi	
-					elif [ "$(echo $line | grep 'NASID')" ] ;then #NASID
-						mactmp="/tmp/mac_device"
-						echo ''>$mactmp
-						nas_id="$(echo $line | awk '{print $2}')"
-						if [ -z "$nas_id" ];then
-							uci del wireless.default_radio0.r0kh
-							uci del wireless.default_radio0.r1kh
-						else	
-							uci set wireless.@wifi-iface[0].nasid="$(echo $line | awk '{print $2}')"
-							uci set wifimedia.@wireless[0].nasid="$(echo $line | awk '{print $2}')"
-						fi	
-						cat "$grp_device_download" | while read line ; do
-							if [ "$(echo $line | grep $(echo $line | awk '{print $2}'))" ];then
-								echo $line | awk '{print $2}' >>$mactmp
-							fi
-						done
-						uci set wifimedia.@wireless[0].macs="$(cat $mactmp | xargs | sed 's/:/-/g' | sed 's/ /,/g')"
-					elif [ "$(echo $line | grep 'HIDE')" ] ;then #HIDE
-						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
-							uci set wireless.@wifi-iface[0].hidden="1"
-							uci set wifimedia.@wireless[0].hidessid="1"
-						else
-							uci set wireless.@wifi-iface[0].hidden="0"
-							uci set wifimedia.@wireless[0].hidessid="0"
-							#uci delete wireless.@wifi-iface[0].hidden #uci: Entry not found
-						fi					
-					
-					elif [ "$(echo $line | grep 'admin')" ] ;then #Change Password admin
-						echo -e "$(echo $line | awk '{print $2}')\n$(echo $line | awk '{print $2}')" | passwd admin							
-			
-					elif [ "$(echo $line | grep 'Isolation')" ] ;then #enable Fast Roaming
-
-						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
-							uci set wireless.@wifi-iface[0].isolate="1"
-							uci set wifimedia.@wireless[0].isolation="1"
-						else
-							#uci delete wireless.@wifi-iface[0].isolate
-							uci set wireless.@wifi-iface[0].isolate="0"
-							uci set wifimedia.@wireless[0].isolation="0"
-						fi
-					#Txpower
-					elif [ "$(echo $line | grep 'TxPower')" ] ;then #enable Fast Roaming
-
-						if [ "$(echo $line | grep 'auto')"  ];then
-							uci delete wireless.@wifi-device[0].txpower
-							uci set wifimedia.@wireless[0].txpower="auto"
-						elif [ "$(echo $line | grep 'low')"  ];then
-							uci set wireless.@wifi-device[0].txpower=17
-							uci set wifimedia.@wireless[0].txpower="low"
-						elif [ "$(echo $line | grep 'medium')"  ];then
-							uci set wireless.@wifi-device[0].txpower=20
-							uci set wifimedia.@wireless[0].txpower="medium"
-						elif [ "$(echo $line | grep 'high')"  ];then
-							uci set wireless.@wifi-device[0].txpower=22
-							uci set wifimedia.@wireless[0].txpower="high"
-						fi
-					elif [ "$(echo $line | grep 'RSSI')" ] ;then #RSSI
-						rssi="$(echo $line | awk '{print $2}')"
-						if [ -z "$rssi" ];then
-							uci set wifimedia.@wireless[0].enable="0"
-							/etc/init.d/watchcat stop && /etc/init.d/watchcat disable
-						else
-							uci set wifimedia.@wireless[0].enable="1"
-							/etc/init.d/watchcat start && /etc/init.d/watchcat enable
-							uci set wifimedia.@wireless[0].level="$rssi"
-						fi
-					elif [ "$(echo $line | grep 'BRIDGE')" ] ;then #BRIDGE
-					
-						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
-							uci delete network.lan
-							uci set network.wan.proto='dhcp'
-							uci set network.wan.ifname='eth0 eth1.1'
-							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@wireless[0].bridge_mode='1'
-						else
-							uci set network.lan='interface'
-							uci commit network
-							uci set network.lan.proto='static'
-							uci set network.lan.ipaddr='172.16.99.1'
-							uci set network.lan.netmask='255.255.255.0'
-							uci set network.lan.type='bridge'
-							uci set network.lan.ifname='eth1.1'
-							uci set dhcp.lan.force='1'
-							uci set dhcp.lan.netmask='255.255.255.0'
-							uci del dhcp.lan.dhcp_option
-							uci add_list dhcp.lan.dhcp_option='6,8.8.8.8,8.8.4.4'			
-							uci set network.wan.ifname='eth0'
-							uci set wireless.@wifi-iface[0].network='wan'
-							uci set wifimedia.@wireless[0].bridge_mode='0'
-						fi						
-					fi
-					wifi up
-					####Auto reboot every day
-					if [ "$(echo $line | grep 'Reboot')" ] ;then #Auto Reboot every day
-						if [ "$(echo $line | awk '{print $2}')" == "1"  ];then
-							echo -e "0 5 * * 0,1,2,3,4,5,6 sleep 70 && touch /etc/banner && reboot" >/tmp/autoreboot
-							crontab /tmp/autoreboot -u wifimedia
-							/etc/init.d/cron start
-							#ntpd -q -p 0.asia.pool.ntp.org				
-							uci set scheduled.days.Mon=1
-							uci set scheduled.days.Tue=1
-							uci set scheduled.days.Wed=1
-							uci set scheduled.days.Thu=1
-							uci set scheduled.days.Fri=1
-							uci set scheduled.days.Sat=1
-							uci set scheduled.days.Sun=1
-							uci set scheduled.time.minute="$(echo $line | awk '{print $4}')"
-							uci set scheduled.time.hour="$(echo $line | awk '{print $3}')"
-						fi
-					else
-						echo -e "" >/tmp/autoreboot
-						crontab /tmp/autoreboot -u wifimedia
-						/etc/init.d/cron start
-						uci delete scheduled.days
-						uci set scheduled.days=instance
-						uci delete scheduled.time
-						uci set scheduled.time=times
-					fi
-					####END Auto reboot every day
-					#commit sha256
-					uci set wifimedia.@wireless[0].sha256="$(sha256sum $grp_download | awk '{print $1}')"
-					#switch interface wireless
-					#if [ "$(uci -q get wifimedia.@wireless[0].wireless_cfg)" == "0" ]; then
-					#	cat /sbin/wifimedia/wifi.lua >/usr/lib/lua/luci/model/cbi/admin_network/wifi.lua
-					#	uci set wifimedia.@wireless[0].wireless_cfg=1
-					#fi	
-				done
-				uci commit wifimedia
-				uci commit wireless
-				uci commit scheduled
-				uci commit network
-				uci commit dhcp
-				wifi up
-				# Restart all of the services
-				/bin/ubus call network reload >/dev/null 2>/dev/null 
-				echo "update: Successfully applied new settings"
-			fi
-		done
-	fi
-fi
-}
-
-local_config(){
-touch  /tmp/list_eap
-if [ "$groups_en" == "1" ];then
-	#Network
-	uci set wireless.@wifi-iface[0].network="$networks_"
-	#Mode
-	uci set wireless.@wifi-iface[0].mode="$mode_"
-	#ESSID
-	if [ -z "$essid" ];then
-		echo "no change SSID"
-	else 
-		uci set wireless.@wifi-iface[0].ssid="$essid"
-	fi
-	#channel
-	uci set wireless.radio0.channel="$ch"
-	#Connect Limit
-	uci set wireless.@wifi-iface[0].maxassoc="$cnl"
-	#Passwd ssid
-	if [ -z "$passwd" ];then
-		uci delete wireless.@wifi-iface[0].encryption
-		uci delete wireless.@wifi-iface[0].key
-		uci delete wireless.@wifi-iface[0].ieee80211r
-		uci delete wireless.@wifi-iface[0].rsn_preauth
-		rm -f >/etc/FT
-	else
-		uci set wireless.@wifi-iface[0].encryption="psk2"
-		uci set wireless.@wifi-iface[0].key="$passwd"
-	fi
-	#Fast Roaming
-	if [ "$ft" == "ieee80211r"  ];then
-		uci set wireless.@wifi-iface[0].ieee80211r="1"
-		uci set wireless.@wifi-iface[0].ft_psk_generate_local="0"
-		uci set wireless.@wifi-iface[0].pmk_r1_push="1"
-		uci delete wireless.@wifi-iface[0].rsn_preauth
-		echo "Fast BSS Transition Roaming" >/etc/FT
-		##fix PMK if pmk locally = 1
-		if [ "$pmk" == "1" ];then
-			uci set wireless.@wifi-iface[0].ft_psk_generate_local="1"
-			#delete all r0kh r1kh
-			uci del wireless.default_radio0.r0kh
-			uci del wireless.default_radio0.r1kh
-		elif [ "$pmk" == "0" ];then #if pmk locally = ""
-			uci set wireless.@wifi-iface[0].ft_psk_generate_local="0"
-			#delete all r0kh r1kh
-			uci del wireless.default_radio0.r0kh
-			uci del wireless.default_radio0.r1kh
-			echo "$macs"  | while read  line;do #add list R0KH va R1KH
-				uci add_list wireless.@wifi-iface[0].r0kh="$(echo $line | awk '{print $1}'),$nasid,000102030405060708090a0b0c0d0e0f"
-				uci add_list wireless.@wifi-iface[0].r1kh="$(echo $line | awk '{print $1}'),$(echo $line | awk '{print $1}'),000102030405060708090a0b0c0d0e0f"
-			done
-		fi
-		#end config r0kh & r1kh
-		
-		if [ -z $(uci -q get wifimedia.@wireless[0].macs) ];then
-		#echo "test rong"
-			uci del wireless.default_radio0.r0kh
-			uci del wireless.default_radio0.r1kh	
-		fi
-		#uci commit wireless
-	elif [ "ft" == "rsn_preauth" ];then
-		uci delete wireless.@wifi-iface[0].ieee80211r
-		uci delete wireless.@wifi-iface[0].ft_psk_generate_local
-		uci delete wireless.@wifi-iface[0].pmk_r1_push
-		uci set wireless.@wifi-iface[0].rsn_preauth="1"
-		uci del wireless.default_radio0.r0kh
-		uci del wireless.default_radio0.r1kh
-		echo "Fast-Secure Roaming" >/etc/FT
-	else
-		rm -f /etc/FT
-	fi
-	#NASID
-	if [ -z "$nasid" ];then
-		uci del wireless.default_radio0.r0kh
-		uci del wireless.default_radio0.r1kh
-	else
-		uci set wireless.@wifi-iface[0].nasid="$nasid"
-	fi	
-
-	#TxPower
-	if [ "$txpower_" == "auto"  ];then
-		uci delete wireless.@wifi-device[0].txpower
-	elif [ "$txpower_" == "low"  ];then
-		uci set wireless.@wifi-device[0].txpower="17"
-	elif [ "$txpower_" == "medium"  ];then
-		uci set wireless.@wifi-device[0].txpower="20"
-	elif [ "$txpower_" == "high"  ];then
-		uci set wireless.@wifi-device[0].txpower="22"
-	fi
+cat $response_file | while read line ; do
+	key=$(echo "$line" | cut -f 1 -d =)
+	value=$(echo "$line" | cut -f 2- -d =)
 	
-	#Hide SSID
-	uci set wireless.@wifi-iface[0].hidden="$hide_ssid"
-	#ISO
-	uci set wireless.@wifi-iface[0].isolate="$isolation_"
-	uci commit wireless
-fi
-sleep 5 && wifi
-
-}
-
-groups_cfg(){
-echo "" > $devices_cfg
-echo "" > $group_cfg
-if [ "$gpd_en" == "1" ];then
-	echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "MAC" > $devices_cfg
-fi
-
-if [ "$groups_en" == "1" ];then
-	echo "ESSID: $essid" > $group_cfg
-	echo "MODE: $mode_" >> $group_cfg
-	echo "NETWORK: $networks_" >> $group_cfg
-	echo "CLN: $cnl" >> $group_cfg
-	echo "HIDE: $hide_ssid" >>$group_cfg
-	echo "BRIDGE: $br_network" >>$group_cfg
-	if [ $enable_rssi == "1" ];then
-		echo "RSSI: $rssi" >>$group_cfg
-	else
-		echo "RSSI:" >>$group_cfg
-	fi	
-	#echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices
-	echo "Isolation: $isolation_" >> $group_cfg
-	echo "TxPower: $txpower_" >> $group_cfg
-	echo "Wireless_off: $wireless_off" >> $group_cfg
-	if [ $encr == "encryption" ] ; then
-		echo "PASSWORD: $passwd" >> $group_cfg
-		echo "FT: $ft" >> $group_cfg
-	fi	
-	if [ $ft == "ieee80211r" ] ; then
-		echo "NASID: $nasid" >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid >> $group_cfg
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo $nasid > $devices_cfg
-	else 
-		echo "$mac_cfg" | sed 's/,/ /g' | xargs -n1 echo "RSN" > $devices_cfg
+	#Cau hinh hostname
+	if [ "$key" = "device.hostname" ];then
+		uci set system.@system[0].hostname="$value"
+	#Mat khau thiet bi	
+	elif [ "$key" = "device.passwd" ];then
+		echo -e "$value\n$value" | passwd root
+	#Reboot device	
+	elif [ "$key" = "device.reboot" ];then
+		echo $value >tmp/reboot_flag
+	elif [ "$key" = "device.passwd" ];then
+	#Cau hinh wireless
+	elif [ "$key" = "wireless.radio2G.enable" ];then
+		uci set wireless.radio0.disabled="$value"
+	elif [ "$key" = "wireless.radio2G.channel" ];then
+		uci set wireless.radio0.channel="$value"
+	elif [ "$key" = "wireless.radio2G.htmode" ];then
+		uci set wireless.radio0.htmode="$value"
+	elif [ "$key" = "wireless.radio2G.txpower" ];then
+		uci set wireless.radio0.txpower="$value"
+	elif [ "$key" = "wireless.ssid2G" ];then
+		uci set wireless.default_radio0.ssid="$value"
+	elif [ "$key" = "wireless.passwd2G" ];then
+		if [ "$value" = "" ];then
+			uci set wireless.default_radio0.key=""
+			uci set wireless.default_radio0.encryption="none"
+		else
+			uci set wireless.default_radio0.key="$value"
+			uci set wireless.default_radio0.encryption="psk2"
+		fi
+	#chuyen dung chuan cache	
+	elif [ "$key" = "wireless.okc2G=" ];then
+		if [ "$value" =  "1" ];then
+			uci set wireless.default_radio0.rsn_preauth="$value"
+			uci set wireless.default_radio0.ieee80211r ="0"
+			uci set wireless.default_radio0.ft_over_ds="0"
+			uci set wireless.default_radio0.ft_psk_generate_local="0"
+		fi	
+	#Chuyen dung 802.1R	
+	elif [ "$key" = "wireless.ft2G" ];then
+		if [ "$value" =  "1" ];then
+			uci set wireless.default_radio0.rsn_preauth="0"
+			uci set wireless.default_radio0.ieee80211r ="1"
+			uci set wireless.default_radio0.ft_over_ds="1"
+			uci set wireless.default_radio0.ft_psk_generate_local="1"
+		fi	
+	##Map SSID to net/plain LAN or WAN	
+	elif [ "$key" = "wireless.network2G" ];then
+		uci set wireless.default_radio0.network="$value"
+	#Set Max Client	
+	elif [ "$key" = "wireless.maxclients2G" ];then
+		uci set wireless.default_radio0.maxassoc="$value"
+	
+	##Cau hinh switch 5 port		
+	elif [ "$key" = "network.switch" ];then
+		echo $value >tmp/switch_flag
+		if [ "$value" = "1" ];then
+			uci delete network.lan
+			uci set network.wan.proto="dhcp"
+			uci set network.wan.ifname="eth0 eth1.1"
+			uci set wireless.@wifi-iface[0].network="wan"
+			uci set wifimedia.@switchmode[0].switch_port="$value"
+			uci commit
+		else
+			uci set network.lan="interface"
+			uci set network.lan.proto="static"
+			uci set network.lan.ipaddr="172.16.99.1"
+			uci set network.lan.netmask="255.255.255.0"
+			uci set network.lan.type="bridge"
+			uci set network.lan.ifname="eth1.1"
+			uci set dhcp.lan.force="1"
+			uci set dhcp.lan.netmask="255.255.255.0"
+			uci del dhcp.lan.dhcp_option
+			uci add_list dhcp.lan.dhcp_option="6,8.8.8.8,8.8.4.4"				
+			uci set network.wan.ifname="eth0"
+			uci set wireless.@wifi-iface[0].network="wan"
+			uci set wifimedia.@switchmode[0].switch_port="0"
+			uci commit			
+		fi
+	#Cu hinh IP LAN/WAN
+	elif [ "$key" = "network.lan.static" ];then
+		if [ "$value" = "1" ];then ##Static 
+			uci set network.lan="interface"
+			uci set network.lan.proto="static"
+			uci set network.lan.type="bridge"
+			uci set network.lan.ifname="eth1.1"		
+		else ##DHCP Client nhan IP
+			uci delete network.lan
+			uci set network.lan.proto="dhcp"
+			uci set network.lan.ifname="eth1.1"		
+		fi
+	elif [  "$key" = "network.lan.ip" ];then
+		uci set network.lan.ipaddr="$value"
+	elif [  "$key" = "network.lan.subnetmask" ];then
+		uci set network.lan.netmask="$value"
+	elif [  "$key" = "network.lan.gateway" ];then
+		uci set network.lan.gateway="$value"		
+	elif [  "$key" = "network.lan.dns" ];then
+		value=$(echo $value | sed 's/,/ /g')
+		uci set network.lan.dns="$value"		
+	###WAN config
+	elif [ "$key" = "network.wan.static" ];then
+		if [ "$value" = "1" ];then ##Static 
+			uci set network.wan="interface"
+			uci set network.wan.proto="static"
+			uci set network.wan.type="bridge"
+			uci set network.wan.ifname="eth1"		
+		else ##DHCP Client nhan IP
+			uci delete network.wan
+			uci set network.wan.proto="dhcp"
+			uci set network.wan.ifname="eth1"		
+		fi
+	elif [  "$key" = "network.lan.ip" ];then
+		uci set network.lan.ipaddr="$value"
+	elif [  "$key" = "network.lan.subnetmask" ];then
+		uci set network.lan.netmask="$value"
+	elif [  "$key" = "network.lan.gateway" ];then
+		uci set network.lan.gateway="$value"		
+	elif [  "$key" = "network.lan.dns" ];then
+		value=$(echo $value | sed 's/,/ /g')
+		uci set network.lan.dns="$value"		
+	##Cau hinh DHCP
+	elif [  "$key" = "lan.dhcp.start" ];then
+		uci set dhcp.lan.start="$value"
+	elif [  "$key" = "lan.dhcp.limit" ];then
+		uci set dhcp.lan.limit="$value"
+	elif [  "$key" = "lan.dhcp.leasetime" ];then
+		uci set dhcp.lan.leasetime="$value"
+		
+	#Cau hinh Captive Portal
+	elif [  "$key" = "cpn.enable" ];then
+		echo $value >tmp/cpn_flag
+		uci set nodogsplash.@nodogsplash[0].enabled="$value"
+	elif [  "$key" = "cpn.domain" ];then
+		uci set wifimedia.@nodogsplash[0].domain="$value"
+	elif [  "$key" = "cpn.walledgarden" ];then
+		value=$(echo $value | sed 's/,/ /g')
+		uci set wifimedia.@nodogsplash[0].preauthenticated_users="$value"
+	elif [  "$key" = "cpn.fb" ];then
+		uci set wifimedia.@nodogsplash[0].facebook="$value"
+	elif [  "$key" = "cpn.dhcpextenal" ];then
+		uci set wifimedia.@nodogsplash[0].dhcpextension="$value"
+	elif [  "$key" = "cpn.clientdetect" ];then
+		uci set wifimedia.@nodogsplash[0].cpn="$value"
+		echo $value >tmp/clientdetect
+	#Cau hinh auto reboot
+	elif [  "$key" = "scheduletask.enable" ];then
+		echo $value >tmp/scheduled_flag
+	elif [  "$key" = "scheduletask.hours" ];then
+		uci set scheduled.@times[0].hour="$value"
+	elif [  "$key" = "scheduletask.minute" ];then
+		uci set scheduled.@times[0].minute="$value"
 	fi
-
-	if [ $admins_ == "1" ] ; then
-		echo "admin: $passwd_" >> $group_cfg
-	fi
+##
+done	
+uci commit
+if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
+	echo "restarting the node"
+	reboot
 fi
 
-if [ "$reboot" == "1" ]; then
-	echo "Reboot: $reboot $hour_ $minute_ " >> $group_cfg
+if [ $(cat /tmp/>tmp/cpn_flag) -eq 1 ]; then
+	echo "Config & Start CPN" 
+	/sbin/wifimedia/captive_portal.sh config_captive_portal
+	echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds
+	/etc/init.d/cron restart
+else
+  echo "Stop CPN"
+  /etc/init.d/nodogsplash stop
 fi
-#ap_manager
-echo "GRP:  $(sha256sum $group_cfg | awk '{print $1}')"  > $sha256_check
-
+if [ $(cat tmp/cpn_flag) -eq 1 ]; then
+	echo "restarting conjob"
+	crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
+fi		
 }
 
 license_srv() {
@@ -595,31 +317,6 @@ if [ "${curl_result}" -eq 0 ]; then
 		done	
 	fi
 fi
-}
-
-lgw_srv() {
-	echo "" > $gwkey
-	wget -q "${codegw}" -O $gwkey
-	curl_result=$?
-	if [ "${curl_result}" -eq 0 ]; then
-		if grep -q "." $gwkey; then
-			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940_device)" ] ;then
-					#Update License Key
-					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
-					cat /etc/opt/license/wifimedia >/etc/opt/license/status
-					uci commit wifimedia
-					licensegw
-				else
-					#enable cronjob chek key
-					echo "enable check key"
-					echo "0 0 * * * /sbin/wifimedia/controller.sh lgw_srv" > /etc/crontabs/wificode
-					#/etc/init.d/cron restart
-					#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-				fi
-			done	
-		fi
-	fi
 }
 
 license_local() {
@@ -669,110 +366,6 @@ if [ "$uptime" -gt 15 ]; then #>15days
 		wifi down
 	fi
 fi
-}
-
-###Gateway
-licensegw() {
-
-first_time=$(cat /etc/opt/first_time.txt)
-timenow=$(date +"%s")
-diff=$(expr $timenow - $first_time)
-days=$(expr $diff / 86400)
-diff=$(expr $diff \% 86400)
-hours=$(expr $diff / 3600)
-diff=$(expr $diff \% 3600)
-min=$(expr $diff / 60)
-
-#uptime="${days}"
-time=$(uci -q get wifimedia.@wireless[0].time)
-time1=${days}
-uptime="${time:-$time1}"
-#status=/etc/opt/wfm_status
-lcs=/etc/opt/wfm_lcs
-if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-	echo "Activated" >/etc/opt/license/status
-	#touch $status
-	rm $lcs
-	echo "" >/etc/crontabs/wificode
-	/etc/init.d/cron restart
-	uci set wireless.radio0.disabled="0"
-	uci set wireless.radio1.disabled="0"
-	uci commit wireless
-	wifi
-else
-	minute=`date | awk '{print $4}'|cut -c 4,5`
-	if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
-		reboot
-	fi
-	echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-	
-fi
-if [ "$uptime" -gt 15 ]; then #>15days
-	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-		uci set wireless.radio0.disabled="0"
-		uci set wireless.radio1.disabled="0"
-		uci commit wireless
-		wifi
-		rm $lcs
-		echo "" >/etc/crontabs/wificode
-		/etc/init.d/cron restart
-		echo "Activated" >/etc/opt/license/status
-	else
-		minute=`date | awk '{print $4}'|cut -c 4,5`
-		if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
-			reboot
-		fi
-		echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-		#rm $status
-		
-	fi
-fi
-}
-#end GW
-eap_manager() {
-
-rm -f /tmp/eap_mac
-rm -f /tmp/eap
-cat "$eap_device" | while read line ; do
-	mac=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f1-5)
-	maclast=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f6)
-	#echo $maclast
-	zero=$(echo $maclast | cut -c 1)
-	echo $zero
-	#echo "Mac address= $mac:$maclast"
-
-	decmac=$(echo "ibase=16; $maclast"|bc)
-	if [ $decmac -eq '241' ]
-	then
-	macinc='00'
-	else
-	incout=`expr $decmac + 1 `
-	macinc=$(echo "obase=16; $incout"|bc)
-
-	fi
-		
-	if [ $zero -eq '0' ];then
-		#echo "Mac address= $mac:$zero$macinc"
-		echo "$mac:$zero$macinc" >>/tmp/eap_mac
-	else
-		#echo "Mac address= $mac:$macinc"
-		echo "$mac:$macinc" >>/tmp/eap_mac
-	fi
-done
-#EXPORT DATA AP IP MAC
-cat "/tmp/eap_mac" | while read line ; do
-
-	#linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	#arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-	#echo $linedeap
-	eapmac=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-	cat "/proc/net/arp" | while read line ; do
-		arpmac=$(echo $line | awk '{print $4}' | sed 's/-/:/g' )
-		if [ "$eapmac" == "$arpmac" ] ;then
-			echo $line | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-		fi
-	done	
-done
 }
 
 action_lan_wlan(){
