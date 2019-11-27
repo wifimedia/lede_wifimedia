@@ -31,7 +31,7 @@ s:taboption( "advance",Value, "authidletimeout","Authidletimeout","Default: > 12
 s:taboption( "advance",Value, "sessiontimeout","Sessiontimeout","Default : 120 Mins")
 s:taboption( "advance",Value, "checkinterval","Checkinterval","Default: 10 Mins")
 s:taboption( "basic",Flag, "facebook","Bypass Facebook")
-s:taboption( "basic",Flag, "https","Bypass https")
+--s:taboption( "basic",Flag, "https","Bypass https")
 dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
 dhcpextension.rmempty = false
 
