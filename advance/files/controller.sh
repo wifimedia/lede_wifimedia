@@ -108,9 +108,15 @@ checking (){
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
+_hash254(){
+response_file=/tmp/wireless_cfg
+hash256=$(sha256sum $response_file | awk '{print $1}')
+
+
+}
 wireless_cfg(){
 
-response_file=/tmp/wireless_cfg
+
 local key
 local value
 
