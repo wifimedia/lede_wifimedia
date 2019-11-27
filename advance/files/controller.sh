@@ -108,18 +108,19 @@ checking (){
 	#if [ -z $pidhostapd ];then echo "Wireless Off" >/tmp/wirelessstatus;else echo "Wireless On" >/tmp/wirelessstatus;fi
 }
 
-_hash254(){
-response_file=/tmp/wireless_cfg
-hash256=$(sha256sum $response_file | awk '{print $1}')
-
-
+device_cfg(){
+	response_file=/tmp/_cfg
+	hash256=$(sha256sum $response_file | awk '{print $1}')
+	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $sha256_download | awk '{print $2}')" ]; then
+		start_cfg
+	fi
+	uci set wifimedia.@hash256[0].value=$hash256
 }
-wireless_cfg(){
 
+start_cfg(){
 
 local key
 local value
-
 cat $response_file | while read line ; do
 	key=$(echo "$line" | cut -f 1 -d =)
 	value=$(echo "$line" | cut -f 2- -d =)
