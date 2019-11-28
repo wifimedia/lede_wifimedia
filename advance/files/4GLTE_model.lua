@@ -26,10 +26,12 @@ lte.rmempty = false
 				luci.sys.call("uci set network.lan.proto='dhcp'")
 				luci.sys.call("uci set network.lan.type='bridge'")
 				luci.sys.call("uci set network.lan.ifname='eth1'")
+				luci.sys.call("echo 1 >/sys/class/gpio/power_usb3/value")
 				luci.sys.call("uci commit")
 			else
 				luci.sys.call("uci delete network.lan")
 				luci.sys.call("uci commit")
+				luci.sys.call("echo 0 >/sys/class/gpio/power_usb3/value")
 			end
 			return Flag.write(self, section, value)
 		end

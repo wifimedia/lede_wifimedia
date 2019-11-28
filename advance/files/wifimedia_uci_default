@@ -248,8 +248,6 @@ uci batch << EOF
 	
 EOF
 
-
-	
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
 echo -e "admin:*:0:0:99999:7:::" >>/etc/shadow
