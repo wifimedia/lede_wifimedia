@@ -158,10 +158,11 @@ heartbeat(){
 	#TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
-	wget -q --timeout=3 \
-		 "$heartbeat_url=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
-		 -O /tmp/config_setting
+	#wget -q --timeout=3 \
+	#	 "$heartbeat_url=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
+	#	 -O /tmp/config_setting
 	#get_config	 
+	captive_portal_restart
 }
 
 setting_config() {
