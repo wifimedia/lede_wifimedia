@@ -10,8 +10,7 @@ m = Map("wifimedia", "")
 m.apply_on_parse = true
 function m.on_apply(self)
 	--luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-	luci.sys.call("env -i /bin/ubus call network restart >/dev/null 2>/dev/null")
-	--luci.http.redirect(luci.dispatcher.build_url("admin","wifimedia","advance"))
+)
 end
 
 s = m:section(TypedSection, "LTE","4G LTE Interface")
@@ -23,13 +22,13 @@ lte.rmempty = false
 		function lte.write(self, section, value)
 			if value == self.enabled then			
 			    luci.sys.call("uci set network.lte='interface'")
-				luci.sys.call("uci set network.lan.proto='dhcp'")
-				luci.sys.call("uci set network.lan.type='bridge'")
-				luci.sys.call("uci set network.lan.ifname='eth1'")
+				luci.sys.call("uci set network.lte.proto='dhcp'")
+				luci.sys.call("uci set network.lte.type='bridge'")
+				luci.sys.call("uci set network.lte.ifname='eth1'")
 				luci.sys.call("echo 1 >/sys/class/gpio/power_usb3/value")
 				luci.sys.call("uci commit")
 			else
-				luci.sys.call("uci delete network.lan")
+				luci.sys.call("uci delete network.lte")
 				luci.sys.call("uci commit")
 				luci.sys.call("echo 0 >/sys/class/gpio/power_usb3/value")
 			end

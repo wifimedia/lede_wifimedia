@@ -40,6 +40,15 @@ uci -q get wifimedia.@wireless[0] || {
 	commit wifimedia
 EOF
 }
+
+uci -q get wifimedia.@LTE[0] || {
+	uci batch <<-EOF
+	add wifimedia LTE
+	set wifimedia.@LTE[0]=lte
+	commit wifimedia
+EOF
+}
+
 #change ver  for upgrade
 uci set wifimedia.@sync[0].version=2.1.1
 uci set wifimedia.@sync[0].rsn=2.6
@@ -245,7 +254,7 @@ uci batch << EOF
 	set firewall.${LTE_ZONE}_fwd_lte=forwarding
 	set firewall.${LTE_ZONE}_fwd_lte.dest=${LTE_INT}
 	set firewall.${LTE_ZONE}_fwd_lte.src=private
-	
+	commit firewall
 EOF
 
 #Password	
