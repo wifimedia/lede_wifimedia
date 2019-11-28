@@ -174,7 +174,7 @@ rm /tmp/monitor_port
 
 ##Sent Client MAC to server Nextify
 get_client_connect_wlan(){
-    ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+    #ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
 	NEWLINE_IFS='
 '
 	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
@@ -195,9 +195,10 @@ get_client_connect_wlan(){
 		done
 	done
 	IFS="$OLD_IFS"
-	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;/,/g'| tr a-z A-Z)
+	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;//g'| tr a-z A-Z)
+	clients=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
-	wget --post-data="&access_point_macs=${global_device}&clients=${client_connect_wlan}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
+	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
 }
