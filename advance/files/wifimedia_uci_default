@@ -232,7 +232,7 @@ uci batch << EOF
 	commit dhcp
 EOF
 
-LTE_ZONE="4G-LTE"
+LTE_ZONE="4glte"
 LTE_INT="lte"
 uci batch << EOF
 	set firewall.${LTE_ZONE}=zone
