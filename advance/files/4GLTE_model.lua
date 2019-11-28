@@ -10,14 +10,13 @@ m = Map("wifimedia", "")
 m.apply_on_parse = true
 function m.on_apply(self)
 	--luci.sys.call("env -i /bin/ubus call network reload >/dev/null 2>/dev/null")
-)
 end
 
-s = m:section(TypedSection, "LTE","4G LTE Interface")
+s = m:section(TypedSection, "lte","4G LTE Interface")
 s.anonymous = true
 s.addremove = false
 
-lte = s:option(Flag, "4g-lte","4G LTE Enable ")
+lte = s:option(Flag, "4glte","4G LTE Enable ")
 lte.rmempty = false
 		function lte.write(self, section, value)
 			if value == self.enabled then			
