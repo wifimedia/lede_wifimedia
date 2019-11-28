@@ -222,6 +222,33 @@ uci batch << EOF
 	commit network
 	commit dhcp
 EOF
+
+LTE_ZONE="4G-LTE"
+LTE_INT="lte"
+uci batch << EOF
+	set firewall.${LTE_ZONE}=zone
+	set firewall.${LTE_ZONE}.input=ACCEPT
+	set firewall.${LTE_ZONE}.forward=ACCEPT
+	set firewall.${LTE_ZONE}.output=ACCEPT
+	set firewall.${LTE_ZONE}.name=${LTE_INT}
+	set firewall.${LTE_ZONE}.masq=1
+	set firewall.${LTE_ZONE}.network=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd=forwarding
+	set firewall.${LTE_ZONE}_fwd.dest=lan
+	set firewall.${LTE_ZONE}_fwd.src=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte=forwarding
+	set firewall.${LTE_ZONE}_fwd_lte.dest=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte.src=lan
+	set firewall.${LTE_ZONE}_fwd=forwarding
+	set firewall.${LTE_ZONE}_fwd.dest=private
+	set firewall.${LTE_ZONE}_fwd.src=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte=forwarding
+	set firewall.${LTE_ZONE}_fwd_lte.dest=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte.src=private
+	
+EOF
+
+
 	
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd

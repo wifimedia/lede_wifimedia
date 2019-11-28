@@ -103,63 +103,6 @@ license_local() {
 	fi
 }
 
-###Gateway
-licensegw() {
-	first_time=$(cat /etc/opt/first_time.txt)
-	timenow=$(date +"%s")
-	diff=$(expr $timenow - $first_time)
-	days=$(expr $diff / 86400)
-	diff=$(expr $diff \% 86400)
-	hours=$(expr $diff / 3600)
-	diff=$(expr $diff \% 3600)
-	min=$(expr $diff / 60)
-
-	#uptime="${days}"
-	time=$(uci -q get wifimedia.@wireless[0].time)
-	time1=${days}
-	uptime="${time:-$time1}"
-	#status=/etc/opt/wfm_status
-	lcs=/etc/opt/wfm_lcs
-	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-		echo "Activated" >/etc/opt/license/status
-		#touch $status
-		rm $lcs
-		echo "" >/etc/crontabs/wificode
-		/etc/init.d/cron restart
-		uci set wireless.radio0.disabled="0"
-		uci set wireless.radio1.disabled="0"
-		uci commit wireless
-		wifi
-	else
-		minute=`date | awk '{print $4}'|cut -c 4,5`
-		if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
-			reboot
-		fi
-		echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-		
-	fi
-	if [ "$uptime" -gt 15 ]; then #>15days
-		if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
-			uci set wireless.radio0.disabled="0"
-			uci set wireless.radio1.disabled="0"
-			uci commit wireless
-			wifi
-			rm $lcs
-			echo "" >/etc/crontabs/wificode
-			/etc/init.d/cron restart
-			echo "Activated" >/etc/opt/license/status
-		else
-			#minute=`date | awk '{print $4}'|cut -c 4,5`
-			#if [ "minute" == "30" ] || [ "minute" == "45" ] || [ "minute" == "59" ];then
-			#	reboot
-			#fi
-			echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-			#rm $status
-			
-		fi
-	fi
-}
-#end GW
 eap_manager() {
 	rm -f /tmp/eap_mac
 	rm -f /tmp/eap
