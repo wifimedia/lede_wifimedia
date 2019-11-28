@@ -59,7 +59,7 @@ uci -q get wifimedia.@nodogsplash[0] || {
         add wifimedia nodogsplash
 		set wifimedia.@nodogsplash[0].domain="tplink.telitads.vn"
 		set wifimedia.@nodogsplash[0].https=0
-		set wifimedia.@nodogsplash[0].server="https://tplink.telitads.vn"
+		set wifimedia.@nodogsplash[0].server="https://api.telitads.vn/v1/access_points/state"
         commit wifimedia
 EOF
 }

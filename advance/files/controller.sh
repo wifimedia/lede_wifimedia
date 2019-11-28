@@ -197,7 +197,7 @@ get_client_connect_wlan(){
 	IFS="$OLD_IFS"
 	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;/,/g'| tr a-z A-Z)
 	#monitor_port
-	wget --post-data="clients=${client_connect_wlan}&vpn=${ip_opvn}&gateway_mac=${global_device}" $cpn_url -O /dev/null
+	wget --post-data="&access_point_macs=${global_device}&clients=${client_connect_wlan}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
 }
