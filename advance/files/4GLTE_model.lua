@@ -25,12 +25,13 @@ lte.rmempty = false
 				luci.sys.call("uci set network.lte.type='bridge'")
 				luci.sys.call("uci set network.lte.ifname='eth1'")
 				luci.sys.call("echo 1 >/sys/class/gpio/power_usb3/value")
-				luci.sys.call("echo 1 >/sys/class/gpio/power_usb3/value")
+				luci.sys.call("sed -i 's/echo 0 >\/sys\/class\/gpio\/power_usb3\/value/echo 1 >\/sys\/class\/gpio\/power_usb3\/value/g' /etc/init.d/network_reload")
 				luci.sys.call("uci commit")
 			else
 				luci.sys.call("uci delete network.lte")
 				luci.sys.call("uci commit")
 				luci.sys.call("echo 0 >/sys/class/gpio/power_usb3/value")
+				luci.sys.call("sed -i 's/echo 1 >\/sys\/class\/gpio\/power_usb3\/value/echo 0 >\/sys\/class\/gpio\/power_usb3\/value/g' /etc/init.d/network_reload")
 			end
 			return Flag.write(self, section, value)
 		end
