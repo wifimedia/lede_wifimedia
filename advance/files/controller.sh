@@ -30,7 +30,7 @@ checking (){
 }
 
 device_cfg(){
-	wget -q "${cfg_ctl}" -O $response_file
+	#wget -q "${cfg_ctl}" -O $response_file
 	response_file=/tmp/_cfg
 	hash256=$(sha256sum $response_file | awk '{print $1}')
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $sha256_download | awk '{print $2}')" ]; then
@@ -223,6 +223,61 @@ if [ $(cat tmp/cpn_flag) -eq 1 ]; then
 fi		
 }
 
+action_lan_wlan(){
+	echo "" > $find_mac_gateway
+	wget -q "${blacklist}" -O $find_mac_gateway
+	curl_result=$?
+	if [ "${curl_result}" -eq 0 ]; then
+		cat "$find_mac_gateway" | while read line ; do
+			if [ "$(echo $line | grep $_device)" ] ;then
+				wifi down
+				ifdown lan
+			fi
+		done	
+	fi
+}
+
+monitor_port(){
+swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
+	echo "$line," >>/tmp/monitor_port
+done
+ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
+echo $ports_data
+#wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_post -O /dev/null
+rm /tmp/monitor_port
+}
+
+##Sent Client MAC to server Nextify
+get_client_connect_wlan(){
+    #ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+	NEWLINE_IFS='
+'
+	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
+	signal=''
+	host=''
+	mac=''
+	touch /tmp/client_connect_wlan
+	for iface in `iw dev | grep Interface | awk '{print $2}'`; do
+		for line in `iwinfo $iface assoclist`; do
+			if echo "$line" | grep -q "SNR"; then
+				if [ -f /etc/ethers ]; then
+					mac=$(echo $line | awk '{print $1}' FS=" ")
+					host=$(awk -v MAC=$mac 'tolower($1)==MAC {print $1}' FS=" " /etc/ethers)
+					data=";$mac"
+					echo $data >>/tmp/client_connect_wlan
+				fi
+			fi
+		done
+	done
+	IFS="$OLD_IFS"
+	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;//g'| tr a-z A-Z)
+	clients=$(cat /tmp/client_connect_wlan | wc -l)
+	#monitor_port
+	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
+	echo $client_connect_wlan
+	rm /tmp/client_connect_wlan
+}
+
 license_srv() {
 	###MAC WAN:WR940NV6 --Ethernet0 OPENWRT19
 	echo "" > $licensekey
@@ -297,7 +352,6 @@ license_local() {
 	fi
 }
 
-ap_m(){
 	rm -f /tmp/eap_mac
 	rm -f /tmp/eap
 	cat "$eap_device" | while read line ; do
@@ -341,61 +395,6 @@ ap_m(){
 		done	
 	done
 }
-action_lan_wlan(){
-	echo "" > $find_mac_gateway
-	wget -q "${blacklist}" -O $find_mac_gateway
-	curl_result=$?
-	if [ "${curl_result}" -eq 0 ]; then
-		cat "$find_mac_gateway" | while read line ; do
-			if [ "$(echo $line | grep $_device)" ] ;then
-				wifi down
-				ifdown lan
-			fi
-		done	
-	fi
-}
-
-monitor_port(){
-swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
-	echo "$line," >>/tmp/monitor_port
-done
-ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
-echo $ports_data
-wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_post -O /dev/null
-rm /tmp/monitor_port
-}
-
-##Sent Client MAC to server Nextify
-get_client_connect_wlan(){
-    #ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
-	NEWLINE_IFS='
-'
-	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
-	signal=''
-	host=''
-	mac=''
-	touch /tmp/client_connect_wlan
-	for iface in `iw dev | grep Interface | awk '{print $2}'`; do
-		for line in `iwinfo $iface assoclist`; do
-			if echo "$line" | grep -q "SNR"; then
-				if [ -f /etc/ethers ]; then
-					mac=$(echo $line | awk '{print $1}' FS=" ")
-					host=$(awk -v MAC=$mac 'tolower($1)==MAC {print $1}' FS=" " /etc/ethers)
-					data=";$mac"
-					echo $data >>/tmp/client_connect_wlan
-				fi
-			fi
-		done
-	done
-	IFS="$OLD_IFS"
-	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;//g'| tr a-z A-Z)
-	clients=$(cat /tmp/client_connect_wlan | wc -l)
-	#monitor_port
-	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
-	echo $client_connect_wlan
-	rm /tmp/client_connect_wlan
-}
-
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
