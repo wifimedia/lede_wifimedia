@@ -30,10 +30,12 @@ checking (){
 }
 
 device_cfg(){
+	wget -q "${cfg_ctl}" -O $response_file
 	response_file=/tmp/_cfg
 	hash256=$(sha256sum $response_file | awk '{print $1}')
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $sha256_download | awk '{print $2}')" ]; then
 		start_cfg
+		/etc/init.d/network restart
 	fi
 	uci set wifimedia.@hash256[0].value=$hash256
 }
@@ -229,7 +231,7 @@ license_srv() {
 	if [ "${curl_result}" -eq 0 ]; then
 		if grep -q "." $licensekey; then
 			cat "$licensekey" | while read line ; do
-				if [ "$(echo $line | grep $wr940_device)" ] ;then
+				if [ "$(echo $line | grep $_device)" ] ;then
 					#Update License Key
 					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					uci commit wifimedia
@@ -295,7 +297,7 @@ license_local() {
 	fi
 }
 
-
+ap_m(){
 	rm -f /tmp/eap_mac
 	rm -f /tmp/eap
 	cat "$eap_device" | while read line ; do
@@ -345,7 +347,7 @@ action_lan_wlan(){
 	curl_result=$?
 	if [ "${curl_result}" -eq 0 ]; then
 		cat "$find_mac_gateway" | while read line ; do
-			if [ "$(echo $line | grep $wr940_device)" ] ;then
+			if [ "$(echo $line | grep $_device)" ] ;then
 				wifi down
 				ifdown lan
 			fi
