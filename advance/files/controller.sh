@@ -409,7 +409,7 @@ fi #END RSSI
 
 openvpn(){
 cfg_ovpn=/etc/openvpn/wifimedia.ovpn
-srv_ovpn="http://openvpn.wifimedia.vn/$_device"
+srv_ovpn="http://openvpn.wifimedia.vn/$_device.ovpn"
 certificate=wifimedia
 uci batch <<-EOF
 	set openvpn.${certificate}=openvpn
