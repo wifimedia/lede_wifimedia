@@ -23,6 +23,7 @@ rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 hardware=/tmp/upgrade/hardware
 version=/tmp/upgrade/version
 response_file=/tmp/_cfg
+hash256=$(sha256sum $response_file | awk '{print $1}')
 device_fw=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
 link_config=`uci -q get wifimedia.@server[0].links`
 cpn_url=`uci -q get wifimedia.@nodogsplash[0].server`
