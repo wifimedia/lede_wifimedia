@@ -37,7 +37,13 @@ device_cfg(){
 		start_cfg
 		/etc/init.d/network restart
 	fi
+	
+	monitor_port
+	get_client_connect_wlan
+	
 	uci set wifimedia.@hash256[0].value=$hash256
+	wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_config -O /tmp/device_cfg
+	rm /tmp/monitor_port
 }
 
 start_cfg(){
@@ -230,7 +236,7 @@ done
 ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
 echo $ports_data
 #wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_config -O /dev/null
-rm /tmp/monitor_port
+#rm /tmp/monitor_port
 }
 
 ##Sent Client MAC to server Nextify
@@ -353,49 +359,6 @@ license_local() {
 	fi
 }
 
-	rm -f /tmp/eap_mac
-	rm -f /tmp/eap
-	cat "$eap_device" | while read line ; do
-		mac=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f1-5)
-		maclast=$(echo $line | awk '{print $2}'| tr '[a-z]' '[A-Z]' | cut -d ':' -f6)
-		#echo $maclast
-		zero=$(echo $maclast | cut -c 1)
-		echo $zero
-		#echo "Mac address= $mac:$maclast"
-
-		decmac=$(echo "ibase=16; $maclast"|bc)
-		if [ $decmac -eq '241' ]
-		then
-		macinc='00'
-		else
-		incout=`expr $decmac + 1 `
-		macinc=$(echo "obase=16; $incout"|bc)
-
-		fi
-			
-		if [ $zero -eq '0' ];then
-			#echo "Mac address= $mac:$zero$macinc"
-			echo "$mac:$zero$macinc" >>/tmp/eap_mac
-		else
-			#echo "Mac address= $mac:$macinc"
-			echo "$mac:$macinc" >>/tmp/eap_mac
-		fi
-	done
-	#EXPORT DATA AP IP MAC
-	cat "/tmp/eap_mac" | while read line ; do
-
-		#linedeap=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-		#arp | grep $linedeap | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-		#echo $linedeap
-		eapmac=$(echo $line | awk '{print $1}' | sed 's/-/:/g' | tr A-Z a-z)
-		cat "/proc/net/arp" | while read line ; do
-			arpmac=$(echo $line | awk '{print $4}' | sed 's/-/:/g' )
-			if [ "$eapmac" == "$arpmac" ] ;then
-				echo $line | awk '{print $4 " "$1 " http://" $1 }' >>/tmp/eap
-			fi
-		done	
-	done
-}
 rssi() {
 if [ $rssi_on == "1" ];then
 	level_defaults=-80
