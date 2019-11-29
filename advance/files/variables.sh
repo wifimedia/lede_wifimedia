@@ -23,9 +23,8 @@ rssi_on=$(uci -q get wifimedia.@advance[0].enable)
 hardware=/tmp/upgrade/hardware
 version=/tmp/upgrade/version
 device_fw=$(cat /sys/class/ieee80211/phy0/macaddress |sed 's/:/-/g' | tr a-z A-Z)
-link_post=`uci -q get wifimedia.@server[0].links`
+link_config=`uci -q get wifimedia.@server[0].links`
 cpn_url=`uci -q get wifimedia.@nodogsplash[0].server`
-cfg_ctl=`uci -q get wifimedia.@server[0].`
 #echo "Waiting a bit..."
 #sleep $(head -30 /dev/urandom | tr -dc "0123456789" | head -c1)
 if [ ! -d "/tmp/upgrade" ]; then mkdir /tmp/upgrade; fi
