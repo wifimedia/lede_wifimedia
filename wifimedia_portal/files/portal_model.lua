@@ -35,7 +35,7 @@ s:taboption( "basic",Flag, "facebook","Bypass Facebook")
 dhcpextension = s:taboption( "basic",Flag, "dhcpextension","DHCP Extension")
 dhcpextension.rmempty = false
 
-cpn = s:taboption( "basic",Flag, "cpn","CPN Clients detect")
+cpn = s:taboption( "basic",Flag, "cpnurl","CPN Clients detect")
 cpn.rmempty = false
 
 function cpn.write(self, section, value)
