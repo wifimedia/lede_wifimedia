@@ -39,7 +39,7 @@ device_cfg(){
 	fi
 	
 	monitor_port
-	get_client_connect_wlan
+	#get_client_connect_wlan $cpn_url
 	
 	uci set wifimedia.@hash256[0].value=$hash256
 	wget --post-data="gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}" $link_config -O /tmp/device_cfg
@@ -238,10 +238,14 @@ echo $ports_data
 #wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_config -O /dev/null
 #rm /tmp/monitor_port
 }
+_detect_clients(){
+	get_client_connect_wlan $cpn_url
+}
 
 ##Sent Client MAC to server Nextify
 get_client_connect_wlan(){
     #ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+	local _url=$1
 	NEWLINE_IFS='
 '
 	OLD_IFS="$IFS"; IFS=$NEWLINE_IFS
@@ -266,7 +270,7 @@ get_client_connect_wlan(){
 	clients=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
 	#wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
-	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}" $cpn_url -O /dev/null #http://api.nextify.vn/clients_around
+	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}" $_url -O /dev/null #http://api.nextify.vn/clients_around
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
 }
