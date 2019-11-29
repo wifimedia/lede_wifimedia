@@ -223,20 +223,6 @@ if [ $(cat tmp/cpn_flag) -eq 1 ]; then
 fi		
 }
 
-action_lan_wlan(){
-	echo "" > $find_mac_gateway
-	wget -q "${blacklist}" -O $find_mac_gateway
-	curl_result=$?
-	if [ "${curl_result}" -eq 0 ]; then
-		cat "$find_mac_gateway" | while read line ; do
-			if [ "$(echo $line | grep $_device)" ] ;then
-				wifi down
-				ifdown lan
-			fi
-		done	
-	fi
-}
-
 monitor_port(){
 swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
 	echo "$line," >>/tmp/monitor_port
@@ -273,10 +259,24 @@ get_client_connect_wlan(){
 	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;//g'| tr a-z A-Z)
 	clients=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
-	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
+	#wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
 	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}" $cpn_url -O /dev/null #http://api.nextify.vn/clients_around
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
+}
+
+action_lan_wlan(){
+	echo "" > $find_mac_gateway
+	wget -q "${blacklist}" -O $find_mac_gateway
+	curl_result=$?
+	if [ "${curl_result}" -eq 0 ]; then
+		cat "$find_mac_gateway" | while read line ; do
+			if [ "$(echo $line | grep $_device)" ] ;then
+				wifi down
+				ifdown lan
+			fi
+		done	
+	fi
 }
 
 license_srv() {
