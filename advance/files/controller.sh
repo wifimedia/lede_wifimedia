@@ -418,8 +418,17 @@ uci batch <<-EOF
 	commit openvpn
 EOF
 
-wget -q "${srv_ovpn}" -O $cfg_ovpn
-if 
+	wget -q "${srv_ovpn}" -O $cfg_ovpn
+	curl_result=$?
+	if [ "${curl_result}" -eq 0 ]; then
+		uci set openvpn.${certificate}.enabled="1"
+		uci commit openvpn
+		/etc/init.d/openvpn start ${certificate}
+	else
+		uci set openvpn.${certificate}.enabled="1"
+		uci commit openvpn
+		/etc/init.d/openvpn stop ${certificate}
+	fi
 }
 
 "$@"
