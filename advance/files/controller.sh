@@ -42,7 +42,7 @@ device_cfg(){
 	get_client_connect_wlan
 	
 	uci set wifimedia.@hash256[0].value=$hash256
-	wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_config -O /tmp/device_cfg
+	wget --post-data="gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}" $link_config -O /tmp/device_cfg
 	rm /tmp/monitor_port
 }
 
