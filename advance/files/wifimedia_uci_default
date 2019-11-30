@@ -349,6 +349,7 @@ uci batch <<-EOF
 	del openvpn.@openvpn[0]
 	del openvpn.@openvpn[1]
 	del openvpn.@openvpn[2]
+	del openvpn.@openvpn[4]
 	commit openvpn
 EOF
 touch /etc/opt/wfm_status

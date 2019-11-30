@@ -63,7 +63,6 @@ cat $response_file | while read line ; do
 	#Reboot device	
 	elif [ "$key" = "device.reboot" ];then
 		echo $value >tmp/reboot_flag
-	elif [ "$key" = "device.passwd" ];then
 	#Cau hinh wireless
 	elif [ "$key" = "wireless.radio2G.enable" ];then
 		uci set wireless.radio0.disabled="$value"
