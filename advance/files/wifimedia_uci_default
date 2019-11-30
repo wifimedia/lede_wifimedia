@@ -343,6 +343,14 @@ uci batch <<-EOF
 	set dropbear.@dropbear[0].Port=2702
 	commit dropbear
 EOF
+
+##Del config openvpn 0 1 2
+uci batch <<-EOF
+	del openvpn.@openvpn[0]
+	del openvpn.@openvpn[1]
+	del openvpn.@openvpn[2]
+	commit openvpn
+EOF
 touch /etc/opt/wfm_status
 rm -f /etc/banner
 mv /etc/banner_ /etc/banner
