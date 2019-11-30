@@ -33,7 +33,7 @@ device_cfg(){
 	#wget -q "${cfg_ctl}" -O $response_file
 	#response_file=/tmp/_cfg
 	#hash256=$(sha256sum $response_file | awk '{print $1}')
-	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $sha256_download | awk '{print $2}')" ]; then
+	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$hash256" ]; then
 		start_cfg
 		/etc/init.d/network restart
 	fi
