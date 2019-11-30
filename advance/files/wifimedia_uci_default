@@ -344,14 +344,14 @@ uci batch <<-EOF
 	commit dropbear
 EOF
 
-echo "" >/etc/config/openvpn
 ##Del config openvpn 0 1 2
-##	del openvpn.@openvpn[0]
-#	del openvpn.@openvpn[1]
-#	del openvpn.@openvpn[2]
-#	del openvpn.@openvpn[4]
-#	commit openvpn
-#EOF
+uci batch <<-EOF
+	del openvpn.@openvpn[0]
+	del openvpn.@openvpn[1]
+	del openvpn.@openvpn[2]
+	del openvpn.@openvpn[3]
+	commit openvpn
+EOF
 touch /etc/opt/wfm_status
 rm -f /etc/banner
 mv /etc/banner_ /etc/banner
