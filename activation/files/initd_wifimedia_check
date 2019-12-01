@@ -1,12 +1,21 @@
 #!/bin/sh /etc/rc.common
 
-START=6
+START=3
 STOP=15
 
 lcs=/etc/opt/wfm_lcs
 
 boot() {
-	if [ -e "$lcs" ];then
-			/sbin/wifimedia/controller.sh license_srv >/dev/null 2>&1
-	fi
+
+	while true; do
+    	ping -c1 -W1 8.8.8.8
+    	if [ ${?} -eq 0 ]; then
+      	  	break
+   	else
+        	sleep 1
+    	fi
+	done
+	#if [ -e "$lcs" ];then
+	/sbin/wifimedia/controller.sh license_srv >/dev/null 2>&1
+	#fi
 }
