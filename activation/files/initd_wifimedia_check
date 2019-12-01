@@ -1,15 +1,12 @@
 #!/bin/sh /etc/rc.common
 
-START=6
+START=3
 STOP=15
 
 lcs=/etc/opt/wfm_lcs
-model_hardware=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+
 boot() {
-	if [ -e "$lcs" ];then
-			/sbin/wifimedia/controller.sh license_srv >/dev/null 2>&1
-	fi
-	# Wait for network up & running
+
 	while true; do
     	ping -c1 -W1 8.8.8.8
     	if [ ${?} -eq 0 ]; then
@@ -18,6 +15,7 @@ boot() {
         	sleep 1
     	fi
 	done
-	/sbin/wifimedia/controller.sh checking
-	/sbin/wifimedia/controller.sh action_lan_wlan
+	#if [ -e "$lcs" ];then
+	/sbin/wifimedia/controller.sh license_srv >/dev/null 2>&1
+	#fi
 }
