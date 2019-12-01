@@ -109,9 +109,9 @@ checking (){
 }
 
 device_cfg(){
-	response_file=/tmp/_cfg
-	hash256=$(sha256sum $response_file | awk '{print $1}')
-	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $sha256_download | awk '{print $2}')" ]; then
+	#response_file=/tmp/_cfg
+	#hash256=$(sha256sum $response_file | awk '{print $1}')
+	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $hash256 | awk '{print $2}')" ]; then
 		start_cfg
 	fi
 	uci set wifimedia.@hash256[0].value=$hash256
@@ -315,9 +315,6 @@ if [ "${curl_result}" -eq 0 ]; then
 				cat /etc/opt/license/wifimedia >/etc/opt/license/status
 				license_local
 			else
-				#echo "we will maintain the existing settings."
-				#echo "Wrong License Code & auto reboot" >/etc/opt/license/status
-				#enable cronjob chek key
 				echo "0 0 * * * /sbin/wifimedia/controller.sh license_srv" > /etc/crontabs/wificode
 				#/etc/init.d/cron restart
 			fi
@@ -357,7 +354,6 @@ fi
 if [ "$uptime" -gt 15 ]; then #>15days
 	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		uci set wireless.radio0.disabled="0"
-		#uci set wireless.radio1.disabled="0"
 		uci commit wireless
 		wifi
 		#touch $status
@@ -368,7 +364,6 @@ if [ "$uptime" -gt 15 ]; then #>15days
 	else
 		echo "Wrong License Code" >/etc/opt/license/status
 		uci set wireless.radio0.disabled="1"
-		uci set wireless.radio1.disabled="1"
 		uci commit wireless
 		wifi down
 	fi
