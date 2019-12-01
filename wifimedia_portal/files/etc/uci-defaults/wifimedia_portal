@@ -1,0 +1,107 @@
+#!/bin/sh
+
+#/etc/init.d/nodogsplash disable
+echo -e "nds:x:0:0:nds:/root:/bin/ash" >>/etc/passwd
+#write file crontabs
+_nds=/etc/cron_nds
+echo '* * * * * /sbin/wifimedia/heartbeat.sh' >$_nds
+
+domain=`uci -q get wifimedia.@nodogsplash[0].nds_domain`
+domain=${domain:-crm.wifimedia.vn}
+
+key=`uci -q get wifimedia.@nodogsplash[0].nds_apkey`
+captive_id=`ifconfig br-lan | grep 'HWaddr' | awk '{ print $5 }'| sed 's/://g'`
+apkey=${key:-$captive_id}
+wg=`uci -q get wifimedia.@nodogsplash[0].nds_wg`
+
+ip_gateway=`ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+
+echo '#!/bin/sh /etc/rc.common
+
+START=99
+STOP=15
+
+EXTRA_COMMANDS="status"
+EXTRA_HELP="        status  View the status of nodogsplash"
+
+boot() {
+    /sbin/wifimedia/update_preauthenticated_rules.sh
+    nodogsplash -s -d 5 -c /tmp/etc/nodogsplash.conf
+}
+
+start() {
+    sleep 1
+    nodogsplash -s -d 5 -c /tmp/etc/nodogsplash.conf
+}
+
+stop() {
+    ndsctl stop
+}
+
+status() {
+    ndsctl status
+}
+' >/etc/init.d/nodogsplash
+
+#write file splash
+echo '<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>$gatewayname</title>
+  </head>
+  <body>
+<<<<<<< HEAD
+      <form id="info" method="POST" action="//'$domain'/back_end/'$apkey'/1">
+=======
+      <form id="info" method="POST" action="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
+          <input type="hidden" name="gateway_name" value="$gatewayname">
+          <input type="hidden" name="gateway_mac" value="$gatewaymac">
+          <input type="hidden" name="client_mac" value="$clientmac">
+          <input type="hidden" name="num_clients" value="$nclients">
+          <input type="hidden" name="uptime" value="$uptime">
+		  <!--input type="hidden" name="splashcheck" value="1"-->
+          <input type="hidden" name="auth_target" value="$authtarget">
+      </form>
+      <script>
+          document.getElementById("info").submit();
+      </script>
+  </body>
+</html>' >/etc/nodogsplash/htdocs/splash.html
+
+#write file infoskel
+echo '<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Whoops...</title>
+<<<<<<< HEAD
+        <meta http-equiv="refresh" content="0; url="//'$domain'/back_end/'$apkey'/1">
+=======
+        <meta http-equiv="refresh" content="0; url="//firmware.wifimedia.com.vn/splash">
+>>>>>>> Blacklist
+        <style>
+            html {
+                background: #F7F7F7;
+            }
+        </style>
+    </head>
+    <body></body>
+</html>' >/etc/nodogsplash/htdocs/infoskel.html
+
+
+uci -q get wifimedia.@nodogsplash[0] || {
+        uci batch <<EOF
+        add wifimedia nodogsplash
+        commit wifimedia
+EOF
+}
+
+/sbin/wifimedia/ndscf.sh start >/dev/null
+crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
+/etc/ini.d/nodogsplash start
+/etc/ini.d/nodogsplash enable
+chmod a+x /sbin/wifimedia/heartbeat.sh
+#sleep 10
+#/etc/init.d/firewall restart

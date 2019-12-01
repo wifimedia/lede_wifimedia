@@ -15,6 +15,27 @@ action_acl=/etc/privoxy/useracl.action
 user_filter=/etc/privoxy/user.filter
 filter=/etc/privoxy/user.filter
 ##IMG
+<<<<<<< HEAD
+link5=$(uci -q get wifimedia.@adnetwork[0].link)
+img5=$(uci -q get wifimedia.@adnetwork[0].img)
+#title5=$(uci -q get wifimedia.@adnetwork[0].title)
+
+link1=$(uci -q get wifimedia.@adnetwork[0].link1)
+img1=$(uci -q get wifimedia.@adnetwork[0].img1)
+#title1=$(uci -q get wifimedia.@adnetwork[0].title1)
+
+link2=$(uci -q get wifimedia.@adnetwork[0].link2)
+img2=$(uci -q get wifimedia.@adnetwork[0].img2)
+#title2=$(uci -q get wifimedia.@adnetwork[0].title2)
+
+link3=$(uci -q get wifimedia.@adnetwork[0].link3)
+img3=$(uci -q get wifimedia.@adnetwork[0].img3)
+#title3=$(uci -q get wifimedia.@adnetwork[0].title3)
+
+link4=$(uci -q get wifimedia.@adnetwork[0].link4)
+img4=$(uci -q get wifimedia.@adnetwork[0].img4)
+#title4=$(uci -q get wifimedia.@adnetwork[0].title4)
+=======
 link1=$(uci -q get wifimedia.@adnetwork[0].link1)
 img1=$(uci -q get wifimedia.@adnetwork[0].img1)
 
@@ -30,6 +51,7 @@ img4=$(uci -q get wifimedia.@adnetwork[0].img4)
 link5=$(uci -q get wifimedia.@adnetwork[0].link)
 img5=$(uci -q get wifimedia.@adnetwork[0].img)
 
+>>>>>>> update_09102018
 ##END IMG
 fb_page=$(uci -q get wifimedia.@adnetwork[0].ads_fb_page)
 fb_video=$(uci -q get wifimedia.@adnetwork[0].ads_fb_video)

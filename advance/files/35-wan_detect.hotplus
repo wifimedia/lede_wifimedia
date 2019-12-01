@@ -32,8 +32,32 @@ if [ $net_wan == $net_lan ];then
 fi
 ip_lan_gw=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 mac_wlan=$(cat /sys/class/ieee80211/phy0/macaddress | sed 's/://g')
+#echo "127.0.0.1 localhost" > /etc/hosts
+#echo "${ip_dhcp} $mac_wlan.wifimedia.vn" >> /etc/hosts
+#echo "$ip_gateway local.wifimedia.vn" >> /etc/hosts
+
 echo "127.0.0.1 localhost" > /etc/hosts
+<<<<<<< HEAD:advance/files/35-wan_detect.hotplus
 echo "${ip_dhcp} $mac_wlan.wifimedia.vn" >> /etc/hosts
+<<<<<<< HEAD
+echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
+<<<<<<< HEAD:advance/files/etc/hotplug.d/iface/35-wan_detect
+=======
+
+<<<<<<< HEAD
+=======
 echo "$ip_gateway local.wifimedia.vn" >> /etc/hosts
+>>>>>>> origin/wifimedia_dev
+=======
 /sbin/wifimedia/controller.sh license_srv
+>>>>>>> wr841v13_ext:advance/files/35-wan_detect.hotplus
+=======
+echo "${ip_dhcp} $mac_wlan.local" >> /etc/hosts
+echo "$ip_lan_gw local.wifimedia.vn" >> /etc/hosts
+>>>>>>> master:advance/files/etc/hotplug.d/iface/35-wan_detect
+=======
+echo "$ip_gateway local.wifimedia.vn" >> /etc/hosts
+>>>>>>> master
+/sbin/wifimedia/controller.sh license_srv
+>>>>>>> origin/wr84xx
 #/etc/init.d/network restart

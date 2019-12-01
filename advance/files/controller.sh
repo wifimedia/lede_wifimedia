@@ -169,6 +169,7 @@ fi
 #}
 
 checking (){
+<<<<<<< HEAD
 	#model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
 	#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
 	#if [ "$model" == "TL-WR840N_v4" ];then
@@ -180,6 +181,23 @@ checking (){
 	#elif [ "$model" == "TL-WR940N_v4" ];then
 	#	wr940v5
 	if [ "$model" == "TL-WR940N_v6" ];then
+=======
+	model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
+	eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-20)
+	if [ "$model" == "TL-WR840N_v4" ];then
+		wr840v4
+		eap_manager
+	elif [ "$model" == "TL-WR841N_v13" ];then
+		wr841v13
+		eap_manager
+<<<<<<< HEAD
+	elif [ "$model" == "TL-WR940N_v5" ];then
+=======
+	elif [ "$model" == "TL-WR940N_v4" ];then
+>>>>>>> origin/wr84xx
+		wr940v5
+	elif [ "$model" == "TL-WR940N_v6" ];then
+>>>>>>> master
 		wr940v6
 	fi	
 	#elif [ "$eap_name" == "TL-WA901ND" ] ;then
@@ -438,7 +456,7 @@ if [ "$groups_en" == "1" ];then
 		uci set wireless.@wifi-iface[0].ssid="$essid"
 	fi
 	#channel
-	uci set wireless.radio0.channel="$ch"
+	#uci set wireless.radio0.channel="$ch"
 	#Connect Limit
 	uci set wireless.@wifi-iface[0].maxassoc="$cnl"
 	#Passwd ssid

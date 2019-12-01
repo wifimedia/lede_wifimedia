@@ -9,11 +9,21 @@ echo "* * * * * /sbin/wifimedia/controller.sh remote_cfg" >>/etc/crontabs/root
 echo "0 0 * * * /sbin/wifimedia/controller_srv.sh upgrade_srv" >>/etc/crontabs/root
 /etc/init.d/cron start
 /etc/init.d/cron enable
+<<<<<<< HEAD
 /sbin/wifimedia/updates.sh
+
+/etc/init.d/cron start
+/etc/init.d/cron enable
+=======
+>>>>>>> master
 
 uci -q get wifimedia.@advance[0] || {
         uci batch <<EOF
         add wifimedia advance
+<<<<<<< HEAD
+        #set wifimedia.@advance[0].online=0
+=======
+>>>>>>> origin/wr84xx
         commit wifimedia
 EOF
 }
