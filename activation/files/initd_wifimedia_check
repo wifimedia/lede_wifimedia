@@ -19,6 +19,4 @@ boot() {
         	sleep 1
     	fi
 	done
-	/sbin/wifimedia/controller.sh checking
-	/sbin/wifimedia/controller.sh action_lan_wlan
 }
