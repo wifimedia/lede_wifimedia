@@ -243,7 +243,10 @@ _detect_clients(){
 
 ##Sent Client MAC to server Nextify
 get_client_connect_wlan(){
-    #ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+	_openvpn=`pidof openvpn`
+	if [ -n "$_openvpn" ];then
+		ip_opvn=`ifconfig tun0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }'`
+	fi
 	local _url=$1
 	NEWLINE_IFS='
 '
