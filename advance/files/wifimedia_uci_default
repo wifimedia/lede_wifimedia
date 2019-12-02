@@ -45,6 +45,7 @@ uci -q get wifimedia.@LTE[0] || {
 	uci batch <<-EOF
 	add wifimedia LTE
 	set wifimedia.@LTE[0]=lte
+	set wifimedia.@LTE[0].lte=0
 	commit wifimedia
 EOF
 }
@@ -295,10 +296,6 @@ echo 'DISTRIB_CODENAME="'"$DISTRIB_CODENAME"'"' >> /etc/openwrt_release
 echo 'DISTRIB_TARGET="'"$DISTRIB_TARGET"'"' >> /etc/openwrt_release
 echo 'DISTRIB_DESCRIPTION="'"$DISTRIB_DESCRIPTION"'"' >> /etc/openwrt_release
 
-#rm -f /etc/privoxy/default.action
-#rm -f /etc/privoxy/default.filter
-
-#chmod a+x /sbin/wifimedia/*.sh
 /etc/init.d/system reload
 /etc/init.d/led reload
 
@@ -323,16 +320,6 @@ uci batch <<-EOF
 	commit system
 EOF
 /etc/init.d/sysntpd start >/dev/null
-##LED XIAOMI-MIWIFI
-#uci batch <<-EOF
-#	set system.led_power.name='power'
-#	set system.led_power.default='1'
-#	set system.led_power.trigger='netdev'
-#	set system.led_power.dev='br-wan'
-#	set system.led_power.mode='link tx rx'
-#	set system.led_power.sysfs='xiaomi:blue:status'
-#	commit system
-#EOF
 uci set luci.diag.dns="google.com.vn"
 uci set luci.diag.ping="google.com.vn"
 uci set luci.diag.route="google.com.vn"
@@ -341,6 +328,15 @@ uci set luci.diag.route="google.com.vn"
 uci batch <<-EOF
 	set dropbear.@dropbear[0].Port=2702
 	commit dropbear
+EOF
+
+##Del config openvpn 0 1 2
+uci batch <<-EOF
+	del openvpn.@openvpn[0]
+	del openvpn.@openvpn[1]
+	del openvpn.@openvpn[2]
+	del openvpn.@openvpn[3]
+	commit openvpn
 EOF
 touch /etc/opt/wfm_status
 rm -f /etc/banner
