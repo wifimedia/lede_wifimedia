@@ -165,7 +165,6 @@ EOF
 #EOF
 /etc/init.d/nodogsplash disable
 uci set nodogsplash.@nodogsplash[0].enabled='0'
-#uci set nodogsplash.@nodogsplash[0].gatewayname="Nextify CRM";
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
@@ -186,6 +185,3 @@ uci commit firewall
 /etc/init.d/relayd restart
 #sleep 5
 #iptables -I FORWARD -o br-wan -d $(route -n | grep 'UG' | grep 'br-wan' | awk '{ print $2 }') -j ACCEPT
-
-
-
