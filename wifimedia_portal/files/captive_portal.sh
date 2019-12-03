@@ -84,8 +84,8 @@ config_captive_portal() {
 		fi			
 		while read line; do
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80 to $(echo $line)"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $line)"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $line)"
+			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
 		done <$PREAUTHENTICATED_ADDRS
 
 		if [ "$facebook" == "1" ];then
@@ -95,20 +95,20 @@ config_captive_portal() {
 		done <$PREAUTHENTICATED_ADDR_FB
 		fi
 
-		if [ $https == "1" ];then
+		#if [ $https == "1" ];then
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
 			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"	
-		else
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+		#else
+		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
 			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
 			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"			
+		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"			
 		
-		fi
+		#fi
 		
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 22"
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 53"
@@ -158,10 +158,10 @@ heartbeat(){
 	#TOTAL_CLIENTS=$(cat /tmp/ndsctl_status.txt | grep 'Current clients' | cut -d':' -f2 | xargs)
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
-	#wget -q --timeout=3 \
-	#	 "$heartbeat_url=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
-	#	 -O /tmp/config_setting
-	#get_config	 
+	wget -q --timeout=3 \
+		 "$heartbeat_url=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
+		 -O /tmp/config_setting
+	get_config	 
 	captive_portal_restart
 }
 
