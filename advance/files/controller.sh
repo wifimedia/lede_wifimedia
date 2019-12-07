@@ -272,6 +272,7 @@ get_client_connect_wlan(){
 	number_client=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
 	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}&ip_opvn=${ip_opvn}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
+	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}" https://api-dev.telitads.vn/v1/splash/connect -O /dev/null
 	#wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}&number_client=${number_client}" $_url -O /dev/null #http://api.nextify.vn/clients_around
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
