@@ -30,22 +30,32 @@ checking (){
 }
 
 device_cfg(){
-
+	token
 	monitor_port
 	get_client_connect_wlan
 	#get_client_connect_wlan $cpn_url
-	wget --post-data="gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}mac_clients=${client_connect_wlan}&number_client=${number_client}&ip_opvn=${ip_opvn}" $link_config -O /tmp/device_cfg
+	wget --post-data="token=${token}&gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}mac_clients=${client_connect_wlan}&number_client=${number_client}&ip_opvn=${ip_opvn}" $link_config -O /tmp/device_cfg
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$hash256" ]; then
 		start_cfg
 	fi
-	
 	uci set wifimedia.@hash256[0].value=$hash256
+	echo "Token "$token
+	echo "AP MAC "$global_device 
 	rm /tmp/monitor_port
 	rm /tmp/client_connect_wlan
 }
-
+token(){
+ global_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }'`
+ token=$(echo -n $(echo $global_device  | cut -c  13,14,16,17) | sha256sum | awk '{print $1}')
+ #echo $token
+}
 start_cfg(){
 
+touch /tmp/reboot_flag
+touch /tmp/network_flag
+touch /tmp/cpn_flag
+touch /tmp/scheduled_flag
+touch /tmp/clientdetect
 local key
 local value
 cat $response_file | while read line ; do
@@ -184,7 +194,7 @@ cat $response_file | while read line ; do
 		
 	#Cau hinh Captive Portal
 	elif [  "$key" = "cpn.enable" ];then
-		echo $value >tmp/cpn_flag
+		echo $value >/tmp/cpn_flag
 		uci set nodogsplash.@nodogsplash[0].enabled="$value"
 	elif [  "$key" = "cpn.domain" ];then
 		uci set wifimedia.@nodogsplash[0].domain="$value"
@@ -197,10 +207,10 @@ cat $response_file | while read line ; do
 		uci set wifimedia.@nodogsplash[0].dhcpextension="$value"
 	elif [  "$key" = "cpn.clientdetect" ];then
 		uci set wifimedia.@nodogsplash[0].cpn="$value"
-		echo $value >tmp/clientdetect
+		echo $value >/tmp/clientdetect
 	#Cau hinh auto reboot
 	elif [  "$key" = "scheduletask.enable" ];then
-		echo $value >tmp/scheduled_flag
+		echo $value >/tmp/scheduled_flag
 	elif [  "$key" = "scheduletask.hours" ];then
 		uci set scheduled.@times[0].hour="$value"
 	elif [  "$key" = "scheduletask.minute" ];then
@@ -214,7 +224,7 @@ if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
 	reboot
 fi
 
-if [ $(cat /tmp/>tmp/cpn_flag) -eq 1 ]; then
+if [ $(cat /tmp/cpn_flag) -eq 1 ]; then
 	echo "Config & Start CPN" 
 	/sbin/wifimedia/captive_portal.sh config_captive_portal
 	echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds
@@ -223,7 +233,7 @@ else
   echo "Stop CPN"
   /etc/init.d/nodogsplash stop
 fi
-if [ $(cat tmp/cpn_flag) -eq 1 ]; then
+if [ $(cat /tmp/clientdetect) -eq 1 ]; then
 	echo "restarting conjob"
 	crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
 fi
