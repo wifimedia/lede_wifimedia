@@ -35,7 +35,6 @@ device_cfg(){
 	#hash256=$(sha256sum $response_file | awk '{print $1}')
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$hash256" ]; then
 		start_cfg
-		/etc/init.d/network restart
 	fi
 	
 	monitor_port
@@ -62,9 +61,10 @@ cat $response_file | while read line ; do
 		echo -e "$value\n$value" | passwd root
 	#Reboot device	
 	elif [ "$key" = "device.reboot" ];then
-		echo $value >tmp/reboot_flag
+		echo $value >/tmp/reboot_flag
 	#Cau hinh wireless
 	elif [ "$key" = "wireless.radio2G.enable" ];then
+		echo 1 >/tmp/network_flag
 		uci set wireless.radio0.disabled="$value"
 	elif [ "$key" = "wireless.radio2G.channel" ];then
 		uci set wireless.radio0.channel="$value"
@@ -107,7 +107,7 @@ cat $response_file | while read line ; do
 	
 	##Cau hinh switch 5 port		
 	elif [ "$key" = "network.switch" ];then
-		echo $value >tmp/switch_flag
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then
 			uci delete network.lan
 			uci set network.wan.proto="dhcp"
@@ -133,6 +133,7 @@ cat $response_file | while read line ; do
 		fi
 	#Cu hinh IP LAN/WAN
 	elif [ "$key" = "network.lan.static" ];then
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then ##Static 
 			uci set network.lan="interface"
 			uci set network.lan.proto="static"
@@ -154,6 +155,7 @@ cat $response_file | while read line ; do
 		uci set network.lan.dns="$value"		
 	###WAN config
 	elif [ "$key" = "network.wan.static" ];then
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then ##Static 
 			uci set network.wan="interface"
 			uci set network.wan.proto="static"
@@ -225,7 +227,12 @@ fi
 if [ $(cat tmp/cpn_flag) -eq 1 ]; then
 	echo "restarting conjob"
 	crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
-fi		
+fi
+
+if [ $(cat /tmp/network_flag) -eq 1 ]; then
+	/etc/init.d/network restart
+fi
+	
 }
 
 monitor_port(){
