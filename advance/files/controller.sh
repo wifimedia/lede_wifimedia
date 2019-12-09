@@ -30,19 +30,18 @@ checking (){
 }
 
 device_cfg(){
-	#wget -q "${cfg_ctl}" -O $response_file
-	#response_file=/tmp/_cfg
-	#hash256=$(sha256sum $response_file | awk '{print $1}')
+
+	monitor_port
+	get_client_connect_wlan
+	#get_client_connect_wlan $cpn_url
+	wget --post-data="gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}mac_clients=${client_connect_wlan}&number_client=${number_client}&ip_opvn=${ip_opvn}" $link_config -O /tmp/device_cfg
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$hash256" ]; then
 		start_cfg
 	fi
 	
-	monitor_port
-	#get_client_connect_wlan $cpn_url
-	
 	uci set wifimedia.@hash256[0].value=$hash256
-	wget --post-data="gateway_mac=${global_device}&isp=${PUBLIC_IP}&ip_wan=${ip_wan}&ip_lan=${ip_lan}&diagnostics=${diagnostics}&ports_data=${ports_data}" $link_config -O /tmp/device_cfg
 	rm /tmp/monitor_port
+	rm /tmp/client_connect_wlan
 }
 
 start_cfg(){
@@ -279,9 +278,9 @@ get_client_connect_wlan(){
 	number_client=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
 	#wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}" $cpn_url -O /dev/null #https://api.telitads.vn/v1/access_points/state
-	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}&number_client=${number_client}&ip_opvn=${ip_opvn}" $_url -O /dev/null #http://api.nextify.vn/clients_around
-	echo $client_connect_wlan
-	rm /tmp/client_connect_wlan
+	#wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}&number_client=${number_client}&ip_opvn=${ip_opvn}" $_url -O /dev/null #http://api.nextify.vn/clients_around
+	#echo $client_connect_wlan
+	#rm /tmp/client_connect_wlan
 }
 
 action_lan_wlan(){
