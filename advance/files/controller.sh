@@ -293,7 +293,7 @@ monitor_port(){
 swconfig dev switch0 show |  grep 'link'| awk '{print $2, $3}' | while read line;do
 	echo "$line," >>/tmp/monitor_port
 done
-ports_data==$(cat /tmp/monitor_port | xargs| sed 's/,/;/g')
+ports_data=$(cat /tmp/monitor_port | xargs| sed 's/,/;/g' | sed 's/ port:/ /g' | sed 's/ link:/:/g' )
 echo $ports_data
 #wget --post-data="gateway_mac=${global_device}&ports_data=${ports_data}" $link_config -O /dev/null
 #rm /tmp/monitor_port
