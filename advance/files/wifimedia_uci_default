@@ -41,6 +41,14 @@ uci -q get wifimedia.@wireless[0] || {
 EOF
 }
 
+uci -q get wifimedia.@hash256[0] || {
+	uci batch <<-EOF
+	add wifimedia hash256
+	set wifimedia.@hash256[0]=hash256
+	commit wifimedia
+EOF
+}
+
 uci -q get wifimedia.@LTE[0] || {
 	uci batch <<-EOF
 	add wifimedia LTE
