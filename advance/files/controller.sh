@@ -39,8 +39,10 @@ device_cfg(){
 		start_cfg
 	fi
 	uci set wifimedia.@hash256[0].value=$hash256
-	echo "Token "$token
-	echo "AP MAC "$global_device 
+	#echo "Token "$token
+	#echo "AP MAC "$global_device
+	#echo "mac_clients "$client_connect_wlan
+	#echo "ports_data "$ports_data
 	rm /tmp/monitor_port
 	rm /tmp/client_connect_wlan
 }
@@ -71,7 +73,7 @@ cat $response_file | while read line ; do
 	#Reboot device	
 	elif [ "$key" = "device.reboot" ];then
 		echo $value >/tmp/reboot_flag
-	#Cau hinh wireless
+	#Cau hinh wireless 2.4
 	elif [ "$key" = "wireless.radio2G.enable" ];then
 		echo 1 >/tmp/network_flag
 		uci set wireless.radio0.disabled="$value"
@@ -113,6 +115,49 @@ cat $response_file | while read line ; do
 	#Set Max Client	
 	elif [ "$key" = "wireless.maxclients2G" ];then
 		uci set wireless.default_radio0.maxassoc="$value"
+
+############cau hinh 5G
+	elif [ "$key" = "wireless.radio5G.enable" ];then
+		echo 1 >/tmp/network_flag
+		uci set wireless.radio1.disabled="$value"
+	elif [ "$key" = "wireless.radio5G.channel" ];then
+		uci set wireless.radio1.channel="$value"
+	elif [ "$key" = "wireless.radio5G.htmode" ];then
+		uci set wireless.radio1.htmode="$value"
+	elif [ "$key" = "wireless.radio5G.txpower" ];then
+		uci set wireless.radio1.txpower="$value"
+	elif [ "$key" = "wireless.ssid5G" ];then
+		uci set wireless.default_radio1.ssid="$value"
+	elif [ "$key" = "wireless.passwd5G" ];then
+		if [ "$value" = "" ];then
+			uci set wireless.default_radio1.key=""
+			uci set wireless.default_radio1.encryption="none"
+		else
+			uci set wireless.default_radio1.key="$value"
+			uci set wireless.default_radio1.encryption="psk2"
+		fi
+	#chuyen dung chuan cache	
+	elif [ "$key" = "wireless.okc5G=" ];then
+		if [ "$value" =  "1" ];then
+			uci set wireless.default_radio1.rsn_preauth="$value"
+			uci set wireless.default_radio1.ieee80211r ="0"
+			uci set wireless.default_radio1.ft_over_ds="0"
+			uci set wireless.default_radio1.ft_psk_generate_local="0"
+		fi	
+	#Chuyen dung 802.1R	
+	elif [ "$key" = "wireless.ft5G" ];then
+		if [ "$value" =  "1" ];then
+			uci set wireless.default_radio1.rsn_preauth="0"
+			uci set wireless.default_radio1.ieee80211r ="1"
+			uci set wireless.default_radio1.ft_over_ds="1"
+			uci set wireless.default_radio1.ft_psk_generate_local="1"
+		fi	
+	##Map SSID to net/plain LAN or WAN	
+	elif [ "$key" = "wireless.network5G" ];then
+		uci set wireless.default_radio0.network="$value"
+	#Set Max Client	
+	elif [ "$key" = "wireless.maxclients5G" ];then
+		uci set wireless.default_radio1.maxassoc="$value"
 	
 	##Cau hinh switch 5 port		
 	elif [ "$key" = "network.switch" ];then
