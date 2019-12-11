@@ -91,25 +91,16 @@ config_captive_portal() {
 		if [ "$facebook" == "1" ];then
 		while read fb; do
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80 to $(echo $fb)"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $fb)"
+			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443 to $(echo $fb)"
 		done <$PREAUTHENTICATED_ADDR_FB
 		fi
 
-		#if [ $https == "1" ];then
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
-			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"	
-		#else
-		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
-			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
-			#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
-		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
-		#	uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"			
-		
-		#fi
-		
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 22"
+		#uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 80"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 443"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow tcp port 53"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow udp port 53"	
+
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 22"
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow tcp port 53"
 		uci add_list nodogsplash.@nodogsplash[0].users_to_router="allow udp port 53"
