@@ -20,7 +20,7 @@ define Package/libiptbwctl
 	SECTION:=net
 	CATEGORY:=Gargoyle
 	SUBMENU:=Network
-	DEPENDS:=+iptables-mod-bandwidth
+	#DEPENDS:=+iptables-mod-bandwidth
 	TITLE:=IPT bandwidth control library
 	URL:=http://www.gargoyle-router.com
 	MAINTAINER:=Eric Bishop <eric@gargoyle-router.com>
