@@ -18,7 +18,7 @@ define Package/luci-app-qosv4
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:=LuCI Support for QoSv4.
-  DEPENDS:=+tc +iptables-mod-conntrack-extra +iptables-mod-conntrack-extra +iptables-mod-filter +iptables-mod-imq +iptables-mod-ipopt +iptables-mod-nat-extra +iptables-mod-imq +kmod-sched
+  DEPENDS:=+tc +iptables-mod-conntrack-extra +iptables-mod-conntrack-extra +iptables-mod-filter +iptables-mod-ipopt +iptables-mod-nat-extra +kmod-sched
   PKGARCH:=all
   MAINTAINER:=qq 3341249
 endef

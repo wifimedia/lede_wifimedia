@@ -91,7 +91,6 @@ define Package/$(PKG_NAME)
   +PACKAGE_$(PKG_NAME)_INCLUDE_V2ray:v2ray \
   +PACKAGE_$(PKG_NAME)_INCLUDE_Trojan:trojan +ipt2socks \
   +PACKAGE_$(PKG_NAME)_INCLUDE_Brook:brook \
-  +PACKAGE_$(PKG_NAME)_INCLUDE_kcptun:kcptun-client \
   +PACKAGE_$(PKG_NAME)_INCLUDE_haproxy:haproxy \
   +PACKAGE_$(PKG_NAME)_INCLUDE_ChinaDNS:openwrt_chinadns \
   +PACKAGE_$(PKG_NAME)_INCLUDE_pdnsd:pdnsd-alt \

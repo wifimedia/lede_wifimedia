@@ -83,13 +83,10 @@ define Package/luci-app-ssr-plus-jsda
 	DEPENDS:=+shadowsocksr-libev-alt +ipset +ip-full +iptables-mod-tproxy +dnsmasq-full +coreutils +coreutils-base64 +bash +pdnsd-alt +wget +unzip \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks:shadowsocks-libev-ss-redir \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray:v2ray \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun:kcptun-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Server:shadowsocksr-libev-server \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Server:shadowsocks-libev-ss-server \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR_Socks:shadowsocksr-libev-ssr-local \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Socks:shadowsocks-libev-ss-local \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Simple_Obfs:simple-obfs \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_V2Ray:v2ray-plugin \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_ChinaDNS:openwrt_chinadns \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_dnscrypt_proxy:dnscrypt-proxy-full \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_dnsforwarder:openwrt-dnsforwarder \
