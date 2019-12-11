@@ -47,6 +47,15 @@ uci -q get wifimedia.@hash256[0] || {
 	commit wifimedia
 EOF
 }
+
+uci -q get wifimedia.@LTE[0] || {
+	uci batch <<-EOF
+	add wifimedia LTE
+	set wifimedia.@LTE[0]=lte
+	set wifimedia.@LTE[0].lte=0
+	commit wifimedia
+EOF
+}
 #change ver  for upgrade
 uci set wifimedia.@sync[0].version=2.1.1
 uci set wifimedia.@sync[0].rsn=2.6
