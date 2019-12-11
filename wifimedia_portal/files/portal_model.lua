@@ -116,7 +116,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  function enable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/preauthenticated_rules.sh")
 			luci.sys.call("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit nodogsplash")
-			luci.sys.call("echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
+			luci.sys.call("echo '* * * * * /sbin/wifimedia/heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart")
 			--luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
