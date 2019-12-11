@@ -339,7 +339,7 @@ get_client_connect_wlan(){
 }
 
 action_lan_wlan(){
-	echo "" > $find_mac_gateway
+	touch $find_mac_gateway
 	wget -q "${blacklist}" -O $find_mac_gateway
 	curl_result=$?
 	if [ "${curl_result}" -eq 0 ]; then
