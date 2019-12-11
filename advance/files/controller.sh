@@ -47,9 +47,13 @@ device_cfg(){
 	rm /tmp/client_connect_wlan
 }
 token(){
- global_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }'`
- token=$(echo -n $(echo $global_device  | cut -c  13,14,16,17) | sha256sum | awk '{print $1}')
- #echo $token
+#token = sha256(mac+secret)
+ secret="(C)WifiMedia2019"
+ mac_device=`ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }'`
+ key=${mac_device}${secret}
+ echo $key
+ token=$(echo -n $(echo $key) | sha256sum | awk '{print $1}')
+ echo $token
 }
 start_cfg(){
 
