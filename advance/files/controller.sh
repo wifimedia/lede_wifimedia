@@ -366,7 +366,7 @@ license_srv() {
 			cat "$licensekey" | while read line ; do
 				if [ "$(echo $line | grep $_device)" ] ;then
 					#Update License Key
-					uci set wifimedia.@wireless[0].wfm="$(cat /etc/opt/license/wifimedia)"
+					uci set wifimedia.@hash256[0].wfm="$(cat /etc/opt/license/wifimedia)"
 					uci commit wifimedia
 					cat /etc/opt/license/wifimedia >/etc/opt/license/status
 					license_local
@@ -400,7 +400,7 @@ license_local() {
 	#uptime="${days}d:${hours}h:${min}m"
 	status=/etc/opt/wfm_status
 	lcs=/etc/opt/wfm_lcs
-	if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+	if [ "$(uci -q get wifimedia.@hash256[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 		echo "Activated" >/etc/opt/license/status
 		#touch $status
 		echo "" >/etc/crontabs/wificode
@@ -410,7 +410,7 @@ license_local() {
 		echo "Wrong License Code" >/etc/opt/license/status
 	fi
 	if [ "$uptime" -gt 15 ]; then #>15days
-		if [ "$(uci -q get wifimedia.@wireless[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
+		if [ "$(uci -q get wifimedia.@hash256[0].wfm)" == "$(cat /etc/opt/license/wifimedia)" ]; then
 			uci set wireless.radio0.disabled="0"
 			uci set wireless.radio1.disabled="0"
 			uci commit wireless
