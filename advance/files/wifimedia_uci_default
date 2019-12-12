@@ -318,7 +318,7 @@ echo -e "09465670089\n09465670089" | passwd wifimedia
 word=$(cat /sys/class/ieee80211/phy0/macaddress | cut -c  10,11,13,14,16,17 | sed 's/://g' |awk '{print $1}'|tr a-z A-Z)
 pwd=$(echo -n $word | md5sum | awk '{print $1}')
 #echo -e "$pwd\n$pwd" | passwd root
-echo -e "wifimedia\nwifimedia" | passwd root
+echo -e "telitads\ntelitads" | passwd root
 #End
 
 #Cron heartbeat
