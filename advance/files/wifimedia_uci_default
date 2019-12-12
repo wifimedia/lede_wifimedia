@@ -321,6 +321,9 @@ pwd=$(echo -n $word | md5sum | awk '{print $1}')
 echo -e "wifimedia\nwifimedia" | passwd root
 #End
 
+#Cron heartbeat
+echo '* * * * * /sbin/wifimedia/controller.sh heartbeat' >/etc/crontabs/root
+
 #Info
 CODENAME="wifimedia"
 if [ -f "/etc/codename" ]; then
