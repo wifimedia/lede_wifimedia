@@ -104,7 +104,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  function disable.write(self, section)
 			--luci.util.exec("/sbin/wifimedia/del_network_nds.sh")
 			luci.sys.exec("uci set nodogsplash.@nodogsplash[0].enabled='0' && uci commit nodogsplash")
-			luci.util.exec("echo '* * * * * /sbin/wifimedia/controller.sh get_client_connect_wlan'>/etc/crontabs/nds && /etc/init.d/cron restart")
+			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash disable && /etc/init.d/nodogsplash stop")
 			luci.http.redirect(
             		luci.dispatcher.build_url("admin", "services", "wifimedia_portal")
