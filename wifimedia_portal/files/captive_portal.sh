@@ -247,7 +247,7 @@ dhcp_extension(){
 	fi
 }
 cpn_detect(){
-	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpn`
+	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpnurl`
 	if [ $cpn_status -eq 0 ];then
 		echo '* * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart
 	fi
