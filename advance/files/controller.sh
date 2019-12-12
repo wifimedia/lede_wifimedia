@@ -337,8 +337,8 @@ get_client_connect_wlan(){
 	number_client=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
 	wget --post-data="clients=${client_connect_wlan}&gateway_mac=${global_device}&number_client=${number_client}&ip_opvn=${ip_opvn}" $cpn_url -O /dev/null #http://api.nextify.vn/clients_around
-	#echo $client_connect_wlan
-	#rm /tmp/client_connect_wlan
+	echo $client_connect_wlan
+	rm /tmp/client_connect_wlan
 }
 
 action_lan_wlan(){
