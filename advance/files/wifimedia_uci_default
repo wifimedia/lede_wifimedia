@@ -379,9 +379,9 @@ mv /etc/banner_ /etc/banner
 /etc/init.d/dropbear restart
 /etc/init.d/network restart
 /etc/init.d/watchcat start #start watchcat
-rm -f /root/advance_model.lua
-rm -f /root/gw_index.htm
-rm -f /root/wifi_overview.htm
+#rm -f /root/advance_model.lua
+#rm -f /root/gw_index.htm
+#rm -f /root/wifi_overview.htm
 chmod +x /sbin/wifimedia/*
 wifi up
 #rm -f /etc/uci-defaults/wifimedia
