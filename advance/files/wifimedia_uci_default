@@ -308,14 +308,14 @@ uci batch <<-EOF
 	commit wifimedia
 EOF
 
-uci batch <<-EOF
-	del openvpn.@openvpn[0]
-	del openvpn.@openvpn[1]
-	del openvpn.@openvpn[2]
-	del openvpn.@openvpn[3]
-	commit openvpn
-EOF
-
+#uci batch <<-EOF
+#	del openvpn.@openvpn[0]
+#	del openvpn.@openvpn[1]
+#	del openvpn.@openvpn[2]
+#	del openvpn.@openvpn[3]
+#	commit openvpn
+#EOF
+echo "" >/etc/config/openvpn
 source /etc/openwrt_release
 rm -f /etc/openwrt_release
 DISTRIB_DESCRIPTION=$(uci get wifimedia.Version.ver)""
