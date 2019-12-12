@@ -279,7 +279,32 @@ uci batch << EOF
 	commit network
 	commit dhcp
 EOF
-	
+
+LTE_ZONE="4glte"
+LTE_INT="lte"
+uci batch << EOF
+	set firewall.${LTE_ZONE}=zone
+	set firewall.${LTE_ZONE}.input=ACCEPT
+	set firewall.${LTE_ZONE}.forward=ACCEPT
+	set firewall.${LTE_ZONE}.output=ACCEPT
+	set firewall.${LTE_ZONE}.name=${LTE_INT}
+	set firewall.${LTE_ZONE}.masq=1
+	set firewall.${LTE_ZONE}.network=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lan=forwarding
+	set firewall.${LTE_ZONE}_fwd_lan.dest=lan
+	set firewall.${LTE_ZONE}_fwd_lan.src=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte=forwarding
+	set firewall.${LTE_ZONE}_fwd_lte.dest=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte.src=lan
+	set firewall.${LTE_ZONE}_fwd_p=forwarding
+	set firewall.${LTE_ZONE}_fwd_p.dest=private
+	set firewall.${LTE_ZONE}_fwd_p.src=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte_p=forwarding
+	set firewall.${LTE_ZONE}_fwd_lte_p.dest=${LTE_INT}
+	set firewall.${LTE_ZONE}_fwd_lte_p.src=private
+	commit firewall
+EOF
+
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
 echo -e "admin:*:0:0:99999:7:::" >>/etc/shadow
