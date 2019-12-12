@@ -59,7 +59,7 @@ get_client_connect_wlan(){
 	client_connect_wlan=$(cat /tmp/client_connect_wlan | xargs| sed 's/;/ /g'| tr a-z A-Z)
 	number_client=$(cat /tmp/client_connect_wlan | wc -l)
 	#monitor_port
-	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}&ip_opvn=${ip_opvn}" https://api.telitads.vn/v1/access_points/state -O /dev/null #https://api.telitads.vn/v1/access_points/state
+	#wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}&clients=${clients}&ip_opvn=${ip_opvn}" https://api.telitads.vn/v1/access_points/state -O /dev/null #https://api.telitads.vn/v1/access_points/state
 	wget --post-data="&access_point_macs=${global_device}&mac_clients=${client_connect_wlan}" https://api-dev.telitads.vn/v1/splash/connect -O /dev/null
 	echo $client_connect_wlan
 	rm /tmp/client_connect_wlan
@@ -190,6 +190,13 @@ if [ $rssi_on == "1" ];then
 	echo "#!/bin/sh" >/tmp/denyclient
 fi #END RSSI
 
+}
+
+heartbeat(){
+	MAC=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
+	UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
+	RAM_FREE=$(grep -i 'MemFree:'  /proc/meminfo | cut -d':' -f2 | xargs)
+	wget --post-data="&access_point_macs=${global_device}&uptime=${UPTIME}&ram_free=${RAM_FREE}" https://api.telitads.vn/v1/access_points/state -O /dev/null #https://api.telitads.vn/v1/access_points/state
 }
 
 openvpn(){
