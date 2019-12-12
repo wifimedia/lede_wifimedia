@@ -151,7 +151,7 @@ heartbeat(){
 	#Value Jsion
 	wget -q --timeout=3 \
 		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}" \
-		 -O /tmp/config_setting
+		 -O /dev/null
 	captive_portal_restart
 	#"http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
 }
