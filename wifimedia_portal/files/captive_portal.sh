@@ -147,8 +147,9 @@ heartbeat(){
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
 	wget -q --timeout=3 \
-		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
-		 -O /tmp/config_setting
+		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}" \
+		 -O /dev/null
+		 #"http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
 	captive_portal_restart
 }
 
