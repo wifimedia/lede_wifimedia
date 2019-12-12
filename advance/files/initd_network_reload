@@ -19,6 +19,7 @@ boot() {
 	done
 	/sbin/wifimedia/controller.sh checking
 	/sbin/wifimedia/controller.sh action_lan_wlan
+	ifup wan && ifup lan
 	#/sbin/wifimedia/controller.sh openvpn #Start openvpn fistboot
 }
 
