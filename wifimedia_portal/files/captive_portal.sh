@@ -150,9 +150,10 @@ heartbeat(){
 	TOTAL_CLIENTS=$(ndsctl status | grep clients | awk '{print $3}')
 	#Value Jsion
 	wget -q --timeout=3 \
-		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
+		 "http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}" \
 		 -O /tmp/config_setting
 	captive_portal_restart
+	#"http://portal.nextify.vn/heartbeat?mac=${MAC}&uptime=${UPTIME}&num_clients=${NUM_CLIENTS}&total_clients=${TOTAL_CLIENTS}" \
 }
 
 get_captive_portal_clients() {
@@ -249,7 +250,7 @@ dhcp_extension(){
 	fi
 }
 cpn_detect(){
-	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpn`
+	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpnurl`
 	if [ $cpn_status -eq 0 ];then
 		echo '* * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart
 	fi
