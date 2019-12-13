@@ -66,7 +66,7 @@ EOF
 
 /etc/init.d/nodogsplash disable
 uci set nodogsplash.@nodogsplash[0].enabled='0'
-#uci set nodogsplash.@nodogsplash[0].gatewayname="Nextify CRM";
+uci set nodogsplash.@nodogsplash[0].gatewayname="CPN";
 uci del nodogsplash.@nodogsplash[0].users_to_router
 uci del nodogsplash.@nodogsplash[0].authenticated_users
 uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
