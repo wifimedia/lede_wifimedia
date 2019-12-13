@@ -406,8 +406,9 @@ rm -f /etc/banner
 mv /etc/banner_ /etc/banner
 /etc/init.d/dropbear restart
 /etc/init.d/network restart
-/etc/init.d/watchcat start #start watchcat
+#/etc/init.d/watchcat start #start watchcat
 chmod +x /sbin/wifimedia/*
+/etc/init.d/cron restart
 wifi up
 #rm -f /etc/uci-defaults/wifimedia
 #sleep 5 && reboot
