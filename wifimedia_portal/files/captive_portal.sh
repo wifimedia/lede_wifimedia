@@ -38,7 +38,8 @@ config_captive_portal() {
 	else	
 
 		#uci set nodogsplash.@nodogsplash[0].enabled='1'
-		uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
+		uci set nodogsplash.@nodogsplash[0].gatewayinterface="${NET_ID}";
+		uci set nodogsplash.@nodogsplash[0].gatewayname="CPN";
 		#uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 		uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
 		uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_default";
@@ -241,20 +242,30 @@ dhcp_extension(){
 			uci set network.local.ipaddr='10.68.255.1'
 			uci add_list network.local.network='hotspot'
 			uci set dhcp.hotspot.ignore='1'
-			uci set wireless.@wifi-iface[0].network='hotspot'			
+			uci set wireless.default_radio0.network='hotspot'
+			uci set wireless.default_radio1.network='hotspot'
 		else
 			uci set network.local.ipaddr='172.16.99.1'
 			uci add_list network.local.network='lan'
 			uci set dhcp.lan.ignore='1'
-			uci set wireless.@wifi-iface[0].network='lan'
+			uci set wireless.default_radio0.network='lan'
+			uci set wireless.default_radio1.network='lan'
 		fi	
 		uci add_list network.local.network='wan'
 	else
+		NET_ID=`uci -q get wifimedia.@nodogsplash[0].network`
+		if [ $NET_ID = "br-hotspot" ];then
+			uci set wireless.default_radio0.network='hotspot'
+			uci set wireless.default_radio1.network='hotspot'
+		else
+			uci set wireless.default_radio0.network='lan'
+			uci set wireless.default_radio1.network='lan'
+		fi	
 		uci set dhcp.lan.ignore='0'
 		uci set dhcp.hotspot.ignore='0'
 
 	fi
-	uci commit
+	uci commit && /etc/init.d/network restart
 }
 cpn_detect(){
 	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpnurl`
