@@ -38,6 +38,10 @@ dhcpextension.rmempty = false
 cpn = s:taboption( "basic",Flag, "cpn","CPN Clients detect")
 cpn.rmempty = false
 
+network = s:taboption( "network",ListValue, "network","Interface")
+network:value("br-hotspot", "Hotspot")
+network:value("br-lan", "LAN")
+
 function cpn.write(self, section, value)
 if value == self.enabled then
 		luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
