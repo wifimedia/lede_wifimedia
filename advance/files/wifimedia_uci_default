@@ -236,9 +236,9 @@ uci batch <<-EOF
 	commit firewall
 	EOF
 	
-NET_ID="private"
-FW_ZONE="private"
-IFNAME="eth0.1" #VLAN1
+NET_ID="hotspot"
+FW_ZONE="hotspot"
+IFNAME="eth0.300" #VLAN1
 uci batch << EOF
 	set network.${NET_ID}=interface
 	set network.${NET_ID}.ifname=${IFNAME}
@@ -297,13 +297,14 @@ uci batch << EOF
 	set firewall.${LTE_ZONE}_fwd_lte.dest=${LTE_INT}
 	set firewall.${LTE_ZONE}_fwd_lte.src=lan
 	set firewall.${LTE_ZONE}_fwd_p=forwarding
-	set firewall.${LTE_ZONE}_fwd_p.dest=private
+	set firewall.${LTE_ZONE}_fwd_p.dest=${NET_ID}
 	set firewall.${LTE_ZONE}_fwd_p.src=${LTE_INT}
 	set firewall.${LTE_ZONE}_fwd_lte_p=forwarding
 	set firewall.${LTE_ZONE}_fwd_lte_p.dest=${LTE_INT}
-	set firewall.${LTE_ZONE}_fwd_lte_p.src=private
+	set firewall.${LTE_ZONE}_fwd_lte_p.src=${NET_ID}
 	commit firewall
 EOF
+
 	
 #Password	
 echo -e "admin:x:1000:1000:admin:/root:/bin/false" >>/etc/passwd
