@@ -110,6 +110,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  disable.inputstyle = "remove"
 	  function disable.write(self, section)
 			luci.sys.exec("uci set nodogsplash.@nodogsplash[0].enabled='0' && uci commit nodogsplash")
+			luci.util.exec("echo '* * * * * /sbin/wifimedia/controller.sh heartbeat' >/etc/crontabs/roots")
 			luci.util.exec("echo ''>/etc/crontabs/nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash disable && /etc/init.d/nodogsplash stop")
 			luci.http.redirect(
@@ -121,6 +122,7 @@ t:option(DummyValue, "status","Captive portal status")
 	  enable.inputstyle = "apply"
 	  function enable.write(self, section)
 			luci.sys.call("uci set nodogsplash.@nodogsplash[0].enabled='1' && uci commit nodogsplash")
+			luci.util.exec("echo '' >/etc/crontabs/roots")
 			luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
 			luci.util.exec("/etc/init.d/nodogsplash enable")
 			luci.http.redirect(
