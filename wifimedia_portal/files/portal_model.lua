@@ -64,11 +64,13 @@ if value == self.enabled then
 		--luci.sys.call("uci set dhcp.lan.ignore='1' && uci commit dhcp ")
 		--luci.sys.call("uci set wireless.@wifi-iface[0].network='lan' && uci commit network")
 		--luci.sys.call("uci set nodogsplash.@nodogsplash[0].gatewayinterface='br-lan'")
+		luci.sys.call("uci commit")
 	else
 		luci.sys.call("uci del network.local")
 		--luci.sys.call("uci set dhcp.hotspot.ignore='0' && uci commit dhcp")
 		--luci.sys.call("uci set wireless.@wifi-iface[0].network='hotspot' && uci commit network")
 		--luci.sys.call("uci set nodogsplash.@nodogsplash[0].gatewayinterface='br-private'")
+		luci.sys.call("uci commit")
 	end
 	return Flag.write(self, section, value)
 end
