@@ -249,11 +249,12 @@ dhcp_extension(){
 			uci set wireless.@wifi-iface[0].network='lan'
 		fi	
 		uci add_list network.local.network='wan'
-		uci commit
 	else
-		uci set dhcp.lan.ignore='1'
-		uci set dhcp.hotspot.ignore='1'
+		uci set dhcp.lan.ignore='0'
+		uci set dhcp.hotspot.ignore='0'
+
 	fi
+	uci commit
 }
 cpn_detect(){
 	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpnurl`
