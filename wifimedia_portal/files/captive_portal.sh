@@ -5,10 +5,7 @@ NODOGSPLASH_CONFIG=/tmp/etc/nodogsplash.conf
 PREAUTHENTICATED_ADDRS=/tmp/preauthenticated_addrs
 PREAUTHENTICATED_ADDR_FB=/tmp/preauthenticated_addr_fb
 PREAUTHENTICATED_RULES=/tmp/preauthenticated_rules
-#NET_ID="nextify"
-NET_ID="lan"
-#FW_ZONE="nextify"
-#IFNAME="nextify0.1" #VLAN1
+NET_ID=`uci -q get wifimedia.@nodogsplash[0].network`
 walledgadent=`uci -q get wifimedia.@nodogsplash[0].preauthenticated_users | sed 's/,/ /g'`
 domain=`uci -q get wifimedia.@nodogsplash[0].domain`
 domain_default=${domain:-portal.nextify.vn/splash}
@@ -41,7 +38,7 @@ config_captive_portal() {
 	else	
 
 		#uci set nodogsplash.@nodogsplash[0].enabled='1'
-		#uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
+		uci set nodogsplash.@nodogsplash[0].gatewayinterface="br-${NET_ID}";
 		#uci set nodogsplash.@nodogsplash[0].redirecturl="$redirecturl_default";
 		uci set nodogsplash.@nodogsplash[0].maxclients="$maxclients_default";
 		uci set nodogsplash.@nodogsplash[0].preauthidletimeout="$preauthidletimeout_default";
@@ -240,11 +237,22 @@ dhcp_extension(){
 	relay=`uci -q get network.local`
 	uci del network.local.network
 	if [ $relay != "" ];then
-		uci set network.local.ipaddr='10.68.255.1'
-		uci add_list network.local.network='hotspot'
+		if [ $NET_ID = "br-hotspot" ];then
+			uci set network.local.ipaddr='10.68.255.1'
+			uci add_list network.local.network='hotspot'
+			uci set dhcp.hotspot.ignore='1'
+			uci set wireless.@wifi-iface[0].network='hotspot'			
+		else
+			uci set network.local.ipaddr='172.16.99.1'
+			uci add_list network.local.network='lan'
+			uci set dhcp.lan.ignore='1'
+			uci set wireless.@wifi-iface[0].network='lan'
+		fi	
 		uci add_list network.local.network='wan'
-		uci commit network
-		#/etc/init.d/network restart
+		uci commit
+	else
+		uci set dhcp.lan.ignore='1'
+		uci set dhcp.hotspot.ignore='1'
 	fi
 }
 cpn_detect(){
