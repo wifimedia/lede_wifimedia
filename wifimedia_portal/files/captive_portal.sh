@@ -285,6 +285,8 @@ cpn_detect(){
 	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpn`
 	if [ $cpn_status -eq 0 ];then
 		echo '* * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds && /etc/init.d/cron restart
+	else
+		crontab /etc/cron_nds -u nds && /etc/init.d/cron restart
 	fi
 }
 "$@"
