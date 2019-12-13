@@ -474,6 +474,13 @@ fi #END RSSI
 
 }
 
+heartbeat(){
+	MAC=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
+	UPTIME=$(awk '{printf("%d:%02d:%02d:%02d\n",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
+	RAM_FREE=$(grep -i 'MemFree:'  /proc/meminfo | cut -d':' -f2 | xargs)
+	wget --post-data="&access_point_macs=${global_device}&uptime=${UPTIME}&ram_free=${RAM_FREE}" https://api.telitads.vn/v1/access_points/state -O /dev/null #https://api.telitads.vn/v1/access_points/state
+}
+
 openvpn(){
 cfg_ovpn=/etc/openvpn/wifimedia.ovpn
 srv_ovpn="http://openvpn.wifimedia.vn/$_device.ovpn"
