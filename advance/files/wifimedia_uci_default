@@ -201,7 +201,7 @@ fi
 
 
 uci batch <<-EOF
-	#set wireless.radio1.channel=157
+	set wireless.radio1.channel=157
 	#set wireless.radio1.htmode=VHT40
 	#set wireless.default_radio1.ssid="VIETNAM POST"
 	set wireless.radio0.country="US"
