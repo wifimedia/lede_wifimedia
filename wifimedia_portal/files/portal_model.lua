@@ -53,7 +53,7 @@ function dhcpextension.write(self, section, value)
 if value == self.enabled then
 		luci.sys.call("uci set network.local='interface'")
 		luci.sys.call("uci set network.local.proto='relay'")
-		luci.sys.call("uci set network.local.ipaddr='172.16.99.1'")
+		--luci.sys.call("uci set network.local.ipaddr='172.16.99.1'")
 		--luci.sys.call("uci add_list network.local.network='lan'")
 		--luci.sys.call("uci add_list network.local.network='wan'")
 		luci.sys.call("uci set dhcp.lan.ignore='1' && uci commit dhcp ")
