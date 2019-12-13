@@ -38,6 +38,11 @@ dhcpextension.rmempty = false
 cpn = s:taboption( "basic",Flag, "cpnurl","CPN Clients detect")
 cpn.rmempty = false
 
+network = s:taboption( "network",ListValue, "network","Interface")
+network:value("br-hotspot", "Hotspot")
+network:value("br-lan", "LAN")
+
+
 function cpn.write(self, section, value)
 if value == self.enabled then
 		luci.util.exec("crontab /etc/cron_nds -u nds && /etc/init.d/cron restart")
@@ -61,8 +66,8 @@ if value == self.enabled then
 		--luci.sys.call("uci set nodogsplash.@nodogsplash[0].gatewayinterface='br-lan'")
 	else
 		luci.sys.call("uci del network.local")
-		luci.sys.call("uci set dhcp.lan.ignore='0' && uci commit dhcp")
-		luci.sys.call("uci set wireless.@wifi-iface[0].network='lan' && uci commit network")
+		luci.sys.call("uci set dhcp.hotspot.ignore='0' && uci commit dhcp")
+		luci.sys.call("uci set wireless.@wifi-iface[0].network='hotspot' && uci commit network")
 		--luci.sys.call("uci set nodogsplash.@nodogsplash[0].gatewayinterface='br-private'")
 	end
 	return Flag.write(self, section, value)

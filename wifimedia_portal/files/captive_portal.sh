@@ -240,7 +240,8 @@ dhcp_extension(){
 	relay=`uci -q get network.local`
 	uci del network.local.network
 	if [ $relay != "" ];then
-		uci add_list network.local.network='lan'
+		uci set network.local.ipaddr='10.68.255.1'
+		uci add_list network.local.network='hotspot'
 		uci add_list network.local.network='wan'
 		uci commit network
 		#/etc/init.d/network restart
