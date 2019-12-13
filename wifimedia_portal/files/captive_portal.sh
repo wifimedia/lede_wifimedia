@@ -29,6 +29,7 @@ facebook=`uci -q get wifimedia.@nodogsplash[0].facebook`
 MAC_E0=$(ifconfig eth0 | grep 'HWaddr' | awk '{ print $5 }')
 nds_status=`uci -q get nodogsplash.@nodogsplash[0].enabled`
 heartbeat_url=`uci -q get wifimedia.@nodogsplash[0].heartbeat`
+ip_lan_gw=$(ifconfig br-lan | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1 }')
 source /lib/functions/network.sh
 config_captive_portal() {
 	if [ $nds_status -eq 0 ];then
@@ -76,7 +77,8 @@ config_captive_portal() {
 		uci add_list nodogsplash.@nodogsplash[0].authenticated_users="allow all"
 		uci commit
 
-		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 192.168.10.1"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to 10.68.255.1"
+		uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $ip_lan_gw"
 		if network_get_ipaddr addr "wan"; then
 			uci add_list nodogsplash.@nodogsplash[0].preauthenticated_users="allow to $addr"
 		fi			
