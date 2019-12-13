@@ -265,7 +265,7 @@ dhcp_extension(){
 		uci set dhcp.hotspot.ignore='0'
 
 	fi
-	uci commit && /etc/init.d/network restart
+	uci commit && wifi up
 }
 cpn_detect(){
 	cpn_status=`uci -q get wifimedia.@nodogsplash[0].cpnurl`
