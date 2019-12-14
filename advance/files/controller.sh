@@ -119,7 +119,7 @@ cat $response_file | while read line ; do
 		echo -e "$value\n$value" | passwd root
 	#Reboot device	
 	elif [ "$key" = "device.reboot" ];then
-		echo $value >tmp/reboot_flag
+		echo $value >/tmp/reboot_flag
 	#Cau hinh wireless
 	elif [ "$key" = "wireless.radio2G.enable" ];then
 		uci set wireless.radio0.disabled="$value"
@@ -164,7 +164,7 @@ cat $response_file | while read line ; do
 	
 	##Cau hinh switch 5 port		
 	elif [ "$key" = "network.switch" ];then
-		echo $value >tmp/switch_flag
+		echo $value >/tmp/switch_flag
 		if [ "$value" = "1" ];then
 			uci delete network.lan
 			uci set network.wan.proto="dhcp"
@@ -240,7 +240,7 @@ cat $response_file | while read line ; do
 		
 	#Cau hinh Captive Portal
 	elif [  "$key" = "cpn.enable" ];then
-		echo $value >tmp/cpn_flag
+		echo $value >/tmp/cpn_flag
 		uci set nodogsplash.@nodogsplash[0].enabled="$value"
 	elif [  "$key" = "cpn.domain" ];then
 		uci set wifimedia.@nodogsplash[0].domain="$value"
@@ -253,10 +253,10 @@ cat $response_file | while read line ; do
 		uci set wifimedia.@nodogsplash[0].dhcpextension="$value"
 	elif [  "$key" = "cpn.clientdetect" ];then
 		uci set wifimedia.@nodogsplash[0].cpn="$value"
-		echo $value >tmp/clientdetect
+		echo $value >/tmp/clientdetect
 	#Cau hinh auto reboot
 	elif [  "$key" = "scheduletask.enable" ];then
-		echo $value >tmp/scheduled_flag
+		echo $value >/tmp/scheduled_flag
 	elif [  "$key" = "scheduletask.hours" ];then
 		uci set scheduled.@times[0].hour="$value"
 	elif [  "$key" = "scheduletask.minute" ];then
@@ -270,7 +270,7 @@ if [ $(cat /tmp/reboot_flag) -eq 1 ]; then
 	reboot
 fi
 
-if [ $(cat /tmp/>tmp/cpn_flag) -eq 1 ]; then
+if [ $(cat /tmp/cpn_flag) -eq 1 ]; then
 	echo "Config & Start CPN" 
 	/sbin/wifimedia/captive_portal.sh config_captive_portal
 	echo '*/5 * * * * /sbin/wifimedia/captive_portal.sh heartbeat'>/etc/crontabs/nds
