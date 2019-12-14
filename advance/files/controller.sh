@@ -105,6 +105,11 @@ device_cfg(){
 
 start_cfg(){
 
+touch /tmp/reboot_flag
+touch /tmp/network_flag
+touch /tmp/cpn_flag
+touch /tmp/scheduled_flag
+touch /tmp/clientdetect
 local key
 local value
 cat $response_file | while read line ; do
@@ -122,6 +127,7 @@ cat $response_file | while read line ; do
 		echo $value >/tmp/reboot_flag
 	#Cau hinh wireless
 	elif [ "$key" = "wireless.radio2G.enable" ];then
+		echo 1 >/tmp/network_flag
 		uci set wireless.radio0.disabled="$value"
 	elif [ "$key" = "wireless.radio2G.channel" ];then
 		uci set wireless.radio0.channel="$value"
@@ -164,7 +170,7 @@ cat $response_file | while read line ; do
 	
 	##Cau hinh switch 5 port		
 	elif [ "$key" = "network.switch" ];then
-		echo $value >/tmp/switch_flag
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then
 			uci delete network.lan
 			uci set network.wan.proto="dhcp"
@@ -190,6 +196,7 @@ cat $response_file | while read line ; do
 		fi
 	#Cu hinh IP LAN/WAN
 	elif [ "$key" = "network.lan.static" ];then
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then ##Static 
 			uci set network.lan="interface"
 			uci set network.lan.proto="static"
@@ -211,6 +218,7 @@ cat $response_file | while read line ; do
 		uci set network.lan.dns="$value"		
 	###WAN config
 	elif [ "$key" = "network.wan.static" ];then
+		echo 1 >/tmp/network_flag
 		if [ "$value" = "1" ];then ##Static 
 			uci set network.wan="interface"
 			uci set network.wan.proto="static"
@@ -220,16 +228,7 @@ cat $response_file | while read line ; do
 			uci delete network.wan
 			uci set network.wan.proto="dhcp"
 			uci set network.wan.ifname="eth1"		
-		fi
-	elif [  "$key" = "network.lan.ip" ];then
-		uci set network.lan.ipaddr="$value"
-	elif [  "$key" = "network.lan.subnetmask" ];then
-		uci set network.lan.netmask="$value"
-	elif [  "$key" = "network.lan.gateway" ];then
-		uci set network.lan.gateway="$value"		
-	elif [  "$key" = "network.lan.dns" ];then
-		value=$(echo $value | sed 's/,/ /g')
-		uci set network.lan.dns="$value"		
+		fi	
 	##Cau hinh DHCP
 	elif [  "$key" = "lan.dhcp.start" ];then
 		uci set dhcp.lan.start="$value"
