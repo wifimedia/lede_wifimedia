@@ -78,19 +78,6 @@ if [ "$ip" != "" ] &&  [ -e /etc/config/meshdesk ];then
 	uci commit meshdesk
 fi
 }
-#eap_name=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-19)
-#
-#eap(){
-#if [ "$eap_name" == "TL-WA901ND" ] ;then
-#	ping -c 3 "$gateway" > /dev/null
-#	if [ $? -eq "0" ];then
-#		echo "dhcp client"
-#	else
-#		uci set network.lan
-#		
-#	fi
-#fi
-#}
 
 checking (){
 	#model=$(cat /proc/cpuinfo | grep 'machine' | cut -f2 -d ":" | cut -b 10-50 | tr ' ' '_')
@@ -109,8 +96,7 @@ checking (){
 }
 
 device_cfg(){
-	#response_file=/tmp/_cfg
-	#hash256=$(sha256sum $response_file | awk '{print $1}')
+
 	if [ "$(uci -q get wifimedia.@hash256[0].value)" != "$(cat $hash256 | awk '{print $2}')" ]; then
 		start_cfg
 	fi
